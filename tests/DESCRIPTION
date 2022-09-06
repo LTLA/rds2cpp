@@ -1,0 +1,15 @@
+Package: rds2cpp
+Version: 0.99.0
+Date: 2022-09-05
+Title: Tests for the rds2cpp C++ Library
+Description: 
+    Implements a test suite for the rds2cpp library, by checking the results of
+    rds2cpp-based unserialization with R's reference implementation.
+Authors@R: person("Aaron", "Lun", role=c("aut", "cre"), email="infinite.monkeys.with.keyboards@gmail.com")
+Imports:
+    Rcpp
+Suggests:
+    testthat
+LinkingTo: Rcpp
+License: GPL-3
+RoxygenNote: 7.2.1

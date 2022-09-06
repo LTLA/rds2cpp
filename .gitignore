@@ -1,0 +1,6 @@
+*.so
+*.o
+build/
+playground/
+*.swp
+*.rds
