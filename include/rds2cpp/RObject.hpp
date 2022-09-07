@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cstdint>
+#include <complex>
 
 #include "SEXPType.hpp"
 
@@ -21,7 +22,13 @@ struct AtomicVector : public RObject {
 
 typedef AtomicVector<int32_t, INT> IntegerVector;
 
+typedef AtomicVector<int32_t, LGL> LogicalVector;
+
 typedef AtomicVector<double, REAL> DoubleVector;
+
+typedef AtomicVector<unsigned char, RAW> RawVector;
+
+typedef AtomicVector<std::complex<double>, CPLX> ComplexVector;
 
 }
 

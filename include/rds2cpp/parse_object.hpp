@@ -32,10 +32,16 @@ std::shared_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
     int sexp_type = details[3];
     std::shared_ptr<RObject> output;
 
-    if (sexp_type == INT) { // integer 
+    if (sexp_type == INT) {
         output.reset(parse_integer(reader, leftovers));
-    } else if (sexp_type == REAL) { // double
+    } else if (sexp_type == LGL) { 
+        output.reset(parse_logical(reader, leftovers));
+    } else if (sexp_type == RAW) {
+        output.reset(parse_raw(reader, leftovers));
+    } else if (sexp_type == REAL) {
         output.reset(parse_double(reader, leftovers));
+    } else if (sexp_type == CPLX) {
+        output.reset(parse_complex(reader, leftovers));
     }
 
     return output;
