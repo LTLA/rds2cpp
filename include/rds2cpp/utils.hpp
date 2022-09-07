@@ -45,7 +45,7 @@ size_t get_length(Reader& reader, std::vector<unsigned char>& leftovers) {
     bool ok = extract_up_to(reader, leftovers, 4, 
         [&](const unsigned char* buffer, size_t n, size_t) -> void {
             for (size_t b = 0; b < n; ++b) {
-                initial <<= 1;
+                initial <<= 8;
                 initial += buffer[b];
             }
         }
@@ -63,7 +63,7 @@ size_t get_length(Reader& reader, std::vector<unsigned char>& leftovers) {
     ok = extract_up_to(reader, leftovers, 8, 
         [&](const unsigned char* buffer, size_t n, size_t) -> void {
             for (size_t b = 0; b < n; ++b) {
-                full <<= 1;
+                full <<= 8;
                 full += buffer[b];
             }
         }

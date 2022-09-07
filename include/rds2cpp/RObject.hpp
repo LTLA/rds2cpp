@@ -4,22 +4,24 @@
 #include <vector>
 #include <cstdint>
 
+#include "SEXPType.hpp"
+
 namespace rds2cpp {
 
 struct RObject {
-    RObject(int st) : sexp_type(st) {}
-    int sexp_type;
+    RObject(SEXPType st) : sexp_type(st) {}
+    SEXPType sexp_type;
 };
 
-template<typename ElementType, int stype>
+template<typename ElementType, SEXPType stype>
 struct AtomicVector : public RObject {
     AtomicVector(size_t n = 0) : RObject(stype), data(n) {}
     std::vector<ElementType> data;
 };
 
-typedef AtomicVector<int32_t, 13> IntegerVector;
+typedef AtomicVector<int32_t, INT> IntegerVector;
 
-typedef AtomicVector<double, 14> DoubleVector;
+typedef AtomicVector<double, REAL> DoubleVector;
 
 }
 

@@ -46,7 +46,7 @@ inline Parsed parse_rds(std::string file) {
         }
 
         for (size_t pos = 2; pos < 6; ++pos) {
-            output.format_version <<= 1;
+            output.format_version <<= 8;
             output.format_version += accumulated[pos];
         }
 
@@ -67,7 +67,7 @@ inline Parsed parse_rds(std::string file) {
         bool ok = extract_up_to(reader, leftovers, 4,
             [&](const unsigned char* buffer, size_t n, size_t) -> void {
                 for (size_t b = 0; b < n; ++b) {
-                    encoding_length <<= 1;
+                    encoding_length <<= 8;
                     encoding_length += buffer[b];
                 }
             }

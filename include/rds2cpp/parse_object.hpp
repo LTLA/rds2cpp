@@ -9,6 +9,7 @@
 #include "RObject.hpp"
 #include "utils.hpp"
 #include "parse_atomic.hpp"
+#include "SEXPType.hpp"
 
 namespace rds2cpp {
 
@@ -31,8 +32,10 @@ std::shared_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
     int sexp_type = details[3];
     std::shared_ptr<RObject> output;
 
-    if (sexp_type == 13) { // integer 
+    if (sexp_type == INT) { // integer 
         output.reset(parse_integer(reader, leftovers));
+    } else if (sexp_type == REAL) { // double
+        output.reset(parse_double(reader, leftovers));
     }
 
     return output;
