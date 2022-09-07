@@ -37,6 +37,19 @@ Rcpp::RObject parse(std::string file_name) {
             output[i].i = std::imag(data[i]);
         }
         return output;
+
+    } else if (output.object->sexp_type == rds2cpp::STR) {
+        auto chr = static_cast<const rds2cpp::CharacterVector*>(output.object.get());
+        const auto& data = chr->data;
+        Rcpp::StringVector output(data.size());
+        for (size_t i = 0; i < data.size(); ++i) {
+            if (data[i].first) {
+                output[i] = NA_STRING;
+            } else {
+                output[i] = data[i].second;
+            }
+        }
+        return output;
     }
 
     return R_NilValue;

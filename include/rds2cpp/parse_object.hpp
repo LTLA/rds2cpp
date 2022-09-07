@@ -42,6 +42,8 @@ std::shared_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
         output.reset(parse_double(reader, leftovers));
     } else if (sexp_type == CPLX) {
         output.reset(parse_complex(reader, leftovers));
+    } else if (sexp_type == STR) {
+        output.reset(parse_character(reader, leftovers));
     }
 
     return output;

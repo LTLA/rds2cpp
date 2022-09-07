@@ -93,3 +93,24 @@ test_that("complex vector loading works as expected", {
         expect_identical(roundtrip, y)
     }
 })
+
+test_that("character vector loading works as expected", {
+    tmp <- tempfile(fileext=".rds")
+    scenarios <- list(
+        sample(LETTERS),
+        c("Aaron", "Lun", "was", "here!"),
+        c("Akari", NA, "Alicia", "Alice", NA, "Athena", "Aika", "Akira", NA),
+        c(
+            paste(sample(LETTERS, 100, replace=TRUE), collapse=""),
+            paste(sample(LETTERS, 1000, replace=TRUE), collapse=""),
+            paste(sample(LETTERS, 10000, replace=TRUE), collapse="")
+        )
+    )
+
+    for (y in scenarios) {
+        saveRDS(y, file=tmp)
+        roundtrip <- rds2cpp:::parse(tmp)
+        expect_identical(roundtrip, y)
+    }
+})
+

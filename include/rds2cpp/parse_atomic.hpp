@@ -107,6 +107,52 @@ ComplexVector* parse_complex(Reader& reader, std::vector<unsigned char>& leftove
     return new ComplexVector(std::move(output));
 }
 
+template<class Reader>
+CharacterVector* parse_character(Reader& reader, std::vector<unsigned char>& leftovers) {
+    size_t len = get_length(reader, leftovers);
+    CharacterVector output(len);
+
+    for (size_t i = 0; i < len; ++i) {
+        // Mystery first 4 bytes, just throw them away.
+        bool ok = extract_up_to(reader, leftovers, 4, [&](const unsigned char* buffer, size_t n, size_t i) -> void {});
+        if (!ok) {
+            throw std::runtime_error("failed to parse the mystery bytes in a character vector");
+        }
+
+        // Getting the string length.
+        uint32_t strlen = 0;
+        ok = extract_up_to(reader, leftovers, 4, 
+            [&](const unsigned char* buffer, size_t n, size_t) -> void {
+                for (size_t x = 0; x < n; ++x) {
+                    strlen <<= 8;
+                    strlen += buffer[x];
+                }
+            }
+        );
+        if (!ok) {
+            throw std::runtime_error("failed to parse the string length in a character vector");
+        }
+
+        // Handle NAs.
+        if (strlen == static_cast<uint32_t>(-1)) {
+            output.data[i].first = true;
+            continue;
+        }
+
+        auto& str = output.data[i].second;
+        ok = extract_up_to(reader, leftovers, strlen,
+            [&](const unsigned char* buffer, size_t n, size_t) -> void {
+                str.insert(str.end(), buffer, buffer + n);
+            }
+        );
+        if (!ok) {
+            throw std::runtime_error("failed to parse the string in a character vector");
+        }
+    }
+
+    return new CharacterVector(std::move(output));
+}
+
 }
 
 #endif
