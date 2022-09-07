@@ -17,11 +17,14 @@ Vector* parse_integer_or_logical(Reader& reader, std::vector<unsigned char>& lef
 
     constexpr size_t width = 4;
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    extract_up_to(reader, leftovers, width * len,
+    bool ok = extract_up_to(reader, leftovers, width * len,
         [&](const unsigned char* buffer, size_t n, size_t i) -> void {
             std::copy(buffer, buffer + n, ptr + i);
         }
     );
+    if (!ok) {
+        throw std::runtime_error("failed to parse data for an integer/logical vector");
+    }
 
     // Flipping endianness.
     if (little_endian()) {
@@ -51,11 +54,14 @@ DoubleVector* parse_double(Reader& reader, std::vector<unsigned char>& leftovers
 
     constexpr size_t width = 8;
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    extract_up_to(reader, leftovers, width * len,
+    bool ok = extract_up_to(reader, leftovers, width * len,
         [&](const unsigned char* buffer, size_t n, size_t i) -> void {
             std::copy(buffer, buffer + n, ptr + i);
         }
     );
+    if (!ok) {
+        throw std::runtime_error("failed to parse data for a double vector");
+    }
 
     // Flipping endianness.
     if (little_endian()) {
@@ -74,11 +80,14 @@ RawVector* parse_raw(Reader& reader, std::vector<unsigned char>& leftovers) {
     RawVector output(len);
 
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    extract_up_to(reader, leftovers, len,
+    bool ok = extract_up_to(reader, leftovers, len,
         [&](const unsigned char* buffer, size_t n, size_t i) -> void {
             std::copy(buffer, buffer + n, ptr + i);
         }
     );
+    if (!ok) {
+        throw std::runtime_error("failed to parse data for a raw vector");
+    }
 
     return new RawVector(std::move(output));
 }
@@ -90,11 +99,14 @@ ComplexVector* parse_complex(Reader& reader, std::vector<unsigned char>& leftove
 
     constexpr size_t width = 16;
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    extract_up_to(reader, leftovers, width * len,
+    bool ok = extract_up_to(reader, leftovers, width * len,
         [&](const unsigned char* buffer, size_t n, size_t i) -> void {
             std::copy(buffer, buffer + n, ptr + i);
         }
     );
+    if (!ok) {
+        throw std::runtime_error("failed to parse data for a complex vector");
+    }
 
     // Flipping endianness for each double.
     if (little_endian()) {
