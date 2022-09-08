@@ -125,10 +125,32 @@ CharacterVector* parse_character(Reader& reader, std::vector<unsigned char>& lef
     CharacterVector output(len);
 
     for (size_t i = 0; i < len; ++i) {
-        // Mystery first 4 bytes, just throw them away.
-        bool ok = extract_up_to(reader, leftovers, 4, [&](const unsigned char* buffer, size_t n, size_t i) -> void {});
+        std::array<unsigned char, 4> header;
+
+        // Examining the header.
+        bool ok = extract_up_to(reader, leftovers, 4, 
+            [&](const unsigned char* buffer, size_t n, size_t i) -> void {
+                std::copy(buffer, buffer + n, header.data() + i);
+            }
+        );
         if (!ok) {
-            throw std::runtime_error("failed to parse the mystery bytes in a character vector");
+            throw std::runtime_error("failed to parse the element header in a character vector");
+        }
+
+        std::reverse(header.begin(), header.end());
+        if (static_cast<SEXPType>(header[0]) != CHAR) {
+            throw std::runtime_error("elements of a character vector should be CHARSXP");
+        }
+
+        auto& enc = output.data[i].encoding;
+        if (header[1] & (1 << (12 - 8 + 1))) {
+            enc = String::NONE;
+        } else if (header[1] & (1 << (12 - 8 + 2))) {
+            enc = String::LATIN1;
+        } else if (header[1] & (1 << (12 - 8 + 3))) {
+            enc = String::UTF8;
+        } else if (header[2] & (1 << (12 - 16 + 6))) {
+            enc = String::ASCII;
         }
 
         // Getting the string length.
@@ -147,11 +169,11 @@ CharacterVector* parse_character(Reader& reader, std::vector<unsigned char>& lef
 
         // Handle NAs.
         if (strlen == static_cast<uint32_t>(-1)) {
-            output.data[i].first = true;
+            output.data[i].missing= true;
             continue;
         }
 
-        auto& str = output.data[i].second;
+        auto& str = output.data[i].value;
         ok = extract_up_to(reader, leftovers, strlen,
             [&](const unsigned char* buffer, size_t n, size_t) -> void {
                 str.insert(str.end(), buffer, buffer + n);

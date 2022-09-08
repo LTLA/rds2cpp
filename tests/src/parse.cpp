@@ -43,10 +43,14 @@ Rcpp::RObject parse(std::string file_name) {
         const auto& data = chr->data;
         Rcpp::StringVector output(data.size());
         for (size_t i = 0; i < data.size(); ++i) {
-            if (data[i].first) {
+            if (data[i].missing) {
                 output[i] = NA_STRING;
             } else {
-                output[i] = data[i].second;
+                cetype_t enc = CE_UTF8;
+                if (data[i].encoding == rds2cpp::String::ASCII) {
+                    enc = CE_NATIVE;
+                }
+                output[i] = Rcpp::String(data[i].value, enc);
             }
         }
         return output;

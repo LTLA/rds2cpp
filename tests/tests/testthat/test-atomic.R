@@ -104,7 +104,8 @@ test_that("character vector loading works as expected", {
             paste(sample(LETTERS, 100, replace=TRUE), collapse=""),
             paste(sample(LETTERS, 1000, replace=TRUE), collapse=""),
             paste(sample(LETTERS, 10000, replace=TRUE), collapse="")
-        )
+        ),
+        c("α-globin", "😀😀😀", "fußball", "Hervé Pagès")
     )
 
     for (y in scenarios) {

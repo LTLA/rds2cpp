@@ -30,7 +30,17 @@ typedef AtomicVector<unsigned char, RAW> RawVector;
 
 typedef AtomicVector<std::complex<double>, CPLX> ComplexVector;
 
-typedef AtomicVector<std::pair<bool, std::string>, STR> CharacterVector;
+struct String {
+    std::string value;
+
+    enum Encoding { NONE, LATIN1, UTF8, ASCII };
+
+    Encoding encoding;
+
+    bool missing;
+};
+
+typedef AtomicVector<String, STR> CharacterVector;
 
 }
 
