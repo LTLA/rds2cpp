@@ -42,6 +42,11 @@ struct String {
 
 typedef AtomicVector<String, STR> CharacterVector;
 
+struct List : public RObject {
+    List(size_t n = 0) : RObject(VEC), data(n) {}
+    std::vector<std::shared_ptr<RObject> > data;
+};
+
 }
 
 #endif

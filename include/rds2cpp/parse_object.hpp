@@ -9,6 +9,7 @@
 #include "RObject.hpp"
 #include "utils.hpp"
 #include "parse_atomic.hpp"
+#include "parse_list.hpp"
 #include "SEXPType.hpp"
 
 namespace rds2cpp {
@@ -44,6 +45,8 @@ std::shared_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
         output.reset(parse_complex(reader, leftovers));
     } else if (sexp_type == STR) {
         output.reset(parse_character(reader, leftovers));
+    } else if (sexp_type == VEC) {
+        output.reset(parse_list(reader, leftovers));
     }
 
     return output;
