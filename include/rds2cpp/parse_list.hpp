@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "RObject.hpp"
+#include "utils.hpp"
 
 namespace rds2cpp {
 

@@ -6,11 +6,14 @@
 #include <algorithm>
 #include <cstdint>
 
+#include "SEXPType.hpp"
 #include "RObject.hpp"
 #include "utils.hpp"
+
 #include "parse_atomic.hpp"
 #include "parse_list.hpp"
-#include "SEXPType.hpp"
+#include "parse_attributes.hpp"
+#include "parse_pairlist.hpp"
 
 namespace rds2cpp {
 
@@ -20,20 +23,29 @@ std::shared_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
     int sexp_type = details[3];
     std::shared_ptr<RObject> output;
 
-    if (sexp_type == INT) {
-        output.reset(parse_integer(reader, leftovers));
-    } else if (sexp_type == LGL) { 
-        output.reset(parse_logical(reader, leftovers));
-    } else if (sexp_type == RAW) {
-        output.reset(parse_raw(reader, leftovers));
-    } else if (sexp_type == REAL) {
-        output.reset(parse_double(reader, leftovers));
-    } else if (sexp_type == CPLX) {
-        output.reset(parse_complex(reader, leftovers));
-    } else if (sexp_type == STR) {
-        output.reset(parse_character(reader, leftovers));
-    } else if (sexp_type == VEC) {
-        output.reset(parse_list(reader, leftovers));
+    if (sexp_type == LIST) {
+        output.reset(parse_pairlist(reader, leftovers, details));
+
+    } else {
+        if (sexp_type == INT) {
+            output.reset(parse_integer(reader, leftovers));
+        } else if (sexp_type == LGL) { 
+            output.reset(parse_logical(reader, leftovers));
+        } else if (sexp_type == RAW) {
+            output.reset(parse_raw(reader, leftovers));
+        } else if (sexp_type == REAL) {
+            output.reset(parse_double(reader, leftovers));
+        } else if (sexp_type == CPLX) {
+            output.reset(parse_complex(reader, leftovers));
+        } else if (sexp_type == STR) {
+            output.reset(parse_character(reader, leftovers));
+        } else if (sexp_type == VEC) {
+            output.reset(parse_list(reader, leftovers));
+        }
+
+        if (has_attributes(details)) {
+            parse_attributes(reader, leftovers, *output);
+        }
     }
 
     return output;

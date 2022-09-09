@@ -115,3 +115,15 @@ test_that("character vector loading works as expected", {
     }
 })
 
+test_that("attributes for atomic vectors are respected", {
+    tmp <- tempfile(fileext=".rds")
+    vals <- sample(.Machine$integer.max, 1000)
+
+    names(vals) <- sprintf("GENE_%i", seq_along(vals))
+    attr(vals, "foo") <- c("BAR", "bar", "Bar")
+    class(vals) <- "frog"
+
+    saveRDS(vals, file=tmp)
+    roundtrip <- rds2cpp:::parse(tmp)
+    expect_identical(roundtrip, vals)
+})
