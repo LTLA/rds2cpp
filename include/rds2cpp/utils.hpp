@@ -81,6 +81,25 @@ inline bool little_endian() {
     return (*lsb == 1);
 }
 
+
+typedef std::array<unsigned char, 4> Header;
+
+template<class Reader>
+Header parse_header(Reader& reader, std::vector<unsigned char>& leftovers) {
+    Header details;
+    bool ok = extract_up_to(reader, leftovers, 4,
+        [&](const unsigned char* buffer, size_t n, size_t i) -> void {
+            for (size_t b = 0; b < n; ++b, ++i) {
+                details[i] = buffer[b];
+            }
+        }
+    );
+    if (!ok) {
+        throw std::runtime_error("missing or incomplete object header");
+    }
+    return details;
+}
+
 }
 
 #endif
