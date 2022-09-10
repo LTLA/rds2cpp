@@ -11,6 +11,8 @@
 
 namespace rds2cpp {
 
+namespace atomic_internal {
+
 template<class Vector, class Reader>
 Vector* parse_integer_or_logical(Reader& reader, std::vector<unsigned char>& leftovers) {
     size_t len = get_length(reader, leftovers);
@@ -38,14 +40,16 @@ Vector* parse_integer_or_logical(Reader& reader, std::vector<unsigned char>& lef
     return new Vector(std::move(output));
 }
 
+}
+
 template<class Reader>
 IntegerVector* parse_integer(Reader& reader, std::vector<unsigned char>& leftovers) {
-    return parse_integer_or_logical<IntegerVector>(reader, leftovers);
+    return atomic_internal::parse_integer_or_logical<IntegerVector>(reader, leftovers);
 }
 
 template<class Reader>
 LogicalVector* parse_logical(Reader& reader, std::vector<unsigned char>& leftovers) {
-    return parse_integer_or_logical<LogicalVector>(reader, leftovers);
+    return atomic_internal::parse_integer_or_logical<LogicalVector>(reader, leftovers);
 }
 
 template<class Reader>

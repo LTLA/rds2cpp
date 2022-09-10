@@ -14,6 +14,8 @@
 #include "parse_list.hpp"
 #include "parse_attributes.hpp"
 #include "parse_pairlist.hpp"
+#include "parse_symbol.hpp"
+#include "parse_altrep.hpp"
 
 namespace rds2cpp {
 
@@ -25,6 +27,15 @@ std::shared_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
 
     if (sexp_type == LIST) {
         output.reset(parse_pairlist(reader, leftovers, details));
+
+    } else if (sexp_type == SYM) {
+        output.reset(parse_symbol(reader, leftovers));
+
+    } else if (sexp_type == 238) {
+        output.reset(parse_altrep(reader, leftovers));
+
+    } else if (sexp_type == 255) {
+        output.reset(new Null);
 
     } else {
         if (sexp_type == INT) {

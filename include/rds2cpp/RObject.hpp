@@ -28,9 +28,20 @@ struct RObject {
     std::vector<std::shared_ptr<RObject> > attribute_values;
 };
 
+struct Null : public RObject {
+    Null() : RObject(NIL) {}
+};
+
+struct Symbol : public RObject {
+    Symbol() : RObject(SYM) {}
+    std::string name;
+    String::Encoding encoding;
+};
+
 template<typename ElementType, SEXPType stype>
 struct AtomicVector : public RObject {
     AtomicVector(size_t n = 0) : RObject(stype), data(n) {}
+    static constexpr SEXPType vector_sexp_type = stype;
     std::vector<ElementType> data;
 };
 

@@ -28,7 +28,7 @@ void parse_attributes(Reader& reader, std::vector<unsigned char>& leftovers, ROb
     plist.reset(parse_pairlist(reader, leftovers, header));
 
     const auto& tags = plist->tags;
-    for (auto t : tags) {
+    for (const auto& t : tags) {
         if (!t.first || t.second.missing) {
             throw std::runtime_error("all attributes should be named");
         }

@@ -55,6 +55,14 @@ PairList* parse_pairlist(Reader& reader, std::vector<unsigned char>& leftovers, 
     return new PairList(std::move(output));
 }
 
+template<class Reader>
+PairList* parse_pairlist(Reader& reader, std::vector<unsigned char>& leftovers) {
+    PairList output;
+    auto header = parse_header(reader, leftovers);
+    parse_pairlist_internal(reader, leftovers, output, header);
+    return new PairList(std::move(output));
+}
+
 }
 
 #endif
