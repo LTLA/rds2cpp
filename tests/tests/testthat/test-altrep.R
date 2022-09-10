@@ -43,3 +43,45 @@ test_that("attribute wrapping for integers works as expected", {
     expect_identical(roundtrip, x)
 })
 
+test_that("deferred string for integers works as expected", {
+    # For integers:
+    x <- as.character(1:100)
+    expect_output(.Internal(inspect(x)), "deferred")
+
+    tmp <- tempfile(fileext=".rds")
+    saveRDS(x, file=tmp)
+    roundtrip <- rds2cpp:::parse(tmp)
+    expect_identical(roundtrip, x)
+
+    # With NA's.
+    x <- c(NA_integer_, 1:10, NA_integer_)
+    x <- as.character(x)
+    expect_output(.Internal(inspect(x)), "deferred")
+
+    tmp <- tempfile(fileext=".rds")
+    saveRDS(x, file=tmp)
+    roundtrip <- rds2cpp:::parse(tmp)
+    expect_identical(roundtrip, x)
+})
+
+test_that("deferred string for doubles works as expected", {
+    # For real:
+    x <- as.character(1:100 * 2)
+    expect_output(.Internal(inspect(x)), "deferred")
+
+    tmp <- tempfile(fileext=".rds")
+    saveRDS(x, file=tmp)
+    roundtrip <- rds2cpp:::parse(tmp)
+    expect_identical(roundtrip, x)
+
+    # With weird things.
+    x <- c(NaN, 1:10, Inf, -Inf, NA)
+    x <- as.character(x)
+    expect_output(.Internal(inspect(x)), "deferred")
+
+    tmp <- tempfile(fileext=".rds")
+    saveRDS(x, file=tmp)
+    roundtrip <- rds2cpp:::parse(tmp)
+    expect_identical(roundtrip, x)
+})
+
