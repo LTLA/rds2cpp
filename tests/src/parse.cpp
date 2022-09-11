@@ -51,6 +51,17 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         return output;
     }
 
+    if (input->sexp_type == rds2cpp::SEXPType::S4) {
+        auto s4 = static_cast<const rds2cpp::S4Object*>(input);
+
+        Rcpp::S4 output(s4->class_name);
+        for (size_t s = 0; s < s4->attribute_names.size(); ++s) {
+            output.slot(s4->attribute_names[s]) = convert(s4->attribute_values[s].get());
+        }
+
+        return Rcpp::RObject(output);
+    }
+
     if (input->sexp_type == rds2cpp::SEXPType::INT) {
         auto integer = static_cast<const rds2cpp::IntegerVector*>(input);
         const auto& data = integer->data;

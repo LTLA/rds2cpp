@@ -16,6 +16,7 @@
 #include "parse_pairlist.hpp"
 #include "parse_symbol.hpp"
 #include "parse_altrep.hpp"
+#include "parse_s4.hpp"
 
 namespace rds2cpp {
 
@@ -36,10 +37,13 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::SYM)) {
         pointerize_(parse_symbol_body(reader, leftovers));
 
+    } else if (sexp_type == static_cast<unsigned char>(SEXPType::S4)) {
+        pointerize_(parse_s4_body(reader, leftovers, details));
+
     } else if (sexp_type == 238) {
         output = parse_altrep_body(reader, leftovers);
 
-    } else if (sexp_type == 255) {
+    } else if (sexp_type == 254 || sexp_type == 255) {
         pointerize_(Null());
 
     } else {

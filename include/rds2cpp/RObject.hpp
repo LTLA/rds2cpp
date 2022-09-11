@@ -75,6 +75,16 @@ struct PairList : public RObject {
     std::vector<StringEncoding> tag_encodings;
 };
 
+struct S4Object : public RObject {
+    S4Object() : RObject(SEXPType::S4) {}
+
+    std::string class_name;
+    StringEncoding class_encoding;
+
+    std::string package_name;
+    StringEncoding package_encoding;
+};
+
 }
 
 #endif
