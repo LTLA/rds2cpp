@@ -3,7 +3,7 @@
 
 namespace rds2cpp {
 
-enum class SEXPType {
+enum class SEXPType : unsigned char {
     NIL = 0,
     SYM = 1,
     LIST = 2,

@@ -22,18 +22,18 @@ namespace rds2cpp {
 template<class Reader>
 std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>& leftovers) {
     auto details = parse_header(reader, leftovers);
-    int sexp_type = details[3];
-    std::unique_ptr<RObject> output;
+    auto sexp_type = details[3];
 
+    std::unique_ptr<RObject> output;
     auto pointerize_ = [&](auto obj) -> void {
         pointerize(output, std::move(obj));
         return;
     };
 
-    if (sexp_type == static_cast<unsigned>(SEXPType::LIST)) {
+    if (sexp_type == static_cast<unsigned char>(SEXPType::LIST)) {
         pointerize_(parse_pairlist_body(reader, leftovers, details));
 
-    } else if (sexp_type == static_cast<unsigned>(SEXPType::SYM)) {
+    } else if (sexp_type == static_cast<unsigned char>(SEXPType::SYM)) {
         pointerize_(parse_symbol_body(reader, leftovers));
 
     } else if (sexp_type == 238) {
@@ -43,19 +43,19 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
         pointerize_(Null());
 
     } else {
-        if (sexp_type == static_cast<unsigned>(SEXPType::INT)) {
+        if (sexp_type == static_cast<unsigned char>(SEXPType::INT)) {
             pointerize_(parse_integer_body(reader, leftovers));
-        } else if (sexp_type == static_cast<unsigned>(SEXPType::LGL)) { 
+        } else if (sexp_type == static_cast<unsigned char>(SEXPType::LGL)) { 
             pointerize_(parse_logical_body(reader, leftovers));
-        } else if (sexp_type == static_cast<unsigned>(SEXPType::RAW)) {
+        } else if (sexp_type == static_cast<unsigned char>(SEXPType::RAW)) {
             pointerize_(parse_raw_body(reader, leftovers));
-        } else if (sexp_type == static_cast<unsigned>(SEXPType::REAL)) {
+        } else if (sexp_type == static_cast<unsigned char>(SEXPType::REAL)) {
             pointerize_(parse_double_body(reader, leftovers));
-        } else if (sexp_type == static_cast<unsigned>(SEXPType::CPLX)) {
+        } else if (sexp_type == static_cast<unsigned char>(SEXPType::CPLX)) {
             pointerize_(parse_complex_body(reader, leftovers));
-        } else if (sexp_type == static_cast<unsigned>(SEXPType::STR)) {
+        } else if (sexp_type == static_cast<unsigned char>(SEXPType::STR)) {
             pointerize_(parse_character_body(reader, leftovers));
-        } else if (sexp_type == static_cast<unsigned>(SEXPType::VEC)) {
+        } else if (sexp_type == static_cast<unsigned char>(SEXPType::VEC)) {
             pointerize_(parse_list_body(reader, leftovers));
         }
 

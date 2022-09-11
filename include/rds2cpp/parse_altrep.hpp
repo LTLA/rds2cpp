@@ -19,7 +19,7 @@ namespace altrep_internal {
 template<class Vector, class Reader>
 Vector parse_numeric_compact_seq(Reader& reader, std::vector<unsigned char>& leftovers) {
     auto header = parse_header(reader, leftovers);
-    if (header[3] != static_cast<unsigned>(SEXPType::REAL)) {
+    if (header[3] != static_cast<unsigned char>(SEXPType::REAL)) {
         throw std::runtime_error("expected compact_seq to store sequence information in doubles");
     }
 
@@ -48,7 +48,7 @@ Vector parse_numeric_compact_seq(Reader& reader, std::vector<unsigned char>& lef
 template<class Vector, class Reader>
 Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& leftovers) {
     auto plist_header = parse_header(reader, leftovers);
-    if (plist_header[3] != static_cast<int>(SEXPType::LIST)) {
+    if (plist_header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected pairlist in wrapper ALTREP's payload");
     }
 
@@ -60,7 +60,7 @@ Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& lefto
 
     // Second cons value is the wrapping metadata, we don't care about it.
     auto metaheader = parse_header(reader, leftovers);
-    if (metaheader[3] != static_cast<int>(SEXPType::INT)) {
+    if (metaheader[3] != static_cast<unsigned char>(SEXPType::INT)) {
         throw std::runtime_error("wrap_* ALTREP should have an integer vector for its metadata");
     }
 
@@ -79,7 +79,7 @@ Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& lefto
 template<class Reader>
 CharacterVector parse_deferred_string(Reader& reader, std::vector<unsigned char>& leftovers) {
     auto plist_header = parse_header(reader, leftovers);
-    if (plist_header[3] != static_cast<int>(SEXPType::LIST)) {
+    if (plist_header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected pairlist in deferred_string ALTREP's payload");
     }
 
@@ -139,7 +139,7 @@ CharacterVector parse_deferred_string(Reader& reader, std::vector<unsigned char>
 
     // Second cons value is the wrapping metadata, we don't care about it.
     auto metaheader = parse_header(reader, leftovers);
-    if (metaheader[3] != static_cast<int>(SEXPType::INT)) {
+    if (metaheader[3] != static_cast<unsigned char>(SEXPType::INT)) {
         throw std::runtime_error("deferred_string ALTREP should have an integer vector for its metadata");
     }
 
@@ -156,7 +156,7 @@ CharacterVector parse_deferred_string(Reader& reader, std::vector<unsigned char>
 template<class Reader>
 std::unique_ptr<RObject> parse_altrep_body(Reader& reader, std::vector<unsigned char>& leftovers) {
     auto header = parse_header(reader, leftovers);
-    if (header[3] != static_cast<unsigned>(SEXPType::LIST)) {
+    if (header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected ALTREP description to be a pairlist");
     }
 

@@ -3,7 +3,7 @@
 
 namespace rds2cpp {
 
-enum class StringEncoding { 
+enum class StringEncoding : unsigned char { 
     NONE, 
     LATIN1, 
     UTF8, 

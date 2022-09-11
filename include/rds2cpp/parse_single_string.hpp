@@ -18,7 +18,7 @@ template<class Reader>
 StringInfo parse_single_string(Reader& reader, std::vector<unsigned char>& leftovers) {
     auto header = parse_header(reader, leftovers);
     std::reverse(header.begin(), header.end());
-    if (header[0] != static_cast<unsigned>(SEXPType::CHAR)) {
+    if (header[0] != static_cast<unsigned char>(SEXPType::CHAR)) {
         throw std::runtime_error("elements of a character vector should be CHARSXP");
     }
 
