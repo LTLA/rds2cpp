@@ -1,15 +1,19 @@
 #include "Rcpp.h"
 #include "rds2cpp/parse_rds.hpp"
 
-void assign_to_string(Rcpp::StringVector& output, size_t i, const rds2cpp::String& thing) {
-    if (thing.missing) {
+void assign_to_string(Rcpp::StringVector& output, size_t i, const std::string& value, rds2cpp::StringEncoding encoding) {
+    cetype_t enc = CE_UTF8;
+    if (encoding == rds2cpp::StringEncoding::ASCII) {
+        enc = CE_NATIVE;
+    }
+    output[i] = Rcpp::String(value, enc);
+}
+
+void assign_to_string(Rcpp::StringVector& output, size_t i, const std::string& value, rds2cpp::StringEncoding encoding, bool missing) {
+    if (missing) {
         output[i] = NA_STRING;
     } else {
-        cetype_t enc = CE_UTF8;
-        if (thing.encoding == rds2cpp::String::ASCII) {
-            enc = CE_NATIVE;
-        }
-        output[i] = Rcpp::String(thing.value, enc);
+        assign_to_string(output, i, value, encoding);
     }
 }
 
@@ -23,7 +27,7 @@ void add_attributes(const rds2cpp::RObject& input, Output& output) {
 }
 
 Rcpp::RObject convert(const rds2cpp::RObject* input) {
-    if (input->sexp_type == rds2cpp::LIST) {
+    if (input->sexp_type == rds2cpp::SEXPType::LIST) {
         auto list = static_cast<const rds2cpp::PairList*>(input);
 
         const auto& data = list->data;
@@ -32,11 +36,11 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
             data_output[i] = convert(data[i].get());
         }
 
-        const auto& tags = list->tags;
-        Rcpp::StringVector tag_output(tags.size());
-        for (size_t i = 0; i < data.size(); ++i) {
-            if (tags[i].first) {
-                assign_to_string(tag_output, i, tags[i].second);
+        size_t nnodes = data.size();
+        Rcpp::StringVector tag_output(nnodes);
+        for (size_t i = 0; i < nnodes; ++i) {
+            if (list->has_tag[i]) {
+                assign_to_string(tag_output, i, list->tag_names[i], list->tag_encodings[i]);
             } else {
                 tag_output[i] = NA_STRING;
             }
@@ -47,35 +51,35 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         return output;
     }
 
-    if (input->sexp_type == rds2cpp::INT) {
+    if (input->sexp_type == rds2cpp::SEXPType::INT) {
         auto integer = static_cast<const rds2cpp::IntegerVector*>(input);
         const auto& data = integer->data;
         Rcpp::IntegerVector output(data.begin(), data.end());
         add_attributes(*input, output);
         return output;
 
-    } else if (input->sexp_type == rds2cpp::LGL) {
+    } else if (input->sexp_type == rds2cpp::SEXPType::LGL) {
         auto logical = static_cast<const rds2cpp::LogicalVector*>(input);
         const auto& data = logical->data;
         Rcpp::LogicalVector output(data.begin(), data.end());
         add_attributes(*input, output);
         return output;
 
-    } else if (input->sexp_type == rds2cpp::REAL) {
+    } else if (input->sexp_type == rds2cpp::SEXPType::REAL) {
         auto doubled = static_cast<const rds2cpp::DoubleVector*>(input);
         const auto& data = doubled->data;
         Rcpp::NumericVector output(data.begin(), data.end());
         add_attributes(*input, output);
         return output;
 
-    } else if (input->sexp_type == rds2cpp::RAW) {
+    } else if (input->sexp_type == rds2cpp::SEXPType::RAW) {
         auto raw = static_cast<const rds2cpp::RawVector*>(input);
         const auto& data = raw->data;
         Rcpp::RawVector output(data.begin(), data.end());
         add_attributes(*input, output);
         return output;
 
-    } else if (input->sexp_type == rds2cpp::CPLX) {
+    } else if (input->sexp_type == rds2cpp::SEXPType::CPLX) {
         auto cplx = static_cast<const rds2cpp::ComplexVector*>(input);
         const auto& data = cplx->data;
         Rcpp::ComplexVector output(data.size());
@@ -86,17 +90,17 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         add_attributes(*input, output);
         return output;
 
-    } else if (input->sexp_type == rds2cpp::STR) {
+    } else if (input->sexp_type == rds2cpp::SEXPType::STR) {
         auto chr = static_cast<const rds2cpp::CharacterVector*>(input);
-        const auto& data = chr->data;
-        Rcpp::StringVector output(data.size());
-        for (size_t i = 0; i < data.size(); ++i) {
-            assign_to_string(output, i, data[i]);
+        size_t nnodes = chr->data.size();
+        Rcpp::StringVector output(nnodes);
+        for (size_t i = 0; i < nnodes; ++i) {
+            assign_to_string(output, i, chr->data[i], chr->encodings[i], chr->missing[i]);
         }
         add_attributes(*input, output);
         return output;
 
-    } else if (input->sexp_type == rds2cpp::VEC) {
+    } else if (input->sexp_type == rds2cpp::SEXPType::VEC) {
         auto list = static_cast<const rds2cpp::List*>(input);
         const auto& data = list->data;
         Rcpp::List output(data.size());
@@ -114,5 +118,9 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
 //[[Rcpp::export(rng=false)]]
 Rcpp::RObject parse(std::string file_name) {
     auto output = rds2cpp::parse_rds(file_name);
-    return convert(output.object.get());
+    if (output.object == nullptr) {
+        return R_NilValue;
+    } else {
+        return convert(output.object.get());
+    }
 }

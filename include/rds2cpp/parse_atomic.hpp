@@ -14,7 +14,7 @@ namespace rds2cpp {
 namespace atomic_internal {
 
 template<class Vector, class Reader>
-Vector* parse_integer_or_logical(Reader& reader, std::vector<unsigned char>& leftovers) {
+Vector parse_integer_or_logical_body(Reader& reader, std::vector<unsigned char>& leftovers) {
     size_t len = get_length(reader, leftovers);
     Vector output(len);
 
@@ -37,23 +37,23 @@ Vector* parse_integer_or_logical(Reader& reader, std::vector<unsigned char>& lef
         }
     }
 
-    return new Vector(std::move(output));
+    return output;
 }
 
 }
 
 template<class Reader>
-IntegerVector* parse_integer(Reader& reader, std::vector<unsigned char>& leftovers) {
-    return atomic_internal::parse_integer_or_logical<IntegerVector>(reader, leftovers);
+IntegerVector parse_integer_body(Reader& reader, std::vector<unsigned char>& leftovers) {
+    return atomic_internal::parse_integer_or_logical_body<IntegerVector>(reader, leftovers);
 }
 
 template<class Reader>
-LogicalVector* parse_logical(Reader& reader, std::vector<unsigned char>& leftovers) {
-    return atomic_internal::parse_integer_or_logical<LogicalVector>(reader, leftovers);
+LogicalVector parse_logical_body(Reader& reader, std::vector<unsigned char>& leftovers) {
+    return atomic_internal::parse_integer_or_logical_body<LogicalVector>(reader, leftovers);
 }
 
 template<class Reader>
-DoubleVector* parse_double(Reader& reader, std::vector<unsigned char>& leftovers) {
+DoubleVector parse_double_body(Reader& reader, std::vector<unsigned char>& leftovers) {
     size_t len = get_length(reader, leftovers);
     DoubleVector output(len);
 
@@ -76,11 +76,11 @@ DoubleVector* parse_double(Reader& reader, std::vector<unsigned char>& leftovers
         }
     }
 
-    return new DoubleVector(std::move(output));
+    return output;
 }
 
 template<class Reader>
-RawVector* parse_raw(Reader& reader, std::vector<unsigned char>& leftovers) {
+RawVector parse_raw_body(Reader& reader, std::vector<unsigned char>& leftovers) {
     size_t len = get_length(reader, leftovers);
     RawVector output(len);
 
@@ -94,11 +94,11 @@ RawVector* parse_raw(Reader& reader, std::vector<unsigned char>& leftovers) {
         throw std::runtime_error("failed to parse data for a raw vector");
     }
 
-    return new RawVector(std::move(output));
+    return output;
 }
 
 template<class Reader>
-ComplexVector* parse_complex(Reader& reader, std::vector<unsigned char>& leftovers) {
+ComplexVector parse_complex_body(Reader& reader, std::vector<unsigned char>& leftovers) {
     size_t len = get_length(reader, leftovers);
     ComplexVector output(len);
 
@@ -121,17 +121,20 @@ ComplexVector* parse_complex(Reader& reader, std::vector<unsigned char>& leftove
         }
     }
 
-    return new ComplexVector(std::move(output));
+    return output;
 }
 
 template<class Reader>
-CharacterVector* parse_character(Reader& reader, std::vector<unsigned char>& leftovers) {
+CharacterVector parse_character_body(Reader& reader, std::vector<unsigned char>& leftovers) {
     size_t len = get_length(reader, leftovers);
     CharacterVector output(len);
     for (size_t i = 0; i < len; ++i) {
-        output.data[i] = parse_single_string(reader, leftovers);
+        auto str = parse_single_string(reader, leftovers);
+        output.data[i] = str.value;
+        output.encodings[i] = str.encoding;
+        output.missing[i] = str.missing;
     }
-    return new CharacterVector(std::move(output));
+    return output;
 }
 
 }

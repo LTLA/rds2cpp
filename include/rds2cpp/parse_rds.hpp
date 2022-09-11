@@ -19,7 +19,7 @@ struct Parsed {
     std::array<unsigned char, 3> writer_version;
     std::array<unsigned char, 3> reader_version;
     std::string encoding;
-    std::shared_ptr<RObject> object;
+    std::unique_ptr<RObject> object;
 };
 
 inline Parsed parse_rds(std::string file) {

@@ -12,12 +12,12 @@
 namespace rds2cpp {
 
 template<class Reader>
-Symbol* parse_symbol(Reader& reader, std::vector<unsigned char>& leftovers) {
+Symbol parse_symbol_body(Reader& reader, std::vector<unsigned char>& leftovers) {
     auto str = parse_single_string(reader, leftovers);
     Symbol output;
     output.name = str.value;
     output.encoding = str.encoding;
-    return new Symbol(std::move(output));
+    return output;
 }
 
 }

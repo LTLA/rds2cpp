@@ -17,14 +17,14 @@ namespace rds2cpp {
 namespace altrep_internal {
 
 template<class Vector, class Reader>
-Vector* parse_numeric_compact_seq(Reader& reader, std::vector<unsigned char>& leftovers) {
+Vector parse_numeric_compact_seq(Reader& reader, std::vector<unsigned char>& leftovers) {
     auto header = parse_header(reader, leftovers);
-    if (header[3] != REAL) {
+    if (header[3] != static_cast<unsigned>(SEXPType::REAL)) {
         throw std::runtime_error("expected compact_seq to store sequence information in doubles");
     }
 
-    std::shared_ptr<DoubleVector> info(parse_double(reader, leftovers));
-    const auto& ranges = info->data;
+    auto info = parse_double_body(reader, leftovers);
+    const auto& ranges = info.data;
     if (ranges.size() != 3) {
         throw std::runtime_error("expected compact_seq's sequence information to be of length 3");
     }
@@ -42,13 +42,13 @@ Vector* parse_numeric_compact_seq(Reader& reader, std::vector<unsigned char>& le
         throw std::runtime_error("failed to terminate a compact_seq ALTREP correctly");
     }
 
-    return new Vector(std::move(output));
+    return output;
 }
 
 template<class Vector, class Reader>
-Vector* parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& leftovers) {
+Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& leftovers) {
     auto plist_header = parse_header(reader, leftovers);
-    if (plist_header[3] != LIST) {
+    if (plist_header[3] != static_cast<int>(SEXPType::LIST)) {
         throw std::runtime_error("expected pairlist in wrapper ALTREP's payload");
     }
 
@@ -60,11 +60,12 @@ Vector* parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& left
 
     // Second cons value is the wrapping metadata, we don't care about it.
     auto metaheader = parse_header(reader, leftovers);
-    if (metaheader[3] != INT) {
+    if (metaheader[3] != static_cast<int>(SEXPType::INT)) {
         throw std::runtime_error("wrap_* ALTREP should have an integer vector for its metadata");
     }
-    std::unique_ptr<IntegerVector> metadata(parse_integer(reader, leftovers));
-    if (metadata->data.size() != 2) {
+
+    auto metadata = parse_integer_body(reader, leftovers);
+    if (metadata.data.size() != 2) {
         throw std::runtime_error("wrap_* ALTREP's metadata should be a length-2 integer vector");
     }
 
@@ -72,13 +73,13 @@ Vector* parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& left
     parse_attributes(reader, leftovers, *contents);
 
     auto coerced = static_cast<Vector*>(contents.get());
-    return new Vector(std::move(*coerced));
+    return IntegerVector(std::move(*coerced));
 }
 
 template<class Reader>
-CharacterVector* parse_deferred_string(Reader& reader, std::vector<unsigned char>& leftovers) {
+CharacterVector parse_deferred_string(Reader& reader, std::vector<unsigned char>& leftovers) {
     auto plist_header = parse_header(reader, leftovers);
-    if (plist_header[3] != LIST) {
+    if (plist_header[3] != static_cast<int>(SEXPType::LIST)) {
         throw std::runtime_error("expected pairlist in deferred_string ALTREP's payload");
     }
 
@@ -86,19 +87,21 @@ CharacterVector* parse_deferred_string(Reader& reader, std::vector<unsigned char
     auto contents = parse_object(reader, leftovers);
     CharacterVector output;
 
-    if (contents->sexp_type == INT) {
+    if (contents->sexp_type == SEXPType::INT){
         auto cast = static_cast<IntegerVector*>(contents.get());
-        output = CharacterVector(cast->data.size());
-        for (size_t i = 0; i < cast->data.size(); ++i) {
+        size_t n = cast->data.size();
+        output = CharacterVector(n);
+
+        for (size_t i = 0; i < n; ++i) {
             if (cast->data[i] == std::numeric_limits<int32_t>::min()) { // see R_ext/Arith.h
-                output.data[i].missing = true;
+                output.missing[i] = true;
             } else {
-                output.data[i].value = std::to_string(cast->data[i]);
-                output.data[i].encoding = String::ASCII;
+                output.data[i] = std::to_string(cast->data[i]);
+                output.encodings[i] = StringEncoding::ASCII;
             }
         }
 
-    } else if (contents->sexp_type == REAL) {
+    } else if (contents->sexp_type == SEXPType::REAL) {
         std::ostringstream converter;
         converter.precision(std::numeric_limits<double>::max_digits10);
         auto cast = static_cast<DoubleVector*>(contents.get());
@@ -106,24 +109,26 @@ CharacterVector* parse_deferred_string(Reader& reader, std::vector<unsigned char
         output = CharacterVector(cast->data.size());
 
         for (size_t i = 0; i < cast->data.size(); ++i) {
-            output.data[i].encoding = String::ASCII;
+            output.encodings[i] = StringEncoding::ASCII;
 
             if (std::isfinite(cast->data[i])) {
                 converter << cast->data[i];
-                output.data[i].value = converter.str();
+                output.data[i] = converter.str();
                 converter.str(std::string());
+
             } else if (std::isnan(cast->data[i])) {
                 auto ptr = reinterpret_cast<uint32_t*>(&(cast->data[i]));
                 if (ptr[lw] == 1954) { // see R_ext/Arith.h.
-                    output.data[i].missing = true;
+                    output.missing[i] = true;
                 } else {
-                    output.data[i].value = "NaN";
+                    output.data[i] = "NaN";
                 }
+
             } else if (std::isinf(cast->data[i])) {
                 if (cast->data[i] > 0) {
-                    output.data[i].value = "Inf";
+                    output.data[i] = "Inf";
                 } else {
-                    output.data[i].value = "-Inf";
+                    output.data[i] = "-Inf";
                 }
             }
         }
@@ -134,38 +139,49 @@ CharacterVector* parse_deferred_string(Reader& reader, std::vector<unsigned char
 
     // Second cons value is the wrapping metadata, we don't care about it.
     auto metaheader = parse_header(reader, leftovers);
-    if (metaheader[3] != INT) {
+    if (metaheader[3] != static_cast<int>(SEXPType::INT)) {
         throw std::runtime_error("deferred_string ALTREP should have an integer vector for its metadata");
     }
-    std::unique_ptr<IntegerVector> metadata(parse_integer(reader, leftovers));
-    if (metadata->data.size() != 1) {
+
+    auto metadata = parse_integer_body(reader, leftovers);
+    if (metadata.data.size() != 1) {
         throw std::runtime_error("deferred_string ALTREP's metadata should be a length-1 integer vector");
     }
 
-    return new CharacterVector(std::move(output));
+    return output;
 }
 
 }
 
 template<class Reader>
-RObject* parse_altrep(Reader& reader, std::vector<unsigned char>& leftovers) {
-    std::unique_ptr<PairList> plist(parse_pairlist(reader, leftovers));
-    if (plist->data.size() < 1 || plist->data[0]->sexp_type != SYM) {
+std::unique_ptr<RObject> parse_altrep_body(Reader& reader, std::vector<unsigned char>& leftovers) {
+    auto header = parse_header(reader, leftovers);
+    if (header[3] != static_cast<unsigned>(SEXPType::LIST)) {
+        throw std::runtime_error("expected ALTREP description to be a pairlist");
+    }
+
+    auto plist = parse_pairlist_body(reader, leftovers, header);
+    if (plist.data.size() < 1 || plist.data[0]->sexp_type != SEXPType::SYM) {
         throw std::runtime_error("expected type specification symbol in the ALTREP description");
     }
-    
-    auto symb = static_cast<Symbol*>(plist->data[0].get());
+
+    std::unique_ptr<RObject> output;
+    auto pointerize_ = [&](auto x) -> void {
+        pointerize(output, std::move(x));
+    };
+
+    auto symb = static_cast<Symbol*>(plist.data[0].get());
     if (symb->name == "wrap_integer") {
-        return altrep_internal::parse_attribute_wrapper<IntegerVector>(reader, leftovers);
+        pointerize_(altrep_internal::parse_attribute_wrapper<IntegerVector>(reader, leftovers));
     } else if (symb->name == "compact_intseq") {
-        return altrep_internal::parse_numeric_compact_seq<IntegerVector>(reader, leftovers);
+        pointerize_(altrep_internal::parse_numeric_compact_seq<IntegerVector>(reader, leftovers));
     } else if (symb->name == "deferred_string") {
-        return altrep_internal::parse_deferred_string(reader, leftovers);
+        pointerize_(altrep_internal::parse_deferred_string(reader, leftovers));
     } else {
         throw std::runtime_error("unrecognized ALTREP type '" + symb->name + "'");
     }
 
-    return nullptr;
+    return output;
 }
 
 }

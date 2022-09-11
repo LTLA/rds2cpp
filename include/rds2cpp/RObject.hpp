@@ -6,36 +6,35 @@
 #include <complex>
 
 #include "SEXPType.hpp"
+#include "StringEncoding.hpp"
 
 namespace rds2cpp {
 
-struct String {
-    std::string value;
-
-    enum Encoding { NONE, LATIN1, UTF8, ASCII };
-
-    Encoding encoding = NONE;
-
-    bool missing;
-};
-
 struct RObject {
     RObject(SEXPType st) : sexp_type(st) {}
+    virtual ~RObject() {}
+
+    // Rule of 5'ing.
+    RObject& operator=(const RObject& rhs) = default;
+    RObject(const RObject& rhs) = default;
+    RObject& operator=(RObject&& rhs) = default;
+    RObject(RObject&& rhs) = default;
+
     SEXPType sexp_type;
 
     std::vector<std::string> attribute_names;
-    std::vector<String::Encoding> attribute_encodings;
-    std::vector<std::shared_ptr<RObject> > attribute_values;
+    std::vector<StringEncoding> attribute_encodings;
+    std::vector<std::unique_ptr<RObject> > attribute_values;
 };
 
 struct Null : public RObject {
-    Null() : RObject(NIL) {}
+    Null() : RObject(SEXPType::NIL) {}
 };
 
 struct Symbol : public RObject {
-    Symbol() : RObject(SYM) {}
+    Symbol() : RObject(SEXPType::SYM) {}
     std::string name;
-    String::Encoding encoding;
+    StringEncoding encoding;
 };
 
 template<typename ElementType, SEXPType stype>
@@ -45,27 +44,35 @@ struct AtomicVector : public RObject {
     std::vector<ElementType> data;
 };
 
-typedef AtomicVector<int32_t, INT> IntegerVector;
+typedef AtomicVector<int32_t, SEXPType::INT> IntegerVector;
 
-typedef AtomicVector<int32_t, LGL> LogicalVector;
+typedef AtomicVector<int32_t, SEXPType::LGL> LogicalVector;
 
-typedef AtomicVector<double, REAL> DoubleVector;
+typedef AtomicVector<double, SEXPType::REAL> DoubleVector;
 
-typedef AtomicVector<unsigned char, RAW> RawVector;
+typedef AtomicVector<unsigned char, SEXPType::RAW> RawVector;
 
-typedef AtomicVector<std::complex<double>, CPLX> ComplexVector;
+typedef AtomicVector<std::complex<double>, SEXPType::CPLX> ComplexVector;
 
-typedef AtomicVector<String, STR> CharacterVector;
+struct CharacterVector : public RObject {
+    CharacterVector(size_t n = 0) : RObject(SEXPType::STR), data(n), encodings(n), missing(n) {}
+    std::vector<std::string> data;
+    std::vector<StringEncoding> encodings;
+    std::vector<char> missing;
+};
 
 struct List : public RObject {
-    List(size_t n = 0) : RObject(VEC), data(n) {}
-    std::vector<std::shared_ptr<RObject> > data;
+    List(size_t n = 0) : RObject(SEXPType::VEC), data(n) {}
+    std::vector<std::unique_ptr<RObject> > data;
 };
 
 struct PairList : public RObject {
-    PairList() : RObject(LIST) {}
-    std::vector<std::shared_ptr<RObject> > data;  
-    std::vector<std::pair<bool, String> > tags;
+    PairList() : RObject(SEXPType::LIST) {}
+
+    std::vector<std::unique_ptr<RObject> > data; 
+    std::vector<bool> has_tag;
+    std::vector<std::string> tag_names;
+    std::vector<StringEncoding> tag_encodings;
 };
 
 }

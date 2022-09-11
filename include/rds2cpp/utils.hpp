@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <vector>
 #include <cstdint>
+#include <memory>
 
 namespace rds2cpp {
 
@@ -81,7 +82,6 @@ inline bool little_endian() {
     return (*lsb == 1);
 }
 
-
 typedef std::array<unsigned char, 4> Header;
 
 template<class Reader>
@@ -98,6 +98,12 @@ Header parse_header(Reader& reader, std::vector<unsigned char>& leftovers) {
         throw std::runtime_error("missing or incomplete object header");
     }
     return details;
+}
+
+template<class Pointer, class Object>
+void pointerize(Pointer& ptr, Object obj) {
+    ptr.reset(new Object(std::move(obj)));
+    return;
 }
 
 }

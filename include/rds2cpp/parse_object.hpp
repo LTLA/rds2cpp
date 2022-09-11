@@ -20,38 +20,43 @@
 namespace rds2cpp {
 
 template<class Reader>
-std::shared_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>& leftovers) {
+std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>& leftovers) {
     auto details = parse_header(reader, leftovers);
     int sexp_type = details[3];
-    std::shared_ptr<RObject> output;
+    std::unique_ptr<RObject> output;
 
-    if (sexp_type == LIST) {
-        output.reset(parse_pairlist(reader, leftovers, details));
+    auto pointerize_ = [&](auto obj) -> void {
+        pointerize(output, std::move(obj));
+        return;
+    };
 
-    } else if (sexp_type == SYM) {
-        output.reset(parse_symbol(reader, leftovers));
+    if (sexp_type == static_cast<unsigned>(SEXPType::LIST)) {
+        pointerize_(parse_pairlist_body(reader, leftovers, details));
+
+    } else if (sexp_type == static_cast<unsigned>(SEXPType::SYM)) {
+        pointerize_(parse_symbol_body(reader, leftovers));
 
     } else if (sexp_type == 238) {
-        output.reset(parse_altrep(reader, leftovers));
+        output = parse_altrep_body(reader, leftovers);
 
     } else if (sexp_type == 255) {
-        output.reset(new Null);
+        pointerize_(Null());
 
     } else {
-        if (sexp_type == INT) {
-            output.reset(parse_integer(reader, leftovers));
-        } else if (sexp_type == LGL) { 
-            output.reset(parse_logical(reader, leftovers));
-        } else if (sexp_type == RAW) {
-            output.reset(parse_raw(reader, leftovers));
-        } else if (sexp_type == REAL) {
-            output.reset(parse_double(reader, leftovers));
-        } else if (sexp_type == CPLX) {
-            output.reset(parse_complex(reader, leftovers));
-        } else if (sexp_type == STR) {
-            output.reset(parse_character(reader, leftovers));
-        } else if (sexp_type == VEC) {
-            output.reset(parse_list(reader, leftovers));
+        if (sexp_type == static_cast<unsigned>(SEXPType::INT)) {
+            pointerize_(parse_integer_body(reader, leftovers));
+        } else if (sexp_type == static_cast<unsigned>(SEXPType::LGL)) { 
+            pointerize_(parse_logical_body(reader, leftovers));
+        } else if (sexp_type == static_cast<unsigned>(SEXPType::RAW)) {
+            pointerize_(parse_raw_body(reader, leftovers));
+        } else if (sexp_type == static_cast<unsigned>(SEXPType::REAL)) {
+            pointerize_(parse_double_body(reader, leftovers));
+        } else if (sexp_type == static_cast<unsigned>(SEXPType::CPLX)) {
+            pointerize_(parse_complex_body(reader, leftovers));
+        } else if (sexp_type == static_cast<unsigned>(SEXPType::STR)) {
+            pointerize_(parse_character_body(reader, leftovers));
+        } else if (sexp_type == static_cast<unsigned>(SEXPType::VEC)) {
+            pointerize_(parse_list_body(reader, leftovers));
         }
 
         if (has_attributes(details)) {

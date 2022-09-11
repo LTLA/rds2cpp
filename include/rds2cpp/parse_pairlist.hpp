@@ -11,13 +11,15 @@
 namespace rds2cpp {
 
 template<class Reader>
-std::shared_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&);
+std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&);
 
 template<class Reader>
 void parse_attributes(Reader&, std::vector<unsigned char>&, RObject*);
 
+namespace pairlist_internal {
+
 template<class Reader>
-void parse_pairlist_internal(Reader& reader, std::vector<unsigned char>& leftovers, PairList& output, const Header& header) {
+void recursive_parse(Reader& reader, std::vector<unsigned char>& leftovers, PairList& output, const Header& header) {
     bool has_attr = header[2] & 0x2;
     bool has_tag = header[2] & 0x4;
 
@@ -25,14 +27,19 @@ void parse_pairlist_internal(Reader& reader, std::vector<unsigned char>& leftove
         parse_attributes(reader, leftovers, output);
     }
 
+    output.has_tag.push_back(has_tag);
     if (has_tag) {
         auto header = parse_header(reader, leftovers);
         if (header[3] != 1) {
             throw std::runtime_error("expected a SYMSXP for a pairlist tag");
         }
-        output.tags.emplace_back(true, parse_single_string(reader, leftovers));
+        auto str = parse_single_string(reader, leftovers);
+        output.tag_names.push_back(str.value);
+        output.tag_encodings.push_back(str.encoding);
     } else {
-        output.tags.emplace_back(false, String());
+        auto n = output.tag_names.size() + 1;
+        output.tag_names.resize(n);
+        output.tag_encodings.resize(n);
     }
 
     output.data.push_back(parse_object(reader, leftovers));
@@ -44,23 +51,17 @@ void parse_pairlist_internal(Reader& reader, std::vector<unsigned char>& leftove
         throw std::runtime_error("expected a terminator or the next pairlist node");
     }
 
-    parse_pairlist_internal(reader, leftovers, output, next_header);
+    recursive_parse(reader, leftovers, output, next_header);
     return;
 }
 
-template<class Reader>
-PairList* parse_pairlist(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header) {
-    PairList output;
-    parse_pairlist_internal(reader, leftovers, output, header);
-    return new PairList(std::move(output));
 }
 
 template<class Reader>
-PairList* parse_pairlist(Reader& reader, std::vector<unsigned char>& leftovers) {
+PairList parse_pairlist_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header) {
     PairList output;
-    auto header = parse_header(reader, leftovers);
-    parse_pairlist_internal(reader, leftovers, output, header);
-    return new PairList(std::move(output));
+    pairlist_internal::recursive_parse(reader, leftovers, output, header);
+    return output;
 }
 
 }
