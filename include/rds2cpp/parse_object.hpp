@@ -21,7 +21,7 @@
 namespace rds2cpp {
 
 template<class Reader>
-std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>& leftovers) {
+std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>& leftovers, Globals& globals) {
     auto details = parse_header(reader, leftovers);
     auto sexp_type = details[3];
 
@@ -32,20 +32,29 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
     };
 
     if (sexp_type == static_cast<unsigned char>(SEXPType::LIST)) {
-        pointerize_(parse_pairlist_body(reader, leftovers, details));
+        pointerize_(parse_pairlist_body(reader, leftovers, details, globals));
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::SYM)) {
         pointerize_(parse_symbol_body(reader, leftovers));
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::S4)) {
-        pointerize_(parse_s4_body(reader, leftovers, details));
+        pointerize_(parse_s4_body(reader, leftovers, details, globals));
 
     } else if (sexp_type == 238) {
-        output = parse_altrep_body(reader, leftovers);
+        output = parse_altrep_body(reader, leftovers, globals);
 
-    } else if (sexp_type == 254 || sexp_type == 255) {
+    } else if (sexp_type == 254) {
         pointerize_(Null());
 
+    } else if (sexp_type == static_cast<unsigned char>(SEXPType::ENV)) {
+        pointerize_(parse_environment_body(reader, leftovers, details, globals));
+
+    } else if (sexp_type == 255) {
+        pointerize_(parse_global_environment_body(reader, leftovers, globals));
+
+    } else if (sexp_type == 253) {
+        pointerize_(parse_existing_environment_body(reader, leftovers, details, globals));
+        
     } else {
         if (sexp_type == static_cast<unsigned char>(SEXPType::INT)) {
             pointerize_(parse_integer_body(reader, leftovers));
@@ -64,7 +73,7 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
         }
 
         if (has_attributes(details)) {
-            parse_attributes(reader, leftovers, *output);
+            parse_attributes(reader, leftovers, *output, globals);
         }
     }
 

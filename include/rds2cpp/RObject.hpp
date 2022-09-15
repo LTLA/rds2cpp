@@ -37,6 +37,19 @@ struct Symbol : public RObject {
     StringEncoding encoding;
 };
 
+struct EnvironmentIndex : public RObject {
+    Symbol() : RObject(SEXPType::ENV) {}
+    size_t index;
+    bool global;
+};
+
+struct Environment {
+    size_t parent;
+    std::vector<std::string> variable_names;
+    std::vector<StringEncoding> variable_encodings;
+    std::vector<std::unique_ptr<RObject> > variable_values;
+};
+
 template<typename ElementType, SEXPType stype>
 struct AtomicVector : public RObject {
     AtomicVector(size_t n = 0) : RObject(stype), data(n) {}
