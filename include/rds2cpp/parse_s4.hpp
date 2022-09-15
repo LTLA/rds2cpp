@@ -6,14 +6,18 @@
 
 #include "RObject.hpp"
 #include "utils.hpp"
+#include "Shared.hpp"
 
 namespace rds2cpp {
 
 template<class Reader>
-std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&);
+std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&, Shared&);
 
 template<class Reader>
-S4Object parse_s4_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header) {
+PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, const Header&, Shared&);
+
+template<class Reader>
+S4Object parse_s4_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, Shared& shared) {
     if (!(header[2] & 0x2) || !(header[2] & 0x1) || !(header[1] & 0x1)) {
         throw std::runtime_error("S4 objects should have object, attribute, and gp-S4 bits set in header");
     }
@@ -25,7 +29,7 @@ S4Object parse_s4_body(Reader& reader, std::vector<unsigned char>& leftovers, co
         throw std::runtime_error("slots of an S4 object should be stored as a pairlist");
     }
 
-    auto slot_plist = parse_pairlist_body(reader, leftovers, slot_header);
+    auto slot_plist = parse_pairlist_body(reader, leftovers, slot_header, shared);
     size_t nslots = slot_plist.data.size();
     bool found_class = false;
 

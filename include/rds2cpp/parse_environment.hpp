@@ -6,43 +6,53 @@
 #include <algorithm>
 
 #include "RObject.hpp"
+#include "Shared.hpp"
 #include "utils.hpp"
 
 namespace rds2cpp {
 
+template<class Reader>
+PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, Shared&);
+
 namespace environment_internals {
 
-void find_parent_env(const Header& header, const Globals& globals, size_t& index) {
-    index = 0;
+size_t find_parent_env(const Header& header, const Shared& shared) {
+    size_t index = 0;
     for (int i = 0; i < 3; ++i) {
-        index << 8;
-        index += parent[i];
+        index <<= 8;
+        index += header[i];
     }
-    if (index >= globals.environments.size()) {
+
+    if (index >= shared.environment_mappings.size()) {
         throw std::runtime_error("index of existing environment is out of range");
     }
+    if (shared.environment_mappings[index] == -1) {
+        throw std::runtime_error("index of existing environment refers to the global environment");
+    }
+    return shared.environment_mappings[index];
 }
 
 }
 
 template<class Reader>
-Environment parse_global_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, Globals& globals) {
+EnvironmentIndex parse_global_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
     EnvironmentIndex output;
-    globals.environments.emplace_back(nullptr);
+    shared.environment_mappings.push_back(-1);
+    output.index = -1;
     output.global = true;
     return output;
 }
 
 template<class Reader>
-Environment parse_existing_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, Globals& globals) {
+EnvironmentIndex parse_existing_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, Shared& shared) {
     EnvironmentIndex output;
+    output.index = environment_internals::find_parent_env(header, shared);
     output.global = false;
-    environment_internals::find_parent_env(header, globals, output.index);
     return output;
 }
 
 template<class Reader>
-Environment parse_new_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, Globals& globals) {
+EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, Shared& shared) {
     EnvironmentIndex output;
     Environment new_env;
 
@@ -57,10 +67,10 @@ Environment parse_new_environment_body(Reader& reader, std::vector<unsigned char
 
     auto lastbit = static_cast<unsigned char>(parent[4]);
     if (lastbit == 255) {
-        environment_internals::find_parent_env(header, globals, new_env.parent);
+        new_env.parent = environment_internals::find_parent_env(parent, shared);
 
     } else if (lastbit == 4) {
-        auto env = parse_environment_body(reader, leftovers, parent, globals);
+        auto env = parse_new_environment_body(reader, leftovers, parent, shared);
         new_env.parent = env.index;
 
     } else {
@@ -68,28 +78,28 @@ Environment parse_new_environment_body(Reader& reader, std::vector<unsigned char
     }
 
     // Who knows what this is...
-    auto header = extract_header(reader, leftovers); 
-    if (header[3] != 254) {
+    auto mystery1 = parse_header(reader, leftovers); 
+    if (mystery1[3] != 254) {
         throw std::runtime_error("environment's parent and hash table should be separated by a null");
     }
 
     // The next part is the hash table.
     auto hash_header = parse_header(reader, leftovers);
-    if (hash_header[3] != static_cast<unsigned char>(VEC)) {
+    if (hash_header[3] != static_cast<unsigned char>(SEXPType::VEC)) {
         throw std::runtime_error("environment's hash table should be a list");
     }
 
-    auto vec = parse_list_body(reader, leftovers);
+    auto vec = parse_list_body(reader, leftovers, shared);
     for (size_t i = 0; i < vec.data.size(); ++i) {
-        if (vec.data[i]->sexp_type == NIL) {
+        if (vec.data[i]->sexp_type == SEXPType::NIL) {
             continue;
         }
 
-        if (vec.data[i]->sexp_type != LIST) {
+        if (vec.data[i]->sexp_type != SEXPType::LIST) {
             throw std::runtime_error("environment values should be represented as pairlists");
         }
 
-        auto plist = static_cast<List*>(vec.data[i].get());
+        auto plist = static_cast<PairList*>(vec.data[i].get());
         if (plist->data.size() != 1 || !plist->has_tag[0]) {
             throw std::runtime_error("environment values should be represented as a length-1 tagged pairlists");
         }
@@ -99,15 +109,16 @@ Environment parse_new_environment_body(Reader& reader, std::vector<unsigned char
         new_env.variable_encodings.emplace_back(plist->tag_encodings[i]);
     }
 
-    // Who knows what this is...
-    auto header = extract_header(reader, leftovers); 
-    if (header[3] != 254) {
+    // Who knows what this is... a terminator for the environment, I guess?
+    auto mystery2 = parse_header(reader, leftovers); 
+    if (mystery2[3] != 254) {
         throw std::runtime_error("environment should be terminated by a null");
     }
 
-    output.index = globals.environments.size();
+    output.index = shared.environments.size();
     output.global = false;
-    globals.environments.emplace_back(std::move(new_env));
+    shared.environments.emplace_back(std::move(new_env));
+    shared.environment_mappings.push_back(output.index);
 
     return output;
 };

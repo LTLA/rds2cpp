@@ -10,9 +10,21 @@
 #include "RObject.hpp"
 #include "utils.hpp"
 #include "parse_single_string.hpp"
-#include "parse_atomic.hpp"
+#include "parse_attributes.hpp"
 
 namespace rds2cpp {
+
+template<class Reader>
+IntegerVector parse_integer_body(Reader&, std::vector<unsigned char>&);
+
+template<class Reader>
+DoubleVector parse_double_body(Reader& reader, std::vector<unsigned char>&);
+
+template<class Reader>
+std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&, Shared&);
+
+template<class Reader>
+PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, const Header&, Shared&);
 
 namespace altrep_internal {
 
@@ -46,14 +58,14 @@ Vector parse_numeric_compact_seq(Reader& reader, std::vector<unsigned char>& lef
 }
 
 template<class Vector, class Reader>
-Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& leftovers) {
+Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
     auto plist_header = parse_header(reader, leftovers);
     if (plist_header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected pairlist in wrapper ALTREP's payload");
     }
 
     // First pairlist element is a CONS cell where the first value is the wrapped integer vector.
-    auto contents = parse_object(reader, leftovers);
+    auto contents = parse_object(reader, leftovers, shared);
     if (contents->sexp_type != Vector::vector_sexp_type) {
         throw std::runtime_error("incorrectly typed contents in wrapper ALTREP's payload");
     }
@@ -70,21 +82,21 @@ Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& lefto
     }
 
     // Now we can finally get the attributes, which makes up the rest of the pairlist.
-    parse_attributes(reader, leftovers, *contents);
+    parse_attributes(reader, leftovers, *contents, shared);
 
     auto coerced = static_cast<Vector*>(contents.get());
     return IntegerVector(std::move(*coerced));
 }
 
 template<class Reader>
-CharacterVector parse_deferred_string(Reader& reader, std::vector<unsigned char>& leftovers) {
+CharacterVector parse_deferred_string(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
     auto plist_header = parse_header(reader, leftovers);
     if (plist_header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected pairlist in deferred_string ALTREP's payload");
     }
 
     // First pairlist element is a CONS cell where the first value is the thing to be converted.
-    auto contents = parse_object(reader, leftovers);
+    auto contents = parse_object(reader, leftovers, shared);
     CharacterVector output;
 
     if (contents->sexp_type == SEXPType::INT){
@@ -154,13 +166,13 @@ CharacterVector parse_deferred_string(Reader& reader, std::vector<unsigned char>
 }
 
 template<class Reader>
-std::unique_ptr<RObject> parse_altrep_body(Reader& reader, std::vector<unsigned char>& leftovers) {
+std::unique_ptr<RObject> parse_altrep_body(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
     auto header = parse_header(reader, leftovers);
     if (header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected ALTREP description to be a pairlist");
     }
 
-    auto plist = parse_pairlist_body(reader, leftovers, header);
+    auto plist = parse_pairlist_body(reader, leftovers, header, shared);
     if (plist.data.size() < 1 || plist.data[0]->sexp_type != SEXPType::SYM) {
         throw std::runtime_error("expected type specification symbol in the ALTREP description");
     }
@@ -172,11 +184,11 @@ std::unique_ptr<RObject> parse_altrep_body(Reader& reader, std::vector<unsigned 
 
     auto symb = static_cast<Symbol*>(plist.data[0].get());
     if (symb->name == "wrap_integer") {
-        pointerize_(altrep_internal::parse_attribute_wrapper<IntegerVector>(reader, leftovers));
+        pointerize_(altrep_internal::parse_attribute_wrapper<IntegerVector>(reader, leftovers, shared));
     } else if (symb->name == "compact_intseq") {
         pointerize_(altrep_internal::parse_numeric_compact_seq<IntegerVector>(reader, leftovers));
     } else if (symb->name == "deferred_string") {
-        pointerize_(altrep_internal::parse_deferred_string(reader, leftovers));
+        pointerize_(altrep_internal::parse_deferred_string(reader, leftovers, shared));
     } else {
         throw std::runtime_error("unrecognized ALTREP type '" + symb->name + "'");
     }

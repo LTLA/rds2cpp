@@ -38,16 +38,9 @@ struct Symbol : public RObject {
 };
 
 struct EnvironmentIndex : public RObject {
-    Symbol() : RObject(SEXPType::ENV) {}
+    EnvironmentIndex() : RObject(SEXPType::ENV) {}
     size_t index;
     bool global;
-};
-
-struct Environment {
-    size_t parent;
-    std::vector<std::string> variable_names;
-    std::vector<StringEncoding> variable_encodings;
-    std::vector<std::unique_ptr<RObject> > variable_values;
 };
 
 template<typename ElementType, SEXPType stype>

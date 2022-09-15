@@ -6,18 +6,19 @@
 
 #include "RObject.hpp"
 #include "utils.hpp"
+#include "Shared.hpp"
 
 namespace rds2cpp {
 
 template<class Reader>
-std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&);
+std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&, Shared& shared);
 
 template<class Reader>
-List parse_list_body(Reader& reader, std::vector<unsigned char>& leftovers) {
+List parse_list_body(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
     size_t len = get_length(reader, leftovers);
     List output(len);
     for (size_t i = 0; i < len; ++i) {
-        output.data[i] = parse_object(reader, leftovers);        
+        output.data[i] = parse_object(reader, leftovers, shared);
     }
     return output;
 }
