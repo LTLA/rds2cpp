@@ -23,13 +23,16 @@ size_t find_parent_env(const Header& header, const Shared& shared) {
         index += header[i];
     }
 
-    if (index >= shared.environment_mappings.size()) {
+    if (index == 0 || index > shared.environment_mappings.size()) {
         throw std::runtime_error("index of existing environment is out of range");
     }
-    if (shared.environment_mappings[index] == -1) {
+
+    auto mapped = shared.environment_mappings[index - 1];
+    if (mapped == -1) {
         throw std::runtime_error("index of existing environment refers to the global environment");
     }
-    return shared.environment_mappings[index];
+
+    return mapped;
 }
 
 }
@@ -65,13 +68,16 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
         std::copy(buffer, buffer + n, parent.data() + i);
     });
 
-    auto lastbit = static_cast<unsigned char>(parent[4]);
+    auto lastbit = static_cast<unsigned char>(parent[3]);
     if (lastbit == 255) {
         new_env.parent = environment_internals::find_parent_env(parent, shared);
 
     } else if (lastbit == 4) {
         auto env = parse_new_environment_body(reader, leftovers, parent, shared);
         new_env.parent = env.index;
+
+    } else if (lastbit == 253) {
+        new_env.parent = -1; // i.e., global env is the parent.
 
     } else {
         throw std::runtime_error("could not resolve the parent environment");
@@ -104,9 +110,9 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
             throw std::runtime_error("environment values should be represented as a length-1 tagged pairlists");
         }
 
-        new_env.variable_values.emplace_back(std::move(plist->data[i]));
-        new_env.variable_names.emplace_back(std::move(plist->tag_names[i]));
-        new_env.variable_encodings.emplace_back(plist->tag_encodings[i]);
+        new_env.variable_values.emplace_back(std::move(plist->data[0]));
+        new_env.variable_names.emplace_back(std::move(plist->tag_names[0]));
+        new_env.variable_encodings.emplace_back(plist->tag_encodings[0]);
     }
 
     // Who knows what this is... a terminator for the environment, I guess?

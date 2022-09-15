@@ -17,23 +17,23 @@ void assign_to_string(Rcpp::StringVector& output, size_t i, const std::string& v
     }
 }
 
-Rcpp::RObject convert(const rds2cpp::RObject*);
+Rcpp::RObject convert(const rds2cpp::RObject*, const rds2cpp::Parsed&);
 
 template<class Output>
-void add_attributes(const rds2cpp::RObject& input, Output& output) {
+void add_attributes(const rds2cpp::RObject& input, const rds2cpp::Parsed& parsed, Output& output) {
     for (size_t a = 0; a < input.attribute_names.size(); ++a) {
-        output.attr(input.attribute_names[a]) = convert(input.attribute_values[a].get());
+        output.attr(input.attribute_names[a]) = convert(input.attribute_values[a].get(), parsed);
     }
 }
 
-Rcpp::RObject convert(const rds2cpp::RObject* input) {
+Rcpp::RObject convert(const rds2cpp::RObject* input, const rds2cpp::Parsed& parsed) {
     if (input->sexp_type == rds2cpp::SEXPType::LIST) {
         auto list = static_cast<const rds2cpp::PairList*>(input);
 
         const auto& data = list->data;
         Rcpp::List data_output(data.size());
         for (size_t i = 0; i < data.size(); ++i) {
-            data_output[i] = convert(data[i].get());
+            data_output[i] = convert(data[i].get(), parsed);
         }
 
         size_t nnodes = data.size();
@@ -47,7 +47,7 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         }
  
         auto output = Rcpp::List::create(Rcpp::Named("data") = data_output, Rcpp::Named("tag") = tag_output);
-        add_attributes(*input, output);
+        add_attributes(*input, parsed, output);
         return output;
     }
 
@@ -56,7 +56,7 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
 
         Rcpp::S4 output(s4->class_name);
         for (size_t s = 0; s < s4->attribute_names.size(); ++s) {
-            output.slot(s4->attribute_names[s]) = convert(s4->attribute_values[s].get());
+            output.slot(s4->attribute_names[s]) = convert(s4->attribute_values[s].get(), parsed);
         }
 
         return Rcpp::RObject(output);
@@ -66,28 +66,28 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         auto integer = static_cast<const rds2cpp::IntegerVector*>(input);
         const auto& data = integer->data;
         Rcpp::IntegerVector output(data.begin(), data.end());
-        add_attributes(*input, output);
+        add_attributes(*input, parsed, output);
         return output;
 
     } else if (input->sexp_type == rds2cpp::SEXPType::LGL) {
         auto logical = static_cast<const rds2cpp::LogicalVector*>(input);
         const auto& data = logical->data;
         Rcpp::LogicalVector output(data.begin(), data.end());
-        add_attributes(*input, output);
+        add_attributes(*input, parsed, output);
         return output;
 
     } else if (input->sexp_type == rds2cpp::SEXPType::REAL) {
         auto doubled = static_cast<const rds2cpp::DoubleVector*>(input);
         const auto& data = doubled->data;
         Rcpp::NumericVector output(data.begin(), data.end());
-        add_attributes(*input, output);
+        add_attributes(*input, parsed, output);
         return output;
 
     } else if (input->sexp_type == rds2cpp::SEXPType::RAW) {
         auto raw = static_cast<const rds2cpp::RawVector*>(input);
         const auto& data = raw->data;
         Rcpp::RawVector output(data.begin(), data.end());
-        add_attributes(*input, output);
+        add_attributes(*input, parsed, output);
         return output;
 
     } else if (input->sexp_type == rds2cpp::SEXPType::CPLX) {
@@ -98,7 +98,7 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
             output[i].r = std::real(data[i]);
             output[i].i = std::imag(data[i]);
         }
-        add_attributes(*input, output);
+        add_attributes(*input, parsed, output);
         return output;
 
     } else if (input->sexp_type == rds2cpp::SEXPType::STR) {
@@ -108,7 +108,7 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         for (size_t i = 0; i < nnodes; ++i) {
             assign_to_string(output, i, chr->data[i], chr->encodings[i], chr->missing[i]);
         }
-        add_attributes(*input, output);
+        add_attributes(*input, parsed, output);
         return output;
 
     } else if (input->sexp_type == rds2cpp::SEXPType::VEC) {
@@ -116,10 +116,35 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         const auto& data = list->data;
         Rcpp::List output(data.size());
         for (size_t i = 0; i < data.size(); ++i) {
-            output[i] = convert(data[i].get());
+            output[i] = convert(data[i].get(), parsed);
         }
-        add_attributes(*input, output);
+        add_attributes(*input, parsed, output);
         return output;
+
+    } else if (input->sexp_type == rds2cpp::SEXPType::ENV) {
+        auto edx = static_cast<const rds2cpp::EnvironmentIndex*>(input);
+
+        if (edx->global) {
+            return Rcpp::List::create(
+                Rcpp::Named("id") = Rcpp::IntegerVector::create(-1)
+            );
+        } else {
+            const auto& env = parsed.environments[edx->index];
+
+            Rcpp::List vars(env.variable_names.size());
+            Rcpp::CharacterVector varnames(env.variable_names.size());
+            for (size_t i = 0; i < env.variable_names.size(); ++i) {
+                vars[i] = convert(env.variable_values[i].get(), parsed);
+                assign_to_string(varnames, i, env.variable_names[i], env.variable_encodings[i], false);
+            }
+            vars.attr("names") = varnames;
+
+            return Rcpp::List::create(
+                Rcpp::Named("variables") = vars,
+                Rcpp::Named("id") = Rcpp::IntegerVector::create(edx->index),
+                Rcpp::Named("parent") = Rcpp::IntegerVector::create(env.parent == static_cast<size_t>(-1) ? -1 : static_cast<int>(env.parent))
+            );
+        }
     }
 
     return R_NilValue;
@@ -132,6 +157,6 @@ Rcpp::RObject parse(std::string file_name) {
     if (output.object == nullptr) {
         return R_NilValue;
     } else {
-        return convert(output.object.get());
+        return convert(output.object.get(), output);
     }
 }

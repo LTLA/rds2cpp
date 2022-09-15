@@ -51,10 +51,10 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::ENV)) {
         pointerize_(parse_new_environment_body(reader, leftovers, details, shared));
 
-    } else if (sexp_type == 255) {
+    } else if (sexp_type == 253) {
         pointerize_(parse_global_environment_body(reader, leftovers, shared));
 
-    } else if (sexp_type == 253) {
+    } else if (sexp_type == 255) {
         pointerize_(parse_existing_environment_body(reader, leftovers, details, shared));
         
     } else {
