@@ -1,4 +1,5 @@
 #ifndef RDS2CPP_PARSE_ENVIRONMENT_HPP
+
 #define RDS2CPP_PARSE_ENVIRONMENT_HPP
 
 #include <cstdint>
@@ -14,53 +15,29 @@ namespace rds2cpp {
 template<class Reader>
 PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, Shared&);
 
-namespace environment_internals {
-
-size_t find_parent_env(const Header& header, const Shared& shared) {
-    size_t index = 0;
-    for (int i = 0; i < 3; ++i) {
-        index <<= 8;
-        index += header[i];
-    }
-
-    if (index == 0 || index > shared.environment_mappings.size()) {
-        throw std::runtime_error("index of existing environment is out of range");
-    }
-
-    auto mapped = shared.environment_mappings[index - 1];
-    if (mapped == -1) {
-        throw std::runtime_error("index of existing environment refers to the global environment");
-    }
-
-    return mapped;
-}
-
-}
-
 template<class Reader>
 EnvironmentIndex parse_global_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
     EnvironmentIndex output;
-    shared.environment_mappings.push_back(-1);
+    output.type = SEXPType::GLOBALENV_;
     output.index = -1;
-    output.global = true;
-    return output;
-}
-
-template<class Reader>
-EnvironmentIndex parse_existing_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, Shared& shared) {
-    EnvironmentIndex output;
-    output.index = environment_internals::find_parent_env(header, shared);
-    output.global = false;
     return output;
 }
 
 template<class Reader>
 EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, Shared& shared) {
-    EnvironmentIndex output;
+    // Need to provision the environment first, so that internal references are valid.
+    size_t eindex = shared.request_environment();
     Environment new_env;
 
-    // Mystery 4 bytes here.
-    extract_up_to(reader, leftovers, 4, [&](const unsigned char*, size_t, size_t) -> void {});
+    // Is it locked or not?
+    uint32_t locked = 0;
+    extract_up_to(reader, leftovers, 4, [&](const unsigned char* buffer, size_t n, size_t) -> void {
+        for (size_t j = 0; j < n; ++j) {
+            locked <<= 8;
+            locked += buffer[j];
+        }        
+    });
+    new_env.locked = (locked > 0);
 
     // The next 4 bytes describe the parent environment.
     std::array<unsigned char, 4> parent;
@@ -68,24 +45,24 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
         std::copy(buffer, buffer + n, parent.data() + i);
     });
 
-    auto lastbit = static_cast<unsigned char>(parent[3]);
-    if (lastbit == 255) {
-        new_env.parent = environment_internals::find_parent_env(parent, shared);
+    auto lastbit = parent[3];
+    if (lastbit == static_cast<unsigned char>(SEXPType::REF)) {
+        new_env.parent = shared.get_environment_index(parent);
 
-    } else if (lastbit == 4) {
+    } else if (lastbit == static_cast<unsigned char>(SEXPType::ENV)) {
         auto env = parse_new_environment_body(reader, leftovers, parent, shared);
         new_env.parent = env.index;
 
-    } else if (lastbit == 253) {
-        new_env.parent = -1; // i.e., global env is the parent.
+    } else if (lastbit == static_cast<unsigned char>(SEXPType::GLOBALENV_)) {
+        new_env.parent_type = SEXPType::GLOBALENV_;
 
     } else {
         throw std::runtime_error("could not resolve the parent environment");
     }
 
-    // Who knows what this is...
+    // A set of 4 mystery bytes...
     auto mystery1 = parse_header(reader, leftovers); 
-    if (mystery1[3] != 254) {
+    if (mystery1[3] != static_cast<unsigned char>(SEXPType::NILVALUE_)) {
         throw std::runtime_error("environment's parent and hash table should be separated by a null");
     }
 
@@ -117,15 +94,13 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
 
     // Who knows what this is... a terminator for the environment, I guess?
     auto mystery2 = parse_header(reader, leftovers); 
-    if (mystery2[3] != 254) {
+    if (mystery2[3] != static_cast<unsigned char>(SEXPType::NILVALUE_)) {
         throw std::runtime_error("environment should be terminated by a null");
     }
 
-    output.index = shared.environments.size();
-    output.global = false;
-    shared.environments.emplace_back(std::move(new_env));
-    shared.environment_mappings.push_back(output.index);
-
+    shared.environments[eindex] = std::move(new_env);
+    EnvironmentIndex output;
+    output.index = eindex;
     return output;
 };
 

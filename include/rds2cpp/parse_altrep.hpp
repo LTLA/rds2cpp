@@ -182,15 +182,17 @@ std::unique_ptr<RObject> parse_altrep_body(Reader& reader, std::vector<unsigned 
         pointerize(output, std::move(x));
     };
 
-    auto symb = static_cast<Symbol*>(plist.data[0].get());
-    if (symb->name == "wrap_integer") {
+    auto sdx = static_cast<SymbolIndex*>(plist.data[0].get());
+    const auto& symb = shared.symbols[sdx->index];
+
+    if (symb.name == "wrap_integer") {
         pointerize_(altrep_internal::parse_attribute_wrapper<IntegerVector>(reader, leftovers, shared));
-    } else if (symb->name == "compact_intseq") {
+    } else if (symb.name == "compact_intseq") {
         pointerize_(altrep_internal::parse_numeric_compact_seq<IntegerVector>(reader, leftovers));
-    } else if (symb->name == "deferred_string") {
+    } else if (symb.name == "deferred_string") {
         pointerize_(altrep_internal::parse_deferred_string(reader, leftovers, shared));
     } else {
-        throw std::runtime_error("unrecognized ALTREP type '" + symb->name + "'");
+        throw std::runtime_error("unrecognized ALTREP type '" + symb.name + "'");
     }
 
     return output;

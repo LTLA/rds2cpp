@@ -37,26 +37,26 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
         pointerize_(parse_pairlist_body(reader, leftovers, details, shared));
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::SYM)) {
-        pointerize_(parse_symbol_body(reader, leftovers));
+        pointerize_(parse_symbol_body(reader, leftovers, shared));
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::S4)) {
         pointerize_(parse_s4_body(reader, leftovers, details, shared));
 
-    } else if (sexp_type == 238) {
+    } else if (sexp_type == static_cast<unsigned char>(SEXPType::ALTREP_)) {
         output = parse_altrep_body(reader, leftovers, shared);
 
-    } else if (sexp_type == 254) {
+    } else if (sexp_type == static_cast<unsigned char>(SEXPType::NIL) || sexp_type == static_cast<unsigned char>(SEXPType::NILVALUE_)) {
         pointerize_(Null());
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::ENV)) {
         pointerize_(parse_new_environment_body(reader, leftovers, details, shared));
 
-    } else if (sexp_type == 253) {
+    } else if (sexp_type == static_cast<unsigned char>(SEXPType::GLOBALENV_)) {
         pointerize_(parse_global_environment_body(reader, leftovers, shared));
 
-    } else if (sexp_type == 255) {
-        pointerize_(parse_existing_environment_body(reader, leftovers, details, shared));
-        
+    } else if (sexp_type == static_cast<unsigned char>(SEXPType::REF)) {
+        output = shared.resolve_reference(details);
+
     } else {
         if (sexp_type == static_cast<unsigned char>(SEXPType::INT)) {
             pointerize_(parse_integer_body(reader, leftovers));

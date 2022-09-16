@@ -6,17 +6,22 @@
 #include <algorithm>
 
 #include "RObject.hpp"
+#include "Shared.hpp"
 #include "utils.hpp"
 #include "parse_single_string.hpp"
 
 namespace rds2cpp {
 
 template<class Reader>
-Symbol parse_symbol_body(Reader& reader, std::vector<unsigned char>& leftovers) {
+SymbolIndex parse_symbol_body(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
     auto str = parse_single_string(reader, leftovers);
-    Symbol output;
-    output.name = str.value;
-    output.encoding = str.encoding;
+
+    Symbol new_symb;
+    new_symb.name = str.value;
+    new_symb.encoding = str.encoding;
+
+    SymbolIndex output;
+    output.index = shared.add_symbol(std::move(new_symb));
     return output;
 }
 

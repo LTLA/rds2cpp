@@ -30,12 +30,20 @@ void recursive_parse(Reader& reader, std::vector<unsigned char>& leftovers, Pair
     output.has_tag.push_back(has_tag);
     if (has_tag) {
         auto header = parse_header(reader, leftovers);
-        if (header[3] != 1) {
+        size_t sindex;
+
+        if (header[3] == static_cast<unsigned char>(SEXPType::SYM)) {
+            auto sdx = parse_symbol_body(reader, leftovers, shared);
+            sindex = sdx.index;
+        } else if (header[3] == static_cast<unsigned char>(SEXPType::REF)) {
+            sindex = shared.get_symbol_index(header);
+        } else {
             throw std::runtime_error("expected a SYMSXP for a pairlist tag");
         }
-        auto str = parse_single_string(reader, leftovers);
-        output.tag_names.push_back(str.value);
-        output.tag_encodings.push_back(str.encoding);
+
+        const auto& sym = shared.symbols[sindex];
+        output.tag_names.push_back(sym.name);
+        output.tag_encodings.push_back(sym.encoding);
     } else {
         auto n = output.tag_names.size() + 1;
         output.tag_names.resize(n);
@@ -45,9 +53,9 @@ void recursive_parse(Reader& reader, std::vector<unsigned char>& leftovers, Pair
     output.data.push_back(parse_object(reader, leftovers, shared));
 
     auto next_header = parse_header(reader, leftovers);
-    if (next_header[3] == 254) {
+    if (next_header[3] == static_cast<unsigned char>(SEXPType::NILVALUE_)) {
         return;
-    } else if (next_header[3] != 2) {
+    } else if (next_header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected a terminator or the next pairlist node");
     }
 
