@@ -2,7 +2,7 @@
 # library(testthat); library(rds2cpp); source("test-environment.R")
 
 test_that("empty environment loading works as expected", {
-    # This is needed to deal with the fact that the parent
+    # local() is needed to deal with the fact that the parent
     # environment is mangled somewhat by testthat.
     roundtrip <- local({
         y <- new.env()
@@ -15,10 +15,29 @@ test_that("empty environment loading works as expected", {
     expect_identical(length(roundtrip$environments), 1L)
     expect_identical(roundtrip$environments[[1]]$parent, -1L)
     expect_identical(length(roundtrip$environments[[1]]$variables), 0L)
+    expect_false(roundtrip$environments[[1]]$locked)
 
     saveRDS(.GlobalEnv, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
     expect_identical(roundtrip$id, -1L)
+})
+
+test_that("locked environment loading works as expected", {
+    # local() is needed to deal with the fact that the parent
+    # environment is mangled somewhat by testthat.
+    roundtrip <- local({
+        y <- new.env()
+        lockEnvironment(y)
+        tmp <- tempfile(fileext=".rds")
+        saveRDS(y, file=tmp)
+        rds2cpp:::parse(tmp)
+    }, envir=.GlobalEnv)
+
+    expect_identical(roundtrip$value$id, 0L)
+    expect_identical(length(roundtrip$environments), 1L)
+    expect_identical(roundtrip$environments[[1]]$parent, -1L)
+    expect_identical(length(roundtrip$environments[[1]]$variables), 0L)
+    expect_true(roundtrip$environments[[1]]$locked)
 })
 
 test_that("non-empty environment loading works as expected", {

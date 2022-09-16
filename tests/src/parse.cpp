@@ -161,7 +161,8 @@ Rcpp::RObject parse(std::string file_name) {
 
         all_envs[e] = Rcpp::List::create(
             Rcpp::Named("variables") = vars,
-            Rcpp::Named("parent") = Rcpp::IntegerVector::create(env.parent == static_cast<size_t>(-1) ? -1 : static_cast<int>(env.parent))
+            Rcpp::Named("parent") = Rcpp::IntegerVector::create(env.parent == static_cast<size_t>(-1) ? -1 : static_cast<int>(env.parent)),
+            Rcpp::Named("locked") = env.locked
         );
     }
 
