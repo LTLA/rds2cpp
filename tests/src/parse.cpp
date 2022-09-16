@@ -19,8 +19,8 @@ void assign_to_string(Rcpp::StringVector& output, size_t i, const std::string& v
 
 Rcpp::RObject convert(const rds2cpp::RObject*);
 
-template<class Output>
-void add_attributes(const rds2cpp::RObject& input, Output& output) {
+template<class Input, class Output>
+void add_attributes(const Input& input, Output& output) {
     for (size_t a = 0; a < input.attribute_names.size(); ++a) {
         output.attr(input.attribute_names[a]) = convert(input.attribute_values[a].get());
     }
@@ -159,11 +159,14 @@ Rcpp::RObject parse(std::string file_name) {
         }
         vars.attr("names") = varnames;
 
-        all_envs[e] = Rcpp::List::create(
+        auto curout = Rcpp::List::create(
             Rcpp::Named("variables") = vars,
             Rcpp::Named("parent") = Rcpp::IntegerVector::create(env.parent == static_cast<size_t>(-1) ? -1 : static_cast<int>(env.parent)),
             Rcpp::Named("locked") = env.locked
         );
+        add_attributes(env, curout);
+
+        all_envs[e] = curout;
     }
 
     return Rcpp::List::create(

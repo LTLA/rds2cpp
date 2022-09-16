@@ -17,13 +17,8 @@ inline bool has_attributes(const Header& header) {
     return (header[2] & 0x2);
 }
 
-template<class Reader>
-void parse_attributes(Reader& reader, std::vector<unsigned char>& leftovers, RObject& object, Shared& shared) {
-    auto header = parse_header(reader, leftovers);
-    if (header[3] != static_cast<unsigned>(SEXPType::LIST)) {
-        throw std::runtime_error("attributes should be a pairlist");
-    }
-
+template<class Reader, class Output>
+void parse_attributes_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, Output& output, Shared& shared) {
     auto plist = parse_pairlist_body(reader, leftovers, header, shared);
 
     size_t nnodes = plist.data.size();
@@ -33,9 +28,19 @@ void parse_attributes(Reader& reader, std::vector<unsigned char>& leftovers, ROb
         }
     }
 
-    object.attribute_values.swap(plist.data);
-    object.attribute_names.swap(plist.tag_names);
-    object.attribute_encodings.swap(plist.tag_encodings);
+    output.attribute_values.swap(plist.data);
+    output.attribute_names.swap(plist.tag_names);
+    output.attribute_encodings.swap(plist.tag_encodings);
+    return;
+}
+
+template<class Reader>
+void parse_attributes(Reader& reader, std::vector<unsigned char>& leftovers, RObject& object, Shared& shared) {
+    auto header = parse_header(reader, leftovers);
+    if (header[3] != static_cast<unsigned>(SEXPType::LIST)) {
+        throw std::runtime_error("attributes should be a pairlist");
+    }
+    parse_attributes_body(reader, leftovers, header, object, shared);
     return;
 }
 

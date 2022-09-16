@@ -19,6 +19,10 @@ struct Environment {
     std::vector<std::string> variable_names;
     std::vector<StringEncoding> variable_encodings;
     std::vector<std::unique_ptr<RObject> > variable_values;
+
+    std::vector<std::string> attribute_names;
+    std::vector<StringEncoding> attribute_encodings;
+    std::vector<std::unique_ptr<RObject> > attribute_values;
 };
 
 struct Symbol {

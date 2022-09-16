@@ -92,9 +92,11 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
         new_env.variable_encodings.emplace_back(plist->tag_encodings[0]);
     }
 
-    // Who knows what this is... a terminator for the environment, I guess?
-    auto mystery2 = parse_header(reader, leftovers); 
-    if (mystery2[3] != static_cast<unsigned char>(SEXPType::NILVALUE_)) {
+    // Attributes or NULL.
+    auto attr_header = parse_header(reader, leftovers); 
+    if (attr_header[3] == static_cast<unsigned>(SEXPType::LIST)) {
+        parse_attributes_body(reader, leftovers, attr_header, new_env, shared);
+    } else if (attr_header[3] != static_cast<unsigned char>(SEXPType::NILVALUE_)) {
         throw std::runtime_error("environment should be terminated by a null");
     }
 

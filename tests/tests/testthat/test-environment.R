@@ -223,3 +223,40 @@ test_that("self-references are properly resolved", {
     expect_identical(roundtrip$environments[[1]]$variables$bar, as.character(100:200))
     expect_identical(roundtrip$environments[[1]]$variables$stuff, list(id=0L)) # can refer to itself, no probs.
 })
+
+test_that("environment attribute works as expected", {
+    roundtrip <- local({
+        y <- new.env()
+        y$foo <- "BAR"
+        attr(y, "name") <- "natalie portman"
+        tmp <- tempfile(fileext=".rds")
+        saveRDS(y, file=tmp)
+        rds2cpp:::parse(tmp)
+    }, envir=.GlobalEnv)
+
+    expect_identical(roundtrip$value$id, 0L)
+    expect_identical(length(roundtrip$environments), 1L)
+    expect_identical(roundtrip$environments[[1]]$parent, -1L)
+
+    expect_identical(length(roundtrip$environments[[1]]$variables), 1L)
+    expect_identical(roundtrip$environments[[1]]$variables$foo, "BAR")
+    expect_identical(attr(roundtrip$environments[[1]], "name"), "natalie portman")
+
+    # Check that environments are fully pass-by-reference w.r.t. attribute setting.
+    roundtrip <- local({
+        y <- new.env()
+        y$foo <- "BAR"
+        z <- y
+        attr(z, "name") <- "jessica biel"
+        expect_identical(attr(y, "name"), "jessica biel")
+
+        tmp <- tempfile(fileext=".rds")
+        saveRDS(list(y, z), file=tmp)
+        rds2cpp:::parse(tmp)
+    }, envir=.GlobalEnv)
+
+    expect_identical(roundtrip$value, list(list(id=0L), list(id=0L)))
+    expect_identical(attr(roundtrip$environments[[1]], "name"), "jessica biel")
+})
+
+
