@@ -31,10 +31,15 @@ struct Null : public RObject {
     Null() : RObject(SEXPType::NIL) {}
 };
 
-struct Symbol : public RObject {
-    Symbol() : RObject(SEXPType::SYM) {}
-    std::string name;
-    StringEncoding encoding;
+struct SymbolIndex : public RObject {
+    SymbolIndex() : RObject(SEXPType::SYM) {}
+    size_t index;
+};
+
+struct EnvironmentIndex : public RObject {
+    EnvironmentIndex() : RObject(SEXPType::ENV) {}
+    SEXPType type;
+    size_t index;
 };
 
 template<typename ElementType, SEXPType stype>

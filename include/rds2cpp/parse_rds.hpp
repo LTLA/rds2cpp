@@ -8,6 +8,7 @@
 
 #include "RObject.hpp"
 #include "utils.hpp"
+#include "Shared.hpp"
 #include "parse_object.hpp"
 
 #include "byteme/SomeFileReader.hpp"
@@ -20,6 +21,7 @@ struct Parsed {
     std::array<unsigned char, 3> reader_version;
     std::string encoding;
     std::unique_ptr<RObject> object;
+    std::vector<Environment> environments;
 };
 
 inline Parsed parse_rds(std::string file) {
@@ -87,7 +89,9 @@ inline Parsed parse_rds(std::string file) {
     }
 
     // Now we can finally read the damn object.
-    output.object = parse_object(reader, leftovers);
+    Shared shared;
+    output.object = parse_object(reader, leftovers, shared);
+    output.environments = std::move(shared.environments);
 
     return output;
 }

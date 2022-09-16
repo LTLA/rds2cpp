@@ -19,8 +19,8 @@ void assign_to_string(Rcpp::StringVector& output, size_t i, const std::string& v
 
 Rcpp::RObject convert(const rds2cpp::RObject*);
 
-template<class Output>
-void add_attributes(const rds2cpp::RObject& input, Output& output) {
+template<class Input, class Output>
+void add_attributes(const Input& input, Output& output) {
     for (size_t a = 0; a < input.attribute_names.size(); ++a) {
         output.attr(input.attribute_names[a]) = convert(input.attribute_values[a].get());
     }
@@ -120,6 +120,15 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         }
         add_attributes(*input, output);
         return output;
+
+    } else if (input->sexp_type == rds2cpp::SEXPType::ENV) {
+        auto edx = static_cast<const rds2cpp::EnvironmentIndex*>(input);
+
+        if (edx->type == rds2cpp::SEXPType::GLOBALENV_) {
+            return Rcpp::List::create(Rcpp::Named("id") = Rcpp::IntegerVector::create(-1));
+        } else {
+            return Rcpp::List::create(Rcpp::Named("id") = Rcpp::IntegerVector::create(edx->index));
+        }
     }
 
     return R_NilValue;
@@ -131,7 +140,37 @@ Rcpp::RObject parse(std::string file_name) {
     auto output = rds2cpp::parse_rds(file_name);
     if (output.object == nullptr) {
         return R_NilValue;
-    } else {
+    } 
+
+    size_t nenvs = output.environments.size();
+    if (nenvs == 0) {
         return convert(output.object.get());
     }
+
+    Rcpp::List all_envs(nenvs);
+    for (size_t e = 0; e < nenvs; ++e) {
+        const auto& env = output.environments[e];
+
+        Rcpp::List vars(env.variable_names.size());
+        Rcpp::CharacterVector varnames(env.variable_names.size());
+        for (size_t i = 0; i < env.variable_names.size(); ++i) {
+            vars[i] = convert(env.variable_values[i].get());
+            assign_to_string(varnames, i, env.variable_names[i], env.variable_encodings[i], false);
+        }
+        vars.attr("names") = varnames;
+
+        auto curout = Rcpp::List::create(
+            Rcpp::Named("variables") = vars,
+            Rcpp::Named("parent") = Rcpp::IntegerVector::create(env.parent == static_cast<size_t>(-1) ? -1 : static_cast<int>(env.parent)),
+            Rcpp::Named("locked") = env.locked
+        );
+        add_attributes(env, curout);
+
+        all_envs[e] = curout;
+    }
+
+    return Rcpp::List::create(
+        Rcpp::Named("value") = convert(output.object.get()),           
+        Rcpp::Named("environments") = all_envs
+    );
 }
