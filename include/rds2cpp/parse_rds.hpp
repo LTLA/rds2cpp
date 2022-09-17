@@ -13,17 +13,63 @@
 
 #include "byteme/SomeFileReader.hpp"
 
+/**
+ * @file parse_rds.hpp
+ *
+ * @brief Parse an RDS file.
+ */
+
 namespace rds2cpp {
 
+/**
+ * @brief Contents of the parsed RDS file.
+ */
 struct Parsed {
+    /**
+     * Version of the RDS format.
+     */
     uint32_t format_version = 0;
+
+    /**
+     * R version used to write the file as major-minor-patch integers.
+     */
     std::array<unsigned char, 3> writer_version;
+
+    /**
+     * Minimum R version required to read the file as major-minor-patch integers.
+     */
     std::array<unsigned char, 3> reader_version;
+
+    /**
+     * Encoding required to read the file.
+     */
     std::string encoding;
+
+    /**
+     * The unserialized object.
+     */
     std::unique_ptr<RObject> object;
+
+    /**
+     * All environments inside the file.
+     * This can be referenced by the `index` in `EnvironmentIndex`.
+     */
     std::vector<Environment> environments;
+
+    /**
+     * All symbols inside the file.
+     * This can be referenced by the `index` in `SymbolIndex`.
+     */
+    std::vector<Symbol> symbols;
 };
 
+/**
+ * Parse the contents of an RDS file.
+ *
+ * @param file Path to an RDS file.
+ *
+ * @return A `Parsed` object containing the contents of `file`.
+ */
 inline Parsed parse_rds(std::string file) {
     byteme::SomeFileReader reader(file.c_str());
     Parsed output;
@@ -92,6 +138,7 @@ inline Parsed parse_rds(std::string file) {
     Shared shared;
     output.object = parse_object(reader, leftovers, shared);
     output.environments = std::move(shared.environments);
+    output.symbols = std::move(shared.symbols);
 
     return output;
 }
