@@ -8,33 +8,79 @@
 #include "StringEncoding.hpp"
 #include "RObject.hpp"
 
+/**
+ * @file Shared.hpp
+ *
+ * @brief Shared values that are re-used within an unserialized object.
+ */
+
 namespace rds2cpp {
 
+/**
+ * @brief An R environment.
+ */
 struct Environment {
+    /**
+     * Whether the environment was locked.
+     */
     bool locked = false;
 
+    /**
+     * Type of the parent environment.
+     */
     SEXPType parent_type = SEXPType::ENV;
+
+    /** 
+     * Index of the parent environment.
+     * This should only be used if `paret_type` is `ENV`.
+     */
     size_t parent = -1;
 
+    /**
+     * Names of the variables inside this environment.
+     */
     std::vector<std::string> variable_names;
+
+    /**
+     * Encodings of the variable names in `variable_names`.
+     */
     std::vector<StringEncoding> variable_encodings;
+
+    /**
+     * Values of the variables in this environment.
+     */
     std::vector<std::unique_ptr<RObject> > variable_values;
 
-    std::vector<std::string> attribute_names;
-    std::vector<StringEncoding> attribute_encodings;
-    std::vector<std::unique_ptr<RObject> > attribute_values;
+    /**
+     * Additional attributes.
+     */
+    Attributes attributes;
 };
 
+/**
+ * @brief An R symbol.
+ */
 struct Symbol {
+    /**
+     * Name of the symbol.
+     */
     std::string name;
+
+    /**
+     * Encoding for the symbol name.
+     */
     StringEncoding encoding;
 };
 
+/**
+ * @cond
+ */
 struct Shared {
     std::vector<Environment> environments;    
-    std::vector<Symbol> symbols;
-    std::vector<std::pair<SEXPType, size_t> > mappings;
 
+    std::vector<Symbol> symbols;
+
+    std::vector<std::pair<SEXPType, size_t> > mappings;
 private:
     size_t compute_reference_index(const Header& header) const {
         size_t index = 0;
@@ -129,7 +175,6 @@ public:
 
         if (chosen.first == SEXPType::ENV) {
             EnvironmentIndex output;
-            output.type = SEXPType::ENV;
             output.index = chosen.second;
             return std::unique_ptr<RObject>(new EnvironmentIndex(std::move(output)));
         } 
@@ -139,6 +184,9 @@ public:
         return std::unique_ptr<RObject>(new SymbolIndex(std::move(output)));
     } 
 };
+/**
+ * @endcond
+ */
 
 }
 

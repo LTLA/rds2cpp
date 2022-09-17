@@ -1,8 +1,21 @@
 #ifndef RDS2CPP_SEXPTYPE_HPP
 #define RDS2CPP_SEXPTYPE_HPP
 
+/**
+ * @file SEXPType.hpp
+ *
+ * @brief R data types.
+ */
+
 namespace rds2cpp {
 
+/**
+ * Data types within R.
+ *
+ * Values from 0 to 25 were taken from the [R internals documentation](https://cran.r-project.org/doc/manuals/r-release/R-ints.html#SEXPTYPEs).
+ *
+ * Values from 238 to 255 were determined by inspecting the R source code.
+ */
 enum class SEXPType : unsigned char {
     // Taken from https://cran.r-project.org/doc/manuals/r-release/R-ints.html#SEXPTYPEs.
     NIL = 0,
@@ -51,7 +64,7 @@ enum class SEXPType : unsigned char {
     ATTRLANG = 240,
     ATTRLIST = 239,
 
-    ALTREP_ = 	  238
+    ALTREP_ = 238
 };
 
 }

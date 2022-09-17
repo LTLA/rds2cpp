@@ -40,16 +40,16 @@ S4Object parse_s4_body(Reader& reader, std::vector<unsigned char>& leftovers, co
         auto& content = slot_plist.data[s];
 
         if (slot_plist.tag_names[s] != "class") {
-            output.attribute_names.emplace_back(std::move(slot_plist.tag_names[s]));
-            output.attribute_encodings.push_back(slot_plist.tag_encodings[s]);
-            output.attribute_values.emplace_back(std::move(content));
+            output.attributes.names.emplace_back(std::move(slot_plist.tag_names[s]));
+            output.attributes.encodings.push_back(slot_plist.tag_encodings[s]);
+            output.attributes.values.emplace_back(std::move(content));
         } else {
             if (found_class) {
                 throw std::runtime_error("multiple class attributes detected in an S4 object");
             }
             found_class = true;
 
-            if (content->sexp_type != SEXPType::STR) {
+            if (content->type() != SEXPType::STR) {
                 throw std::runtime_error("class attribute in an S4 object should be a character vector");
             }
             
@@ -60,10 +60,10 @@ S4Object parse_s4_body(Reader& reader, std::vector<unsigned char>& leftovers, co
             output.class_name = cls->data[0];
             output.class_encoding = cls->encodings[0];
 
-            if (cls->attribute_values.size() != 1 || cls->attribute_names[0] != "package" || cls->attribute_values[0]->sexp_type != SEXPType::STR) {
+            if (cls->attributes.values.size() != 1 || cls->attributes.names[0] != "package" || cls->attributes.values[0]->type() != SEXPType::STR) {
                 throw std::runtime_error("class attribute in an S4 object should have a 'package' character attribute");
             }
-            auto pkg = static_cast<CharacterVector*>(cls->attribute_values[0].get());
+            auto pkg = static_cast<CharacterVector*>(cls->attributes.values[0].get());
             if (pkg->data.size() != 1) {
                 throw std::runtime_error("package attribute in an S4 object should be a length-1 character vector");
             }

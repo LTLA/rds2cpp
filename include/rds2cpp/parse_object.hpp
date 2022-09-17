@@ -33,6 +33,13 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
         return;
     };
 
+    auto pointerize_attr = [&](auto obj) -> Attributes* {
+        pointerize(output, std::move(obj));
+        typedef typename std::remove_reference<decltype(obj)>::type Object;
+        auto ptr = static_cast<Object*>(output.get());
+        return &(ptr->attributes);
+    };
+
     if (sexp_type == static_cast<unsigned char>(SEXPType::LIST)) {
         pointerize_(parse_pairlist_body(reader, leftovers, details, shared));
 
@@ -58,24 +65,26 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
         output = shared.resolve_reference(details);
 
     } else {
+        Attributes* attr = nullptr;
+
         if (sexp_type == static_cast<unsigned char>(SEXPType::INT)) {
-            pointerize_(parse_integer_body(reader, leftovers));
+            attr = pointerize_attr(parse_integer_body(reader, leftovers));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::LGL)) { 
-            pointerize_(parse_logical_body(reader, leftovers));
+            attr = pointerize_attr(parse_logical_body(reader, leftovers));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::RAW)) {
-            pointerize_(parse_raw_body(reader, leftovers));
+            attr = pointerize_attr(parse_raw_body(reader, leftovers));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::REAL)) {
-            pointerize_(parse_double_body(reader, leftovers));
+            attr = pointerize_attr(parse_double_body(reader, leftovers));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::CPLX)) {
-            pointerize_(parse_complex_body(reader, leftovers));
+            attr = pointerize_attr(parse_complex_body(reader, leftovers));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::STR)) {
-            pointerize_(parse_character_body(reader, leftovers));
+            attr = pointerize_attr(parse_character_body(reader, leftovers));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::VEC)) {
-            pointerize_(parse_list_body(reader, leftovers, shared));
+            attr = pointerize_attr(parse_list_body(reader, leftovers, shared));
         }
 
-        if (has_attributes(details)) {
-            parse_attributes(reader, leftovers, *output, shared);
+        if (has_attributes(details) && attr) {
+            parse_attributes(reader, leftovers, *attr, shared);
         }
     }
 

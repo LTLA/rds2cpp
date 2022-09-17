@@ -18,7 +18,7 @@ PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, Shared&);
 template<class Reader>
 EnvironmentIndex parse_global_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
     EnvironmentIndex output;
-    output.type = SEXPType::GLOBALENV_;
+    output.env_type = SEXPType::GLOBALENV_;
     output.index = -1;
     return output;
 }
@@ -74,11 +74,11 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
 
     auto vec = parse_list_body(reader, leftovers, shared);
     for (size_t i = 0; i < vec.data.size(); ++i) {
-        if (vec.data[i]->sexp_type == SEXPType::NIL) {
+        if (vec.data[i]->type() == SEXPType::NIL) {
             continue;
         }
 
-        if (vec.data[i]->sexp_type != SEXPType::LIST) {
+        if (vec.data[i]->type() != SEXPType::LIST) {
             throw std::runtime_error("environment values should be represented as pairlists");
         }
 
@@ -95,7 +95,7 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
     // Attributes or NULL.
     auto attr_header = parse_header(reader, leftovers); 
     if (attr_header[3] == static_cast<unsigned>(SEXPType::LIST)) {
-        parse_attributes_body(reader, leftovers, attr_header, new_env, shared);
+        parse_attributes_body(reader, leftovers, attr_header, new_env.attributes, shared);
     } else if (attr_header[3] != static_cast<unsigned char>(SEXPType::NILVALUE_)) {
         throw std::runtime_error("environment should be terminated by a null");
     }

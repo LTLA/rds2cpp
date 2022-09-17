@@ -66,7 +66,7 @@ Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& lefto
 
     // First pairlist element is a CONS cell where the first value is the wrapped integer vector.
     auto contents = parse_object(reader, leftovers, shared);
-    if (contents->sexp_type != Vector::vector_sexp_type) {
+    if (contents->type() != Vector::vector_sexp_type) {
         throw std::runtime_error("incorrectly typed contents in wrapper ALTREP's payload");
     }
 
@@ -82,9 +82,9 @@ Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& lefto
     }
 
     // Now we can finally get the attributes, which makes up the rest of the pairlist.
-    parse_attributes(reader, leftovers, *contents, shared);
-
     auto coerced = static_cast<Vector*>(contents.get());
+    parse_attributes(reader, leftovers, coerced->attributes, shared);
+
     return IntegerVector(std::move(*coerced));
 }
 
@@ -99,7 +99,7 @@ CharacterVector parse_deferred_string(Reader& reader, std::vector<unsigned char>
     auto contents = parse_object(reader, leftovers, shared);
     CharacterVector output;
 
-    if (contents->sexp_type == SEXPType::INT){
+    if (contents->type() == SEXPType::INT){
         auto cast = static_cast<IntegerVector*>(contents.get());
         size_t n = cast->data.size();
         output = CharacterVector(n);
@@ -113,7 +113,7 @@ CharacterVector parse_deferred_string(Reader& reader, std::vector<unsigned char>
             }
         }
 
-    } else if (contents->sexp_type == SEXPType::REAL) {
+    } else if (contents->type() == SEXPType::REAL) {
         std::ostringstream converter;
         converter.precision(std::numeric_limits<double>::max_digits10);
         auto cast = static_cast<DoubleVector*>(contents.get());
@@ -173,7 +173,7 @@ std::unique_ptr<RObject> parse_altrep_body(Reader& reader, std::vector<unsigned 
     }
 
     auto plist = parse_pairlist_body(reader, leftovers, header, shared);
-    if (plist.data.size() < 1 || plist.data[0]->sexp_type != SEXPType::SYM) {
+    if (plist.data.size() < 1 || plist.data[0]->type() != SEXPType::SYM) {
         throw std::runtime_error("expected type specification symbol in the ALTREP description");
     }
 

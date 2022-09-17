@@ -24,7 +24,7 @@ void recursive_parse(Reader& reader, std::vector<unsigned char>& leftovers, Pair
     bool has_tag = header[2] & 0x4;
 
     if (has_attr) {
-        parse_attributes(reader, leftovers, output, shared);
+        parse_attributes(reader, leftovers, output.attributes, shared);
     }
 
     output.has_tag.push_back(has_tag);
