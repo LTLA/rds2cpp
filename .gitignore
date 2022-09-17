@@ -4,3 +4,5 @@ build/
 playground/
 *.swp
 *.rds
+docs/html
+docs/latex
