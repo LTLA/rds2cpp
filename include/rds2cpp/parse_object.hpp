@@ -78,7 +78,7 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::CPLX)) {
             attr = pointerize_attr(parse_complex_body(reader, leftovers));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::STR)) {
-            attr = pointerize_attr(parse_character_body(reader, leftovers));
+            attr = pointerize_attr(parse_string_body(reader, leftovers));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::VEC)) {
             attr = pointerize_attr(parse_list_body(reader, leftovers, shared));
         }

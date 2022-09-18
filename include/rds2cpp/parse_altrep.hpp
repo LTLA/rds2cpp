@@ -89,7 +89,7 @@ Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& lefto
 }
 
 template<class Reader>
-CharacterVector parse_deferred_string(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
+StringVector parse_deferred_string(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
     auto plist_header = parse_header(reader, leftovers);
     if (plist_header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected pairlist in deferred_string ALTREP's payload");
@@ -97,12 +97,12 @@ CharacterVector parse_deferred_string(Reader& reader, std::vector<unsigned char>
 
     // First pairlist element is a CONS cell where the first value is the thing to be converted.
     auto contents = parse_object(reader, leftovers, shared);
-    CharacterVector output;
+    StringVector output;
 
     if (contents->type() == SEXPType::INT){
         auto cast = static_cast<IntegerVector*>(contents.get());
         size_t n = cast->data.size();
-        output = CharacterVector(n);
+        output = StringVector(n);
 
         for (size_t i = 0; i < n; ++i) {
             if (cast->data[i] == std::numeric_limits<int32_t>::min()) { // see R_ext/Arith.h
@@ -118,7 +118,7 @@ CharacterVector parse_deferred_string(Reader& reader, std::vector<unsigned char>
         converter.precision(std::numeric_limits<double>::max_digits10);
         auto cast = static_cast<DoubleVector*>(contents.get());
         bool lw = (little_endian() ? 0 : 1); // see R_ext/Arith.h
-        output = CharacterVector(cast->data.size());
+        output = StringVector(cast->data.size());
 
         for (size_t i = 0; i < cast->data.size(); ++i) {
             output.encodings[i] = StringEncoding::ASCII;

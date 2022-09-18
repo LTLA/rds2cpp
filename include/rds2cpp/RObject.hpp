@@ -160,13 +160,13 @@ typedef AtomicVector<unsigned char, SEXPType::RAW> RawVector;
 typedef AtomicVector<std::complex<double>, SEXPType::CPLX> ComplexVector;
 
 /**
- * @brief Character (i.e., string) vector.
+ * @brief String vector.
  */
-struct CharacterVector : public RObject {
+struct StringVector : public RObject {
     /**
      * @cond
      */
-    CharacterVector(size_t n = 0) : data(n), encodings(n), missing(n) {}
+    StringVector(size_t n = 0) : data(n), encodings(n), missing(n) {}
     /**
      * @endcond
      */
@@ -196,13 +196,13 @@ struct CharacterVector : public RObject {
 };
 
 /**
- * @brief Generic vector, i.e., an ordinary list.
+ * @brief Generic vector, i.e., an ordinary R list.
  */
-struct List : public RObject {
+struct GenericVector : public RObject {
     /**
      * @cond
      */
-    List(size_t n = 0) : data(n) {}
+    GenericVector(size_t n = 0) : data(n) {}
     /**
      * @endcond
      */

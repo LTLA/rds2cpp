@@ -53,7 +53,7 @@ S4Object parse_s4_body(Reader& reader, std::vector<unsigned char>& leftovers, co
                 throw std::runtime_error("class attribute in an S4 object should be a character vector");
             }
             
-            auto cls = static_cast<CharacterVector*>(content.get());
+            auto cls = static_cast<StringVector*>(content.get());
             if (cls->data.size() != 1) {
                 throw std::runtime_error("class attribute in an S4 object should be a length-1 character vector");
             }
@@ -63,7 +63,7 @@ S4Object parse_s4_body(Reader& reader, std::vector<unsigned char>& leftovers, co
             if (cls->attributes.values.size() != 1 || cls->attributes.names[0] != "package" || cls->attributes.values[0]->type() != SEXPType::STR) {
                 throw std::runtime_error("class attribute in an S4 object should have a 'package' character attribute");
             }
-            auto pkg = static_cast<CharacterVector*>(cls->attributes.values[0].get());
+            auto pkg = static_cast<StringVector*>(cls->attributes.values[0].get());
             if (pkg->data.size() != 1) {
                 throw std::runtime_error("package attribute in an S4 object should be a length-1 character vector");
             }

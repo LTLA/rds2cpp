@@ -13,7 +13,18 @@ namespace rds2cpp {
  * Data types within R.
  *
  * Values from 0 to 25 were taken from the [R internals documentation](https://cran.r-project.org/doc/manuals/r-release/R-ints.html#SEXPTYPEs).
- * Note that `LIST` refers to a pairlist (see `PairList`), whereas an ordinary R list is encoded as `VEC` (see `List`).
+ * Of particular interest are the following:
+ *
+ * - `NIL` is R's `NULL`.
+ * - `ENV` is an R environment.
+ * - `LGL` is a logical vector.
+ * - `INT` is an integer vector.
+ * - `REAL` is a double vector.
+ * - `CPLX` is a complex vector.
+ * - `STR` is a string vector (also known as a character vector in R).
+ *   Do not confuse this with `CHAR`, which refers to an internal representation of a single string.
+ * - `VEC` is an ordinary R list.
+ *   Do not confuse this with `LIST`, which refers to a pairlist.
  *
  * Values from 238 to 255 were determined by inspecting the R source code.
  */

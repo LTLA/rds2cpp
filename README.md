@@ -30,11 +30,11 @@ if (ptr->type() == rds2cpp::SEXPType::INT) {
 }
 ```
 
-Or maybe we have a list instead:
+Or maybe we have an ordinary list instead:
 
 ```cpp
 if (ptr->type() == rds2cpp::SEXPType::VEC) {
-    auto lptr = static_cast<rds2cpp::List*>(ptr.get());
+    auto lptr = static_cast<rds2cpp::GenericVector*>(ptr.get());
     const auto& elements = lptr->data; // vector of pointers to list elements.
 }
 ```

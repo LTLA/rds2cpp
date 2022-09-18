@@ -102,7 +102,7 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         return output;
 
     } else if (input->type() == rds2cpp::SEXPType::STR) {
-        auto chr = static_cast<const rds2cpp::CharacterVector*>(input);
+        auto chr = static_cast<const rds2cpp::StringVector*>(input);
         size_t nnodes = chr->data.size();
         Rcpp::StringVector output(nnodes);
         for (size_t i = 0; i < nnodes; ++i) {
@@ -112,7 +112,7 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         return output;
 
     } else if (input->type() == rds2cpp::SEXPType::VEC) {
-        auto list = static_cast<const rds2cpp::List*>(input);
+        auto list = static_cast<const rds2cpp::GenericVector*>(input);
         const auto& data = list->data;
         Rcpp::List output(data.size());
         for (size_t i = 0; i < data.size(); ++i) {

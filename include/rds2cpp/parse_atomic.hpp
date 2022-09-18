@@ -125,9 +125,9 @@ ComplexVector parse_complex_body(Reader& reader, std::vector<unsigned char>& lef
 }
 
 template<class Reader>
-CharacterVector parse_character_body(Reader& reader, std::vector<unsigned char>& leftovers) {
+StringVector parse_string_body(Reader& reader, std::vector<unsigned char>& leftovers) {
     size_t len = get_length(reader, leftovers);
-    CharacterVector output(len);
+    StringVector output(len);
     for (size_t i = 0; i < len; ++i) {
         auto str = parse_single_string(reader, leftovers);
         output.data[i] = str.value;
