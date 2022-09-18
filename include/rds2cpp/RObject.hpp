@@ -80,7 +80,7 @@ struct EnvironmentIndex : public RObject {
      */
     SEXPType env_type = SEXPType::ENV;
     /**
-     * @cond
+     * @endcond
      */
 };
 
@@ -105,7 +105,7 @@ struct Attributes {
 };
 
 /**
- * @brief Vector of an atomic type.
+ * @brief Vector of some atomic type.
  *
  * @tparam ElementType Data type for each element.
  * @tparam stype `SEXPType` flag for the type. 

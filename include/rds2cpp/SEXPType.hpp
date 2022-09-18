@@ -13,6 +13,7 @@ namespace rds2cpp {
  * Data types within R.
  *
  * Values from 0 to 25 were taken from the [R internals documentation](https://cran.r-project.org/doc/manuals/r-release/R-ints.html#SEXPTYPEs).
+ * Note that `LIST` refers to a pairlist (see `PairList`), whereas an ordinary R list is encoded as `VEC` (see `List`).
  *
  * Values from 238 to 255 were determined by inspecting the R source code.
  */
