@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>rds2cpp: Main Page</title>
+<title>rds2cpp: Read RDS files in C++</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -70,10 +70,66 @@ $(function() {
 </div>
 </div>
 
-<div class="header">
-  <div class="headertitle"><div class="title">rds2cpp Documentation</div></div>
+<div><div class="header">
+  <div class="headertitle"><div class="title">Read RDS files in C++ </div></div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><p ><a class="anchor" id="md__github_workspace_README"></a> <img src="https://github.com/LTLA/rds2cpp/actions/workflows/run-tests.yaml/badge.svg" alt="Unit tests" style="pointer-events: none;" class="inline"/> <img src="https://github.com/LTLA/rds2cpp/actions/workflows/doxygenate.yaml/badge.svg" alt="Documentation" style="pointer-events: none;" class="inline"/></p>
+<h1>Overview</h1>
+<p >This repository contains a header-only C++ library for reading RDS files into memory. This provides a lightweight mechanism for applications to read user data created with <code>saveRDS()</code> without linking to R itself. We currently support most user-visible data structures such as atomic vectors, lists, environments and S4 classes.</p>
+<h1>Quick start</h1>
+<p >Given a path to an RDS file, the <code>parse_rds()</code> function will return a pointer to an <code>RObject</code> interface:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="rds2cpp_8hpp.html">rds2cpp/rds2cpp.hpp</a>&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span> ptr = <a class="code hl_function" href="namespacerds2cpp.html#ae6eac0a8595a18340e5b7ea35b9b8372">rds2cpp::parse_rds</a>(fpath);</div>
+<div class="ttc" id="anamespacerds2cpp_html_ae6eac0a8595a18340e5b7ea35b9b8372"><div class="ttname"><a href="namespacerds2cpp.html#ae6eac0a8595a18340e5b7ea35b9b8372">rds2cpp::parse_rds</a></div><div class="ttdeci">Parsed parse_rds(std::string file)</div><div class="ttdef"><b>Definition:</b> parse_rds.hpp:73</div></div>
+<div class="ttc" id="ards2cpp_8hpp_html"><div class="ttname"><a href="rds2cpp_8hpp.html">rds2cpp.hpp</a></div><div class="ttdoc">Entrypoint header.</div></div>
+</div><!-- fragment --><p >The type of the underlying object can then be queried for further examination. For example, if we wanted to process integer vectors:</p>
+<div class="fragment"><div class="line"><span class="keywordflow">if</span> (ptr-&gt;type() == rds2cpp::SEXPType::INT) {</div>
+<div class="line">    <span class="keyword">auto</span> iptr = <span class="keyword">static_cast&lt;</span><a class="code hl_struct" href="structrds2cpp_1_1AtomicVector.html">rds2cpp::IntegerVector</a>*<span class="keyword">&gt;</span>(ptr.get());</div>
+<div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; values = iptr-&gt;<a class="code hl_variable" href="structrds2cpp_1_1AtomicVector.html#a87427d2862c982a09ac077ac6ad12eae">data</a>; <span class="comment">// vector of int32_t&#39;s.</span></div>
+<div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; attr_names = iptr-&gt;attributes.names; <span class="comment">// vector of attribute names.</span></div>
+<div class="line">}</div>
+<div class="ttc" id="astructrds2cpp_1_1AtomicVector_html"><div class="ttname"><a href="structrds2cpp_1_1AtomicVector.html">rds2cpp::AtomicVector</a></div><div class="ttdoc">Vector of some atomic type.</div><div class="ttdef"><b>Definition:</b> RObject.hpp:114</div></div>
+<div class="ttc" id="astructrds2cpp_1_1AtomicVector_html_a87427d2862c982a09ac077ac6ad12eae"><div class="ttname"><a href="structrds2cpp_1_1AtomicVector.html#a87427d2862c982a09ac077ac6ad12eae">rds2cpp::AtomicVector::data</a></div><div class="ttdeci">std::vector&lt; ElementType &gt; data</div><div class="ttdef"><b>Definition:</b> RObject.hpp:129</div></div>
+</div><!-- fragment --><p >Or maybe we have an ordinary list instead:</p>
+<div class="fragment"><div class="line"><span class="keywordflow">if</span> (ptr-&gt;type() == rds2cpp::SEXPType::VEC) {</div>
+<div class="line">    <span class="keyword">auto</span> lptr = <span class="keyword">static_cast&lt;</span><a class="code hl_struct" href="structrds2cpp_1_1GenericVector.html">rds2cpp::GenericVector</a>*<span class="keyword">&gt;</span>(ptr.get());</div>
+<div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; elements = lptr-&gt;<a class="code hl_variable" href="structrds2cpp_1_1GenericVector.html#aca411f5b3a5609e4ba6fb450b4f935cb">data</a>; <span class="comment">// vector of pointers to list elements.</span></div>
+<div class="line">}</div>
+<div class="ttc" id="astructrds2cpp_1_1GenericVector_html"><div class="ttname"><a href="structrds2cpp_1_1GenericVector.html">rds2cpp::GenericVector</a></div><div class="ttdoc">Generic vector, i.e., an ordinary R list.</div><div class="ttdef"><b>Definition:</b> RObject.hpp:201</div></div>
+<div class="ttc" id="astructrds2cpp_1_1GenericVector_html_aca411f5b3a5609e4ba6fb450b4f935cb"><div class="ttname"><a href="structrds2cpp_1_1GenericVector.html#aca411f5b3a5609e4ba6fb450b4f935cb">rds2cpp::GenericVector::data</a></div><div class="ttdeci">std::vector&lt; std::unique_ptr&lt; RObject &gt; &gt; data</div><div class="ttdef"><b>Definition:</b> RObject.hpp:215</div></div>
+</div><!-- fragment --><p >Slots of S4 instances are encoded in the attributes:</p>
+<div class="fragment"><div class="line"><span class="keywordflow">if</span> (ptr-&gt;type() == rds2cpp::SEXPType::S4) {</div>
+<div class="line">    <span class="keyword">auto</span> sptr = <span class="keyword">static_cast&lt;</span><a class="code hl_struct" href="structrds2cpp_1_1S4Object.html">rds2cpp::S4Object</a>*<span class="keyword">&gt;</span>(ptr.get());</div>
+<div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; slot_names = sptr-&gt;<a class="code hl_variable" href="structrds2cpp_1_1S4Object.html#afff39c9a8ab91c50d8542f0b583982f8">attributes</a>.<a class="code hl_variable" href="structrds2cpp_1_1Attributes.html#a3dd274a97e415b2d14606843b63f6b18">names</a>;</div>
+<div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; slot_values = sptr-&gt;attributes.values;</div>
+<div class="line">}</div>
+<div class="ttc" id="astructrds2cpp_1_1Attributes_html_a3dd274a97e415b2d14606843b63f6b18"><div class="ttname"><a href="structrds2cpp_1_1Attributes.html#a3dd274a97e415b2d14606843b63f6b18">rds2cpp::Attributes::names</a></div><div class="ttdeci">std::vector&lt; std::string &gt; names</div><div class="ttdef"><b>Definition:</b> RObject.hpp:94</div></div>
+<div class="ttc" id="astructrds2cpp_1_1S4Object_html"><div class="ttname"><a href="structrds2cpp_1_1S4Object.html">rds2cpp::S4Object</a></div><div class="ttdoc">S4 object.</div><div class="ttdef"><b>Definition:</b> RObject.hpp:260</div></div>
+<div class="ttc" id="astructrds2cpp_1_1S4Object_html_afff39c9a8ab91c50d8542f0b583982f8"><div class="ttname"><a href="structrds2cpp_1_1S4Object.html#afff39c9a8ab91c50d8542f0b583982f8">rds2cpp::S4Object::attributes</a></div><div class="ttdeci">Attributes attributes</div><div class="ttdef"><b>Definition:</b> RObject.hpp:287</div></div>
+</div><!-- fragment --><p >See the <a href="https://ltla.github.io/rds2cpp">reference documentation</a> for a list of known representations.</p>
+<h1>Building projects</h1>
+<p >If you're using CMake, you just need to add something like this to your <code>CMakeLists.txt</code>:</p>
+<div class="fragment"><div class="line">include(FetchContent)</div>
+<div class="line"> </div>
+<div class="line">FetchContent_Declare(</div>
+<div class="line">  rds2cpp</div>
+<div class="line">  GIT_REPOSITORY https://github.com/LTLA/rds2cpp</div>
+<div class="line">  GIT_TAG master # or any version of interest</div>
+<div class="line">)</div>
+<div class="line"> </div>
+<div class="line">FetchContent_MakeAvailable(rds2cpp)</div>
+</div><!-- fragment --><p >Then you can link to <b><a class="el" href="namespacerds2cpp.html" title="Parse an RDS file in C++.">rds2cpp</a></b> to make the headers available during compilation:</p>
+<div class="fragment"><div class="line"># For executables:</div>
+<div class="line">target_link_libraries(myexe rds2cpp)</div>
+<div class="line"> </div>
+<div class="line"># For libaries</div>
+<div class="line">target_link_libraries(mylib INTERFACE rds2cpp)</div>
+</div><!-- fragment --><h1>Known limitations</h1>
+<p >This library may not support RDS files created using <code>saveRDS()</code> with non-default parameters.</p>
+<p >Currently, no support is provided for unserializing built-in functions or user-defined closures. </p>
+</div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

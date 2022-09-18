@@ -1,0 +1,5 @@
+<map id="rds2cpp::AtomicVector&lt; ElementType, stype &gt;" name="rds2cpp::AtomicVector&lt; ElementType, stype &gt;">
+<area shape="rect" id="node1" title="Vector of some atomic type." alt="" coords="62,93,219,133"/>
+<area shape="rect" id="node2" href="$structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects." alt="" coords="5,5,127,31"/>
+<area shape="rect" id="node3" href="$structrds2cpp_1_1Attributes.html" title="Attribute names and values." alt="" coords="151,5,282,31"/>
+</map>

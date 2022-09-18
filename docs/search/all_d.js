@@ -1,12 +1,10 @@
 var searchData=
 [
-  ['s4object_0',['S4Object',['../structrds2cpp_1_1S4Object.html',1,'rds2cpp']]],
-  ['sexptype_1',['SEXPType',['../namespacerds2cpp.html#acf2b27eb21235c6dd30b8819ea682629',1,'rds2cpp']]],
-  ['sexptype_2ehpp_2',['SEXPType.hpp',['../SEXPType_8hpp.html',1,'']]],
-  ['shared_2ehpp_3',['Shared.hpp',['../Shared_8hpp.html',1,'']]],
-  ['stringencoding_4',['StringEncoding',['../namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b',1,'rds2cpp']]],
-  ['stringencoding_2ehpp_5',['StringEncoding.hpp',['../StringEncoding_8hpp.html',1,'']]],
-  ['symbol_6',['Symbol',['../structrds2cpp_1_1Symbol.html',1,'rds2cpp']]],
-  ['symbolindex_7',['SymbolIndex',['../structrds2cpp_1_1SymbolIndex.html',1,'rds2cpp']]],
-  ['symbols_8',['symbols',['../structrds2cpp_1_1Parsed.html#a2e683e7de68118b9104df91988323a37',1,'rds2cpp::Parsed']]]
+  ['rawvector_0',['RawVector',['../namespacerds2cpp.html#a0adba04a729035c4b716a3d4db7cd340',1,'rds2cpp']]],
+  ['rds2cpp_1',['rds2cpp',['../namespacerds2cpp.html',1,'']]],
+  ['rds2cpp_2ehpp_2',['rds2cpp.hpp',['../rds2cpp_8hpp.html',1,'']]],
+  ['read_20rds_20files_20in_20c_2b_2b_3',['Read RDS files in C++',['../index.html',1,'']]],
+  ['reader_5fversion_4',['reader_version',['../structrds2cpp_1_1Parsed.html#a90842021bdcbb19d8d251002b8b65ff8',1,'rds2cpp::Parsed']]],
+  ['robject_5',['RObject',['../structrds2cpp_1_1RObject.html',1,'rds2cpp']]],
+  ['robject_2ehpp_6',['RObject.hpp',['../RObject_8hpp.html',1,'']]]
 ];

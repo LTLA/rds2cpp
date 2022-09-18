@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['name_0',['name',['../structrds2cpp_1_1Symbol.html#a68099267ab64bc22a9aabbdd3d9fb87e',1,'rds2cpp::Symbol']]],
-  ['null_1',['Null',['../structrds2cpp_1_1Null.html',1,'rds2cpp']]]
+  ['missing_0',['missing',['../structrds2cpp_1_1StringVector.html#a75ffb98789db717ebb9a3715fcac46df',1,'rds2cpp::StringVector']]]
 ];
