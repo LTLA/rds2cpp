@@ -11,5 +11,6 @@ Imports:
 Suggests:
     testthat
 LinkingTo: Rcpp
+SystemRequirements: C++17
 License: GPL-3
 RoxygenNote: 7.2.1
