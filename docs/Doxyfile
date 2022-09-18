@@ -795,6 +795,7 @@ INPUT                  = ../include/rds2cpp/StringEncoding.hpp \
                          ../include/rds2cpp/SEXPType.hpp \
                          ../include/rds2cpp/Shared.hpp \
                          ../include/rds2cpp/parse_rds.hpp \
+                         ../include/rds2cpp/rds2cpp.hpp \
                          ../README.md
 
 # This tag can be used to specify the character encoding of the source files

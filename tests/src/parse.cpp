@@ -1,5 +1,5 @@
 #include "Rcpp.h"
-#include "rds2cpp/parse_rds.hpp"
+#include "rds2cpp/rds2cpp.hpp"
 
 void assign_to_string(Rcpp::StringVector& output, size_t i, const std::string& value, rds2cpp::StringEncoding encoding) {
     cetype_t enc = CE_UTF8;
