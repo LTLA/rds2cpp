@@ -1,0 +1,11 @@
+<map id="rds2cpp/Shared.hpp" name="rds2cpp/Shared.hpp">
+<area shape="rect" id="node1" title="Shared values that are re&#45;used within an unserialized object." alt="" coords="170,5,307,31"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,152,64,177"/>
+<area shape="rect" id="node3" title=" " alt="" coords="310,79,378,104"/>
+<area shape="rect" id="node4" title=" " alt="" coords="402,79,457,104"/>
+<area shape="rect" id="node5" href="$StringEncoding_8hpp.html" title="String encodings." alt="" coords="88,152,221,177"/>
+<area shape="rect" id="node6" href="$RObject_8hpp.html" title="Representations of unserialized R objects." alt="" coords="192,79,285,104"/>
+<area shape="rect" id="node7" title=" " alt="" coords="245,152,307,177"/>
+<area shape="rect" id="node8" title=" " alt="" coords="331,152,402,177"/>
+<area shape="rect" id="node9" href="$SEXPType_8hpp.html" title="R data types." alt="" coords="427,152,536,177"/>
+</map>
