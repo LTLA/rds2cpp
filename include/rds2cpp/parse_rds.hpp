@@ -66,12 +66,14 @@ struct Parsed {
 /**
  * Parse the contents of an RDS file.
  *
- * @param file Path to an RDS file.
+ * @tparam Reader A [`byteme::Reader`](https://ltla.github.io/byteme) class.
  *
- * @return A `Parsed` object containing the contents of `file`.
+ * @param reader Instance of a `Reader` class, containing the contents of the RDS file.
+ *
+ * @return A `Parsed` object containing the contents of the RDS file.
  */
-inline Parsed parse_rds(std::string file) {
-    byteme::SomeFileReader reader(file.c_str());
+template<class Reader>
+Parsed parse_rds(Reader& reader) {
     Parsed output;
 
     std::vector<unsigned char> leftovers;
@@ -141,6 +143,18 @@ inline Parsed parse_rds(std::string file) {
     output.symbols = std::move(shared.symbols);
 
     return output;
+}
+
+/**
+ * Parse the contents of an RDS file.
+ *
+ * @param file Path to an RDS file.
+ *
+ * @return A `Parsed` object containing the contents of `file`.
+ */
+inline Parsed parse_rds(std::string file) {
+    byteme::SomeFileReader reader(file.c_str());
+    return parse_rds(reader);
 }
 
 }
