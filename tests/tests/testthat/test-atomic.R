@@ -1,23 +1,33 @@
 # This tests the correct saving and loading of atomic vectors.
 # library(testthat); library(rds2cpp); source("test-atomic.R")
 
+integer.scenarios <- list(
+    sample(15),
+    rpois(112, lambda=8),
+    rnorm(990) * 10,
+    {
+        y <- 0:99
+        y[sample(length(y), 10)] <- NA
+        y
+    }
+)
+
 test_that("integer vector loading works as expected", {
     tmp <- tempfile(fileext=".rds")
-    scenarios <- list(
-        sample(15),
-        rpois(112, lambda=8),
-        rnorm(990) * 10,
-        {
-            y <- 0:99
-            y[sample(length(y), 10)] <- NA
-            y
-        }
-    )
-
-    for (y in scenarios) {
+    for (y in integer.scenarios) {
         y <- as.integer(y)
         saveRDS(y, file=tmp)
         roundtrip <- rds2cpp:::parse(tmp)
+        expect_identical(roundtrip, y)
+    }
+})
+
+test_that("integer vector writing works as expected", {
+    tmp <- tempfile(fileext=".rds")
+    for (y in integer.scenarios) {
+        y <- as.integer(y)
+        rds2cpp::write(y, file_name=tmp)
+        roundtrip <- readRDS(tmp)
         expect_identical(roundtrip, y)
     }
 })

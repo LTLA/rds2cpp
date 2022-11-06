@@ -6,3 +6,8 @@ parse <- function(file_name) {
     .Call('_rds2cpp_parse', PACKAGE = 'rds2cpp', file_name)
 }
 
+#' @export
+write <- function(x, file_name) {
+    .Call('_rds2cpp_write', PACKAGE = 'rds2cpp', x, file_name)
+}
+
