@@ -2,11 +2,10 @@
 #define RDS2CPP_PARSE_HPP
 
 #include <memory>
-#include <array>
 #include <algorithm>
 #include <cstdint>
 
-#include "RObject.hpp"
+#include "RdsFile.hpp"
 #include "utils.hpp"
 #include "Shared.hpp"
 #include "parse_object.hpp"
@@ -22,59 +21,17 @@
 namespace rds2cpp {
 
 /**
- * @brief Contents of the parsed RDS file.
- */
-struct Parsed {
-    /**
-     * Version of the RDS format.
-     */
-    uint32_t format_version = 0;
-
-    /**
-     * R version used to write the file as major-minor-patch integers.
-     */
-    std::array<unsigned char, 3> writer_version;
-
-    /**
-     * Minimum R version required to read the file as major-minor-patch integers.
-     */
-    std::array<unsigned char, 3> reader_version;
-
-    /**
-     * Encoding required to read the file.
-     */
-    std::string encoding;
-
-    /**
-     * The unserialized object.
-     */
-    std::unique_ptr<RObject> object;
-
-    /**
-     * All environments inside the file.
-     * This can be referenced by the `index` in `EnvironmentIndex`.
-     */
-    std::vector<Environment> environments;
-
-    /**
-     * All symbols inside the file.
-     * This can be referenced by the `index` in `SymbolIndex`.
-     */
-    std::vector<Symbol> symbols;
-};
-
-/**
  * Parse the contents of an RDS file.
  *
  * @tparam Reader A [`byteme::Reader`](https://ltla.github.io/byteme) class.
  *
  * @param reader Instance of a `Reader` class, containing the contents of the RDS file.
  *
- * @return A `Parsed` object containing the contents of the RDS file.
+ * @return An `RdsFile` object containing the contents of the RDS file.
  */
 template<class Reader>
-Parsed parse_rds(Reader& reader) {
-    Parsed output;
+RdsFile parse_rds(Reader& reader) {
+    RdsFile output(false);
 
     std::vector<unsigned char> leftovers;
     bool remaining = true;
@@ -95,6 +52,7 @@ Parsed parse_rds(Reader& reader) {
             throw std::runtime_error("only RDS files in XDR format are currently supported");
         }
 
+        output.format_version = 0;
         for (size_t pos = 2; pos < 6; ++pos) {
             output.format_version <<= 8;
             output.format_version += accumulated[pos];
@@ -150,12 +108,17 @@ Parsed parse_rds(Reader& reader) {
  *
  * @param file Path to an RDS file.
  *
- * @return A `Parsed` object containing the contents of `file`.
+ * @return An `RdsFile` object containing the contents of `file`.
  */
-inline Parsed parse_rds(std::string file) {
+inline RdsFile parse_rds(std::string file) {
     byteme::SomeFileReader reader(file.c_str());
     return parse_rds(reader);
 }
+
+/**
+ * Typedef for back-compatibility.
+ */
+typedef RdsFile Parsed;
 
 }
 

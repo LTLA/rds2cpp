@@ -3,57 +3,65 @@
 
 #include <vector>
 
-#include "byteme/GzipFileWriter.hpp"
-
-#include "parse_rds.hpp"
+#include "RdsFile.hpp"
+#include "RObject.hpp"
 #include "utils_write.hpp"
 #include "write_object.hpp"
 
+#include "byteme/GzipFileWriter.hpp"
+
+/**
+ * @file write_rds.hpp
+ *
+ * @brief Write an RDS file.
+ */
+
 namespace rds2cpp {
 
-void set_typical_defaults(Parsed& parsed) {
-    parsed.format_version = 3;
-
-    parsed.writer_version[0] = 4;
-    parsed.writer_version[1] = 2;
-    parsed.writer_version[2] = 0;
-
-    parsed.reader_version[0] = 3;
-    parsed.reader_version[1] = 5;
-    parsed.reader_version[2] = 0;
-
-    parsed.encoding = "UTF-8";
-}
-
+/**
+ * Convert an R object into the RDS format and write it to a specified output.
+ *
+ * @tparam Writer A [`byteme::Writer`](https://ltla.github.io/byteme) class.
+ *
+ * @param info Information about the RDS file to be written, including a pointer to a valid `RObject`.
+ * @param writer Instance of a `Writer` class, where the RDS file is to be written.
+ */
 template<class Writer>
-void write_rds(const Parsed& parsed, Writer& writer) {
+void write_rds(const RdsFile& info, Writer& writer) {
     std::vector<unsigned char> buffer;
     inject_string("X\n", 2, buffer);
-    inject_integer(parsed.format_version, buffer);
+    inject_integer(info.format_version, buffer);
 
     buffer.push_back(0);
-    for (auto x : parsed.writer_version) {
+    for (auto x : info.writer_version) {
         buffer.push_back(x);
     }
 
     buffer.push_back(0);
-    for (auto x : parsed.reader_version) {
+    for (auto x : info.reader_version) {
         buffer.push_back(x);
     }
 
-    size_t encoding_len = parsed.encoding.size();
+    size_t encoding_len = info.encoding.size();
     inject_integer(encoding_len, buffer);
-    inject_string(parsed.encoding.c_str(), encoding_len, buffer);
+    inject_string(info.encoding.c_str(), encoding_len, buffer);
     writer.write(buffer.data(), buffer.size());
 
-    write_object(parsed.object.get(), writer, buffer); 
+    write_object(info.object.get(), writer, buffer); 
 
     return;
 }
 
-inline void write_rds(const Parsed& parsed, std::string path) {
+/**
+ * Write an R object to a Gzip-compressed RDS file.
+ *
+ * @param info Information about the RDS file to be written, including a pointer to a valid `RObject`.
+ * @param path Path to the output file.
+ */
+inline void write_rds(const RdsFile& info, std::string path) {
     byteme::GzipFileWriter writer(path);
-    write_rds(parsed, writer);
+    write_rds(info, writer);
+    return;
 }
 
 }

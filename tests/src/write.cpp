@@ -18,8 +18,7 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x) {
 //' @export
 //[[Rcpp::export(rng=false)]]
 Rcpp::RObject write(Rcpp::RObject x, std::string file_name) {
-    rds2cpp::Parsed output;
-    rds2cpp::set_typical_defaults(output);
+    rds2cpp::RdsFile output;
     output.object = unconvert(x);
     rds2cpp::write_rds(output, file_name);
     return R_NilValue;
