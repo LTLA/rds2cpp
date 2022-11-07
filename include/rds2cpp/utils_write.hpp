@@ -48,7 +48,17 @@ void inject_header(Object& vec, std::vector<unsigned char>& buffer) {
     buffer.push_back(0);
 
     if constexpr(has_attributes) {
-        buffer.push_back(vec.attributes.names.empty() ? 0 : 2);
+        unsigned char bit = 0;
+        if (!vec.attributes.names.empty()) {
+            bit |= 0x2;
+            for (const auto& x : vec.attributes.names) {
+                if (x == "class") {
+                    bit |= 0x1;
+                    break;
+                }
+            }
+        }
+        buffer.push_back(bit);
     } else {
         buffer.push_back(0);
     }

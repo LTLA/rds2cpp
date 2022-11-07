@@ -6,7 +6,7 @@
 
 #include "RObject.hpp"
 #include "utils.hpp"
-#include "Shared.hpp"
+#include "write_attributes.hpp"
 
 namespace rds2cpp {
 
@@ -26,6 +26,7 @@ void write_list(const RObject* object, Writer& writer, std::vector<unsigned char
     for (size_t i = 0; i < len; ++i) {
         write_object(ptr->data[i].get(), writer, buffer);
     }
+    write_attributes(ptr->attributes, writer, buffer);
     return;
 }
 

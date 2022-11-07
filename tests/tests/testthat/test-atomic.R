@@ -172,7 +172,7 @@ test_that("character vector loading works as expected", {
     }
 })
 
-test_that("character vector writng works as expected", {
+test_that("character vector writing works as expected", {
     tmp <- tempfile(fileext=".rds")
     for (y in string.scenarios) {
         rds2cpp::write(y, file_name=tmp)
@@ -183,15 +183,21 @@ test_that("character vector writng works as expected", {
 
 ########################################################
 
-test_that("attributes for atomic vectors are respected", {
+attr_vals <- sample(.Machine$integer.max, 1000)
+names(attr_vals) <- sprintf("GENE_%i", seq_along(attr_vals))
+attr(attr_vals, "foo") <- c("BAR", "bar", "Bar")
+class(attr_vals) <- "frog"
+
+test_that("attributes for atomic vectors are loaded correctly", {
     tmp <- tempfile(fileext=".rds")
-    vals <- sample(.Machine$integer.max, 1000)
-
-    names(vals) <- sprintf("GENE_%i", seq_along(vals))
-    attr(vals, "foo") <- c("BAR", "bar", "Bar")
-    class(vals) <- "frog"
-
-    saveRDS(vals, file=tmp)
+    saveRDS(attr_vals, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
-    expect_identical(roundtrip, vals)
+    expect_identical(roundtrip, attr_vals)
+})
+
+test_that("attributes for atomic vectors are written correctly", {
+    tmp <- tempfile(fileext=".rds")
+    rds2cpp::write(attr_vals, tmp)
+    roundtrip <- readRDS(tmp)
+    expect_identical(roundtrip, attr_vals)
 })

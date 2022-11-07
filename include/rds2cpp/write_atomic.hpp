@@ -9,6 +9,7 @@
 #include "utils.hpp"
 #include "utils_write.hpp"
 #include "write_single_string.hpp"
+#include "write_attributes.hpp"
 
 namespace rds2cpp {
 
@@ -45,6 +46,8 @@ void write_integer_or_logical_body(const RObject* obj, Writer& writer, std::vect
     } else {
         writer.write(ptr, nbytes);
     }
+
+    write_attributes(vec.attributes, writer, buffer);
 }
 
 }
@@ -84,6 +87,8 @@ void write_double(const RObject* obj, Writer& writer, std::vector<unsigned char>
     } else {
         writer.write(ptr, nbytes);
     }
+
+    write_attributes(vec.attributes, writer, buffer);
 }
 
 template<class Writer>
@@ -97,6 +102,7 @@ void write_raw(const RObject* obj, Writer& writer, std::vector<unsigned char>& b
     writer.write(buffer.data(), buffer.size());
 
     writer.write(values.data(), len);
+    write_attributes(vec.attributes, writer, buffer);
 }
 
 template<class Writer>
@@ -124,6 +130,8 @@ void write_complex(const RObject* obj, Writer& writer, std::vector<unsigned char
     } else {
         writer.write(ptr, nbytes);
     }
+
+    write_attributes(vec.attributes, writer, buffer);
 }
 
 template<class Writer>
@@ -137,10 +145,9 @@ void write_string(const RObject* obj, Writer& writer, std::vector<unsigned char>
     writer.write(buffer.data(), buffer.size());
 
     for (size_t i = 0; i < len; ++i) {
-        buffer.clear();
-        write_single_string(vec.data[i], vec.encodings[i], vec.missing[i], buffer);
-        writer.write(buffer.data(), buffer.size());
+        write_single_string(vec.data[i], vec.encodings[i], vec.missing[i], writer, buffer);
     }
+    write_attributes(vec.attributes, writer, buffer);
 }
 
 }

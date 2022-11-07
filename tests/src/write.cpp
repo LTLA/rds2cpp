@@ -1,6 +1,19 @@
 #include "Rcpp.h"
 #include "rds2cpp/rds2cpp.hpp"
 
+std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x);
+
+template<class RdsObject>
+void add_attributes(const Rcpp::RObject& x, RdsObject* y) {
+    const auto& attr_names = x.attributeNames();
+    auto& attr_dest = y->attributes;
+    for (const auto& attr : attr_names) {
+        attr_dest.names.push_back(attr);        
+        attr_dest.encodings.push_back(rds2cpp::StringEncoding::ASCII); // just assume, I guess.
+        attr_dest.values.push_back(unconvert(x.attr(attr)));
+    }
+}
+
 template<class SourceVector, class HostVector>
 std::unique_ptr<rds2cpp::RObject> prepare_simple_vector(const Rcpp::RObject& x) {
     std::unique_ptr<rds2cpp::RObject> output;
@@ -8,6 +21,7 @@ std::unique_ptr<rds2cpp::RObject> prepare_simple_vector(const Rcpp::RObject& x) 
     auto ptr = new HostVector;
     output.reset(ptr);
     ptr->data.insert(ptr->data.end(), vec.begin(), vec.end());
+    add_attributes(x, ptr);
     return output;
 }
 
@@ -34,6 +48,8 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x) {
         for (size_t i = 0; i < vec.size(); ++i) {
             ptr->data[i] = std::complex<double>(vec[i].r, vec[i].i);
         }
+
+        add_attributes(x, ptr);
         return output;
 
     } else if (x.sexp_type() == STRSXP) {
@@ -57,6 +73,8 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x) {
             }
             ptr->data[i] = current.get_cstring();
         }
+
+        add_attributes(x, ptr);
         return output;
 
     } else if (x.sexp_type() == VECSXP) {
@@ -67,6 +85,7 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x) {
         for (size_t i = 0; i < vec.size(); ++i) {
             ptr->data.push_back(unconvert(vec[i]));
         }
+        add_attributes(x, ptr);
         return output;
     }
 

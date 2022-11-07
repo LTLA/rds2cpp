@@ -25,16 +25,30 @@ test_that("list writing works as expected", {
     }
 })
 
+test.df <- data.frame(xxx=runif(19), YYY=sample(letters, 19), ZZZ=rbinom(19, 1, 0.4) == 0)
+test.df.with.rownames <- test.df
+rownames(test.df.with.rownames) <- paste0("FOO-", LETTERS[1:19])
+
 test_that("data frame loading works as expected", {
     tmp <- tempfile(fileext=".rds")
-    df <- data.frame(xxx=runif(19), YYY=sample(letters, 19), ZZZ=rbinom(19, 1, 0.4) == 0)
-    saveRDS(df, file=tmp)
+    saveRDS(test.df, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
-    expect_identical(roundtrip, df)
+    expect_identical(roundtrip, test.df)
 
     # Works with row names.
-    rownames(df) <- paste0("FOO-", LETTERS[1:19])
-    saveRDS(df, file=tmp)
+    saveRDS(test.df.with.rownames, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
-    expect_identical(roundtrip, df)
+    expect_identical(roundtrip, test.df.with.rownames)
+})
+
+test_that("data frame loading works as expected", {
+    tmp <- tempfile(fileext=".rds")
+    rds2cpp::write(test.df, file=tmp)
+    roundtrip <- readRDS(tmp)
+    expect_identical(roundtrip, test.df)
+
+    # Works with row names.
+    rds2cpp::write(test.df.with.rownames, file=tmp)
+    roundtrip <- readRDS(tmp)
+    expect_identical(roundtrip, test.df.with.rownames)
 })
