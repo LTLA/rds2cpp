@@ -17,24 +17,13 @@ struct StringInfo {
 template<class Reader>
 StringInfo parse_single_string(Reader& reader, std::vector<unsigned char>& leftovers) {
     auto header = parse_header(reader, leftovers);
-    std::reverse(header.begin(), header.end());
+    std::reverse(header.begin(), header.end()); // make it little-endian for easier indexing.
     if (header[0] != static_cast<unsigned char>(SEXPType::CHAR)) {
-        throw std::runtime_error("elements of a character vector should be CHARSXP");
+        throw std::runtime_error("expected a CHARSXP representation for a string");
     }
 
-    StringInfo output;
-    auto& enc = output.encoding;
-    if (header[1] & (1 << (12 - 8 + 1))) {
-        enc = StringEncoding::NONE;
-    } else if (header[1] & (1 << (12 - 8 + 2))) {
-        enc = StringEncoding::LATIN1;
-    } else if (header[1] & (1 << (12 - 8 + 3))) {
-        enc = StringEncoding::UTF8;
-    } else if (header[2] & (1 << (12 - 16 + 6))) {
-        enc = StringEncoding::ASCII;
-    }
-
-    // Getting the string length.
+    // Getting the string length; all strings are less than 2^31-1,
+    // see https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Long-vectors.
     uint32_t strlen = 0;
     bool ok = extract_up_to(reader, leftovers, 4, 
         [&](const unsigned char* buffer, size_t n, size_t) -> void {
@@ -48,11 +37,10 @@ StringInfo parse_single_string(Reader& reader, std::vector<unsigned char>& lefto
         throw std::runtime_error("failed to parse the string length in a character vector");
     }
 
-    // Handle NAs.
-    if (strlen == static_cast<uint32_t>(-1)) {
-        output.missing= true;
-    } else {
-        output.missing= false;
+    StringInfo output;
+    output.missing = (strlen == static_cast<uint32_t>(-1));
+
+    if (!output.missing) {
         auto& str = output.value;
         bool ok = extract_up_to(reader, leftovers, strlen,
             [&](const unsigned char* buffer, size_t n, size_t) -> void {
@@ -61,6 +49,24 @@ StringInfo parse_single_string(Reader& reader, std::vector<unsigned char>& lefto
         );
         if (!ok) {
             throw std::runtime_error("failed to parse the string in a character vector");
+        }
+
+        /* String encoding is stored in the gp field, from bits 12 to 27 in the header.
+         * We make life easier by just accessing the relevant byte below, after adjusting
+         * the start of the gp field for the skipped bytes. For more details, see
+         * https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Rest-of-header.
+         */
+        auto& enc = output.encoding;
+        if (header[1] & (1 << (12 - 8 + 1))) {
+            enc = StringEncoding::NONE;
+        } else if (header[1] & (1 << (12 - 8 + 2))) {
+            enc = StringEncoding::LATIN1;
+        } else if (header[1] & (1 << (12 - 8 + 3))) {
+            enc = StringEncoding::UTF8;
+        } else if (header[2] & (1 << (12 - 16 + 6))) {
+            enc = StringEncoding::ASCII;
+        } else {
+            enc = StringEncoding::UTF8; // fall back to UTF8 if no encoding can be detected.
         }
     }
 
