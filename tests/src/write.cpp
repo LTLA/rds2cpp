@@ -58,6 +58,16 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x) {
             ptr->data[i] = current.get_cstring();
         }
         return output;
+
+    } else if (x.sexp_type() == VECSXP) {
+        std::unique_ptr<rds2cpp::RObject> output;
+        Rcpp::List vec(x);
+        auto ptr = new rds2cpp::GenericVector;
+        output.reset(ptr);
+        for (size_t i = 0; i < vec.size(); ++i) {
+            ptr->data.push_back(unconvert(vec[i]));
+        }
+        return output;
     }
 
     return std::unique_ptr<rds2cpp::RObject>();

@@ -4,6 +4,7 @@
 #include "RObject.hpp"
 #include "SEXPType.hpp"
 #include "write_atomic.hpp"
+#include "write_list.hpp"
 #include <vector>
 
 namespace rds2cpp {
@@ -28,6 +29,9 @@ void write_object(const RObject* object, Writer& writer, std::vector<unsigned ch
             break;
         case SEXPType::STR:
             write_string(object, writer, buffer);
+            break;
+        case SEXPType::VEC:
+            write_list(object, writer, buffer);
             break;
          default:
             throw std::runtime_error("unsupported SEXP type '" + std::to_string(static_cast<int>(object->type())) + "' for writing");
