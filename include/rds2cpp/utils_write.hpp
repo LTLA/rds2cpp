@@ -18,6 +18,25 @@ inline void inject_integer(int32_t value, std::vector<unsigned char>& buffer) {
     buffer.insert(buffer.end(), ptr, ptr + width);
 }
 
+inline void inject_length(size_t value, std::vector<unsigned char>& buffer) {
+    if (value <= 2147483647) {
+        inject_integer(value, buffer);
+        return;
+    }
+
+    inject_integer(-1, buffer);
+    uint64_t big = value;
+
+    auto ptr = reinterpret_cast<unsigned char*>(&value);
+    constexpr size_t width = 8;
+    if (little_endian()) {
+        std::reverse(ptr, ptr + width/2);
+        std::reverse(ptr + width/2, ptr + width);
+    }
+
+    buffer.insert(buffer.end(), ptr, ptr + width);
+}
+
 inline void inject_string(const char* ptr, size_t n, std::vector<unsigned char>& buffer) {
     auto p = reinterpret_cast<const unsigned char*>(ptr);
     buffer.insert(buffer.end(), p, p + n);
