@@ -23,7 +23,7 @@ void set_vector_header(Vector& vec, std::vector<unsigned char>& buffer) {
 
 template<class Vector, class Writer>
 void write_integer_or_logical_body(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
-    const auto& vec = *reinterpret_cast<const Vector*>(obj);
+    const auto& vec = *static_cast<const Vector*>(obj);
     set_vector_header(vec, buffer);
 
     const auto& values = vec.data;
@@ -64,7 +64,7 @@ void write_logical(const RObject* obj, Writer& writer, std::vector<unsigned char
 
 template<class Writer>
 void write_double(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
-    const auto& vec = *reinterpret_cast<const DoubleVector*>(obj);
+    const auto& vec = *static_cast<const DoubleVector*>(obj);
     atomic_internal::set_vector_header(vec, buffer);
 
     const auto& values = vec.data;
@@ -93,7 +93,7 @@ void write_double(const RObject* obj, Writer& writer, std::vector<unsigned char>
 
 template<class Writer>
 void write_raw(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
-    const auto& vec = *reinterpret_cast<const RawVector*>(obj);
+    const auto& vec = *static_cast<const RawVector*>(obj);
     atomic_internal::set_vector_header(vec, buffer);
 
     const auto& values = vec.data;
@@ -107,7 +107,7 @@ void write_raw(const RObject* obj, Writer& writer, std::vector<unsigned char>& b
 
 template<class Writer>
 void write_complex(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
-    const auto& vec = *reinterpret_cast<const ComplexVector*>(obj);
+    const auto& vec = *static_cast<const ComplexVector*>(obj);
     atomic_internal::set_vector_header(vec, buffer);
 
     const auto& values = vec.data;
@@ -136,7 +136,7 @@ void write_complex(const RObject* obj, Writer& writer, std::vector<unsigned char
 
 template<class Writer>
 void write_string(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
-    const auto& vec = *reinterpret_cast<const StringVector*>(obj);
+    const auto& vec = *static_cast<const StringVector*>(obj);
     atomic_internal::set_vector_header(vec, buffer);
 
     const auto& values = vec.data;
