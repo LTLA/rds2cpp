@@ -1,6 +1,7 @@
 <map id="rds2cpp/RObject.hpp" name="rds2cpp/RObject.hpp">
-<area shape="rect" id="node1" title="Representations of unserialized R objects." alt="" coords="56,5,199,31"/>
-<area shape="rect" id="node2" href="$Shared_8hpp.html" title="Shared values that are re&#45;used within an unserialized object." alt="" coords="5,79,143,104"/>
-<area shape="rect" id="node3" href="$parse__rds_8hpp.html" title="Parse an RDS file." alt="" coords="51,152,204,177"/>
-<area shape="rect" id="node4" href="$rds2cpp_8hpp.html" title="Entrypoint header." alt="" coords="56,225,199,251"/>
+<area shape="rect" id="node1" title="Representations of unserialized R objects." alt="" coords="99,5,241,31"/>
+<area shape="rect" id="node2" href="$Shared_8hpp.html" title="Shared values that are re&#45;used within an unserialized object." alt="" coords="48,79,185,104"/>
+<area shape="rect" id="node5" href="$write__rds_8hpp.html" title="Write an RDS file." alt="" coords="183,152,333,177"/>
+<area shape="rect" id="node3" href="$parse__rds_8hpp.html" title="Parse an RDS file." alt="" coords="5,152,159,177"/>
+<area shape="rect" id="node4" href="$rds2cpp_8hpp.html" title="Entrypoint header." alt="" coords="99,225,241,251"/>
 </map>

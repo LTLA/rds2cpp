@@ -1,11 +1,12 @@
 var searchData=
 [
-  ['package_5fencoding_0',['package_encoding',['../structrds2cpp_1_1S4Object.html#a048e7b648052c8b12d7fc5b2bcca38c9',1,'rds2cpp::S4Object']]],
-  ['package_5fname_1',['package_name',['../structrds2cpp_1_1S4Object.html#ac01786753fa1f33a5382527df8c42450',1,'rds2cpp::S4Object']]],
-  ['pairlist_2',['PairList',['../structrds2cpp_1_1PairList.html',1,'rds2cpp']]],
-  ['parent_3',['parent',['../structrds2cpp_1_1Environment.html#ae729557dda55babd8df86b1edd6bfa1e',1,'rds2cpp::Environment']]],
-  ['parent_5ftype_4',['parent_type',['../structrds2cpp_1_1Environment.html#af916025aa24b767482eeea48f8f32512',1,'rds2cpp::Environment']]],
-  ['parse_5frds_5',['parse_rds',['../namespacerds2cpp.html#afd4c31eb4eaa8b4ec14481dd9aea8162',1,'rds2cpp::parse_rds(Reader &amp;reader)'],['../namespacerds2cpp.html#ae6eac0a8595a18340e5b7ea35b9b8372',1,'rds2cpp::parse_rds(std::string file)']]],
-  ['parse_5frds_2ehpp_6',['parse_rds.hpp',['../parse__rds_8hpp.html',1,'']]],
-  ['parsed_7',['Parsed',['../structrds2cpp_1_1Parsed.html',1,'rds2cpp']]]
+  ['s4object_0',['S4Object',['../structrds2cpp_1_1S4Object.html',1,'rds2cpp']]],
+  ['sexptype_1',['SEXPType',['../namespacerds2cpp.html#acf2b27eb21235c6dd30b8819ea682629',1,'rds2cpp']]],
+  ['sexptype_2ehpp_2',['SEXPType.hpp',['../SEXPType_8hpp.html',1,'']]],
+  ['shared_2ehpp_3',['Shared.hpp',['../Shared_8hpp.html',1,'']]],
+  ['stringencoding_4',['StringEncoding',['../namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b',1,'rds2cpp']]],
+  ['stringencoding_2ehpp_5',['StringEncoding.hpp',['../StringEncoding_8hpp.html',1,'']]],
+  ['stringvector_6',['StringVector',['../structrds2cpp_1_1StringVector.html',1,'rds2cpp']]],
+  ['symbol_7',['Symbol',['../structrds2cpp_1_1Symbol.html',1,'rds2cpp']]],
+  ['symbolindex_8',['SymbolIndex',['../structrds2cpp_1_1SymbolIndex.html',1,'rds2cpp']]]
 ];

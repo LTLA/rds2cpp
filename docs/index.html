@@ -81,27 +81,32 @@ $(function() {
 <p >Given a path to an RDS file, the <code>parse_rds()</code> function will return a pointer to an <code>RObject</code> interface:</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="rds2cpp_8hpp.html">rds2cpp/rds2cpp.hpp</a>&quot;</span></div>
 <div class="line"> </div>
-<div class="line"><span class="keyword">auto</span> ptr = <a class="code hl_function" href="namespacerds2cpp.html#afd4c31eb4eaa8b4ec14481dd9aea8162">rds2cpp::parse_rds</a>(fpath);</div>
-<div class="ttc" id="anamespacerds2cpp_html_afd4c31eb4eaa8b4ec14481dd9aea8162"><div class="ttname"><a href="namespacerds2cpp.html#afd4c31eb4eaa8b4ec14481dd9aea8162">rds2cpp::parse_rds</a></div><div class="ttdeci">Parsed parse_rds(Reader &amp;reader)</div><div class="ttdef"><b>Definition:</b> parse_rds.hpp:76</div></div>
+<div class="line"><span class="comment">// Returns an object containing the file information,</span></div>
+<div class="line"><span class="comment">// e.g., R version used to read/write the file.</span></div>
+<div class="line"><span class="keyword">auto</span> file_info = <a class="code hl_function" href="namespacerds2cpp.html#a38106f23b66054a289c192d946c30601">rds2cpp::parse_rds</a>(fpath);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Get the pointer to the actual R object.</span></div>
+<div class="line"><span class="keyword">const</span> <span class="keyword">auto</span>&amp; ptr = file_info-&gt;object;</div>
+<div class="ttc" id="anamespacerds2cpp_html_a38106f23b66054a289c192d946c30601"><div class="ttname"><a href="namespacerds2cpp.html#a38106f23b66054a289c192d946c30601">rds2cpp::parse_rds</a></div><div class="ttdeci">RdsFile parse_rds(Reader &amp;reader)</div><div class="ttdef"><b>Definition:</b> parse_rds.hpp:33</div></div>
 <div class="ttc" id="ards2cpp_8hpp_html"><div class="ttname"><a href="rds2cpp_8hpp.html">rds2cpp.hpp</a></div><div class="ttdoc">Entrypoint header.</div></div>
 </div><!-- fragment --><p >The type of the underlying object can then be queried for further examination. For example, if we wanted to process integer vectors:</p>
 <div class="fragment"><div class="line"><span class="keywordflow">if</span> (ptr-&gt;type() == rds2cpp::SEXPType::INT) {</div>
-<div class="line">    <span class="keyword">auto</span> iptr = <span class="keyword">static_cast&lt;</span><a class="code hl_struct" href="structrds2cpp_1_1AtomicVector.html">rds2cpp::IntegerVector</a>*<span class="keyword">&gt;</span>(ptr.get());</div>
+<div class="line">    <span class="keyword">auto</span> iptr = <span class="keyword">static_cast&lt;</span><span class="keyword">const </span><a class="code hl_struct" href="structrds2cpp_1_1AtomicVector.html">rds2cpp::IntegerVector</a>*<span class="keyword">&gt;</span>(ptr.get());</div>
 <div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; values = iptr-&gt;<a class="code hl_variable" href="structrds2cpp_1_1AtomicVector.html#a87427d2862c982a09ac077ac6ad12eae">data</a>; <span class="comment">// vector of int32_t&#39;s.</span></div>
 <div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; attr_names = iptr-&gt;attributes.names; <span class="comment">// vector of attribute names.</span></div>
 <div class="line">}</div>
 <div class="ttc" id="astructrds2cpp_1_1AtomicVector_html"><div class="ttname"><a href="structrds2cpp_1_1AtomicVector.html">rds2cpp::AtomicVector</a></div><div class="ttdoc">Vector of some atomic type.</div><div class="ttdef"><b>Definition:</b> RObject.hpp:114</div></div>
 <div class="ttc" id="astructrds2cpp_1_1AtomicVector_html_a87427d2862c982a09ac077ac6ad12eae"><div class="ttname"><a href="structrds2cpp_1_1AtomicVector.html#a87427d2862c982a09ac077ac6ad12eae">rds2cpp::AtomicVector::data</a></div><div class="ttdeci">std::vector&lt; ElementType &gt; data</div><div class="ttdef"><b>Definition:</b> RObject.hpp:129</div></div>
-</div><!-- fragment --><p >Or maybe we have an ordinary list instead:</p>
+</div><!-- fragment --><p >Or maybe we have an ordinary list:</p>
 <div class="fragment"><div class="line"><span class="keywordflow">if</span> (ptr-&gt;type() == rds2cpp::SEXPType::VEC) {</div>
-<div class="line">    <span class="keyword">auto</span> lptr = <span class="keyword">static_cast&lt;</span><a class="code hl_struct" href="structrds2cpp_1_1GenericVector.html">rds2cpp::GenericVector</a>*<span class="keyword">&gt;</span>(ptr.get());</div>
+<div class="line">    <span class="keyword">auto</span> lptr = <span class="keyword">static_cast&lt;</span><span class="keyword">const </span><a class="code hl_struct" href="structrds2cpp_1_1GenericVector.html">rds2cpp::GenericVector</a>*<span class="keyword">&gt;</span>(ptr.get());</div>
 <div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; elements = lptr-&gt;<a class="code hl_variable" href="structrds2cpp_1_1GenericVector.html#aca411f5b3a5609e4ba6fb450b4f935cb">data</a>; <span class="comment">// vector of pointers to list elements.</span></div>
 <div class="line">}</div>
 <div class="ttc" id="astructrds2cpp_1_1GenericVector_html"><div class="ttname"><a href="structrds2cpp_1_1GenericVector.html">rds2cpp::GenericVector</a></div><div class="ttdoc">Generic vector, i.e., an ordinary R list.</div><div class="ttdef"><b>Definition:</b> RObject.hpp:201</div></div>
 <div class="ttc" id="astructrds2cpp_1_1GenericVector_html_aca411f5b3a5609e4ba6fb450b4f935cb"><div class="ttname"><a href="structrds2cpp_1_1GenericVector.html#aca411f5b3a5609e4ba6fb450b4f935cb">rds2cpp::GenericVector::data</a></div><div class="ttdeci">std::vector&lt; std::unique_ptr&lt; RObject &gt; &gt; data</div><div class="ttdef"><b>Definition:</b> RObject.hpp:215</div></div>
 </div><!-- fragment --><p >Slots of S4 instances are encoded in the attributes:</p>
 <div class="fragment"><div class="line"><span class="keywordflow">if</span> (ptr-&gt;type() == rds2cpp::SEXPType::S4) {</div>
-<div class="line">    <span class="keyword">auto</span> sptr = <span class="keyword">static_cast&lt;</span><a class="code hl_struct" href="structrds2cpp_1_1S4Object.html">rds2cpp::S4Object</a>*<span class="keyword">&gt;</span>(ptr.get());</div>
+<div class="line">    <span class="keyword">auto</span> sptr = <span class="keyword">static_cast&lt;</span><span class="keyword">const </span><a class="code hl_struct" href="structrds2cpp_1_1S4Object.html">rds2cpp::S4Object</a>*<span class="keyword">&gt;</span>(ptr.get());</div>
 <div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; slot_names = sptr-&gt;<a class="code hl_variable" href="structrds2cpp_1_1S4Object.html#afff39c9a8ab91c50d8542f0b583982f8">attributes</a>.<a class="code hl_variable" href="structrds2cpp_1_1Attributes.html#a3dd274a97e415b2d14606843b63f6b18">names</a>;</div>
 <div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; slot_values = sptr-&gt;attributes.values;</div>
 <div class="line">}</div>
@@ -109,7 +114,74 @@ $(function() {
 <div class="ttc" id="astructrds2cpp_1_1S4Object_html"><div class="ttname"><a href="structrds2cpp_1_1S4Object.html">rds2cpp::S4Object</a></div><div class="ttdoc">S4 object.</div><div class="ttdef"><b>Definition:</b> RObject.hpp:260</div></div>
 <div class="ttc" id="astructrds2cpp_1_1S4Object_html_afff39c9a8ab91c50d8542f0b583982f8"><div class="ttname"><a href="structrds2cpp_1_1S4Object.html#afff39c9a8ab91c50d8542f0b583982f8">rds2cpp::S4Object::attributes</a></div><div class="ttdeci">Attributes attributes</div><div class="ttdef"><b>Definition:</b> RObject.hpp:287</div></div>
 </div><!-- fragment --><p >See the <a href="https://ltla.github.io/rds2cpp">reference documentation</a> for a list of known representations.</p>
-<h1>Building projects</h1>
+<h1>Writing RDS files</h1>
+<p >The <code>write_rds()</code> function will write RDS files from an <code><a class="el" href="structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects.">rds2cpp::RObject</a></code> representation:</p>
+<div class="fragment"><div class="line">rds2cpp::RdsFile file_info;</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Setting up an integer vector.</span></div>
+<div class="line"><span class="keyword">auto</span> vec = <span class="keyword">new</span> <a class="code hl_typedef" href="namespacerds2cpp.html#a648cbbcf5f0bb0dae27d33af67ccf004">rds2cpp::IntegerVector</a>;</div>
+<div class="line">file_info.object.reset(vec);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Storing data in the integer vector.</span></div>
+<div class="line">vec-&gt;data = std::vector&lt;int32_t&gt;{ 0, 1, 2, 3, 4, 5 };</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_function" href="namespacerds2cpp.html#a5c53787e1d5fea7c789ba4fd4fab0849">rds2cpp::write_rds</a>(file_info, <span class="stringliteral">&quot;some_file_path.rds&quot;</span>);</div>
+<div class="ttc" id="anamespacerds2cpp_html_a5c53787e1d5fea7c789ba4fd4fab0849"><div class="ttname"><a href="namespacerds2cpp.html#a5c53787e1d5fea7c789ba4fd4fab0849">rds2cpp::write_rds</a></div><div class="ttdeci">void write_rds(const RdsFile &amp;info, Writer &amp;writer)</div><div class="ttdef"><b>Definition:</b> write_rds.hpp:30</div></div>
+<div class="ttc" id="anamespacerds2cpp_html_a648cbbcf5f0bb0dae27d33af67ccf004"><div class="ttname"><a href="namespacerds2cpp.html#a648cbbcf5f0bb0dae27d33af67ccf004">rds2cpp::IntegerVector</a></div><div class="ttdeci">AtomicVector&lt; int32_t, SEXPType::INT &gt; IntegerVector</div><div class="ttdoc">Integer vector.</div><div class="ttdef"><b>Definition:</b> RObject.hpp:140</div></div>
+</div><!-- fragment --><p >Here's a more complicated example that saves a sparse matrix (as a <code>dgCMatrix</code> from the <b>Matrix</b> package) to file.</p>
+<div class="fragment"><div class="line">rds2cpp::RdsFile file_info;</div>
+<div class="line"><span class="keyword">auto</span> ptr = <span class="keyword">new</span> <a class="code hl_struct" href="structrds2cpp_1_1S4Object.html">rds2cpp::S4Object</a>;</div>
+<div class="line">file_info.object.reset(ptr);</div>
+<div class="line"><span class="keyword">auto</span>&amp; obj = *ptr;</div>
+<div class="line"> </div>
+<div class="line">obj.<a class="code hl_variable" href="structrds2cpp_1_1S4Object.html#a7cb839f83694dc70d66c529848fd1e5f">class_name</a> = <span class="stringliteral">&quot;dgCMatrix&quot;</span>;</div>
+<div class="line">obj.class_encoding = rds2cpp::StringEncoding::UTF8;</div>
+<div class="line">obj.package_name = <span class="stringliteral">&quot;Matrix&quot;</span>;</div>
+<div class="line">obj.package_encoding = rds2cpp::StringEncoding::UTF8;</div>
+<div class="line"> </div>
+<div class="line">obj.attributes.names.push_back(<span class="stringliteral">&quot;i&quot;</span>);</div>
+<div class="line">obj.attributes.encodings.push_back(rds2cpp::StringEncoding::UTF8);</div>
+<div class="line"><span class="keyword">auto</span> ivec = <span class="keyword">new</span> <a class="code hl_typedef" href="namespacerds2cpp.html#a648cbbcf5f0bb0dae27d33af67ccf004">rds2cpp::IntegerVector</a>;</div>
+<div class="line">obj.attributes.values.emplace_back(ivec);</div>
+<div class="line">ivec-&gt;data = std::vector&lt;int32_t&gt;{ 6, 8, 0, 3, 5, 6, 0, 1, 3, 7 };</div>
+<div class="line"> </div>
+<div class="line">obj.attributes.names.push_back(<span class="stringliteral">&quot;p&quot;</span>);</div>
+<div class="line">obj.attributes.encodings.push_back(rds2cpp::StringEncoding::UTF8);</div>
+<div class="line"><span class="keyword">auto</span> pvec = <span class="keyword">new</span> <a class="code hl_typedef" href="namespacerds2cpp.html#a648cbbcf5f0bb0dae27d33af67ccf004">rds2cpp::IntegerVector</a>;</div>
+<div class="line">obj.attributes.values.emplace_back(pvec);</div>
+<div class="line">pvec-&gt;data = std::vector&lt;int32_t&gt;{ 0, 0, 2, 3, 4, 5, 6, 8, 8, 8, 10 };</div>
+<div class="line"> </div>
+<div class="line">obj.attributes.names.push_back(<span class="stringliteral">&quot;x&quot;</span>);</div>
+<div class="line">obj.attributes.encodings.push_back(rds2cpp::StringEncoding::UTF8);</div>
+<div class="line"><span class="keyword">auto</span> xvec = <span class="keyword">new</span> <a class="code hl_typedef" href="namespacerds2cpp.html#a3a233aabb04ace22331d96dd485292f4">rds2cpp::DoubleVector</a>;</div>
+<div class="line">obj.attributes.values.emplace_back(xvec);</div>
+<div class="line">xvec-&gt;data = std::vector&lt;double&gt;{ 0.96, -0.34, 0.82, -2, -0.072, 0.39, 0.16, 0.36, -1.5, -0.047 };</div>
+<div class="line"> </div>
+<div class="line">obj.attributes.names.push_back(<span class="stringliteral">&quot;Dim&quot;</span>);</div>
+<div class="line">obj.attributes.encodings.push_back(rds2cpp::StringEncoding::UTF8);</div>
+<div class="line"><span class="keyword">auto</span> dims = <span class="keyword">new</span> <a class="code hl_typedef" href="namespacerds2cpp.html#a648cbbcf5f0bb0dae27d33af67ccf004">rds2cpp::IntegerVector</a>;</div>
+<div class="line">obj.attributes.values.emplace_back(dims);</div>
+<div class="line">dims-&gt;data = std::vector&lt;int32_t&gt;{ 10, 10 };</div>
+<div class="line"> </div>
+<div class="line">obj.attributes.names.push_back(<span class="stringliteral">&quot;Dimnames&quot;</span>);</div>
+<div class="line">obj.attributes.encodings.push_back(rds2cpp::StringEncoding::UTF8);</div>
+<div class="line"><span class="keyword">auto</span> dimnames = <span class="keyword">new</span> <a class="code hl_struct" href="structrds2cpp_1_1GenericVector.html">rds2cpp::GenericVector</a>;</div>
+<div class="line">obj.<a class="code hl_variable" href="structrds2cpp_1_1GenericVector.html#ac72b1a04ce4ca685e1121b075f59d486">attributes</a>.<a class="code hl_variable" href="structrds2cpp_1_1Attributes.html#a5defb973382d2827821c68367c58968c">values</a>.emplace_back(dimnames);</div>
+<div class="line">dimnames-&gt;data.emplace_back(<span class="keyword">new</span> <a class="code hl_struct" href="structrds2cpp_1_1Null.html">rds2cpp::Null</a>);</div>
+<div class="line">dimnames-&gt;data.emplace_back(<span class="keyword">new</span> <a class="code hl_struct" href="structrds2cpp_1_1Null.html">rds2cpp::Null</a>);</div>
+<div class="line"> </div>
+<div class="line">obj.attributes.names.push_back(<span class="stringliteral">&quot;factors&quot;</span>);</div>
+<div class="line">obj.attributes.encodings.push_back(rds2cpp::StringEncoding::UTF8);</div>
+<div class="line"><span class="keyword">auto</span> factors = <span class="keyword">new</span> <a class="code hl_struct" href="structrds2cpp_1_1GenericVector.html">rds2cpp::GenericVector</a>;</div>
+<div class="line">obj.<a class="code hl_variable" href="structrds2cpp_1_1GenericVector.html#ac72b1a04ce4ca685e1121b075f59d486">attributes</a>.<a class="code hl_variable" href="structrds2cpp_1_1Attributes.html#a5defb973382d2827821c68367c58968c">values</a>.emplace_back(factors);</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_function" href="namespacerds2cpp.html#a5c53787e1d5fea7c789ba4fd4fab0849">rds2cpp::write_rds</a>(file_info, <span class="stringliteral">&quot;my_matrix.rds&quot;</span>);</div>
+<div class="ttc" id="anamespacerds2cpp_html_a3a233aabb04ace22331d96dd485292f4"><div class="ttname"><a href="namespacerds2cpp.html#a3a233aabb04ace22331d96dd485292f4">rds2cpp::DoubleVector</a></div><div class="ttdeci">AtomicVector&lt; double, SEXPType::REAL &gt; DoubleVector</div><div class="ttdoc">Double-precision vector.</div><div class="ttdef"><b>Definition:</b> RObject.hpp:150</div></div>
+<div class="ttc" id="astructrds2cpp_1_1Attributes_html_a5defb973382d2827821c68367c58968c"><div class="ttname"><a href="structrds2cpp_1_1Attributes.html#a5defb973382d2827821c68367c58968c">rds2cpp::Attributes::values</a></div><div class="ttdeci">std::vector&lt; std::unique_ptr&lt; RObject &gt; &gt; values</div><div class="ttdef"><b>Definition:</b> RObject.hpp:104</div></div>
+<div class="ttc" id="astructrds2cpp_1_1GenericVector_html_ac72b1a04ce4ca685e1121b075f59d486"><div class="ttname"><a href="structrds2cpp_1_1GenericVector.html#ac72b1a04ce4ca685e1121b075f59d486">rds2cpp::GenericVector::attributes</a></div><div class="ttdeci">Attributes attributes</div><div class="ttdef"><b>Definition:</b> RObject.hpp:220</div></div>
+<div class="ttc" id="astructrds2cpp_1_1Null_html"><div class="ttname"><a href="structrds2cpp_1_1Null.html">rds2cpp::Null</a></div><div class="ttdoc">R's NULL value.</div><div class="ttdef"><b>Definition:</b> RObject.hpp:47</div></div>
+<div class="ttc" id="astructrds2cpp_1_1S4Object_html_a7cb839f83694dc70d66c529848fd1e5f"><div class="ttname"><a href="structrds2cpp_1_1S4Object.html#a7cb839f83694dc70d66c529848fd1e5f">rds2cpp::S4Object::class_name</a></div><div class="ttdeci">std::string class_name</div><div class="ttdef"><b>Definition:</b> RObject.hpp:266</div></div>
+</div><!-- fragment --><h1>Building projects</h1>
 <p >If you're using CMake, you just need to add something like this to your <code>CMakeLists.txt</code>:</p>
 <div class="fragment"><div class="line">include(FetchContent)</div>
 <div class="line"> </div>

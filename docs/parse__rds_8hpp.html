@@ -76,8 +76,8 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">parse_rds.hpp File Reference</div></div>
 </div><!--header-->
@@ -86,10 +86,9 @@ $(function() {
 <p>Parse an RDS file.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;memory&gt;</code><br />
-<code>#include &lt;array&gt;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
-<code>#include &quot;<a class="el" href="RObject_8hpp_source.html">RObject.hpp</a>&quot;</code><br />
+<code>#include &quot;RdsFile.hpp&quot;</code><br />
 <code>#include &quot;utils.hpp&quot;</code><br />
 <code>#include &quot;<a class="el" href="Shared_8hpp_source.html">Shared.hpp</a>&quot;</code><br />
 <code>#include &quot;parse_object.hpp&quot;</code><br />
@@ -99,21 +98,21 @@ Include dependency graph for parse_rds.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="parse__rds_8hpp__incl.png" border="0" usemap="#ards2cpp_2parse__rds_8hpp" alt=""/></div>
 <map name="ards2cpp_2parse__rds_8hpp" id="ards2cpp_2parse__rds_8hpp">
-<area shape="rect" title="Parse an RDS file." alt="" coords="337,5,490,31"/>
-<area shape="rect" title=" " alt="" coords="114,152,182,177"/>
-<area shape="rect" title=" " alt="" coords="388,79,439,104"/>
-<area shape="rect" title=" " alt="" coords="463,79,537,104"/>
-<area shape="rect" title=" " alt="" coords="5,225,67,251"/>
-<area shape="rect" href="RObject_8hpp.html" title="Representations of unserialized R objects." alt="" coords="207,152,300,177"/>
-<area shape="rect" title=" " alt="" coords="562,79,633,104"/>
-<area shape="rect" href="Shared_8hpp.html" title="Shared values that are re&#45;used within an unserialized object." alt="" coords="277,79,363,104"/>
-<area shape="rect" title=" " alt="" coords="657,79,777,104"/>
-<area shape="rect" title=" " alt="" coords="802,79,990,104"/>
-<area shape="rect" title=" " alt="" coords="320,225,379,251"/>
-<area shape="rect" title=" " alt="" coords="91,225,162,251"/>
-<area shape="rect" href="SEXPType_8hpp.html" title="R data types." alt="" coords="187,225,296,251"/>
-<area shape="rect" href="StringEncoding_8hpp.html" title="String encodings." alt="" coords="403,225,536,251"/>
-<area shape="rect" title=" " alt="" coords="426,152,481,177"/>
+<area shape="rect" title="Parse an RDS file." alt="" coords="465,5,619,31"/>
+<area shape="rect" title=" " alt="" coords="5,152,73,177"/>
+<area shape="rect" title=" " alt="" coords="542,79,617,104"/>
+<area shape="rect" title=" " alt="" coords="555,225,617,251"/>
+<area shape="rect" title=" " alt="" coords="641,79,731,104"/>
+<area shape="rect" title=" " alt="" coords="97,152,168,177"/>
+<area shape="rect" href="Shared_8hpp.html" title="Shared values that are re&#45;used within an unserialized object." alt="" coords="213,79,300,104"/>
+<area shape="rect" title=" " alt="" coords="755,79,875,104"/>
+<area shape="rect" title=" " alt="" coords="900,79,1088,104"/>
+<area shape="rect" title=" " alt="" coords="86,225,145,251"/>
+<area shape="rect" title=" " alt="" coords="412,152,467,177"/>
+<area shape="rect" href="StringEncoding_8hpp.html" title="String encodings." alt="" coords="169,225,302,251"/>
+<area shape="rect" href="RObject_8hpp.html" title="Representations of unserialized R objects." alt="" coords="294,152,387,177"/>
+<area shape="rect" title=" " alt="" coords="327,225,397,251"/>
+<area shape="rect" href="SEXPType_8hpp.html" title="R data types." alt="" coords="422,225,531,251"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -128,25 +127,24 @@ This graph shows which files directly or indirectly include this file:</div>
 </div>
 <p><a href="parse__rds_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1Parsed.html">rds2cpp::Parsed</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contents of the parsed RDS file.  <a href="structrds2cpp_1_1Parsed.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacerds2cpp"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerds2cpp.html">rds2cpp</a></td></tr>
 <tr class="memdesc:namespacerds2cpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse an RDS file in C++. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a9a4371900eec82463a3aa0a2a9d5cce1"><td class="memItemLeft" align="right" valign="top">typedef RdsFile&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerds2cpp.html#a9a4371900eec82463a3aa0a2a9d5cce1">rds2cpp::Parsed</a></td></tr>
+<tr class="separator:a9a4371900eec82463a3aa0a2a9d5cce1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:afd4c31eb4eaa8b4ec14481dd9aea8162"><td class="memTemplParams" colspan="2">template&lt;class Reader &gt; </td></tr>
-<tr class="memitem:afd4c31eb4eaa8b4ec14481dd9aea8162"><td class="memTemplItemLeft" align="right" valign="top">Parsed&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerds2cpp.html#afd4c31eb4eaa8b4ec14481dd9aea8162">rds2cpp::parse_rds</a> (Reader &amp;reader)</td></tr>
-<tr class="separator:afd4c31eb4eaa8b4ec14481dd9aea8162"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6eac0a8595a18340e5b7ea35b9b8372"><td class="memItemLeft" align="right" valign="top">Parsed&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerds2cpp.html#ae6eac0a8595a18340e5b7ea35b9b8372">rds2cpp::parse_rds</a> (std::string file)</td></tr>
-<tr class="separator:ae6eac0a8595a18340e5b7ea35b9b8372"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38106f23b66054a289c192d946c30601"><td class="memTemplParams" colspan="2">template&lt;class Reader &gt; </td></tr>
+<tr class="memitem:a38106f23b66054a289c192d946c30601"><td class="memTemplItemLeft" align="right" valign="top">RdsFile&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerds2cpp.html#a38106f23b66054a289c192d946c30601">rds2cpp::parse_rds</a> (Reader &amp;reader)</td></tr>
+<tr class="separator:a38106f23b66054a289c192d946c30601"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4b70b502073bf078cdaf2ccf3b6306a"><td class="memItemLeft" align="right" valign="top">RdsFile&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerds2cpp.html#ae4b70b502073bf078cdaf2ccf3b6306a">rds2cpp::parse_rds</a> (std::string file)</td></tr>
+<tr class="separator:ae4b70b502073bf078cdaf2ccf3b6306a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Parse an RDS file. </p>

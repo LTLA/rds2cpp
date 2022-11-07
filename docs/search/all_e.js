@@ -1,13 +1,7 @@
 var searchData=
 [
-  ['s4object_0',['S4Object',['../structrds2cpp_1_1S4Object.html',1,'rds2cpp']]],
-  ['sexptype_1',['SEXPType',['../namespacerds2cpp.html#acf2b27eb21235c6dd30b8819ea682629',1,'rds2cpp']]],
-  ['sexptype_2ehpp_2',['SEXPType.hpp',['../SEXPType_8hpp.html',1,'']]],
-  ['shared_2ehpp_3',['Shared.hpp',['../Shared_8hpp.html',1,'']]],
-  ['stringencoding_4',['StringEncoding',['../namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b',1,'rds2cpp']]],
-  ['stringencoding_2ehpp_5',['StringEncoding.hpp',['../StringEncoding_8hpp.html',1,'']]],
-  ['stringvector_6',['StringVector',['../structrds2cpp_1_1StringVector.html',1,'rds2cpp']]],
-  ['symbol_7',['Symbol',['../structrds2cpp_1_1Symbol.html',1,'rds2cpp']]],
-  ['symbolindex_8',['SymbolIndex',['../structrds2cpp_1_1SymbolIndex.html',1,'rds2cpp']]],
-  ['symbols_9',['symbols',['../structrds2cpp_1_1Parsed.html#a2e683e7de68118b9104df91988323a37',1,'rds2cpp::Parsed']]]
+  ['values_0',['values',['../structrds2cpp_1_1Attributes.html#a5defb973382d2827821c68367c58968c',1,'rds2cpp::Attributes']]],
+  ['variable_5fencodings_1',['variable_encodings',['../structrds2cpp_1_1Environment.html#addd5af039f70a716bc6088700d94a414',1,'rds2cpp::Environment']]],
+  ['variable_5fnames_2',['variable_names',['../structrds2cpp_1_1Environment.html#a667f7a97b340ebaf3d5a24c33929e60c',1,'rds2cpp::Environment']]],
+  ['variable_5fvalues_3',['variable_values',['../structrds2cpp_1_1Environment.html#afdaff9bbd4bf0b2e8a505e219b41000e',1,'rds2cpp::Environment']]]
 ];
