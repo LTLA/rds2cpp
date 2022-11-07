@@ -70,7 +70,7 @@ file_info.object.reset(vec);
 // Storing data in the integer vector.
 vec->data = std::vector<int32_t>{ 0, 1, 2, 3, 4, 5 };
 
-rds2cpp::write_rds(file_info, std::string("some_file_path.rds"));
+rds2cpp::write_rds(file_info, "some_file_path.rds");
 ```
 
 Here's a more complicated example that saves a sparse matrix (as a `dgCMatrix` from the **Matrix** package) to file.
@@ -122,7 +122,7 @@ obj.attributes.encodings.push_back(rds2cpp::StringEncoding::UTF8);
 auto factors = new rds2cpp::GenericVector;
 obj.attributes.values.emplace_back(factors);
 
-rds2cpp::write_rds(file_info, std::string("my_matrix.rds"));
+rds2cpp::write_rds(file_info, "my_matrix.rds");
 ``` 
 
 ## Building projects

@@ -58,11 +58,23 @@ void write_rds(const RdsFile& info, Writer& writer) {
  * @param info Information about the RDS file to be written, including a pointer to a valid `RObject`.
  * @param path Path to the output file.
  */
-inline void write_rds(const RdsFile& info, std::string path) {
+inline void write_rds(const RdsFile& info, const char* path) {
     byteme::GzipFileWriter writer(path);
     write_rds(info, writer);
     return;
 }
+
+/**
+ * Write an R object to a Gzip-compressed RDS file.
+ *
+ * @param info Information about the RDS file to be written, including a pointer to a valid `RObject`.
+ * @param path Path to the output file.
+ */
+inline void write_rds(const RdsFile& info, const std::string& path) {
+    write_rds(info, path.c_str());
+    return;
+}
+
 
 }
 
