@@ -70,7 +70,7 @@ inline void write_rds(const RdsFile& info, const char* path) {
  * @param info Information about the RDS file to be written, including a pointer to a valid `RObject`.
  * @param path Path to the output file.
  */
-inline void write_rds(const RdsFile& info, const std::string& path) {
+inline void write_rds(const RdsFile& info, std::string path) {
     write_rds(info, path.c_str());
     return;
 }
