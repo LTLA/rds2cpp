@@ -144,6 +144,13 @@ void write_string(const RObject* obj, Writer& writer, std::vector<unsigned char>
     inject_length(len, buffer);
     writer.write(buffer.data(), buffer.size());
 
+    if (len != vec.encodings.size()) {
+        throw std::runtime_error("vectors of strings and encodings should have the same length");
+    }
+    if (len != vec.missing.size()) {
+        throw std::runtime_error("vectors of strings and missingness should have the same length");
+    }
+
     for (size_t i = 0; i < len; ++i) {
         write_single_string(vec.data[i], vec.encodings[i], vec.missing[i], writer, buffer);
     }
