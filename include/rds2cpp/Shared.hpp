@@ -7,6 +7,7 @@
 
 #include "StringEncoding.hpp"
 #include "RObject.hpp"
+#include "utils.hpp"
 
 /**
  * @file Shared.hpp

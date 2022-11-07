@@ -20,9 +20,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// write
+Rcpp::RObject write(Rcpp::RObject x, std::string file_name);
+RcppExport SEXP _rds2cpp_write(SEXP xSEXP, SEXP file_nameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type x(xSEXP);
+    Rcpp::traits::input_parameter< std::string >::type file_name(file_nameSEXP);
+    rcpp_result_gen = Rcpp::wrap(write(x, file_name));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rds2cpp_parse", (DL_FUNC) &_rds2cpp_parse, 1},
+    {"_rds2cpp_write", (DL_FUNC) &_rds2cpp_write, 2},
     {NULL, NULL, 0}
 };
 
