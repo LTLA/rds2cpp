@@ -15,7 +15,7 @@ void write_object(const RObject* object, Writer& writer, std::vector<unsigned ch
 
 template<class Writer>
 void write_list(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer) {
-    auto ptr = reinterpret_cast<const GenericVector*>(object);
+    auto ptr = static_cast<const GenericVector*>(object);
     buffer.clear();
     inject_header<true>(*ptr, buffer);
 

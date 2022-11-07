@@ -87,8 +87,37 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x) {
         }
         add_attributes(x, ptr);
         return output;
+
+    } else if (x.sexp_type() == S4SXP) {
+        std::unique_ptr<rds2cpp::RObject> output;
+        Rcpp::S4 obj(x);
+        auto ptr = new rds2cpp::S4Object;
+        output.reset(ptr);
+
+        const auto& names = obj.attributeNames();
+        for (const auto& n : names) {
+            if (n != "class") {
+                ptr->attributes.names.push_back(n);
+                ptr->attributes.encodings.push_back(rds2cpp::StringEncoding::ASCII); // again, just assuming.
+                ptr->attributes.values.push_back(unconvert(obj.slot(n)));
+            }
+        }
+
+        Rcpp::CharacterVector cls = obj.attr("class");
+        ptr->class_name = Rcpp::String(cls[0]).get_cstring();
+        ptr->class_encoding = rds2cpp::StringEncoding::ASCII; // again, just assuming.
+
+        Rcpp::CharacterVector pkg = cls.attr("package");
+        ptr->package_name = Rcpp::String(pkg[0]).get_cstring();
+        ptr->package_encoding = rds2cpp::StringEncoding::ASCII; // again, just assuming.
+
+        return output;
+
+    } else if (x.sexp_type() == NILSXP) {
+        return std::unique_ptr<rds2cpp::RObject>(new rds2cpp::Null);
     }
 
+    throw std::runtime_error("unsupported SEXP type '" + std::to_string(static_cast<int>(x.sexp_type())) + "' for writing");
     return std::unique_ptr<rds2cpp::RObject>();
 }
 
