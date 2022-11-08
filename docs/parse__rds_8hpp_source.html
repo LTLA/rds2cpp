@@ -87,7 +87,7 @@ $(function() {
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;RdsFile.hpp&quot;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;utils.hpp&quot;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="Shared_8hpp.html">Shared.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;SharedParseInfo.hpp&quot;</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;parse_object.hpp&quot;</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;byteme/SomeFileReader.hpp&quot;</span></div>
@@ -160,7 +160,7 @@ $(function() {
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    }</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="comment">// Now we can finally read the damn object.</span></div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    Shared shared;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    SharedParseInfo shared;</div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    output.object = parse_object(reader, leftovers, shared);</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    output.environments = std::move(shared.environments);</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    output.symbols = std::move(shared.symbols);</div>
@@ -178,7 +178,6 @@ $(function() {
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>}</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aShared_8hpp_html"><div class="ttname"><a href="Shared_8hpp.html">Shared.hpp</a></div><div class="ttdoc">Shared values that are re-used within an unserialized object.</div></div>
 <div class="ttc" id="anamespacerds2cpp_html"><div class="ttname"><a href="namespacerds2cpp.html">rds2cpp</a></div><div class="ttdoc">Parse an RDS file in C++.</div><div class="ttdef"><b>Definition:</b> StringEncoding.hpp:10</div></div>
 <div class="ttc" id="anamespacerds2cpp_html_a38106f23b66054a289c192d946c30601"><div class="ttname"><a href="namespacerds2cpp.html#a38106f23b66054a289c192d946c30601">rds2cpp::parse_rds</a></div><div class="ttdeci">RdsFile parse_rds(Reader &amp;reader)</div><div class="ttdef"><b>Definition:</b> parse_rds.hpp:33</div></div>
 <div class="ttc" id="anamespacerds2cpp_html_a9a4371900eec82463a3aa0a2a9d5cce1"><div class="ttname"><a href="namespacerds2cpp.html#a9a4371900eec82463a3aa0a2a9d5cce1">rds2cpp::Parsed</a></div><div class="ttdeci">RdsFile Parsed</div><div class="ttdef"><b>Definition:</b> parse_rds.hpp:121</div></div>

@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['sexptype_2ehpp_0',['SEXPType.hpp',['../SEXPType_8hpp.html',1,'']]],
-  ['shared_2ehpp_1',['Shared.hpp',['../Shared_8hpp.html',1,'']]],
-  ['stringencoding_2ehpp_2',['StringEncoding.hpp',['../StringEncoding_8hpp.html',1,'']]]
+  ['rds2cpp_2ehpp_0',['rds2cpp.hpp',['../rds2cpp_8hpp.html',1,'']]],
+  ['robject_2ehpp_1',['RObject.hpp',['../RObject_8hpp.html',1,'']]]
 ];

@@ -1,17 +1,11 @@
 <map id="rds2cpp/parse_rds.hpp" name="rds2cpp/parse_rds.hpp">
-<area shape="rect" id="node1" title="Parse an RDS file." alt="" coords="465,5,619,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,152,73,177"/>
-<area shape="rect" id="node3" title=" " alt="" coords="542,79,617,104"/>
-<area shape="rect" id="node4" title=" " alt="" coords="555,225,617,251"/>
-<area shape="rect" id="node5" title=" " alt="" coords="641,79,731,104"/>
-<area shape="rect" id="node6" title=" " alt="" coords="97,152,168,177"/>
-<area shape="rect" id="node7" href="$Shared_8hpp.html" title="Shared values that are re&#45;used within an unserialized object." alt="" coords="213,79,300,104"/>
-<area shape="rect" id="node14" title=" " alt="" coords="755,79,875,104"/>
-<area shape="rect" id="node15" title=" " alt="" coords="900,79,1088,104"/>
-<area shape="rect" id="node8" title=" " alt="" coords="86,225,145,251"/>
-<area shape="rect" id="node9" title=" " alt="" coords="412,152,467,177"/>
-<area shape="rect" id="node10" href="$StringEncoding_8hpp.html" title="String encodings." alt="" coords="169,225,302,251"/>
-<area shape="rect" id="node11" href="$RObject_8hpp.html" title="Representations of unserialized R objects." alt="" coords="294,152,387,177"/>
-<area shape="rect" id="node12" title=" " alt="" coords="327,225,397,251"/>
-<area shape="rect" id="node13" href="$SEXPType_8hpp.html" title="R data types." alt="" coords="422,225,531,251"/>
+<area shape="rect" id="node1" title="Parse an RDS file." alt="" coords="303,5,456,31"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,79,73,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="98,79,173,104"/>
+<area shape="rect" id="node4" title=" " alt="" coords="197,79,258,104"/>
+<area shape="rect" id="node5" title=" " alt="" coords="282,79,373,104"/>
+<area shape="rect" id="node6" title=" " alt="" coords="397,79,468,104"/>
+<area shape="rect" id="node7" title=" " alt="" coords="492,79,635,104"/>
+<area shape="rect" id="node8" title=" " alt="" coords="659,79,779,104"/>
+<area shape="rect" id="node9" title=" " alt="" coords="804,79,992,104"/>
 </map>

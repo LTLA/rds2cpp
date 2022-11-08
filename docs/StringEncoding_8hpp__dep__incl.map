@@ -1,8 +1,8 @@
 <map id="rds2cpp/StringEncoding.hpp" name="rds2cpp/StringEncoding.hpp">
-<area shape="rect" id="node1" title="String encodings." alt="" coords="79,5,261,31"/>
-<area shape="rect" id="node2" href="$RObject_8hpp.html" title="Representations of unserialized R objects." alt="" coords="153,79,296,104"/>
-<area shape="rect" id="node3" href="$Shared_8hpp.html" title="Shared values that are re&#45;used within an unserialized object." alt="" coords="47,152,184,177"/>
-<area shape="rect" id="node6" href="$write__rds_8hpp.html" title="Write an RDS file." alt="" coords="183,225,333,251"/>
-<area shape="rect" id="node4" href="$parse__rds_8hpp.html" title="Parse an RDS file." alt="" coords="5,225,159,251"/>
-<area shape="rect" id="node5" href="$rds2cpp_8hpp.html" title="Entrypoint header." alt="" coords="99,299,241,324"/>
+<area shape="rect" id="node1" title="String encodings." alt="" coords="178,5,361,31"/>
+<area shape="rect" id="node2" href="$Environment_8hpp.html" title="Representation of an R environment." alt="" coords="5,79,173,104"/>
+<area shape="rect" id="node3" href="$RObject_8hpp.html" title="Representations of unserialized R objects." alt="" coords="198,79,341,104"/>
+<area shape="rect" id="node6" href="$Symbol_8hpp.html" title="Representation of an R symbol." alt="" coords="365,79,504,104"/>
+<area shape="rect" id="node4" href="$write__rds_8hpp.html" title="Write an RDS file." alt="" coords="195,152,344,177"/>
+<area shape="rect" id="node5" href="$rds2cpp_8hpp.html" title="Entrypoint header." alt="" coords="198,225,341,251"/>
 </map>
