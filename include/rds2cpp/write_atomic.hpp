@@ -6,6 +6,7 @@
 #include <algorithm>
 
 #include "RObject.hpp"
+#include "SharedWriteInfo.hpp"
 #include "utils.hpp"
 #include "utils_write.hpp"
 #include "write_single_string.hpp"
@@ -22,7 +23,7 @@ void set_vector_header(Vector& vec, std::vector<unsigned char>& buffer) {
 }
 
 template<class Vector, class Writer>
-void write_integer_or_logical_body(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
+void write_integer_or_logical_body(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
     const auto& vec = *static_cast<const Vector*>(obj);
     set_vector_header(vec, buffer);
 
@@ -47,23 +48,23 @@ void write_integer_or_logical_body(const RObject* obj, Writer& writer, std::vect
         writer.write(ptr, nbytes);
     }
 
-    write_attributes(vec.attributes, writer, buffer);
+    write_attributes(vec.attributes, writer, buffer, shared);
 }
 
 }
 
 template<class Writer>
-void write_integer(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
-    return atomic_internal::write_integer_or_logical_body<IntegerVector>(obj, writer, buffer);
+void write_integer(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
+    return atomic_internal::write_integer_or_logical_body<IntegerVector>(obj, writer, buffer, shared);
 }
 
 template<class Writer>
-void write_logical(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
-    return atomic_internal::write_integer_or_logical_body<LogicalVector>(obj, writer, buffer);
+void write_logical(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
+    return atomic_internal::write_integer_or_logical_body<LogicalVector>(obj, writer, buffer, shared);
 }
 
 template<class Writer>
-void write_double(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
+void write_double(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
     const auto& vec = *static_cast<const DoubleVector*>(obj);
     atomic_internal::set_vector_header(vec, buffer);
 
@@ -88,11 +89,11 @@ void write_double(const RObject* obj, Writer& writer, std::vector<unsigned char>
         writer.write(ptr, nbytes);
     }
 
-    write_attributes(vec.attributes, writer, buffer);
+    write_attributes(vec.attributes, writer, buffer, shared);
 }
 
 template<class Writer>
-void write_raw(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
+void write_raw(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
     const auto& vec = *static_cast<const RawVector*>(obj);
     atomic_internal::set_vector_header(vec, buffer);
 
@@ -102,11 +103,11 @@ void write_raw(const RObject* obj, Writer& writer, std::vector<unsigned char>& b
     writer.write(buffer.data(), buffer.size());
 
     writer.write(values.data(), len);
-    write_attributes(vec.attributes, writer, buffer);
+    write_attributes(vec.attributes, writer, buffer, shared);
 }
 
 template<class Writer>
-void write_complex(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
+void write_complex(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
     const auto& vec = *static_cast<const ComplexVector*>(obj);
     atomic_internal::set_vector_header(vec, buffer);
 
@@ -131,11 +132,11 @@ void write_complex(const RObject* obj, Writer& writer, std::vector<unsigned char
         writer.write(ptr, nbytes);
     }
 
-    write_attributes(vec.attributes, writer, buffer);
+    write_attributes(vec.attributes, writer, buffer, shared);
 }
 
 template<class Writer>
-void write_string(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
+void write_string(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
     const auto& vec = *static_cast<const StringVector*>(obj);
     atomic_internal::set_vector_header(vec, buffer);
 
@@ -154,7 +155,7 @@ void write_string(const RObject* obj, Writer& writer, std::vector<unsigned char>
     for (size_t i = 0; i < len; ++i) {
         write_single_string(vec.data[i], vec.encodings[i], vec.missing[i], writer, buffer);
     }
-    write_attributes(vec.attributes, writer, buffer);
+    write_attributes(vec.attributes, writer, buffer, shared);
 }
 
 }

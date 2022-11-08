@@ -3,6 +3,7 @@
 
 #include "RObject.hpp"
 #include "SEXPType.hpp"
+#include "SharedWriteInfo.hpp"
 #include "write_atomic.hpp"
 #include "write_list.hpp"
 #include "write_s4.hpp"
@@ -11,31 +12,31 @@
 namespace rds2cpp {
 
 template<class Writer>
-void write_object(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer) {
+void write_object(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
     switch (object->type()) {
         case SEXPType::INT:
-            write_integer(object, writer, buffer);
+            write_integer(object, writer, buffer, shared);
             break;
         case SEXPType::LGL:
-            write_logical(object, writer, buffer);
+            write_logical(object, writer, buffer, shared);
             break;
         case SEXPType::REAL:
-            write_double(object, writer, buffer);
+            write_double(object, writer, buffer, shared);
             break;
         case SEXPType::RAW:
-            write_raw(object, writer, buffer);
+            write_raw(object, writer, buffer, shared);
             break;
         case SEXPType::CPLX:
-            write_complex(object, writer, buffer);
+            write_complex(object, writer, buffer, shared);
             break;
         case SEXPType::STR:
-            write_string(object, writer, buffer);
+            write_string(object, writer, buffer, shared);
             break;
         case SEXPType::VEC:
-            write_list(object, writer, buffer);
+            write_list(object, writer, buffer, shared);
             break;
         case SEXPType::S4:
-            write_s4(object, writer, buffer);
+            write_s4(object, writer, buffer, shared);
             break;
         case SEXPType::NIL:
         case SEXPType::NILVALUE_:

@@ -7,6 +7,7 @@
 #include "RObject.hpp"
 #include "utils_write.hpp"
 #include "write_object.hpp"
+#include "SharedWriteInfo.hpp"
 
 #include "byteme/GzipFileWriter.hpp"
 
@@ -47,7 +48,8 @@ void write_rds(const RdsFile& info, Writer& writer) {
     inject_string(info.encoding.c_str(), encoding_len, buffer);
     writer.write(buffer.data(), buffer.size());
 
-    write_object(info.object.get(), writer, buffer); 
+    SharedWriteInfo shared;
+    write_object(info.object.get(), writer, buffer, shared); 
 
     return;
 }

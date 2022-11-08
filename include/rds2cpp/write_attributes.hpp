@@ -4,6 +4,9 @@
 #include <vector>
 #include <memory>
 
+#include "RObject.hpp"
+#include "SharedWriteInfo.hpp"
+#include "SEXPType.hpp"
 #include "write_object.hpp"
 #include "utils_write.hpp"
 #include "write_single_string.hpp"
@@ -11,7 +14,7 @@
 namespace rds2cpp {
 
 template<class Writer>
-void write_attributes(const Attributes& attr, Writer& writer, std::vector<unsigned char>& buffer) {
+void write_attributes(const Attributes& attr, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
     size_t nattr = attr.names.size();
     if (!nattr) {
         return;
@@ -30,19 +33,13 @@ void write_attributes(const Attributes& attr, Writer& writer, std::vector<unsign
         // Adding the header.
         buffer.push_back(0);
         buffer.push_back(0);
-        buffer.push_back(4);
+        buffer.push_back(4); // has tag.
         buffer.push_back(static_cast<unsigned char>(SEXPType::LIST));
-
-        // Injecting the name of the tag.
-        // TODO: this requires proper symbol reference handling.
-        buffer.push_back(0);
-        buffer.push_back(0);
-        buffer.push_back(0);
-        buffer.push_back(static_cast<unsigned char>(SEXPType::SYM));
-
         writer.write(buffer.data(), buffer.size());
-        write_single_string(attr.names[a], attr.encodings[a], false, writer, buffer);
-        write_object(attr.values[a].get(), writer, buffer);
+
+        // Tag and value.
+        shared.write_symbol(attr.names[a], attr.encodings[a], writer, buffer);
+        write_object(attr.values[a].get(), writer, buffer, shared);
     }
 
     buffer.clear();

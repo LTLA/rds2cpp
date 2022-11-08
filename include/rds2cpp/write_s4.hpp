@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 
+#include "SharedWriteInfo.hpp"
 #include "write_object.hpp"
 #include "utils_write.hpp"
 #include "write_single_string.hpp"
@@ -11,10 +12,10 @@
 namespace rds2cpp {
 
 template<class Writer>
-void write_object(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer);
+void write_object(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared);
 
 template<class Writer>
-void write_s4(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer) {
+void write_s4(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
     auto ptr = static_cast<const S4Object*>(object);
 
     buffer.clear();
@@ -29,15 +30,11 @@ void write_s4(const RObject* object, Writer& writer, std::vector<unsigned char>&
     buffer.push_back(4);
     buffer.push_back(static_cast<unsigned char>(SEXPType::LIST));
 
-    // Injecting the name of the tag.
-    // TODO: this requires proper symbol reference handling.
-    buffer.push_back(0);
-    buffer.push_back(0);
-    buffer.push_back(0);
-    buffer.push_back(static_cast<unsigned char>(SEXPType::SYM));
-
     writer.write(buffer.data(), buffer.size());
-    write_single_string("class", StringEncoding::UTF8, false, writer, buffer); // guessing the encoding of the 'class' string itself.
+
+    // Injecting the name of the tag.
+    // We'll guess the encoding of the 'class' string as UTF-8.
+    shared.write_symbol("class", StringEncoding::UTF8, writer, buffer); 
 
     // Writing the class information.
     StringVector class_info;
@@ -54,10 +51,10 @@ void write_s4(const RObject* object, Writer& writer, std::vector<unsigned char>&
     pkg_ptr->encodings.push_back(ptr->package_encoding);
     pkg_ptr->missing.push_back(false);
 
-    write_string(&class_info, writer, buffer);
+    write_string(&class_info, writer, buffer, shared);
 
     // Writing the remaining slots.
-    write_attributes(ptr->attributes, writer, buffer);
+    write_attributes(ptr->attributes, writer, buffer, shared);
 }
 
 }
