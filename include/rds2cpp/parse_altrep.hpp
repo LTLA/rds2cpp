@@ -21,10 +21,10 @@ template<class Reader>
 DoubleVector parse_double_body(Reader& reader, std::vector<unsigned char>&);
 
 template<class Reader>
-std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&, Shared&);
+std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&, SharedParseInfo&);
 
 template<class Reader>
-PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, const Header&, Shared&);
+PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, const Header&, SharedParseInfo&);
 
 namespace altrep_internal {
 
@@ -58,7 +58,7 @@ Vector parse_numeric_compact_seq(Reader& reader, std::vector<unsigned char>& lef
 }
 
 template<class Vector, class Reader>
-Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
+Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) {
     auto plist_header = parse_header(reader, leftovers);
     if (plist_header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected pairlist in wrapper ALTREP's payload");
@@ -89,7 +89,7 @@ Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& lefto
 }
 
 template<class Reader>
-StringVector parse_deferred_string(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
+StringVector parse_deferred_string(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) {
     auto plist_header = parse_header(reader, leftovers);
     if (plist_header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected pairlist in deferred_string ALTREP's payload");
@@ -166,7 +166,7 @@ StringVector parse_deferred_string(Reader& reader, std::vector<unsigned char>& l
 }
 
 template<class Reader>
-std::unique_ptr<RObject> parse_altrep_body(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
+std::unique_ptr<RObject> parse_altrep_body(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) {
     auto header = parse_header(reader, leftovers);
     if (header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected ALTREP description to be a pairlist");

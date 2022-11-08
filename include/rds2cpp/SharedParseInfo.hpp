@@ -1,82 +1,19 @@
-#ifndef RDS2CPP_SHARED_HPP
-#define RDS2CPP_SHARED_HPP
+#ifndef RDS2CPP_SHARED_PARSE_HPP
+#define RDS2CPP_SHARED_PARSE_HPP
 
 #include <vector>
 #include <memory>
 #include <string>
 
-#include "StringEncoding.hpp"
+#include "Environment.hpp"
+#include "Symbol.hpp"
 #include "RObject.hpp"
+#include "SEXPType.hpp"
 #include "utils.hpp"
-
-/**
- * @file Shared.hpp
- *
- * @brief Shared values that are re-used within an unserialized object.
- */
 
 namespace rds2cpp {
 
-/**
- * @brief An R environment.
- */
-struct Environment {
-    /**
-     * Whether the environment was locked.
-     */
-    bool locked = false;
-
-    /**
-     * Type of the parent environment.
-     */
-    SEXPType parent_type = SEXPType::ENV;
-
-    /** 
-     * Index of the parent environment.
-     * This should only be used if `paret_type` is `ENV`.
-     */
-    size_t parent = -1;
-
-    /**
-     * Names of the variables inside this environment.
-     */
-    std::vector<std::string> variable_names;
-
-    /**
-     * Encodings of the variable names in `variable_names`.
-     */
-    std::vector<StringEncoding> variable_encodings;
-
-    /**
-     * Values of the variables in this environment.
-     */
-    std::vector<std::unique_ptr<RObject> > variable_values;
-
-    /**
-     * Additional attributes.
-     */
-    Attributes attributes;
-};
-
-/**
- * @brief An R symbol.
- */
-struct Symbol {
-    /**
-     * Name of the symbol.
-     */
-    std::string name;
-
-    /**
-     * Encoding for the symbol name.
-     */
-    StringEncoding encoding;
-};
-
-/**
- * @cond
- */
-struct Shared {
+struct SharedParseInfo {
     std::vector<Environment> environments;    
 
     std::vector<Symbol> symbols;
@@ -185,9 +122,6 @@ public:
         return std::unique_ptr<RObject>(new SymbolIndex(std::move(output)));
     } 
 };
-/**
- * @endcond
- */
 
 }
 

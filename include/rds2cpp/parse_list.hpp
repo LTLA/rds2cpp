@@ -6,15 +6,15 @@
 
 #include "RObject.hpp"
 #include "utils.hpp"
-#include "Shared.hpp"
+#include "SharedParseInfo.hpp"
 
 namespace rds2cpp {
 
 template<class Reader>
-std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&, Shared& shared);
+std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&, SharedParseInfo& shared);
 
 template<class Reader>
-GenericVector parse_list_body(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
+GenericVector parse_list_body(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) {
     size_t len = get_length(reader, leftovers);
     GenericVector output(len);
     for (size_t i = 0; i < len; ++i) {

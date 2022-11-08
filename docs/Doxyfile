@@ -793,7 +793,8 @@ WARN_LOGFILE           =
 INPUT                  = ../include/rds2cpp/StringEncoding.hpp \
                          ../include/rds2cpp/RObject.hpp \
                          ../include/rds2cpp/SEXPType.hpp \
-                         ../include/rds2cpp/Shared.hpp \
+                         ../include/rds2cpp/Environment.hpp \
+                         ../include/rds2cpp/Symbol.hpp \
                          ../include/rds2cpp/parse_rds.hpp \
                          ../include/rds2cpp/write_rds.hpp \
                          ../include/rds2cpp/rds2cpp.hpp \

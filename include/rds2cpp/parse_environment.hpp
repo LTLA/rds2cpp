@@ -1,5 +1,4 @@
 #ifndef RDS2CPP_PARSE_ENVIRONMENT_HPP
-
 #define RDS2CPP_PARSE_ENVIRONMENT_HPP
 
 #include <cstdint>
@@ -7,16 +6,16 @@
 #include <algorithm>
 
 #include "RObject.hpp"
-#include "Shared.hpp"
+#include "SharedParseInfo.hpp"
 #include "utils.hpp"
 
 namespace rds2cpp {
 
 template<class Reader>
-PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, Shared&);
+PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, SharedParseInfo&);
 
 template<class Reader>
-EnvironmentIndex parse_global_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
+EnvironmentIndex parse_global_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) {
     EnvironmentIndex output;
     output.env_type = SEXPType::GLOBALENV_;
     output.index = -1;
@@ -24,7 +23,7 @@ EnvironmentIndex parse_global_environment_body(Reader& reader, std::vector<unsig
 }
 
 template<class Reader>
-EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, Shared& shared) {
+EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, SharedParseInfo& shared) {
     // Need to provision the environment first, so that internal references are valid.
     size_t eindex = shared.request_environment();
     Environment new_env;

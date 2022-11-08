@@ -5,20 +5,20 @@
 #include <memory>
 
 #include "RObject.hpp"
-#include "Shared.hpp"
+#include "SharedParseInfo.hpp"
 #include "utils.hpp"
 
 namespace rds2cpp {
 
 template<class Reader>
-PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, const Header&, Shared&);
+PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, const Header&, SharedParseInfo&);
 
 inline bool has_attributes(const Header& header) {
     return (header[2] & 0x2);
 }
 
 template<class Reader>
-void parse_attributes_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, Attributes& output, Shared& shared) {
+void parse_attributes_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, Attributes& output, SharedParseInfo& shared) {
     auto plist = parse_pairlist_body(reader, leftovers, header, shared);
 
     size_t nnodes = plist.data.size();
@@ -35,7 +35,7 @@ void parse_attributes_body(Reader& reader, std::vector<unsigned char>& leftovers
 }
 
 template<class Reader>
-void parse_attributes(Reader& reader, std::vector<unsigned char>& leftovers, Attributes& output, Shared& shared) {
+void parse_attributes(Reader& reader, std::vector<unsigned char>& leftovers, Attributes& output, SharedParseInfo& shared) {
     auto header = parse_header(reader, leftovers);
     if (header[3] != static_cast<unsigned>(SEXPType::LIST)) {
         throw std::runtime_error("attributes should be a pairlist");

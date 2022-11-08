@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "RObject.hpp"
-#include "Shared.hpp"
+#include "SharedParseInfo.hpp"
 #include "utils.hpp"
 
 #include "parse_single_string.hpp"
@@ -14,12 +14,12 @@
 namespace rds2cpp {
 
 template<class Reader>
-std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&, Shared&);
+std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&, SharedParseInfo&);
 
 namespace pairlist_internal {
 
 template<class Reader>
-void recursive_parse(Reader& reader, std::vector<unsigned char>& leftovers, PairList& output, const Header& header, Shared& shared) {
+void recursive_parse(Reader& reader, std::vector<unsigned char>& leftovers, PairList& output, const Header& header, SharedParseInfo& shared) {
     bool has_attr = header[2] & 0x2;
     bool has_tag = header[2] & 0x4;
 
@@ -66,7 +66,7 @@ void recursive_parse(Reader& reader, std::vector<unsigned char>& leftovers, Pair
 }
 
 template<class Reader>
-PairList parse_pairlist_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, Shared& shared) {
+PairList parse_pairlist_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, SharedParseInfo& shared) {
     PairList output;
     pairlist_internal::recursive_parse(reader, leftovers, output, header, shared);
     return output;

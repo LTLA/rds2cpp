@@ -8,7 +8,7 @@
 
 #include "SEXPType.hpp"
 #include "RObject.hpp"
-#include "Shared.hpp"
+#include "SharedParseInfo.hpp"
 #include "utils.hpp"
 
 #include "parse_atomic.hpp"
@@ -23,7 +23,7 @@
 namespace rds2cpp {
 
 template<class Reader>
-std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>& leftovers, Shared& shared) {
+std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) {
     auto details = parse_header(reader, leftovers);
     auto sexp_type = details[3];
 

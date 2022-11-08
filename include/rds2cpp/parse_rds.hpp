@@ -7,7 +7,7 @@
 
 #include "RdsFile.hpp"
 #include "utils.hpp"
-#include "Shared.hpp"
+#include "SharedParseInfo.hpp"
 #include "parse_object.hpp"
 
 #include "byteme/SomeFileReader.hpp"
@@ -95,7 +95,7 @@ RdsFile parse_rds(Reader& reader) {
     }
 
     // Now we can finally read the damn object.
-    Shared shared;
+    SharedParseInfo shared;
     output.object = parse_object(reader, leftovers, shared);
     output.environments = std::move(shared.environments);
     output.symbols = std::move(shared.symbols);

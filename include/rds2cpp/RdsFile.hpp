@@ -3,7 +3,8 @@
 
 #include <array>
 #include "RObject.hpp"
-#include "Shared.hpp"
+#include "Environment.hpp"
+#include "Symbol.hpp"
 
 /**
  * @file RdsFile.hpp
