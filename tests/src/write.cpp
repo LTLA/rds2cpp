@@ -80,12 +80,38 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x) {
     } else if (x.sexp_type() == VECSXP) {
         std::unique_ptr<rds2cpp::RObject> output;
         Rcpp::List vec(x);
-        auto ptr = new rds2cpp::GenericVector;
-        output.reset(ptr);
-        for (size_t i = 0; i < vec.size(); ++i) {
-            ptr->data.push_back(unconvert(vec[i]));
+
+        if (vec.hasAttribute("pretend-to-be-a-pairlist")) {
+            auto ptr = new rds2cpp::PairList;
+            output.reset(ptr);
+
+            bool has_names = vec.hasAttribute("names");
+            Rcpp::CharacterVector names;
+            if (has_names) {
+                names = vec.attr("names");
+            }
+
+            for (size_t i = 0; i < vec.size(); ++i) {
+                ptr->data.push_back(unconvert(vec[i]));
+                std::string curname;
+                if (has_names) {
+                    curname = Rcpp::String(names[i]).get_cstring();
+                }
+                ptr->has_tag.push_back(curname != "");
+                ptr->tag_names.push_back(curname);
+                ptr->tag_encodings.push_back(rds2cpp::StringEncoding::UTF8);
+            }
+            add_attributes(x, ptr);
+
+        } else {
+            auto ptr = new rds2cpp::GenericVector;
+            output.reset(ptr);
+            for (size_t i = 0; i < vec.size(); ++i) {
+                ptr->data.push_back(unconvert(vec[i]));
+            }
+            add_attributes(x, ptr);
         }
-        add_attributes(x, ptr);
+
         return output;
 
     } else if (x.sexp_type() == S4SXP) {

@@ -7,6 +7,7 @@
 #include "write_atomic.hpp"
 #include "write_list.hpp"
 #include "write_s4.hpp"
+#include "write_pairlist.hpp"
 #include <vector>
 
 namespace rds2cpp {
@@ -45,7 +46,10 @@ void write_object(const RObject* object, Writer& writer, std::vector<unsigned ch
             buffer[3] = static_cast<unsigned char>(SEXPType::NILVALUE_); // just using 255 consistently, as this seems to be what R uses for NULLs.
             writer.write(buffer.data(), buffer.size());
             break;
-         default:
+        case SEXPType::LIST:
+            write_pairlist(object, writer, buffer, shared);
+            break;
+        default:
             throw std::runtime_error("unsupported SEXP type '" + std::to_string(static_cast<int>(object->type())) + "' for writing");
     }
     return;

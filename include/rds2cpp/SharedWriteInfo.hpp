@@ -31,11 +31,11 @@ public:
         if (it != host.end()) {
             auto ref = it->second;
             buffer.resize(4);
-            buffer[2] = ref & 0x255;
+            buffer[2] = ref & 255;
             ref >>= 8;
-            buffer[1] = ref & 0x255;
+            buffer[1] = ref & 255;
             ref >>= 8;
-            buffer[0] = ref & 0x255;
+            buffer[0] = ref & 255;
             buffer[3] = static_cast<unsigned char>(SEXPType::REF);
             writer.write(buffer.data(), buffer.size());
             return;
