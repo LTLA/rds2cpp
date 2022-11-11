@@ -128,6 +128,50 @@ test_that("non-empty environment loading works as expected", {
     expect_identical(roundtrip$environments[[1]]$variables$Michael, ref$Michael)
 })
 
+test_that("unhashed environment loading works as expected", {
+    output <- local({
+        y <- new.env(hash=FALSE)
+        y$aoyama <- rnorm(10)
+        y$blue <- "mountain"
+
+        tmp <- tempfile(fileext=".rds")
+        saveRDS(y, file=tmp)
+        list(roundtrip = rds2cpp:::parse_details(tmp), ref = y)
+    }, envir=.GlobalEnv)
+
+    roundtrip <- output$roundtrip
+    ref <- output$ref
+    expect_identical(length(roundtrip$environments), 1L)
+    expect_identical(length(roundtrip$environments[[1]]$variables), 2L)
+
+    expect_identical(roundtrip$value$id, 0L)
+    expect_identical(roundtrip$environments[[1]]$parent, -1L)
+    expect_identical(roundtrip$environments[[1]]$variables$AAA, ref$AAA)
+    expect_identical(roundtrip$environments[[1]]$variables$BBB, ref$BBB)
+})
+
+test_that("environment hash chains are correclty loaded", {
+    output <- local({
+        y <- new.env()
+
+        for (i in seq_len(1000)) {
+            name <- basename(tempfile())
+            assign(envir=y, name, runif(10))
+        }
+
+        tmp <- tempfile(fileext=".rds")
+        saveRDS(y, file=tmp)
+        list(roundtrip = rds2cpp:::parse_details(tmp), ref = y)
+    }, envir=.GlobalEnv)
+
+    roundtrip <- output$roundtrip
+    ref <- output$ref
+    expect_identical(sort(names(roundtrip$environments[[1]]$variables)), sort(ls(ref)))
+
+    retrieved <- as.list(ref)
+    expect_identical(roundtrip$environments[[1]]$variables[names(retrieved)], retrieved)
+})
+
 test_that("non-empty environment writing works as expected", {
     y <- list(aaron=231, jay=runif(5))
     attr(y, "pretend-to-be-an-environment") <- TRUE

@@ -24,6 +24,11 @@ struct Environment {
     bool locked = false;
 
     /**
+     * Whether the environment was hashed.
+     */
+    bool hashed = false;
+
+    /**
      * Type of the parent environment.
      */
     SEXPType parent_type = SEXPType::ENV;
