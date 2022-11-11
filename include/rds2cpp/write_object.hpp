@@ -50,7 +50,7 @@ void write_object(const RObject* object, Writer& writer, std::vector<unsigned ch
             write_pairlist(object, writer, buffer, shared);
             break;
         case SEXPType::SYM:
-            shared.write_symbol(static_cast<const SymbolIndex*>(object)->index, writer, buffer);
+            shared.write_symbol(object, writer, buffer);
             break;
         case SEXPType::ENV: 
         case SEXPType::GLOBALENV_:

@@ -79,7 +79,9 @@ public:
     }
 
     template<class Writer>
-    void write_symbol(size_t index, Writer& writer, std::vector<unsigned char>& buffer) {
+    void write_symbol(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
+        auto ptr = static_cast<const SymbolIndex*>(obj);
+        auto index = ptr->index;
         if (index >= known_symbol_mappings.size()) {
             throw std::runtime_error("symbol index out of range for supplied Symbol objects");
         }
