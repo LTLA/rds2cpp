@@ -121,6 +121,10 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         add_attributes(list->attributes, output);
         return output;
 
+    } else if (input->type() == rds2cpp::SEXPType::SYM) {
+        auto sdx = static_cast<const rds2cpp::SymbolIndex*>(input);
+        return Rcpp::List::create(Rcpp::Named("id") = Rcpp::IntegerVector::create(sdx->index));
+
     } else if (input->type() == rds2cpp::SEXPType::ENV) {
         auto edx = static_cast<const rds2cpp::EnvironmentIndex*>(input);
         return Rcpp::List::create(Rcpp::Named("id") = Rcpp::IntegerVector::create(edx->index));
@@ -139,12 +143,18 @@ Rcpp::RObject parse(std::string file_name) {
     if (output.object == nullptr) {
         return R_NilValue;
     } 
+    return convert(output.object.get());
+}
+
+//' @export
+//[[Rcpp::export(rng=false)]]
+Rcpp::RObject parse_details(std::string file_name) {
+    auto output = rds2cpp::parse_rds(file_name);
+    if (output.object == nullptr) {
+        return R_NilValue;
+    } 
 
     size_t nenvs = output.environments.size();
-    if (nenvs == 0) {
-        return convert(output.object.get());
-    }
-
     Rcpp::List all_envs(nenvs);
     for (size_t e = 0; e < nenvs; ++e) {
         const auto& env = output.environments[e];
@@ -167,8 +177,17 @@ Rcpp::RObject parse(std::string file_name) {
         all_envs[e] = curout;
     }
 
+    size_t nsyms = output.symbols.size();
+
+    Rcpp::StringVector all_symb(nsyms);
+    for (size_t s = 0; s < nsyms; ++s) {
+        const auto& sym = output.symbols[s];
+        all_symb[s] = sym.name;
+    }
+
     return Rcpp::List::create(
         Rcpp::Named("value") = convert(output.object.get()),           
-        Rcpp::Named("environments") = all_envs
+        Rcpp::Named("environments") = all_envs,
+        Rcpp::Named("symbols") = all_symb
     );
 }

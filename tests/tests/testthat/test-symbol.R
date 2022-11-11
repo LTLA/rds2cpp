@@ -16,15 +16,18 @@ scan_for_references <- function(file) {
     candidates
 }
 
-test_that("redundant symbols are correctly resolved", {
-    y <- list("foo", list("bar", "foo", list("bar")))
-    attr(y[[1]], "pretend-to-be-a-symbol") <- TRUE
-    attr(y[[2]][[1]], "pretend-to-be-a-symbol") <- TRUE
-    attr(y[[2]][[2]], "pretend-to-be-a-symbol") <- TRUE
-    attr(y[[2]][[3]][[1]], "pretend-to-be-a-symbol") <- TRUE
+########################################################
 
-    tmp <- tempfile(fileext=".rds")
-    rds2cpp::write(y, tmp)
+y <- list("foo", list("bar", "foo", list("bar")))
+attr(y[[1]], "pretend-to-be-a-symbol") <- TRUE
+attr(y[[2]][[1]], "pretend-to-be-a-symbol") <- TRUE
+attr(y[[2]][[2]], "pretend-to-be-a-symbol") <- TRUE
+attr(y[[2]][[3]][[1]], "pretend-to-be-a-symbol") <- TRUE
+
+tmp <- tempfile(fileext=".rds")
+rds2cpp::write(y, tmp)
+
+test_that("redundant symbols are correctly resolved", {
     roundtrip <- readRDS(tmp)
 
     expect_type(roundtrip[[1]], "symbol")
@@ -41,6 +44,14 @@ test_that("redundant symbols are correctly resolved", {
     expect_true(length(unique(refs)) >= 2) # at least 2 refs of the 'foo' and 'bar' symbols.
 })
 
+test_that("parser works correctly with redundant symbols", {
+    mine <- rds2cpp::parse_details(tmp)
+    expect_identical(mine$symbols, c("foo", "bar"))
+    expect_identical(mine$value, list(list(id=0L), list(list(id=1L), list(id=0L), list(list(id=1L)))))
+})
+
+########################################################
+
 test_that("redundant symbols in the attributes are respected", {
     y <- list(A=list(B=2, C=list(D=4)))
     tmp <- tempfile(fileext=".rds")
@@ -48,18 +59,25 @@ test_that("redundant symbols in the attributes are respected", {
 
     expect_identical(y, readRDS(tmp))
 
+    mine <- rds2cpp::parse_details(tmp)
+    expect_identical(y, mine$value)
+    expect_identical(mine$symbols, "names")
+
     refs <- scan_for_references(tmp)
     expect_true(length(refs) >= 2) # at least 2 refs of the 'names' symbol.
 })
 
-test_that("redundancy across symbols and attributes are respected", {
-    y <- list(A=list("names", "foo"), B=123)
-    attr(y[[1]][[1]], "pretend-to-be-a-symbol") <- TRUE
-    attr(y[[1]][[2]], "pretend-to-be-a-symbol") <- TRUE
-    attr(y[[2]], "foo") <- TRUE
+########################################################
 
-    tmp <- tempfile(fileext=".rds")
-    rds2cpp::write(y, tmp)
+y <- list(A=list("names", "foo"), B=123)
+attr(y[[1]][[1]], "pretend-to-be-a-symbol") <- TRUE
+attr(y[[1]][[2]], "pretend-to-be-a-symbol") <- TRUE
+attr(y[[2]], "foo") <- TRUE
+
+tmp <- tempfile(fileext=".rds")
+rds2cpp::write(y, tmp)
+
+test_that("redundancy across symbols and attributes are respected", {
     roundtrip <- readRDS(tmp)
 
     expect_identical(names(roundtrip), c("A", "B"))
@@ -70,3 +88,10 @@ test_that("redundancy across symbols and attributes are respected", {
     refs <- scan_for_references(tmp)
     expect_true(length(unique(refs)) >= 2) # at least 2 refs of the 'names' and 'foo' symbols.
 })
+
+test_that("parser works correctly with more redundant symbols", {
+    mine <- rds2cpp::parse_details(tmp)
+    expect_identical(mine$symbols, c("names", "foo"))
+    expect_identical(mine$value, list(A=list(list(id=0L), list(id=1L)), B=y$B))
+})
+
