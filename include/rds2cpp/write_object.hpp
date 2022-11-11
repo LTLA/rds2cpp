@@ -49,6 +49,9 @@ void write_object(const RObject* object, Writer& writer, std::vector<unsigned ch
         case SEXPType::LIST:
             write_pairlist(object, writer, buffer, shared);
             break;
+        case SEXPType::SYM:
+            shared.write_symbol(static_cast<const SymbolIndex*>(object)->index, writer, buffer);
+            break;
         default:
             throw std::runtime_error("unsupported SEXP type '" + std::to_string(static_cast<int>(object->type())) + "' for writing");
     }

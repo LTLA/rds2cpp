@@ -48,7 +48,7 @@ void write_rds(const RdsFile& info, Writer& writer) {
     inject_string(info.encoding.c_str(), encoding_len, buffer);
     writer.write(buffer.data(), buffer.size());
 
-    SharedWriteInfo shared;
+    SharedWriteInfo shared(info.symbols, info.environments);
     write_object(info.object.get(), writer, buffer, shared); 
 
     return;

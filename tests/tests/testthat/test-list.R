@@ -58,21 +58,3 @@ test_that("data frame loading works as expected", {
     roundtrip <- readRDS(tmp)
     expect_identical(roundtrip, test.df.with.rownames)
 })
-
-########################################################
-
-test_that("list writing respects redundant symbols", {
-    y <- list(A=list(B=2, C=list(D=4)))
-    tmp <- tempfile(fileext=".rds")
-    rds2cpp::write(y, tmp)
-
-    handle <- gzfile(tmp, open="rb")
-    on.exit(close(handle))
-    x <- readBin(handle, raw(), 1000)
-
-    # Multiple 'names' symbols are deduplicated.
-    i <- which(x == 0xff)
-    expect_true(length(i) >= 2)
-    expect_true(sum(x[i - 1] == 0x01) > 1)
-})
-
