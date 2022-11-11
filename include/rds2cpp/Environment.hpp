@@ -30,7 +30,7 @@ struct Environment {
 
     /** 
      * Index of the parent environment.
-     * This should only be used if `paret_type` is `ENV`.
+     * This should only be used if `parent_type` is `ENV`.
      */
     size_t parent = -1;
 

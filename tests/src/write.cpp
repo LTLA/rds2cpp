@@ -14,6 +14,19 @@ void add_attributes(const Rcpp::RObject& x, RdsObject* y, rds2cpp::RdsFile& glob
     }
 }
 
+template<class RdsObject>
+void add_attributes_except(const Rcpp::RObject& x, RdsObject* y, rds2cpp::RdsFile& globals, const std::unordered_set<std::string>& excluded) {
+    const auto& attr_names = x.attributeNames();
+    auto& attr_dest = y->attributes;
+    for (const auto& attr : attr_names) {
+        if (excluded.find(attr) == excluded.end()) {
+            attr_dest.names.push_back(attr);
+            attr_dest.encodings.push_back(rds2cpp::StringEncoding::ASCII); 
+            attr_dest.values.push_back(unconvert(x.attr(attr), globals));
+        }
+    }
+}
+
 template<class SourceVector, class HostVector>
 std::unique_ptr<rds2cpp::RObject> prepare_simple_vector(const Rcpp::RObject& x, rds2cpp::RdsFile& globals) {
     std::unique_ptr<rds2cpp::RObject> output;
@@ -117,6 +130,48 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, rds2cpp::Rds
                 ptr->tag_encodings.push_back(rds2cpp::StringEncoding::UTF8);
             }
             add_attributes(x, ptr, globals);
+
+        } else if (vec.hasAttribute("pretend-to-be-an-environment")) {
+            Rcpp::IntegerVector env_index = vec.attr("environment-index");
+            auto index = env_index[0];
+
+            auto ptr = new rds2cpp::EnvironmentIndex;
+            output.reset(ptr);
+            ptr->index = index;
+
+            if (index >= 0) {
+                ptr->env_type = rds2cpp::SEXPType::ENV;
+                if (static_cast<size_t>(index) == globals.environments.size()) {
+                    rds2cpp::Environment latest;
+
+                    Rcpp::IntegerVector env_parent = vec.attr("environment-parent");
+                    auto parent = env_parent[0];
+                    if (parent >= 0) {
+                        latest.parent = parent;
+                        latest.parent_type = rds2cpp::SEXPType::ENV;
+                    } else {
+                        latest.parent = -1;
+                        latest.parent_type = rds2cpp::SEXPType::GLOBALENV_;
+                    }
+
+                    Rcpp::LogicalVector is_locked = vec.attr("environment-locked");
+                    latest.locked = is_locked[0];
+
+                    Rcpp::CharacterVector names = vec.attr("names");
+                    for (size_t i = 0; i < vec.size(); ++i) {
+                        latest.variable_names.emplace_back(Rcpp::String(names[i]).get_cstring());
+                        latest.variable_encodings.push_back(rds2cpp::StringEncoding::UTF8);
+                        latest.variable_values.push_back(unconvert(vec[i], globals));
+                    }
+
+                    add_attributes_except(x, &latest, globals, { "pretend-to-be-an-environment", "environment-index", "environment-parent", "environment-locked", "names" });
+                    globals.environments.push_back(std::move(latest));
+                } else if (static_cast<size_t>(index) > globals.environments.size()) {
+                    throw std::runtime_error("environment index out of range");
+                }
+            } else {
+                ptr->env_type = rds2cpp::SEXPType::GLOBALENV_;
+            }
 
         } else {
             auto ptr = new rds2cpp::GenericVector;

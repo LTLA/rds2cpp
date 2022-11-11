@@ -14,10 +14,10 @@
 namespace rds2cpp {
 
 template<class Writer>
-void write_attributes(const Attributes& attr, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
+bool write_attributes(const Attributes& attr, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
     size_t nattr = attr.names.size();
     if (!nattr) {
-        return;
+        return false;
     }
 
     if (nattr != attr.encodings.size()) {
@@ -48,6 +48,8 @@ void write_attributes(const Attributes& attr, Writer& writer, std::vector<unsign
     buffer.push_back(0);
     buffer.push_back(static_cast<unsigned char>(SEXPType::NILVALUE_));
     writer.write(buffer.data(), buffer.size());
+
+    return true;
 }
 
 }

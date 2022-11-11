@@ -52,6 +52,10 @@ void write_object(const RObject* object, Writer& writer, std::vector<unsigned ch
         case SEXPType::SYM:
             shared.write_symbol(static_cast<const SymbolIndex*>(object)->index, writer, buffer);
             break;
+        case SEXPType::ENV: 
+        case SEXPType::GLOBALENV_:
+            shared.write_environment(object, writer, buffer);
+            break;
         default:
             throw std::runtime_error("unsupported SEXP type '" + std::to_string(static_cast<int>(object->type())) + "' for writing");
     }

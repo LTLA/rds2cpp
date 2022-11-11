@@ -22,6 +22,34 @@ test_that("empty environment loading works as expected", {
     expect_identical(roundtrip$id, -1L)
 })
 
+test_that("empty environment writing works as expected", {
+    y <- list()
+    attr(y, "pretend-to-be-an-environment") <- TRUE
+    attr(y, "environment-index") <- 0L
+    attr(y, "environment-parent") <- -1L
+    attr(y, "environment-locked") <- FALSE
+    names(y) <- character(0)
+
+    tmp <- tempfile(fileext=".rds")
+    rds2cpp::write(y, file=tmp)
+    roundtrip <- readRDS(tmp)
+
+    expect_type(roundtrip, "environment")
+    expect_identical(ls(roundtrip), character(0))
+    expect_false(environmentIsLocked(roundtrip))
+    expect_identical(parent.env(roundtrip), .GlobalEnv)
+
+    # Works for the global environment.
+    y <- list()
+    attr(y, "pretend-to-be-an-environment") <- TRUE
+    attr(y, "environment-index") <- -1L
+    names(y) <- character(0)
+
+    rds2cpp::write(y, file=tmp)
+    roundtrip <- readRDS(tmp)
+    expect_identical(roundtrip, .GlobalEnv)
+})
+
 test_that("locked environment loading works as expected", {
     # local() is needed to deal with the fact that the parent
     # environment is mangled somewhat by testthat.
@@ -38,6 +66,22 @@ test_that("locked environment loading works as expected", {
     expect_identical(roundtrip$environments[[1]]$parent, -1L)
     expect_identical(length(roundtrip$environments[[1]]$variables), 0L)
     expect_true(roundtrip$environments[[1]]$locked)
+})
+
+test_that("locked environment writing works as expected", {
+    y <- list()
+    attr(y, "pretend-to-be-an-environment") <- TRUE
+    attr(y, "environment-index") <- 0L
+    attr(y, "environment-parent") <- -1L
+    attr(y, "environment-locked") <- TRUE 
+    names(y) <- character(0)
+
+    tmp <- tempfile(fileext=".rds")
+    rds2cpp::write(y, file=tmp)
+    roundtrip <- readRDS(tmp)
+
+    expect_type(roundtrip, "environment")
+    expect_true(environmentIsLocked(roundtrip))
 })
 
 test_that("non-empty environment loading works as expected", {
@@ -84,7 +128,24 @@ test_that("non-empty environment loading works as expected", {
     expect_identical(roundtrip$environments[[1]]$variables$Michael, ref$Michael)
 })
 
-test_that("environment references work as expected", {
+test_that("non-empty environment writing works as expected", {
+    y <- list(aaron=231, jay=runif(5))
+    attr(y, "pretend-to-be-an-environment") <- TRUE
+    attr(y, "environment-index") <- 0L
+    attr(y, "environment-parent") <- -1L
+    attr(y, "environment-locked") <- FALSE 
+
+    tmp <- tempfile(fileext=".rds")
+    rds2cpp::write(y, file=tmp)
+    roundtrip <- readRDS(tmp)
+
+    expect_type(roundtrip, "environment")
+    expect_identical(sort(ls(roundtrip)), c("aaron", "jay"))
+    expect_identical(roundtrip$aaron, y$aaron)
+    expect_identical(roundtrip$jay, y$jay)
+})
+
+test_that("parsing environment references works as expected", {
     roundtrip <- local({
         y <- new.env()
         tmp <- tempfile(fileext=".rds")
@@ -141,7 +202,58 @@ test_that("environment references work as expected", {
     expect_identical(roundtrip$environments, roundtrip2$environments)
 })
 
-test_that("environment parenthood works as expected", {
+test_that("writing environment references works as expected", {
+    z <- list(
+        first = {
+            y <- list(chino=231, cocoa=runif(5))
+            attr(y, "pretend-to-be-an-environment") <- TRUE
+            attr(y, "environment-index") <- 0L
+            attr(y, "environment-parent") <- -1L
+            attr(y, "environment-locked") <- FALSE 
+            y
+        },
+        second = {
+            y <- list(rize=TRUE, syaro=FALSE)
+            attr(y, "pretend-to-be-an-environment") <- TRUE
+            attr(y, "environment-index") <- 1L
+            attr(y, "environment-parent") <- -1L
+            attr(y, "environment-locked") <- FALSE 
+            y
+        },
+        second_again = {
+            y <- list()
+            attr(y, "pretend-to-be-an-environment") <- TRUE
+            attr(y, "environment-index") <- 1L
+            names(y) <- character(0)
+            y
+        },
+        first_again = {
+            y <- list()
+            attr(y, "pretend-to-be-an-environment") <- TRUE
+            attr(y, "environment-index") <- 0L
+            names(y) <- character(0)
+            y
+        }
+    )
+
+    tmp <- tempfile(fileext=".rds")
+    rds2cpp::write(z, file=tmp)
+    roundtrip <- readRDS(tmp)
+
+    expect_type(roundtrip$first, "environment")
+    expect_identical(roundtrip$first, roundtrip$first_again)
+    expect_identical(sort(ls(roundtrip$first)), c("chino", "cocoa"))
+    expect_identical(roundtrip$first$chino, z$first$chino)
+    expect_identical(roundtrip$first$cocoa, z$first$cocoa)
+
+    expect_type(roundtrip$second, "environment")
+    expect_identical(roundtrip$second, roundtrip$second_again)
+    expect_identical(sort(ls(roundtrip$second)), c("rize", "syaro"))
+    expect_identical(roundtrip$second$rize, z$second$rize)
+    expect_identical(roundtrip$second$syaro, z$second$syaro)
+})
+
+test_that("environment parenthood works as expected when parsing", {
     roundtrip <- local({
         y <- new.env()
         y$level <- "A"
@@ -197,6 +309,55 @@ test_that("environment parenthood works as expected", {
     expect_identical(roundtrip$environments[[3]]$variables$level, "B2")
 })
 
+test_that("environment parenthood works as expected when writing", {
+    z <- list(
+        first = {
+            y <- list(chino=231, cocoa=runif(5))
+            attr(y, "pretend-to-be-an-environment") <- TRUE
+            attr(y, "environment-index") <- 0L
+            attr(y, "environment-parent") <- -1L
+            attr(y, "environment-locked") <- FALSE 
+            y
+        },
+        second = {
+            y <- list(rize=TRUE, syaro=FALSE)
+            attr(y, "pretend-to-be-an-environment") <- TRUE
+            attr(y, "environment-index") <- 1L
+            attr(y, "environment-parent") <- 0L 
+            attr(y, "environment-locked") <- FALSE 
+            y
+        },
+        third = {
+            y <- list(chiya="black", megu="red", maya="blue")
+            attr(y, "pretend-to-be-an-environment") <- TRUE
+            attr(y, "environment-index") <- 2L
+            attr(y, "environment-parent") <- 1L 
+            attr(y, "environment-locked") <- FALSE 
+            y
+        }
+    )
+
+    tmp <- tempfile(fileext=".rds")
+    rds2cpp::write(z, file=tmp)
+    roundtrip <- readRDS(tmp)
+
+    expect_type(roundtrip$first, "environment")
+    expect_identical(parent.env(roundtrip$first), .GlobalEnv)
+    expect_identical(roundtrip$first$chino, z$first$chino)
+    expect_identical(roundtrip$first$cocoa, z$first$cocoa)
+
+    expect_type(roundtrip$second, "environment")
+    expect_identical(parent.env(roundtrip$second), roundtrip$first)
+    expect_identical(roundtrip$second$rize, z$second$rize)
+    expect_identical(roundtrip$second$syaro, z$second$syaro)
+
+    expect_type(roundtrip$third, "environment")
+    expect_identical(parent.env(roundtrip$third), roundtrip$second)
+    expect_identical(roundtrip$third$chiya, z$third$chiya)
+    expect_identical(roundtrip$third$megu, z$third$megu)
+    expect_identical(roundtrip$third$maya, z$third$maya)
+})
+
 test_that("self-references are properly resolved", {
     output <- local({
         y <- new.env()
@@ -223,7 +384,7 @@ test_that("self-references are properly resolved", {
     expect_identical(roundtrip$environments[[1]]$variables$stuff, list(id=0L)) # can refer to itself, no probs.
 })
 
-test_that("environment attribute works as expected", {
+test_that("environment attributes are parsed correctly", {
     roundtrip <- local({
         y <- new.env()
         y$foo <- "BAR"
@@ -258,4 +419,20 @@ test_that("environment attribute works as expected", {
     expect_identical(attr(roundtrip$environments[[1]], "name"), "jessica biel")
 })
 
+test_that("environment attributes are saved correctly", {
+    y <- list(aaron=231, jay=runif(5))
+    attr(y, "pretend-to-be-an-environment") <- TRUE
+    attr(y, "environment-index") <- 0L
+    attr(y, "environment-parent") <- -1L
+    attr(y, "environment-locked") <- FALSE 
+    attr(y, "foo") <- "bar"
+    
+    tmp <- tempfile(fileext=".rds")
+    rds2cpp::write(y, file=tmp)
+    roundtrip <- readRDS(tmp)
 
+    expect_type(roundtrip, "environment")
+    expect_identical(roundtrip$aaron, y$aaron)
+    expect_identical(roundtrip$jay, y$jay)
+    expect_identical(attr(roundtrip, "foo"), "bar")
+})
