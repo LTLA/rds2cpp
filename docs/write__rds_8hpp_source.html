@@ -114,7 +114,7 @@ $(function() {
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    inject_string(info.encoding.c_str(), encoding_len, buffer);</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    writer.write(buffer.data(), buffer.size());</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    SharedWriteInfo shared;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    SharedWriteInfo shared(info.symbols, info.environments);</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    write_object(info.object.get(), writer, buffer, shared); </div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keywordflow">return</span>;</div>
