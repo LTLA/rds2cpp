@@ -81,6 +81,8 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
             attr = pointerize_attr(parse_string_body(reader, leftovers));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::VEC)) {
             attr = pointerize_attr(parse_list_body(reader, leftovers, shared));
+        } else {
+            throw std::runtime_error("cannot read unknown (or unsupported) SEXP type " + std::to_string(static_cast<int>(sexp_type)));
         }
 
         if (has_attributes(details) && attr) {
