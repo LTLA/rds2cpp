@@ -97,14 +97,30 @@ $(function() {
 <div class="line">}</div>
 <div class="ttc" id="astructrds2cpp_1_1AtomicVector_html"><div class="ttname"><a href="structrds2cpp_1_1AtomicVector.html">rds2cpp::AtomicVector</a></div><div class="ttdoc">Vector of some atomic type.</div><div class="ttdef"><b>Definition:</b> RObject.hpp:114</div></div>
 <div class="ttc" id="astructrds2cpp_1_1AtomicVector_html_a87427d2862c982a09ac077ac6ad12eae"><div class="ttname"><a href="structrds2cpp_1_1AtomicVector.html#a87427d2862c982a09ac077ac6ad12eae">rds2cpp::AtomicVector::data</a></div><div class="ttdeci">std::vector&lt; ElementType &gt; data</div><div class="ttdef"><b>Definition:</b> RObject.hpp:129</div></div>
-</div><!-- fragment --><p >Or maybe we have an ordinary list:</p>
+</div><!-- fragment --><p >See the <a href="https://ltla.github.io/rds2cpp">reference documentation</a> for a list of known representations.</p>
+<h1>More reading examples</h1>
+<p ><b><a class="el" href="namespacerds2cpp.html" title="Parse an RDS file in C++.">rds2cpp</a></b> can extract ordinary lists from an RDS file. Users can inspect the attributes to determine if the list is named.</p>
 <div class="fragment"><div class="line"><span class="keywordflow">if</span> (ptr-&gt;type() == rds2cpp::SEXPType::VEC) {</div>
 <div class="line">    <span class="keyword">auto</span> lptr = <span class="keyword">static_cast&lt;</span><span class="keyword">const </span><a class="code hl_struct" href="structrds2cpp_1_1GenericVector.html">rds2cpp::GenericVector</a>*<span class="keyword">&gt;</span>(ptr.get());</div>
 <div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; elements = lptr-&gt;<a class="code hl_variable" href="structrds2cpp_1_1GenericVector.html#aca411f5b3a5609e4ba6fb450b4f935cb">data</a>; <span class="comment">// vector of pointers to list elements.</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; attr = lptr-&gt;attributes; </div>
+<div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; attr_names = sptr-&gt;attributes.names;</div>
+<div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; attr_values = sptr-&gt;attributes.values;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Scanning for the list names.</span></div>
+<div class="line">    <span class="keyword">auto</span> nIt = std::find(attr_names.begin(), attr_names.end(), std::string(<span class="stringliteral">&quot;names&quot;</span>));</div>
+<div class="line">    <span class="keywordflow">if</span> (nIt != attr_names.end()) {</div>
+<div class="line">        <span class="keywordtype">size_t</span> nindex = nIt - attr_names.begin();</div>
+<div class="line">        <span class="keywordflow">if</span> (attr_values[nindex]-&gt;type() == rds2cpp::SEXPType::STR) {</div>
+<div class="line">            <span class="keyword">auto</span> nptr = <span class="keyword">static_cast&lt;</span><span class="keyword">const </span><a class="code hl_struct" href="structrds2cpp_1_1StringVector.html">rds2cpp::StringVector</a>*<span class="keyword">&gt;</span>(attr_values[nindex].get());</div>
+<div class="line">        }</div>
+<div class="line">    }</div>
 <div class="line">}</div>
 <div class="ttc" id="astructrds2cpp_1_1GenericVector_html"><div class="ttname"><a href="structrds2cpp_1_1GenericVector.html">rds2cpp::GenericVector</a></div><div class="ttdoc">Generic vector, i.e., an ordinary R list.</div><div class="ttdef"><b>Definition:</b> RObject.hpp:201</div></div>
 <div class="ttc" id="astructrds2cpp_1_1GenericVector_html_aca411f5b3a5609e4ba6fb450b4f935cb"><div class="ttname"><a href="structrds2cpp_1_1GenericVector.html#aca411f5b3a5609e4ba6fb450b4f935cb">rds2cpp::GenericVector::data</a></div><div class="ttdeci">std::vector&lt; std::unique_ptr&lt; RObject &gt; &gt; data</div><div class="ttdef"><b>Definition:</b> RObject.hpp:215</div></div>
-</div><!-- fragment --><p >Slots of S4 instances are encoded in the attributes:</p>
+<div class="ttc" id="astructrds2cpp_1_1StringVector_html"><div class="ttname"><a href="structrds2cpp_1_1StringVector.html">rds2cpp::StringVector</a></div><div class="ttdoc">String vector.</div><div class="ttdef"><b>Definition:</b> RObject.hpp:165</div></div>
+</div><!-- fragment --><p >Slots of S4 instances are similarly encoded in the attributes:</p>
 <div class="fragment"><div class="line"><span class="keywordflow">if</span> (ptr-&gt;type() == rds2cpp::SEXPType::S4) {</div>
 <div class="line">    <span class="keyword">auto</span> sptr = <span class="keyword">static_cast&lt;</span><span class="keyword">const </span><a class="code hl_struct" href="structrds2cpp_1_1S4Object.html">rds2cpp::S4Object</a>*<span class="keyword">&gt;</span>(ptr.get());</div>
 <div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; slot_names = sptr-&gt;<a class="code hl_variable" href="structrds2cpp_1_1S4Object.html#afff39c9a8ab91c50d8542f0b583982f8">attributes</a>.<a class="code hl_variable" href="structrds2cpp_1_1Attributes.html#a3dd274a97e415b2d14606843b63f6b18">names</a>;</div>
@@ -113,8 +129,17 @@ $(function() {
 <div class="ttc" id="astructrds2cpp_1_1Attributes_html_a3dd274a97e415b2d14606843b63f6b18"><div class="ttname"><a href="structrds2cpp_1_1Attributes.html#a3dd274a97e415b2d14606843b63f6b18">rds2cpp::Attributes::names</a></div><div class="ttdeci">std::vector&lt; std::string &gt; names</div><div class="ttdef"><b>Definition:</b> RObject.hpp:94</div></div>
 <div class="ttc" id="astructrds2cpp_1_1S4Object_html"><div class="ttname"><a href="structrds2cpp_1_1S4Object.html">rds2cpp::S4Object</a></div><div class="ttdoc">S4 object.</div><div class="ttdef"><b>Definition:</b> RObject.hpp:260</div></div>
 <div class="ttc" id="astructrds2cpp_1_1S4Object_html_afff39c9a8ab91c50d8542f0b583982f8"><div class="ttname"><a href="structrds2cpp_1_1S4Object.html#afff39c9a8ab91c50d8542f0b583982f8">rds2cpp::S4Object::attributes</a></div><div class="ttdeci">Attributes attributes</div><div class="ttdef"><b>Definition:</b> RObject.hpp:287</div></div>
-</div><!-- fragment --><p >See the <a href="https://ltla.github.io/rds2cpp">reference documentation</a> for a list of known representations.</p>
-<h1>Writing RDS files</h1>
+</div><!-- fragment --><p >Advanced users can also pull out serialized environments. These should be treated as file-specific globals that may be referenced one or more times inside the R object.</p>
+<div class="fragment"><div class="line"><span class="keywordflow">if</span> (ptr-&gt;type() == rds2cpp::SEXPType::ENV) {</div>
+<div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; env = file_info-&gt;environments[eptr-&gt;index];</div>
+<div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; vnames = env.variable_names;</div>
+<div class="line">    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; vvalues = env.variable_values;</div>
+<div class="line">}</div>
+</div><!-- fragment --><p ><code>NULL</code>s are supported but not particularly interesting:</p>
+<div class="fragment"><div class="line"><span class="keywordflow">if</span> (ptr-&gt;type() == rds2cpp::SEXPType::NIL) {</div>
+<div class="line">   <span class="comment">// Do something.</span></div>
+<div class="line">}</div>
+</div><!-- fragment --><h1>Writing RDS files</h1>
 <p >The <code>write_rds()</code> function will write RDS files from an <code><a class="el" href="structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects.">rds2cpp::RObject</a></code> representation:</p>
 <div class="fragment"><div class="line">rds2cpp::RdsFile file_info;</div>
 <div class="line"> </div>
@@ -181,6 +206,30 @@ $(function() {
 <div class="ttc" id="astructrds2cpp_1_1GenericVector_html_ac72b1a04ce4ca685e1121b075f59d486"><div class="ttname"><a href="structrds2cpp_1_1GenericVector.html#ac72b1a04ce4ca685e1121b075f59d486">rds2cpp::GenericVector::attributes</a></div><div class="ttdeci">Attributes attributes</div><div class="ttdef"><b>Definition:</b> RObject.hpp:220</div></div>
 <div class="ttc" id="astructrds2cpp_1_1Null_html"><div class="ttname"><a href="structrds2cpp_1_1Null.html">rds2cpp::Null</a></div><div class="ttdoc">R's NULL value.</div><div class="ttdef"><b>Definition:</b> RObject.hpp:47</div></div>
 <div class="ttc" id="astructrds2cpp_1_1S4Object_html_a7cb839f83694dc70d66c529848fd1e5f"><div class="ttname"><a href="structrds2cpp_1_1S4Object.html#a7cb839f83694dc70d66c529848fd1e5f">rds2cpp::S4Object::class_name</a></div><div class="ttdeci">std::string class_name</div><div class="ttdef"><b>Definition:</b> RObject.hpp:266</div></div>
+</div><!-- fragment --><p >We can also create environments by registering the environment before creating indices to it.</p>
+<div class="fragment"><div class="line">rds2cpp::RdsFile file_info;</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Creating an environment with a &#39;foo&#39; variable containing the &#39;bar&#39; string.</span></div>
+<div class="line">file_info.environments.resize(2);</div>
+<div class="line">file_info.enviroments[0].parent_type = rds2cpp::SEXPType::GLOBALENV_;</div>
+<div class="line">file_info.enviroments[0].variable_names.push_back(<span class="stringliteral">&quot;foo&quot;</span>);</div>
+<div class="line">file_info.enviroments[0].variable_encodings.push_back(rds2cpp::StringEncoding::UTF8);</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span> sptr = <span class="keyword">new</span> <a class="code hl_struct" href="structrds2cpp_1_1StringVector.html">rds2cpp::StringVector</a>;</div>
+<div class="line">file_info.enviroments[0].variable_values.emplace_back(sptr);</div>
+<div class="line">sptr-&gt;<a class="code hl_variable" href="structrds2cpp_1_1StringVector.html#a800012da9c834c3b7aabbb8dd009e59b">data</a>.push_back(<span class="stringliteral">&quot;bar&quot;</span>);</div>
+<div class="line">sptr-&gt;encodings.push_back(rds2cpp::StringEncoding::ASCII);</div>
+<div class="line">sptr-&gt;missing.push_back(<span class="keyword">false</span>);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Referencing the environment: </span></div>
+<div class="line"><span class="keyword">auto</span> eptr = <span class="keyword">new</span> <a class="code hl_struct" href="structrds2cpp_1_1EnvironmentIndex.html">rds2cpp::EnvironmentIndex</a>;</div>
+<div class="line">file_info.object.reset(eptr);</div>
+<div class="line">eptr-&gt;<a class="code hl_variable" href="structrds2cpp_1_1EnvironmentIndex.html#a48847650f3aacbb87796282b9124492d">index</a> = 0;</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_function" href="namespacerds2cpp.html#a5c53787e1d5fea7c789ba4fd4fab0849">rds2cpp::write_rds</a>(file_info, <span class="stringliteral">&quot;my_matrix.rds&quot;</span>);</div>
+<div class="ttc" id="astructrds2cpp_1_1EnvironmentIndex_html"><div class="ttname"><a href="structrds2cpp_1_1EnvironmentIndex.html">rds2cpp::EnvironmentIndex</a></div><div class="ttdoc">Reference to an environment.</div><div class="ttdef"><b>Definition:</b> RObject.hpp:66</div></div>
+<div class="ttc" id="astructrds2cpp_1_1EnvironmentIndex_html_a48847650f3aacbb87796282b9124492d"><div class="ttname"><a href="structrds2cpp_1_1EnvironmentIndex.html#a48847650f3aacbb87796282b9124492d">rds2cpp::EnvironmentIndex::index</a></div><div class="ttdeci">size_t index</div><div class="ttdef"><b>Definition:</b> RObject.hpp:76</div></div>
+<div class="ttc" id="astructrds2cpp_1_1StringVector_html_a800012da9c834c3b7aabbb8dd009e59b"><div class="ttname"><a href="structrds2cpp_1_1StringVector.html#a800012da9c834c3b7aabbb8dd009e59b">rds2cpp::StringVector::data</a></div><div class="ttdeci">std::vector&lt; std::string &gt; data</div><div class="ttdef"><b>Definition:</b> RObject.hpp:179</div></div>
 </div><!-- fragment --><h1>Building projects</h1>
 <p >If you're using CMake, you just need to add something like this to your <code>CMakeLists.txt</code>:</p>
 <div class="fragment"><div class="line">include(FetchContent)</div>
