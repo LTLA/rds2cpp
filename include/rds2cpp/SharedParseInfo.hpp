@@ -112,9 +112,7 @@ public:
         auto chosen = mappings[index];
 
         if (chosen.first == SEXPType::ENV) {
-            EnvironmentIndex output;
-            output.index = chosen.second;
-            return std::unique_ptr<RObject>(new EnvironmentIndex(std::move(output)));
+            return std::unique_ptr<RObject>(new EnvironmentIndex(chosen.second));
         } 
 
         SymbolIndex output;

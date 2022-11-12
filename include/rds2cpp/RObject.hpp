@@ -52,6 +52,12 @@ struct Null : public RObject {
  * @brief Reference to a language symbol. 
  */
 struct SymbolIndex : public RObject {
+    /**
+     * @param i Value of the symbol index.
+     */
+    SymbolIndex(size_t i = -1) : index(i) {}
+
+
     SEXPType type() const { return SEXPType::SYM; }
 
     /**
@@ -65,23 +71,36 @@ struct SymbolIndex : public RObject {
  */
 struct EnvironmentIndex : public RObject {
     /**
+     * By default, this creates an `EnvironmentIndex` that refers to the global environment.
+     *
+     * @param e Type of the environment.
+     */
+    EnvironmentIndex(SEXPType e = SEXPType::GLOBALENV_) : index(-1), env_type(e) {}
+
+    /**
+     * This creates an `EnvironmentIndex` that refers to a non-global environment, i.e., is of type `ENV`.
+     *
+     * @param i Value of the environment index. 
+     */
+    EnvironmentIndex(size_t i): index(i), env_type(SEXPType::ENV) {}
+
+    /**
      * Type of environment.
-     * Most environments will be `ENV` but special environments may occur like `GLOBALENV_` and `BASEENV_`.
+     * Most environments will be `ENV` but special environments can be constructed like `GLOBALENV_`.
      */
     SEXPType type() const { return env_type; }
 
     /**
      * Index into the `environments` vector of the `Parsed` object.
+     * This is only used if `type()` returns `ENV`.
      */
     size_t index;
 
     /**
-     * @cond
+     * Type of the environment, as returned by `type()`.
+     * This can be modified if it changes after construction. 
      */
-    SEXPType env_type = SEXPType::ENV;
-    /**
-     * @endcond
-     */
+    SEXPType env_type;
 };
 
 /**
@@ -102,6 +121,33 @@ struct Attributes {
      * Value of each attribute.
      */
     std::vector<std::unique_ptr<RObject> > values;
+
+    /**
+     * A convenient helper to add an attribute.
+     *
+     * @param n Name of the attribute.
+     * @param v Pointer to the attribute value.
+     * This should not be owned by any other object.
+     * @param enc Encoding of the attribute name.
+     */
+    void add(std::string n, RObject* v, StringEncoding enc = StringEncoding::UTF8) {
+        names.emplace_back(std::move(n));
+        encodings.emplace_back(enc);
+        values.emplace_back(v);
+    }
+
+    /**
+     * A convenient helper to add an attribute.
+     *
+     * @param n Name of the attribute.
+     * @param v Unique pointer to the attribute value.
+     * @param enc Encoding of the attribute name.
+     */
+    void add(std::string n, std::unique_ptr<RObject> v, StringEncoding enc = StringEncoding::UTF8) {
+        names.emplace_back(std::move(n));
+        encodings.emplace_back(enc);
+        values.emplace_back(std::move(v));
+    }
 };
 
 /**
@@ -190,6 +236,27 @@ struct StringVector : public RObject {
     std::vector<char> missing;
 
     /**
+     * A convenient helper to add a string to the end of the vector.
+     *
+     * @param d Value of the string.
+     * @param enc Encoding of the attribute name.
+     */
+    void add(std::string d, StringEncoding enc = StringEncoding::UTF8) {
+        data.push_back(std::move(d));
+        encodings.push_back(enc);
+        missing.push_back(false);
+    }
+
+    /**
+     * A convenient helper to add a missing string to the end of the vector.
+     */
+    void add() {
+        data.push_back("");
+        encodings.push_back(StringEncoding::NONE);
+        missing.push_back(true);
+    }
+
+    /**
      * Additional attributes.
      */
     Attributes attributes;
@@ -249,6 +316,60 @@ struct PairList : public RObject {
     std::vector<StringEncoding> tag_encodings;
 
     /**
+     * A convenient helper to add a tagged element to the end of the pairlist.
+     *
+     * @param t Tag name.
+     * @param d Unique pointer to the element value.
+     * @param enc Encoding of the tag name.
+     */
+    void add(std::string t, std::unique_ptr<RObject> d, StringEncoding enc = StringEncoding::UTF8) {
+        data.push_back(std::move(d));
+        has_tag.push_back(true);
+        tag_names.push_back(std::move(t));
+        tag_encodings.push_back(enc);
+    }
+
+    /**
+     * A convenient helper to add a tagged element to the end of the pairlist.
+     *
+     * @param t Tag name.
+     * @param d Pointer to the element value.
+     * This should not be owned by any other resource.
+     * @param enc Encoding of the tag name.
+     */
+    void add(std::string t, RObject* d, StringEncoding enc = StringEncoding::UTF8) {
+        data.emplace_back(d);
+        has_tag.push_back(true);
+        tag_names.push_back(std::move(t));
+        tag_encodings.push_back(enc);
+    }
+
+    /**
+     * A convenient helper to add an untagged element to the end of the pairlist.
+     *
+     * @param d Pointer to the element value.
+     */
+    void add(std::unique_ptr<RObject> d) {
+        data.push_back(std::move(d));
+        has_tag.push_back(false);
+        tag_names.push_back("");
+        tag_encodings.push_back(StringEncoding::NONE);
+    }
+
+    /**
+     * A convenient helper to add an untagged element to the end of the pairlist.
+     *
+     * @param d Pointer to the element value.
+     * This should not be owned by any other resource.
+     */
+    void add(RObject* d) {
+        data.emplace_back(d);
+        has_tag.push_back(false);
+        tag_names.push_back("");
+        tag_encodings.push_back(StringEncoding::NONE);
+    }
+
+    /**
      * Additional attributes.
      */
     Attributes attributes;
@@ -268,7 +389,7 @@ struct S4Object : public RObject {
     /**
      * Encoding of the class name.
      */
-    StringEncoding class_encoding;
+    StringEncoding class_encoding = StringEncoding::UTF8;
 
     /**
      * Name of the package.
@@ -278,7 +399,7 @@ struct S4Object : public RObject {
     /**
      * Encoding of the package name.
      */
-    StringEncoding package_encoding;
+    StringEncoding package_encoding = StringEncoding::UTF8;
 
     /**
      * Additional attributes.

@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <unordered_map>
 
 #include "Environment.hpp"
 #include "Symbol.hpp"

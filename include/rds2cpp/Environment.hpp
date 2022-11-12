@@ -31,7 +31,7 @@ struct Environment {
     /**
      * Type of the parent environment.
      */
-    SEXPType parent_type = SEXPType::ENV;
+    SEXPType parent_type = SEXPType::GLOBALENV_;
 
     /** 
      * Index of the parent environment.
@@ -53,6 +53,33 @@ struct Environment {
      * Values of the variables in this environment.
      */
     std::vector<std::unique_ptr<RObject> > variable_values;
+
+    /**
+     * A convenient helper to add a variable.
+     *
+     * @param n Name of the variable.
+     * @param v Pointer to the variable value.
+     * This should not be owned by any other object.
+     * @param enc Encoding of the variable name.
+     */
+    void add(std::string n, RObject* v, StringEncoding enc = StringEncoding::UTF8) {
+        variable_names.push_back(std::move(n));
+        variable_values.emplace_back(v);
+        variable_encodings.push_back(enc);
+    }
+
+    /**
+     * A convenient helper to add a variable.
+     *
+     * @param n Name of the variable.
+     * @param v Unique pointer to the variable value.
+     * @param enc Encoding of the variable name.
+     */
+    void add(std::string n, std::unique_ptr<RObject> v, StringEncoding enc = StringEncoding::UTF8) {
+        variable_names.push_back(std::move(n));
+        variable_values.push_back(std::move(v));
+        variable_encodings.push_back(enc);
+    }
 
     /**
      * Additional attributes.

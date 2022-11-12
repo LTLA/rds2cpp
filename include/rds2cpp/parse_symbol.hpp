@@ -20,9 +20,7 @@ SymbolIndex parse_symbol_body(Reader& reader, std::vector<unsigned char>& leftov
     new_symb.name = str.value;
     new_symb.encoding = str.encoding;
 
-    SymbolIndex output;
-    output.index = shared.add_symbol(std::move(new_symb));
-    return output;
+    return SymbolIndex(shared.add_symbol(std::move(new_symb)));
 }
 
 }

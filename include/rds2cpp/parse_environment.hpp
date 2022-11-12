@@ -16,10 +16,8 @@ PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, SharedParseIn
 
 template<class Reader>
 EnvironmentIndex parse_global_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) {
-    EnvironmentIndex output;
-    output.env_type = SEXPType::GLOBALENV_;
-    output.index = -1;
-    return output;
+    // Rely on default constructor.
+    return EnvironmentIndex();
 }
 
 template<class Reader>
@@ -47,10 +45,12 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
     auto lastbit = parent[3];
     if (lastbit == static_cast<unsigned char>(SEXPType::REF)) {
         new_env.parent = shared.get_environment_index(parent);
+        new_env.parent_type = SEXPType::ENV;
 
     } else if (lastbit == static_cast<unsigned char>(SEXPType::ENV)) {
         auto env = parse_new_environment_body(reader, leftovers, parent, shared);
         new_env.parent = env.index;
+        new_env.parent_type = SEXPType::ENV;
 
     } else if (lastbit == static_cast<unsigned char>(SEXPType::GLOBALENV_)) {
         new_env.parent_type = SEXPType::GLOBALENV_;
@@ -120,9 +120,7 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
     }
 
     shared.environments[eindex] = std::move(new_env);
-    EnvironmentIndex output;
-    output.index = eindex;
-    return output;
+    return EnvironmentIndex(eindex);
 };
 
 }
