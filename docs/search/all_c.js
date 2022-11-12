@@ -8,5 +8,5 @@ var searchData=
   ['stringvector_5',['StringVector',['../structrds2cpp_1_1StringVector.html',1,'rds2cpp']]],
   ['symbol_6',['Symbol',['../structrds2cpp_1_1Symbol.html',1,'rds2cpp']]],
   ['symbol_2ehpp_7',['Symbol.hpp',['../Symbol_8hpp.html',1,'']]],
-  ['symbolindex_8',['SymbolIndex',['../structrds2cpp_1_1SymbolIndex.html',1,'rds2cpp']]]
+  ['symbolindex_8',['SymbolIndex',['../structrds2cpp_1_1SymbolIndex.html',1,'rds2cpp::SymbolIndex'],['../structrds2cpp_1_1SymbolIndex.html#a869b3accf667ee21d6e055ad475dc54c',1,'rds2cpp::SymbolIndex::SymbolIndex()']]]
 ];

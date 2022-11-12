@@ -76,6 +76,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structrds2cpp_1_1Attributes-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">rds2cpp::Attributes Struct Reference</div></div>
@@ -87,6 +88,13 @@ $(function() {
 
 <p><code>#include &lt;<a class="el" href="RObject_8hpp_source.html">RObject.hpp</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a6109e48b389399a860f1d98487a2b018"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1Attributes.html#a6109e48b389399a860f1d98487a2b018">add</a> (std::string n, <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> *v, <a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a> enc=StringEncoding::UTF8)</td></tr>
+<tr class="separator:a6109e48b389399a860f1d98487a2b018"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe5b330809ce9763404901fd282845e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1Attributes.html#abe5b330809ce9763404901fd282845e3">add</a> (std::string n, std::unique_ptr&lt; <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> &gt; v, <a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a> enc=StringEncoding::UTF8)</td></tr>
+<tr class="separator:abe5b330809ce9763404901fd282845e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a3dd274a97e415b2d14606843b63f6b18"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1Attributes.html#a3dd274a97e415b2d14606843b63f6b18">names</a></td></tr>
@@ -98,7 +106,110 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Attribute names and values. </p>
-</div><h2 class="groupheader">Member Data Documentation</h2>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6109e48b389399a860f1d98487a2b018" name="a6109e48b389399a860f1d98487a2b018"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6109e48b389399a860f1d98487a2b018">&#9670;&#160;</a></span>add() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rds2cpp::Attributes::add </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> *&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a>&#160;</td>
+          <td class="paramname"><em>enc</em> = <code>StringEncoding::UTF8</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >A convenient helper to add an attribute.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Name of the attribute. </td></tr>
+    <tr><td class="paramname">v</td><td>Pointer to the attribute value. This should not be owned by any other object. </td></tr>
+    <tr><td class="paramname">enc</td><td>Encoding of the attribute name. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="abe5b330809ce9763404901fd282845e3" name="abe5b330809ce9763404901fd282845e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe5b330809ce9763404901fd282845e3">&#9670;&#160;</a></span>add() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rds2cpp::Attributes::add </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> &gt;&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a>&#160;</td>
+          <td class="paramname"><em>enc</em> = <code>StringEncoding::UTF8</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >A convenient helper to add an attribute.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>Name of the attribute. </td></tr>
+    <tr><td class="paramname">v</td><td>Unique pointer to the attribute value. </td></tr>
+    <tr><td class="paramname">enc</td><td>Encoding of the attribute name. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
 <a id="ae2db31e6b60cfa8b94257154dd283dc2" name="ae2db31e6b60cfa8b94257154dd283dc2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae2db31e6b60cfa8b94257154dd283dc2">&#9670;&#160;</a></span>encodings</h2>
 

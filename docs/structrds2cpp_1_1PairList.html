@@ -111,6 +111,14 @@ Collaboration diagram for rds2cpp::PairList:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a66acd5fb763645bdbd5880e82c5d3805"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacerds2cpp.html#acf2b27eb21235c6dd30b8819ea682629">SEXPType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1PairList.html#a66acd5fb763645bdbd5880e82c5d3805">type</a> () const</td></tr>
 <tr class="separator:a66acd5fb763645bdbd5880e82c5d3805"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e07c228c50a439fcf4d4747cf100b4b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1PairList.html#a8e07c228c50a439fcf4d4747cf100b4b">add</a> (std::string t, std::unique_ptr&lt; <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> &gt; d, <a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a> enc=StringEncoding::UTF8)</td></tr>
+<tr class="separator:a8e07c228c50a439fcf4d4747cf100b4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0f20e75f3eedeae77c240defd7fcd25"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1PairList.html#aa0f20e75f3eedeae77c240defd7fcd25">add</a> (std::string t, <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> *d, <a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a> enc=StringEncoding::UTF8)</td></tr>
+<tr class="separator:aa0f20e75f3eedeae77c240defd7fcd25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84ac16335499a2f56636407ff3874c94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1PairList.html#a84ac16335499a2f56636407ff3874c94">add</a> (std::unique_ptr&lt; <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> &gt; d)</td></tr>
+<tr class="separator:a84ac16335499a2f56636407ff3874c94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a5bda24efb1fe1dbd15b103dfeda3a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1PairList.html#a3a5bda24efb1fe1dbd15b103dfeda3a8">add</a> (<a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> *d)</td></tr>
+<tr class="separator:a3a5bda24efb1fe1dbd15b103dfeda3a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a650039d33738c4d5b91d0df0977f6d9b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacerds2cpp.html#acf2b27eb21235c6dd30b8819ea682629">SEXPType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1RObject.html#a650039d33738c4d5b91d0df0977f6d9b">type</a> () const =0</td></tr>
 <tr class="separator:a650039d33738c4d5b91d0df0977f6d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -130,6 +138,174 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Pairlist, i.e., a linked list. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a3a5bda24efb1fe1dbd15b103dfeda3a8" name="a3a5bda24efb1fe1dbd15b103dfeda3a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a5bda24efb1fe1dbd15b103dfeda3a8">&#9670;&#160;</a></span>add() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rds2cpp::PairList::add </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> *&#160;</td>
+          <td class="paramname"><em>d</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >A convenient helper to add an untagged element to the end of the pairlist.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">d</td><td>Pointer to the element value. This should not be owned by any other resource. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa0f20e75f3eedeae77c240defd7fcd25" name="aa0f20e75f3eedeae77c240defd7fcd25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0f20e75f3eedeae77c240defd7fcd25">&#9670;&#160;</a></span>add() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rds2cpp::PairList::add </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> *&#160;</td>
+          <td class="paramname"><em>d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a>&#160;</td>
+          <td class="paramname"><em>enc</em> = <code>StringEncoding::UTF8</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >A convenient helper to add a tagged element to the end of the pairlist.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>Tag name. </td></tr>
+    <tr><td class="paramname">d</td><td>Pointer to the element value. This should not be owned by any other resource. </td></tr>
+    <tr><td class="paramname">enc</td><td>Encoding of the tag name. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8e07c228c50a439fcf4d4747cf100b4b" name="a8e07c228c50a439fcf4d4747cf100b4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e07c228c50a439fcf4d4747cf100b4b">&#9670;&#160;</a></span>add() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rds2cpp::PairList::add </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> &gt;&#160;</td>
+          <td class="paramname"><em>d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a>&#160;</td>
+          <td class="paramname"><em>enc</em> = <code>StringEncoding::UTF8</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >A convenient helper to add a tagged element to the end of the pairlist.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>Tag name. </td></tr>
+    <tr><td class="paramname">d</td><td>Unique pointer to the element value. </td></tr>
+    <tr><td class="paramname">enc</td><td>Encoding of the tag name. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a84ac16335499a2f56636407ff3874c94" name="a84ac16335499a2f56636407ff3874c94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84ac16335499a2f56636407ff3874c94">&#9670;&#160;</a></span>add() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rds2cpp::PairList::add </td>
+          <td>(</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> &gt;&#160;</td>
+          <td class="paramname"><em>d</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >A convenient helper to add an untagged element to the end of the pairlist.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">d</td><td>Pointer to the element value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a66acd5fb763645bdbd5880e82c5d3805" name="a66acd5fb763645bdbd5880e82c5d3805"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a66acd5fb763645bdbd5880e82c5d3805">&#9670;&#160;</a></span>type()</h2>
 

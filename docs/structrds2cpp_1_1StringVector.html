@@ -111,6 +111,10 @@ Collaboration diagram for rds2cpp::StringVector:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a8bfa8ead6efbb3e7fbe58580c40a1c61"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacerds2cpp.html#acf2b27eb21235c6dd30b8819ea682629">SEXPType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1StringVector.html#a8bfa8ead6efbb3e7fbe58580c40a1c61">type</a> () const</td></tr>
 <tr class="separator:a8bfa8ead6efbb3e7fbe58580c40a1c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ae3a82394b91bef285ad744f537fc39"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1StringVector.html#a2ae3a82394b91bef285ad744f537fc39">add</a> (std::string d, <a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a> enc=StringEncoding::UTF8)</td></tr>
+<tr class="separator:a2ae3a82394b91bef285ad744f537fc39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1c3c7c50cf073f30255a52460133e42"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1StringVector.html#af1c3c7c50cf073f30255a52460133e42">add</a> ()</td></tr>
+<tr class="separator:af1c3c7c50cf073f30255a52460133e42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a650039d33738c4d5b91d0df0977f6d9b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacerds2cpp.html#acf2b27eb21235c6dd30b8819ea682629">SEXPType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1RObject.html#a650039d33738c4d5b91d0df0977f6d9b">type</a> () const =0</td></tr>
 <tr class="separator:a650039d33738c4d5b91d0df0977f6d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -128,6 +132,76 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >String vector. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="af1c3c7c50cf073f30255a52460133e42" name="af1c3c7c50cf073f30255a52460133e42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1c3c7c50cf073f30255a52460133e42">&#9670;&#160;</a></span>add() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rds2cpp::StringVector::add </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >A convenient helper to add a missing string to the end of the vector. </p>
+
+</div>
+</div>
+<a id="a2ae3a82394b91bef285ad744f537fc39" name="a2ae3a82394b91bef285ad744f537fc39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ae3a82394b91bef285ad744f537fc39">&#9670;&#160;</a></span>add() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void rds2cpp::StringVector::add </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a>&#160;</td>
+          <td class="paramname"><em>enc</em> = <code>StringEncoding::UTF8</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >A convenient helper to add a string to the end of the vector.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">d</td><td>Value of the string. </td></tr>
+    <tr><td class="paramname">enc</td><td>Encoding of the attribute name. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a8bfa8ead6efbb3e7fbe58580c40a1c61" name="a8bfa8ead6efbb3e7fbe58580c40a1c61"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8bfa8ead6efbb3e7fbe58580c40a1c61">&#9670;&#160;</a></span>type()</h2>
 
