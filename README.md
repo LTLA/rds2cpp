@@ -35,16 +35,34 @@ if (ptr->type() == rds2cpp::SEXPType::INT) {
 }
 ```
 
-Or maybe we have an ordinary list:
+See the [reference documentation](https://ltla.github.io/rds2cpp) for a list of known representations.
+
+## More reading examples
+
+**rds2cpp** can extract ordinary lists from an RDS file.
+Users can inspect the attributes to determine if the list is named.
 
 ```cpp
 if (ptr->type() == rds2cpp::SEXPType::VEC) {
     auto lptr = static_cast<const rds2cpp::GenericVector*>(ptr.get());
     const auto& elements = lptr->data; // vector of pointers to list elements.
+
+    const auto& attr = lptr->attributes; 
+    const auto& attr_names = sptr->attributes.names;
+    const auto& attr_values = sptr->attributes.values;
+
+    // Scanning for the list names.
+    auto nIt = std::find(attr_names.begin(), attr_names.end(), std::string("names"));
+    if (nIt != attr_names.end()) {
+        size_t nindex = nIt - attr_names.begin();
+        if (attr_values[nindex]->type() == rds2cpp::SEXPType::STR) {
+            auto nptr = static_cast<const rds2cpp::StringVector*>(attr_values[nindex].get());
+        }
+    }
 }
 ```
 
-Slots of S4 instances are encoded in the attributes:
+Slots of S4 instances are similarly encoded in the attributes:
 
 ```cpp
 if (ptr->type() == rds2cpp::SEXPType::S4) {
@@ -54,7 +72,24 @@ if (ptr->type() == rds2cpp::SEXPType::S4) {
 }
 ```
 
-See the [reference documentation](https://ltla.github.io/rds2cpp) for a list of known representations.
+Advanced users can also pull out serialized environments.
+These should be treated as file-specific globals that may be referenced one or more times inside the R object.
+
+```cpp
+if (ptr->type() == rds2cpp::SEXPType::ENV) {
+    const auto& env = file_info->environments[eptr->index];
+    const auto& vnames = env.variable_names;
+    const auto& vvalues = env.variable_values;
+}
+```
+
+`NULL`s are supported but not particularly interesting:
+
+```cpp
+if (ptr->type() == rds2cpp::SEXPType::NIL) {
+   // Do something.
+}
+```
 
 ## Writing RDS files
 
@@ -124,6 +159,31 @@ obj.attributes.values.emplace_back(factors);
 
 rds2cpp::write_rds(file_info, "my_matrix.rds");
 ``` 
+
+We can also create environments by registering the environment before creating indices to it.
+
+```cpp
+rds2cpp::RdsFile file_info;
+
+// Creating an environment with a 'foo' variable containing the 'bar' string.
+file_info.environments.resize(2);
+file_info.enviroments[0].parent_type = rds2cpp::SEXPType::GLOBALENV_;
+file_info.enviroments[0].variable_names.push_back("foo");
+file_info.enviroments[0].variable_encodings.push_back(rds2cpp::StringEncoding::UTF8);
+
+auto sptr = new rds2cpp::StringVector;
+file_info.enviroments[0].variable_values.emplace_back(sptr);
+sptr->data.push_back("bar");
+sptr->encodings.push_back(rds2cpp::StringEncoding::ASCII);
+sptr->missing.push_back(false);
+
+// Referencing the environment: 
+auto eptr = new rds2cpp::EnvironmentIndex;
+file_info.object.reset(eptr);
+eptr->index = 0;
+
+rds2cpp::write_rds(file_info, "my_matrix.rds");
+```
 
 ## Building projects
 
