@@ -5,8 +5,9 @@
 
 ## Overview
 
-This repository contains a header-only C++ library for reading RDS files into memory.
-This provides a lightweight mechanism for applications to read user data created with `saveRDS()` without linking to R itself.
+This repository contains a header-only C++ library for reading and writing RDS files (created with `saveRDS()`) without the need to link to R's libraries.
+In this manner, we can use RDS as a flexible data exchange format across different frameworks that have C++ bindings, 
+e.g., [Python](https://github.com/biocpy/rds2py), [Javascript (via Wasm)](https://github.com/jkanche/scran.js).
 We currently support most user-visible data structures such as atomic vectors, lists, environments and S4 classes.
 
 ## Quick start
@@ -154,7 +155,7 @@ We can also create environments by registering the environment before creating i
 ```cpp
 rds2cpp::RdsFile file_info;
 
-// Creating an environment with a 'foo' variable containing the 'bar' string.
+// Creating an environment with a 'foo' variable containing c('bar', NA, 'whee')
 file_info.environments.resize(1);
 auto& current_env = file_info.environments[0];
 
@@ -200,5 +201,8 @@ target_link_libraries(mylib INTERFACE rds2cpp)
 ## Known limitations
 
 This library may not support RDS files created using `saveRDS()` with non-default parameters.
+
+Environments are written without a hash table, so as to avoid the need to replicate R's string hashing logic.
+This may result in slower retrieval of variables when those environments are loaded into an R session.
 
 Currently, no support is provided for unserializing built-in functions or user-defined closures.
