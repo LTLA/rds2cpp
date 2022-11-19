@@ -76,7 +76,7 @@ $(function() {
 <div class="contents">
 <div class="textblock"><p ><a class="anchor" id="md__github_workspace_README"></a> <img src="https://github.com/LTLA/rds2cpp/actions/workflows/run-tests.yaml/badge.svg" alt="Unit tests" style="pointer-events: none;" class="inline"/> <img src="https://github.com/LTLA/rds2cpp/actions/workflows/doxygenate.yaml/badge.svg" alt="Documentation" style="pointer-events: none;" class="inline"/></p>
 <h1>Overview</h1>
-<p >This repository contains a header-only C++ library for reading RDS files into memory. This provides a lightweight mechanism for applications to read user data created with <code>saveRDS()</code> without linking to R itself. We currently support most user-visible data structures such as atomic vectors, lists, environments and S4 classes.</p>
+<p >This repository contains a header-only C++ library for reading and writing RDS files (created with <code>saveRDS()</code>) without the need to link to R's libraries. In this manner, we can use RDS as a flexible data exchange format across different frameworks that have C++ bindings, e.g., <a href="https://github.com/biocpy/rds2py">Python</a>, <a href="https://github.com/jkanche/scran.js">Javascript (via Wasm)</a>. We currently support most user-visible data structures such as atomic vectors, lists, environments and S4 classes.</p>
 <h1>Quick start</h1>
 <p >Given a path to an RDS file, the <code>parse_rds()</code> function will return a pointer to an <code>RObject</code> interface:</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="rds2cpp_8hpp.html">rds2cpp/rds2cpp.hpp</a>&quot;</span></div>
@@ -195,7 +195,7 @@ $(function() {
 </div><!-- fragment --><p >We can also create environments by registering the environment before creating indices to it.</p>
 <div class="fragment"><div class="line">rds2cpp::RdsFile file_info;</div>
 <div class="line"> </div>
-<div class="line"><span class="comment">// Creating an environment with a &#39;foo&#39; variable containing the &#39;bar&#39; string.</span></div>
+<div class="line"><span class="comment">// Creating an environment with a &#39;foo&#39; variable containing c(&#39;bar&#39;, NA, &#39;whee&#39;)</span></div>
 <div class="line">file_info.environments.resize(1);</div>
 <div class="line"><span class="keyword">auto</span>&amp; current_env = file_info.environments[0];</div>
 <div class="line"> </div>
@@ -231,6 +231,7 @@ $(function() {
 <div class="line">target_link_libraries(mylib INTERFACE rds2cpp)</div>
 </div><!-- fragment --><h1>Known limitations</h1>
 <p >This library may not support RDS files created using <code>saveRDS()</code> with non-default parameters.</p>
+<p >Environments are written without a hash table, so as to avoid the need to replicate R's string hashing logic. This may result in slower retrieval of variables when those environments are loaded into an R session.</p>
 <p >Currently, no support is provided for unserializing built-in functions or user-defined closures. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
