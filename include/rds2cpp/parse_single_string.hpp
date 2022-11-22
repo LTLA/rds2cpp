@@ -44,7 +44,8 @@ StringInfo parse_single_string(Reader& reader, std::vector<unsigned char>& lefto
         auto& str = output.value;
         bool ok = extract_up_to(reader, leftovers, strlen,
             [&](const unsigned char* buffer, size_t n, size_t) -> void {
-                str.insert(str.end(), buffer, buffer + n);
+                auto ptr = reinterpret_cast<const char*>(buffer);
+                str.insert(str.end(), ptr, ptr + n);
             }
         );
         if (!ok) {
