@@ -1,11 +1,11 @@
 <map id="rds2cpp/parse_rds.hpp" name="rds2cpp/parse_rds.hpp">
-<area shape="rect" id="node1" title="Parse an RDS file." alt="" coords="303,5,456,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,79,73,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="98,79,173,104"/>
-<area shape="rect" id="node4" title=" " alt="" coords="197,79,258,104"/>
-<area shape="rect" id="node5" title=" " alt="" coords="282,79,373,104"/>
-<area shape="rect" id="node6" title=" " alt="" coords="397,79,468,104"/>
-<area shape="rect" id="node7" title=" " alt="" coords="492,79,635,104"/>
-<area shape="rect" id="node8" title=" " alt="" coords="659,79,779,104"/>
-<area shape="rect" id="node9" title=" " alt="" coords="804,79,992,104"/>
+<area shape="rect" id="node1" title="Parse an RDS file." coords="303,5,456,31"/>
+<area shape="rect" id="node2" title=" " coords="5,79,73,104"/>
+<area shape="rect" id="node3" title=" " coords="98,79,173,104"/>
+<area shape="rect" id="node4" title=" " coords="197,79,258,104"/>
+<area shape="rect" id="node5" title=" " coords="282,79,373,104"/>
+<area shape="rect" id="node6" title=" " coords="397,79,468,104"/>
+<area shape="rect" id="node7" title=" " coords="492,79,635,104"/>
+<area shape="rect" id="node8" title=" " coords="659,79,779,104"/>
+<area shape="rect" id="node9" title=" " coords="804,79,992,104"/>
 </map>

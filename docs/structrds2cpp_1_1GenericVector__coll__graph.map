@@ -1,5 +1,5 @@
 <map id="rds2cpp::GenericVector" name="rds2cpp::GenericVector">
-<area shape="rect" id="node1" title="Generic vector, i.e., an ordinary R list." alt="" coords="62,93,219,119"/>
-<area shape="rect" id="node2" href="$structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects." alt="" coords="5,5,127,31"/>
-<area shape="rect" id="node3" href="$structrds2cpp_1_1Attributes.html" title="Attribute names and values." alt="" coords="151,5,282,31"/>
+<area shape="rect" id="node1" title="Generic vector, i.e., an ordinary R list." coords="62,93,219,119"/>
+<area shape="rect" id="node2" href="$structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects." coords="5,5,127,31"/>
+<area shape="rect" id="node3" href="$structrds2cpp_1_1Attributes.html" title="Attribute names and values." coords="151,5,282,31"/>
 </map>

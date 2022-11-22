@@ -1,14 +1,14 @@
 <map id="rds2cpp/write_rds.hpp" name="rds2cpp/write_rds.hpp">
-<area shape="rect" id="node1" title="Write an RDS file." alt="" coords="271,5,420,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,152,64,177"/>
-<area shape="rect" id="node3" title=" " alt="" coords="60,79,151,104"/>
-<area shape="rect" id="node4" href="$RObject_8hpp.html" title="Representations of unserialized R objects." alt="" coords="175,79,268,104"/>
-<area shape="rect" id="node9" title=" " alt="" coords="293,79,398,104"/>
-<area shape="rect" id="node10" title=" " alt="" coords="422,79,538,104"/>
-<area shape="rect" id="node11" title=" " alt="" coords="563,79,701,104"/>
-<area shape="rect" id="node12" title=" " alt="" coords="725,79,899,104"/>
-<area shape="rect" id="node5" title=" " alt="" coords="93,152,155,177"/>
-<area shape="rect" id="node6" title=" " alt="" coords="179,152,250,177"/>
-<area shape="rect" id="node7" href="$SEXPType_8hpp.html" title="R data types." alt="" coords="275,152,384,177"/>
-<area shape="rect" id="node8" href="$StringEncoding_8hpp.html" title="String encodings." alt="" coords="408,152,541,177"/>
+<area shape="rect" id="node1" title="Write an RDS file." coords="271,5,420,31"/>
+<area shape="rect" id="node2" title=" " coords="5,152,64,177"/>
+<area shape="rect" id="node3" title=" " coords="60,79,151,104"/>
+<area shape="rect" id="node4" href="$RObject_8hpp.html" title="Representations of unserialized R objects." coords="175,79,268,104"/>
+<area shape="rect" id="node9" title=" " coords="293,79,398,104"/>
+<area shape="rect" id="node10" title=" " coords="422,79,538,104"/>
+<area shape="rect" id="node11" title=" " coords="563,79,701,104"/>
+<area shape="rect" id="node12" title=" " coords="725,79,899,104"/>
+<area shape="rect" id="node5" title=" " coords="93,152,155,177"/>
+<area shape="rect" id="node6" title=" " coords="179,152,250,177"/>
+<area shape="rect" id="node7" href="$SEXPType_8hpp.html" title="R data types." coords="275,152,384,177"/>
+<area shape="rect" id="node8" href="$StringEncoding_8hpp.html" title="String encodings." coords="408,152,541,177"/>
 </map>

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['data_0',['data',['../structrds2cpp_1_1AtomicVector.html#a87427d2862c982a09ac077ac6ad12eae',1,'rds2cpp::AtomicVector::data()'],['../structrds2cpp_1_1StringVector.html#a800012da9c834c3b7aabbb8dd009e59b',1,'rds2cpp::StringVector::data()'],['../structrds2cpp_1_1GenericVector.html#aca411f5b3a5609e4ba6fb450b4f935cb',1,'rds2cpp::GenericVector::data()'],['../structrds2cpp_1_1PairList.html#a1bff4d9a02cd64c44908b9362317a893',1,'rds2cpp::PairList::data()']]],
-  ['doublevector_1',['DoubleVector',['../namespacerds2cpp.html#a3a233aabb04ace22331d96dd485292f4',1,'rds2cpp']]]
+  ['class_5fencoding_0',['class_encoding',['../structrds2cpp_1_1S4Object.html#a9aaea2ba7196414bc1f2118303de6887',1,'rds2cpp::S4Object']]],
+  ['class_5fname_1',['class_name',['../structrds2cpp_1_1S4Object.html#a7cb839f83694dc70d66c529848fd1e5f',1,'rds2cpp::S4Object']]],
+  ['complexvector_2',['ComplexVector',['../namespacerds2cpp.html#ad178dfcbc2a0ba9bd813f289bdf147a7',1,'rds2cpp']]]
 ];

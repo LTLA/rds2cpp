@@ -1,9 +1,5 @@
 var searchData=
 [
-  ['encoding_0',['encoding',['../structrds2cpp_1_1Symbol.html#a98cc68e484cb112a40021d4cb1687054',1,'rds2cpp::Symbol']]],
-  ['encodings_1',['encodings',['../structrds2cpp_1_1Attributes.html#ae2db31e6b60cfa8b94257154dd283dc2',1,'rds2cpp::Attributes::encodings()'],['../structrds2cpp_1_1StringVector.html#a3e0ee119cdb7013bfe956df6d66165d6',1,'rds2cpp::StringVector::encodings()']]],
-  ['env_5ftype_2',['env_type',['../structrds2cpp_1_1EnvironmentIndex.html#a1bf1c15fce2af818ff9b6cce9e12ae8f',1,'rds2cpp::EnvironmentIndex']]],
-  ['environment_3',['Environment',['../structrds2cpp_1_1Environment.html',1,'rds2cpp']]],
-  ['environment_2ehpp_4',['Environment.hpp',['../Environment_8hpp.html',1,'']]],
-  ['environmentindex_5',['EnvironmentIndex',['../structrds2cpp_1_1EnvironmentIndex.html#ac50ff843b19bfaa8d3395bea0a517a38',1,'rds2cpp::EnvironmentIndex::EnvironmentIndex(SEXPType e=SEXPType::GLOBALENV_)'],['../structrds2cpp_1_1EnvironmentIndex.html#a968a0c890622b9e7514e8dd16674960b',1,'rds2cpp::EnvironmentIndex::EnvironmentIndex(size_t i)'],['../structrds2cpp_1_1EnvironmentIndex.html',1,'rds2cpp::EnvironmentIndex']]]
+  ['data_0',['data',['../structrds2cpp_1_1AtomicVector.html#a87427d2862c982a09ac077ac6ad12eae',1,'rds2cpp::AtomicVector::data()'],['../structrds2cpp_1_1StringVector.html#a800012da9c834c3b7aabbb8dd009e59b',1,'rds2cpp::StringVector::data()'],['../structrds2cpp_1_1GenericVector.html#aca411f5b3a5609e4ba6fb450b4f935cb',1,'rds2cpp::GenericVector::data()'],['../structrds2cpp_1_1PairList.html#a1bff4d9a02cd64c44908b9362317a893',1,'rds2cpp::PairList::data()']]],
+  ['doublevector_1',['DoubleVector',['../namespacerds2cpp.html#a3a233aabb04ace22331d96dd485292f4',1,'rds2cpp']]]
 ];

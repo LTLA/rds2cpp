@@ -1,4 +1,4 @@
 <map id="rds2cpp::S4Object" name="rds2cpp::S4Object">
-<area shape="rect" id="node1" title="S4 object." alt="" coords="5,79,133,104"/>
-<area shape="rect" id="node2" href="$structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects." alt="" coords="9,5,130,31"/>
+<area shape="rect" id="node1" title="S4 object." coords="5,79,133,104"/>
+<area shape="rect" id="node2" href="$structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects." coords="9,5,130,31"/>
 </map>

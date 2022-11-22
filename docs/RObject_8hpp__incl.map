@@ -1,8 +1,8 @@
 <map id="rds2cpp/RObject.hpp" name="rds2cpp/RObject.hpp">
-<area shape="rect" id="node1" title="Representations of unserialized R objects." alt="" coords="138,5,281,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,79,64,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="88,79,149,104"/>
-<area shape="rect" id="node4" title=" " alt="" coords="174,79,245,104"/>
-<area shape="rect" id="node5" href="$SEXPType_8hpp.html" title="R data types." alt="" coords="269,79,379,104"/>
-<area shape="rect" id="node6" href="$StringEncoding_8hpp.html" title="String encodings." alt="" coords="403,79,536,104"/>
+<area shape="rect" id="node1" title="Representations of unserialized R objects." coords="138,5,281,31"/>
+<area shape="rect" id="node2" title=" " coords="5,79,64,104"/>
+<area shape="rect" id="node3" title=" " coords="88,79,149,104"/>
+<area shape="rect" id="node4" title=" " coords="174,79,245,104"/>
+<area shape="rect" id="node5" href="$SEXPType_8hpp.html" title="R data types." coords="269,79,379,104"/>
+<area shape="rect" id="node6" href="$StringEncoding_8hpp.html" title="String encodings." coords="403,79,536,104"/>
 </map>
