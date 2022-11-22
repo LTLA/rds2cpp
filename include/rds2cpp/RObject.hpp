@@ -408,6 +408,18 @@ struct S4Object : public RObject {
     Attributes attributes;
 };
 
+/**
+ * @brief Built-in function.
+ */
+struct BuiltInFunction : public RObject {
+    SEXPType type() const { return SEXPType::BUILTIN; }
+
+    /**
+     * Name of the built-in function.
+     */
+    std::string name;
+};
+
 }
 
 #endif

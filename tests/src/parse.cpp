@@ -121,6 +121,13 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         add_attributes(list->attributes, output);
         return output;
 
+    } else if (input->type() == rds2cpp::SEXPType::BUILTIN) {
+        auto bif = static_cast<const rds2cpp::BuiltInFunction*>(input);
+        Rcpp::List output(1);
+        output[0] = Rcpp::CharacterVector::create(bif->name);
+        output.attr("pretend-to-be-a-builtin") = Rcpp::LogicalVector::create(1);
+        return output;
+
     } else if (input->type() == rds2cpp::SEXPType::SYM) {
         auto sdx = static_cast<const rds2cpp::SymbolIndex*>(input);
         return Rcpp::List::create(Rcpp::Named("id") = Rcpp::IntegerVector::create(sdx->index));

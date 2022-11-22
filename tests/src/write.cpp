@@ -173,6 +173,12 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, rds2cpp::Rds
                 ptr->env_type = rds2cpp::SEXPType::GLOBALENV_;
             }
 
+        } else if (vec.hasAttribute("pretend-to-be-a-builtin")) {
+            auto ptr = new rds2cpp::BuiltInFunction;
+            output.reset(ptr);
+            Rcpp::CharacterVector name(vec[0]);
+            ptr->name = Rcpp::String(name[0]).get_cstring();
+
         } else {
             auto ptr = new rds2cpp::GenericVector;
             output.reset(ptr);

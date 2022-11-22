@@ -8,6 +8,7 @@
 #include "write_list.hpp"
 #include "write_s4.hpp"
 #include "write_pairlist.hpp"
+#include "write_builtin.hpp"
 #include <vector>
 
 namespace rds2cpp {
@@ -51,6 +52,9 @@ void write_object(const RObject* object, Writer& writer, std::vector<unsigned ch
             break;
         case SEXPType::SYM:
             shared.write_symbol(object, writer, buffer);
+            break;
+        case SEXPType::BUILTIN:
+            write_builtin(object, writer, buffer);
             break;
         case SEXPType::ENV: 
         case SEXPType::GLOBALENV_:
