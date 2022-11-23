@@ -18,6 +18,28 @@ scan_for_references <- function(file) {
 
 ########################################################
 
+test_that("direct symbol reading works correctly", {
+    tmp <- tempfile(fileext=".rds")
+    y <- quote(aaron)
+    saveRDS(y, file=tmp)
+
+    info <- rds2cpp::parse_details(tmp)
+    expect_identical(info$value, list(id=0L))
+    expect_identical(info$symbols, "aaron")
+})
+
+test_that("direct symbol writing works correctly", {
+    y <- "aaron"
+    attr(y, "pretend-to-be-a-symbol") <- TRUE
+
+    tmp <- tempfile(fileext=".rds")
+    info <- rds2cpp::write(y, tmp)
+    roundtrip <- readRDS(tmp)
+    expect_identical(roundtrip, quote(aaron))
+})
+
+########################################################
+
 y <- list("foo", list("bar", "foo", list("bar")))
 attr(y[[1]], "pretend-to-be-a-symbol") <- TRUE
 attr(y[[2]][[1]], "pretend-to-be-a-symbol") <- TRUE
