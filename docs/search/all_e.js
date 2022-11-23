@@ -1,6 +1,12 @@
 var searchData=
 [
-  ['tag_5fencodings_0',['tag_encodings',['../structrds2cpp_1_1PairList.html#a815b78782ffa0f898b96df8fcaaccd0b',1,'rds2cpp::PairList']]],
-  ['tag_5fnames_1',['tag_names',['../structrds2cpp_1_1PairList.html#a36dc7df750a2aaaccfc943a1e3a3075a',1,'rds2cpp::PairList']]],
-  ['type_2',['type',['../structrds2cpp_1_1RObject.html#a650039d33738c4d5b91d0df0977f6d9b',1,'rds2cpp::RObject::type()'],['../structrds2cpp_1_1Null.html#afbb49b7f52faa2f0f460b7a99bc5cb52',1,'rds2cpp::Null::type()'],['../structrds2cpp_1_1SymbolIndex.html#a94aeb9118804d619fbf1a7b8269c9609',1,'rds2cpp::SymbolIndex::type()'],['../structrds2cpp_1_1EnvironmentIndex.html#a919fd1864585a46ae8841a59726fc491',1,'rds2cpp::EnvironmentIndex::type()'],['../structrds2cpp_1_1AtomicVector.html#a708beabc7687eea3b6145cb09de5a32f',1,'rds2cpp::AtomicVector::type()'],['../structrds2cpp_1_1StringVector.html#a8bfa8ead6efbb3e7fbe58580c40a1c61',1,'rds2cpp::StringVector::type()'],['../structrds2cpp_1_1GenericVector.html#a43b5fa96e496b57a7090523146078353',1,'rds2cpp::GenericVector::type()'],['../structrds2cpp_1_1PairList.html#a66acd5fb763645bdbd5880e82c5d3805',1,'rds2cpp::PairList::type()'],['../structrds2cpp_1_1S4Object.html#adcf2f0a6a6fbe9c647e13c45c1f8505e',1,'rds2cpp::S4Object::type()'],['../structrds2cpp_1_1BuiltInFunction.html#ae67e34eec0eb4d75fc8b8d44a8d165e4',1,'rds2cpp::BuiltInFunction::type()']]]
+  ['s4object_0',['S4Object',['../structrds2cpp_1_1S4Object.html',1,'rds2cpp']]],
+  ['sexptype_1',['SEXPType',['../namespacerds2cpp.html#acf2b27eb21235c6dd30b8819ea682629',1,'rds2cpp']]],
+  ['sexptype_2ehpp_2',['SEXPType.hpp',['../SEXPType_8hpp.html',1,'']]],
+  ['stringencoding_3',['StringEncoding',['../namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b',1,'rds2cpp']]],
+  ['stringencoding_2ehpp_4',['StringEncoding.hpp',['../StringEncoding_8hpp.html',1,'']]],
+  ['stringvector_5',['StringVector',['../structrds2cpp_1_1StringVector.html',1,'rds2cpp']]],
+  ['symbol_6',['Symbol',['../structrds2cpp_1_1Symbol.html',1,'rds2cpp']]],
+  ['symbol_2ehpp_7',['Symbol.hpp',['../Symbol_8hpp.html',1,'']]],
+  ['symbolindex_8',['SymbolIndex',['../structrds2cpp_1_1SymbolIndex.html',1,'rds2cpp::SymbolIndex'],['../structrds2cpp_1_1SymbolIndex.html#a869b3accf667ee21d6e055ad475dc54c',1,'rds2cpp::SymbolIndex::SymbolIndex()']]]
 ];

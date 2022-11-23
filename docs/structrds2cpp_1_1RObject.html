@@ -91,16 +91,18 @@ Inheritance diagram for rds2cpp::RObject:</div>
 <div class="dyncontent">
 <div class="center"><img src="structrds2cpp_1_1RObject__inherit__graph.png" border="0" usemap="#ards2cpp_1_1RObject_inherit__map" alt="Inheritance graph"/></div>
 <map name="ards2cpp_1_1RObject_inherit__map" id="ards2cpp_1_1RObject_inherit__map">
-<area shape="rect" title="Virtual class for all unserialized R objects." coords="5,218,127,243"/>
+<area shape="rect" title="Virtual class for all unserialized R objects." coords="5,267,127,293"/>
 <area shape="rect" href="structrds2cpp_1_1AtomicVector.html" title="Vector of some atomic type." coords="185,5,342,45"/>
 <area shape="rect" href="structrds2cpp_1_1BuiltInFunction.html" title="Built&#45;in function." coords="183,70,344,95"/>
 <area shape="rect" href="structrds2cpp_1_1EnvironmentIndex.html" title="Reference to an environment." coords="175,119,352,145"/>
-<area shape="rect" href="structrds2cpp_1_1GenericVector.html" title="Generic vector, i.e., an ordinary R list." coords="185,169,342,194"/>
-<area shape="rect" href="structrds2cpp_1_1Null.html" title="R&#39;s NULL value." coords="215,218,312,243"/>
-<area shape="rect" href="structrds2cpp_1_1PairList.html" title="Pairlist, i.e., a linked list." coords="204,267,323,293"/>
-<area shape="rect" href="structrds2cpp_1_1S4Object.html" title="S4 object." coords="199,317,327,342"/>
-<area shape="rect" href="structrds2cpp_1_1StringVector.html" title="String vector." coords="190,366,337,391"/>
-<area shape="rect" href="structrds2cpp_1_1SymbolIndex.html" title="Reference to a language symbol." coords="189,415,337,441"/>
+<area shape="rect" href="structrds2cpp_1_1ExpressionVector.html" title="Expression vector." coords="176,169,351,194"/>
+<area shape="rect" href="structrds2cpp_1_1GenericVector.html" title="Generic vector, i.e., an ordinary R list." coords="185,218,342,243"/>
+<area shape="rect" href="structrds2cpp_1_1LanguageObject.html" title="Language object, i.e., a function call." coords="179,267,348,293"/>
+<area shape="rect" href="structrds2cpp_1_1Null.html" title="R&#39;s NULL value." coords="215,317,312,342"/>
+<area shape="rect" href="structrds2cpp_1_1PairList.html" title="Pairlist, i.e., a linked list." coords="204,366,323,391"/>
+<area shape="rect" href="structrds2cpp_1_1S4Object.html" title="S4 object." coords="199,415,327,441"/>
+<area shape="rect" href="structrds2cpp_1_1StringVector.html" title="String vector." coords="190,465,337,490"/>
+<area shape="rect" href="structrds2cpp_1_1SymbolIndex.html" title="Reference to a language symbol." coords="189,514,337,539"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -136,7 +138,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>Type of the R object. </dd></dl>
 
-<p>Implemented in <a class="el" href="structrds2cpp_1_1Null.html#afbb49b7f52faa2f0f460b7a99bc5cb52">rds2cpp::Null</a>, <a class="el" href="structrds2cpp_1_1SymbolIndex.html#a94aeb9118804d619fbf1a7b8269c9609">rds2cpp::SymbolIndex</a>, <a class="el" href="structrds2cpp_1_1EnvironmentIndex.html#a919fd1864585a46ae8841a59726fc491">rds2cpp::EnvironmentIndex</a>, <a class="el" href="structrds2cpp_1_1AtomicVector.html#a708beabc7687eea3b6145cb09de5a32f">rds2cpp::AtomicVector&lt; ElementType, stype &gt;</a>, <a class="el" href="structrds2cpp_1_1StringVector.html#a8bfa8ead6efbb3e7fbe58580c40a1c61">rds2cpp::StringVector</a>, <a class="el" href="structrds2cpp_1_1GenericVector.html#a43b5fa96e496b57a7090523146078353">rds2cpp::GenericVector</a>, <a class="el" href="structrds2cpp_1_1PairList.html#a66acd5fb763645bdbd5880e82c5d3805">rds2cpp::PairList</a>, <a class="el" href="structrds2cpp_1_1S4Object.html#adcf2f0a6a6fbe9c647e13c45c1f8505e">rds2cpp::S4Object</a>, and <a class="el" href="structrds2cpp_1_1BuiltInFunction.html#ae67e34eec0eb4d75fc8b8d44a8d165e4">rds2cpp::BuiltInFunction</a>.</p>
+<p>Implemented in <a class="el" href="structrds2cpp_1_1Null.html#afbb49b7f52faa2f0f460b7a99bc5cb52">rds2cpp::Null</a>, <a class="el" href="structrds2cpp_1_1SymbolIndex.html#a94aeb9118804d619fbf1a7b8269c9609">rds2cpp::SymbolIndex</a>, <a class="el" href="structrds2cpp_1_1EnvironmentIndex.html#a919fd1864585a46ae8841a59726fc491">rds2cpp::EnvironmentIndex</a>, <a class="el" href="structrds2cpp_1_1AtomicVector.html#a708beabc7687eea3b6145cb09de5a32f">rds2cpp::AtomicVector&lt; ElementType, stype &gt;</a>, <a class="el" href="structrds2cpp_1_1StringVector.html#a8bfa8ead6efbb3e7fbe58580c40a1c61">rds2cpp::StringVector</a>, <a class="el" href="structrds2cpp_1_1GenericVector.html#a43b5fa96e496b57a7090523146078353">rds2cpp::GenericVector</a>, <a class="el" href="structrds2cpp_1_1PairList.html#a66acd5fb763645bdbd5880e82c5d3805">rds2cpp::PairList</a>, <a class="el" href="structrds2cpp_1_1S4Object.html#adcf2f0a6a6fbe9c647e13c45c1f8505e">rds2cpp::S4Object</a>, <a class="el" href="structrds2cpp_1_1BuiltInFunction.html#ae67e34eec0eb4d75fc8b8d44a8d165e4">rds2cpp::BuiltInFunction</a>, <a class="el" href="structrds2cpp_1_1LanguageObject.html#ae09e6c629273aa154bbb410871826878">rds2cpp::LanguageObject</a>, and <a class="el" href="structrds2cpp_1_1ExpressionVector.html#ac289540e98afc883b5eabe4d1685fe07">rds2cpp::ExpressionVector</a>.</p>
 
 </div>
 </div>

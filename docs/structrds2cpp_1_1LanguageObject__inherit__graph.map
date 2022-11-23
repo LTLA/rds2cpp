@@ -1,0 +1,4 @@
+<map id="rds2cpp::LanguageObject" name="rds2cpp::LanguageObject">
+<area shape="rect" id="node1" title="Language object, i.e., a function call." coords="5,79,175,104"/>
+<area shape="rect" id="node2" href="$structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects." coords="29,5,151,31"/>
+</map>

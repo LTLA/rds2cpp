@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pairlist_0',['PairList',['../structrds2cpp_1_1PairList.html',1,'rds2cpp']]]
+  ['null_0',['Null',['../structrds2cpp_1_1Null.html',1,'rds2cpp']]]
 ];
