@@ -179,6 +179,30 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, rds2cpp::Rds
             Rcpp::CharacterVector name(vec[0]);
             ptr->name = Rcpp::String(name[0]).get_cstring();
 
+        } else if (vec.hasAttribute("pretend-to-be-a-language")) {
+            auto ptr = new rds2cpp::LanguageObject;
+            output.reset(ptr);
+            Rcpp::CharacterVector name(vec[0]);
+            ptr->function_name = Rcpp::String(name[0]).get_cstring();
+
+            Rcpp::List arguments(vec[1]);
+            Rcpp::CharacterVector argnames;
+            if (arguments.hasAttribute("names")) {
+                argnames = arguments.names();
+            }
+
+            for (size_t a = 0; a < arguments.size(); ++a) {
+                if (argnames.size()) {
+                    std::string candidate = Rcpp::String(argnames[a]).get_cstring();
+                    if (!candidate.empty()) {
+                        ptr->add_argument(candidate, unconvert(arguments[a], globals));
+                        continue;
+                    }
+                }
+                ptr->add_argument(unconvert(arguments[a], globals));
+            }
+            add_attributes_except(x, ptr, globals, { "pretend-to-be-a-language" });
+
         } else {
             auto ptr = new rds2cpp::GenericVector;
             output.reset(ptr);

@@ -420,6 +420,125 @@ struct BuiltInFunction : public RObject {
     std::string name;
 };
 
+/**
+ * @brief Language object, i.e., a function call.
+ */
+struct LanguageObject : public RObject {
+
+    SEXPType type() const { return SEXPType::LANG; }
+
+    /**
+     * Name of the function.
+     */
+    std::string function_name;
+
+    /**
+     * Encoding for the function name.
+     */
+    StringEncoding function_encoding = StringEncoding::UTF8;
+
+    /**
+     * Values of the arguments to the function, typically `LanguageObject` or `SymbolIndex` objects.
+     * These may also be `AtomicVector` instances of length 1.
+     */
+    std::vector<std::unique_ptr<RObject> > argument_values;
+
+    /**
+     * Whether or not each argument is named.
+     * This should have the same length as `argument_values`.
+     */
+    std::vector<std::string> argument_names;
+
+    /**
+     * The name of the argument, if the corresponding entry of `argument_names` is `true`.
+     * This should have the same length as `argument_values`.
+     */
+    std::vector<unsigned char> argument_has_name;
+
+    /**
+     * Encoding of the argument name, if the corresponding entry of `argument_names` is `true`.
+     * This should have the same length as `argument_values`.
+     */
+    std::vector<StringEncoding> argument_encodings;
+
+    /**
+     * A convenient helper to add a named argument to the end of the argument list.
+     *
+     * @param n Argument name.
+     * @param d Unique pointer to the argument value.
+     * This should not be owned by any other resource.
+     * @param enc Encoding of the argument name.
+     */
+    void add_argument(std::string n, RObject* d, StringEncoding enc = StringEncoding::UTF8) {
+        argument_names.push_back(std::move(n));
+        argument_values.emplace_back(d);
+        argument_has_name.push_back(true);
+        argument_encodings.push_back(enc);
+    }
+
+    /**
+     * A convenient helper to add a named argument to the end of the argument list.
+     *
+     * @param n Argument name.
+     * @param d Unique pointer to the argument value.
+     * @param enc Encoding of the argument name.
+     */
+    void add_argument(std::string n, std::unique_ptr<RObject> d, StringEncoding enc = StringEncoding::UTF8) {
+        argument_names.push_back(std::move(n));
+        argument_values.push_back(std::move(d));
+        argument_has_name.push_back(true);
+        argument_encodings.push_back(enc);
+    }
+
+    /**
+     * A convenient helper to add an unnamed argument to the end of the argument list.
+     *
+     * @param d Pointer to the argument value.
+     * This should not be owned by any other resource.
+     */
+    void add_argument(RObject* d) {
+        argument_names.resize(argument_names.size() + 1);
+        argument_values.emplace_back(d);
+        argument_has_name.push_back(false);
+        argument_encodings.push_back(StringEncoding::NONE);
+    }
+
+    /**
+     * A convenient helper to add an unnamed argument to the end of the argument list.
+     *
+     * @param d Pointer to the argument value.
+     */
+    void add_argument(std::unique_ptr<RObject> d) {
+        argument_names.resize(argument_names.size() + 1);
+        argument_values.push_back(std::move(d));
+        argument_has_name.push_back(false);
+        argument_encodings.push_back(StringEncoding::NONE);
+    }
+
+    /**
+     * Additional attributes.
+     */
+    Attributes attributes;
+};
+
+/**
+ * @brief Expression vector.
+ */
+struct ExpressionVector : public RObject {
+    SEXPType type() const { return SEXPType::EXPR; }
+
+    /**
+     * Vector of pointers to R expressions, typically `LanguageObject` or `SymbolIndex` objects.
+     * These may also be `AtomicVector` instances of length 1.
+     */
+    std::vector<std::unique_ptr<RObject> > data;
+
+    /**
+     * Additional attributes.
+     */
+    Attributes attributes;
+};
+
 }
 
 #endif

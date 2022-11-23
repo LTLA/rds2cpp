@@ -128,6 +128,25 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         output.attr("pretend-to-be-a-builtin") = Rcpp::LogicalVector::create(1);
         return output;
 
+    } else if (input->type() == rds2cpp::SEXPType::LANG) {
+        auto lang = static_cast<const rds2cpp::LanguageObject*>(input);
+        Rcpp::List output(2);
+        output[0] = Rcpp::CharacterVector::create(lang->function_name);
+
+        size_t nargs = lang->argument_values.size();
+        Rcpp::List args(nargs);
+        Rcpp::CharacterVector names(nargs);
+        for (size_t i = 0; i < nargs; ++i) {
+            args[i] = convert(lang->argument_values[i].get());
+            names[i] = lang->argument_names[i]; 
+        }
+        args.attr("arg-names") = names;
+        output[1] = args;
+
+        output.attr("pretend-to-be-a-language") = Rcpp::LogicalVector::create(1);
+        add_attributes(lang->attributes, output);
+        return output;
+
     } else if (input->type() == rds2cpp::SEXPType::SYM) {
         auto sdx = static_cast<const rds2cpp::SymbolIndex*>(input);
         return Rcpp::List::create(Rcpp::Named("id") = Rcpp::IntegerVector::create(sdx->index));

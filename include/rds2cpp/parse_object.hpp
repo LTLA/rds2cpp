@@ -20,6 +20,7 @@
 #include "parse_s4.hpp"
 #include "parse_environment.hpp"
 #include "parse_builtin.hpp"
+#include "parse_language.hpp"
 
 namespace rds2cpp {
 
@@ -67,6 +68,9 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::BUILTIN)) {
         pointerize_(parse_builtin_function(reader, leftovers));
+
+    } else if (sexp_type == static_cast<unsigned char>(SEXPType::LANG)) {
+        pointerize_(parse_language_body(reader, leftovers, details, shared));
 
     } else {
         Attributes* attr = nullptr;
