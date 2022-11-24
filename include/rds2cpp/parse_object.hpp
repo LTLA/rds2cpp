@@ -68,7 +68,7 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
         output = shared.resolve_reference(details);
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::BUILTIN)) {
-        pointerize_(parse_builtin_function(reader, leftovers));
+        pointerize_(parse_builtin_body(reader, leftovers));
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::LANG)) {
         pointerize_(parse_language_body(reader, leftovers, details, shared));

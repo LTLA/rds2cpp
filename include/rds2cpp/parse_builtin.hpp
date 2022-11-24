@@ -10,7 +10,7 @@
 namespace rds2cpp {
 
 template<class Reader>
-BuiltInFunction parse_builtin_function(Reader& reader, std::vector<unsigned char>& leftovers) {
+BuiltInFunction parse_builtin_body(Reader& reader, std::vector<unsigned char>& leftovers) {
     size_t len = get_length(reader, leftovers);
 
     BuiltInFunction output;
