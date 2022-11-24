@@ -1,22 +1,26 @@
 <map id="rds2cpp/rds2cpp.hpp" name="rds2cpp/rds2cpp.hpp">
-<area shape="rect" id="node1" title="Entrypoint header." coords="703,5,846,31"/>
-<area shape="rect" id="node2" href="$parse__rds_8hpp.html" title="Parse an RDS file." coords="1073,79,1175,104"/>
-<area shape="rect" id="node11" href="$write__rds_8hpp.html" title="Write an RDS file." coords="443,79,541,104"/>
-<area shape="rect" id="node3" title=" " coords="919,152,987,177"/>
-<area shape="rect" id="node4" title=" " coords="1012,152,1087,177"/>
-<area shape="rect" id="node5" title=" " coords="863,225,924,251"/>
-<area shape="rect" id="node6" title=" " coords="804,152,895,177"/>
-<area shape="rect" id="node7" title=" " coords="1162,152,1233,177"/>
-<area shape="rect" id="node8" title=" " coords="1257,152,1399,177"/>
-<area shape="rect" id="node9" title=" " coords="1424,152,1544,177"/>
-<area shape="rect" id="node10" title=" " coords="1569,152,1757,177"/>
-<area shape="rect" id="node12" title=" " coords="163,225,221,251"/>
-<area shape="rect" id="node13" href="$RObject_8hpp.html" title="Representations of unserialized R objects." coords="253,152,347,177"/>
-<area shape="rect" id="node17" title=" " coords="371,152,477,177"/>
-<area shape="rect" id="node18" title=" " coords="501,152,617,177"/>
-<area shape="rect" id="node19" title=" " coords="641,152,780,177"/>
-<area shape="rect" id="node20" title=" " coords="5,152,179,177"/>
-<area shape="rect" id="node14" title=" " coords="537,225,607,251"/>
-<area shape="rect" id="node15" href="$SEXPType_8hpp.html" title="R data types." coords="245,225,355,251"/>
-<area shape="rect" id="node16" href="$StringEncoding_8hpp.html" title="String encodings." coords="379,225,512,251"/>
+<area shape="rect" id="node1" title="Entrypoint header." coords="659,5,801,31"/>
+<area shape="rect" id="node2" href="$parse__rds_8hpp.html" title="Parse an RDS file." coords="363,79,465,104"/>
+<area shape="rect" id="node20" href="$write__rds_8hpp.html" title="Write an RDS file." coords="1042,79,1141,104"/>
+<area shape="rect" id="node3" title=" " coords="5,152,73,177"/>
+<area shape="rect" id="node4" title=" " coords="98,152,173,177"/>
+<area shape="rect" id="node5" title=" " coords="381,299,442,324"/>
+<area shape="rect" id="node6" href="$RdsFile_8hpp.html" title="Information about an RDS file." coords="867,152,958,177"/>
+<area shape="rect" id="node16" title=" " coords="248,152,319,177"/>
+<area shape="rect" id="node17" title=" " coords="343,152,485,177"/>
+<area shape="rect" id="node18" title=" " coords="510,152,630,177"/>
+<area shape="rect" id="node19" title=" " coords="655,152,843,177"/>
+<area shape="rect" id="node7" title=" " coords="697,225,747,251"/>
+<area shape="rect" id="node8" href="$RObject_8hpp.html" title="Representations of unserialized R objects." coords="771,225,865,251"/>
+<area shape="rect" id="node13" href="$Environment_8hpp.html" title="Representation of an R environment." coords="889,225,1008,251"/>
+<area shape="rect" id="node15" href="$Symbol_8hpp.html" title="Representation of an R symbol." coords="1084,225,1173,251"/>
+<area shape="rect" id="node9" title=" " coords="897,299,955,324"/>
+<area shape="rect" id="node10" title=" " coords="668,299,739,324"/>
+<area shape="rect" id="node11" href="$SEXPType_8hpp.html" title="R data types." coords="763,299,873,324"/>
+<area shape="rect" id="node12" href="$StringEncoding_8hpp.html" title="String encodings." coords="979,299,1113,324"/>
+<area shape="rect" id="node14" title=" " coords="1137,299,1192,324"/>
+<area shape="rect" id="node21" title=" " coords="1084,152,1189,177"/>
+<area shape="rect" id="node22" title=" " coords="1213,152,1329,177"/>
+<area shape="rect" id="node23" title=" " coords="1354,152,1493,177"/>
+<area shape="rect" id="node24" title=" " coords="1517,152,1690,177"/>
 </map>

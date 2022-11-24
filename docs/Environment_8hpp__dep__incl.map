@@ -1,0 +1,7 @@
+<map id="rds2cpp/Environment.hpp" name="rds2cpp/Environment.hpp">
+<area shape="rect" id="node1" title="Representation of an R environment." coords="86,5,254,31"/>
+<area shape="rect" id="node2" href="$RdsFile_8hpp.html" title="Information about an RDS file." coords="100,79,240,104"/>
+<area shape="rect" id="node3" href="$parse__rds_8hpp.html" title="Parse an RDS file." coords="5,152,159,177"/>
+<area shape="rect" id="node5" href="$write__rds_8hpp.html" title="Write an RDS file." coords="183,152,333,177"/>
+<area shape="rect" id="node4" href="$rds2cpp_8hpp.html" title="Entrypoint header." coords="99,225,241,251"/>
+</map>

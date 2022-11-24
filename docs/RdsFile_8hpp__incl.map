@@ -1,0 +1,13 @@
+<map id="rds2cpp/RdsFile.hpp" name="rds2cpp/RdsFile.hpp">
+<area shape="rect" id="node1" title="Information about an RDS file." coords="211,5,351,31"/>
+<area shape="rect" id="node2" title=" " coords="95,79,145,104"/>
+<area shape="rect" id="node3" href="$RObject_8hpp.html" title="Representations of unserialized R objects." coords="169,79,263,104"/>
+<area shape="rect" id="node9" href="$Environment_8hpp.html" title="Representation of an R environment." coords="287,79,406,104"/>
+<area shape="rect" id="node11" href="$Symbol_8hpp.html" title="Representation of an R symbol." coords="430,79,519,104"/>
+<area shape="rect" id="node4" title=" " coords="187,152,245,177"/>
+<area shape="rect" id="node5" title=" " coords="5,152,67,177"/>
+<area shape="rect" id="node6" title=" " coords="91,152,162,177"/>
+<area shape="rect" id="node7" href="$SEXPType_8hpp.html" title="R data types." coords="269,152,379,177"/>
+<area shape="rect" id="node8" href="$StringEncoding_8hpp.html" title="String encodings." coords="403,152,536,177"/>
+<area shape="rect" id="node10" title=" " coords="561,152,615,177"/>
+</map>
