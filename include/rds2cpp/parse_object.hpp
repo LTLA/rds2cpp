@@ -21,6 +21,7 @@
 #include "parse_environment.hpp"
 #include "parse_builtin.hpp"
 #include "parse_language.hpp"
+#include "parse_expression.hpp"
 
 namespace rds2cpp {
 
@@ -89,6 +90,8 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
             attr = pointerize_attr(parse_string_body(reader, leftovers));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::VEC)) {
             attr = pointerize_attr(parse_list_body(reader, leftovers, shared));
+        } else if (sexp_type == static_cast<unsigned char>(SEXPType::EXPR)) {
+            attr = pointerize_attr(parse_expression_body(reader, leftovers, shared));
         } else {
             throw std::runtime_error("cannot read unknown (or unsupported) SEXP type " + std::to_string(static_cast<int>(sexp_type)));
         }

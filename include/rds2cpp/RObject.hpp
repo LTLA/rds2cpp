@@ -525,6 +525,14 @@ struct LanguageObject : public RObject {
  * @brief Expression vector.
  */
 struct ExpressionVector : public RObject {
+    /**
+     * @cond
+     */
+    ExpressionVector(size_t n = 0) : data(n) {}
+    /**
+     * @endcond
+     */
+
     SEXPType type() const { return SEXPType::EXPR; }
 
     /**

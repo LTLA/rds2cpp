@@ -10,6 +10,7 @@
 #include "write_pairlist.hpp"
 #include "write_builtin.hpp"
 #include "write_language.hpp"
+#include "write_expression.hpp"
 #include <vector>
 
 namespace rds2cpp {
@@ -59,6 +60,9 @@ void write_object(const RObject* object, Writer& writer, std::vector<unsigned ch
             break;
         case SEXPType::LANG:
             write_language(object, writer, buffer, shared);
+            break;
+        case SEXPType::EXPR:
+            write_expression(object, writer, buffer, shared);
             break;
         case SEXPType::ENV: 
         case SEXPType::GLOBALENV_:

@@ -147,6 +147,17 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         add_attributes(lang->attributes, output);
         return output;
 
+    } else if (input->type() == rds2cpp::SEXPType::EXPR) {
+        auto expr = static_cast<const rds2cpp::ExpressionVector*>(input);
+        const auto& data = expr->data;
+        Rcpp::List output(data.size());
+        for (size_t i = 0; i < data.size(); ++i) {
+            output[i] = convert(data[i].get());
+        }
+        output.attr("pretend-to-be-an-expression") = Rcpp::LogicalVector::create(1);
+        add_attributes(expr->attributes, output);
+        return output;
+
     } else if (input->type() == rds2cpp::SEXPType::SYM) {
         auto sdx = static_cast<const rds2cpp::SymbolIndex*>(input);
         return Rcpp::List::create(Rcpp::Named("id") = Rcpp::IntegerVector::create(sdx->index));

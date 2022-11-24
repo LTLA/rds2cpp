@@ -203,6 +203,14 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, rds2cpp::Rds
             }
             add_attributes_except(x, ptr, globals, { "pretend-to-be-a-language" });
 
+        } else if (vec.hasAttribute("pretend-to-be-an-expression")) {
+            auto ptr = new rds2cpp::ExpressionVector;
+            output.reset(ptr);
+            for (size_t i = 0; i < vec.size(); ++i) {
+                ptr->data.push_back(unconvert(vec[i], globals));
+            }
+            add_attributes_except(x, ptr, globals, { "pretend-to-be-an-expression" });
+
         } else {
             auto ptr = new rds2cpp::GenericVector;
             output.reset(ptr);
