@@ -19,6 +19,7 @@
 #include "parse_altrep.hpp"
 #include "parse_s4.hpp"
 #include "parse_environment.hpp"
+#include "parse_external_pointer.hpp"
 #include "parse_builtin.hpp"
 #include "parse_language.hpp"
 #include "parse_expression.hpp"
@@ -60,6 +61,9 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::ENV)) {
         pointerize_(parse_new_environment_body(reader, leftovers, details, shared));
+
+    } else if (sexp_type == static_cast<unsigned char>(SEXPType::EXTPTR)) {
+        pointerize_(parse_external_pointer_body(reader, leftovers, details, shared));
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::GLOBALENV_)) {
         pointerize_(parse_global_environment_body(reader, leftovers, shared));

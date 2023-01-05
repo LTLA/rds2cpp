@@ -211,6 +211,24 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, rds2cpp::Rds
             }
             add_attributes_except(x, ptr, globals, { "pretend-to-be-an-expression" });
 
+        } else if (vec.hasAttribute("pretend-to-be-an-external-pointer")) {
+            Rcpp::IntegerVector extptr_index = vec.attr("external-pointer-index");
+            auto index = extptr_index[0];
+
+            auto ptr = new rds2cpp::ExternalPointerIndex;
+            output.reset(ptr);
+            ptr->index = index;
+
+            if (static_cast<size_t>(index) == globals.external_pointers.size()) {
+                rds2cpp::ExternalPointer latest;
+                latest.protection = unconvert(vec[0], globals);
+                latest.tag= unconvert(vec[1], globals);
+                add_attributes_except(x, &latest, globals, { "pretend-to-be-an-external-pointer", "external-pointer-index" });
+                globals.external_pointers.push_back(std::move(latest));
+            } else if (static_cast<size_t>(index) > globals.external_pointers.size()) {
+                throw std::runtime_error("environment index out of range");
+            }
+
         } else {
             auto ptr = new rds2cpp::GenericVector;
             output.reset(ptr);

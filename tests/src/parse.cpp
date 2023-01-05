@@ -166,6 +166,10 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         auto edx = static_cast<const rds2cpp::EnvironmentIndex*>(input);
         return Rcpp::List::create(Rcpp::Named("id") = Rcpp::IntegerVector::create(edx->index));
 
+    } else if (input->type() == rds2cpp::SEXPType::EXTPTR) {
+        auto edx = static_cast<const rds2cpp::ExternalPointerIndex*>(input);
+        return Rcpp::List::create(Rcpp::Named("id") = Rcpp::IntegerVector::create(edx->index));
+
     } else if (input->type() == rds2cpp::SEXPType::GLOBALENV_) {
         return Rcpp::List::create(Rcpp::Named("id") = Rcpp::IntegerVector::create(-1));
     }
@@ -191,6 +195,7 @@ Rcpp::RObject parse_details(std::string file_name) {
         return R_NilValue;
     } 
 
+    // Fetching environments.
     size_t nenvs = output.environments.size();
     Rcpp::List all_envs(nenvs);
     for (size_t e = 0; e < nenvs; ++e) {
@@ -214,8 +219,23 @@ Rcpp::RObject parse_details(std::string file_name) {
         all_envs[e] = curout;
     }
 
-    size_t nsyms = output.symbols.size();
+    // Fetching external pointers.
+    size_t nexts = output.external_pointers.size();
+    Rcpp::List all_exts(nexts);
+    for (size_t e = 0; e < nexts; ++e) {
+        const auto& ext = output.external_pointers[e];
 
+        Rcpp::List output = Rcpp::List::create(
+            Rcpp::Named("protection") = convert(ext.protection.get()),
+            Rcpp::Named("tag") = convert(ext.tag.get())
+        );
+        add_attributes(ext.attributes, output);
+
+        all_exts[e] = output;
+    }
+
+    // Fetching symbols.
+    size_t nsyms = output.symbols.size();
     Rcpp::StringVector all_symb(nsyms);
     for (size_t s = 0; s < nsyms; ++s) {
         const auto& sym = output.symbols[s];
@@ -225,6 +245,7 @@ Rcpp::RObject parse_details(std::string file_name) {
     return Rcpp::List::create(
         Rcpp::Named("value") = convert(output.object.get()),           
         Rcpp::Named("environments") = all_envs,
-        Rcpp::Named("symbols") = all_symb
+        Rcpp::Named("symbols") = all_symb,
+        Rcpp::Named("external_pointers") = all_exts
     );
 }

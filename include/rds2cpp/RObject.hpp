@@ -61,7 +61,7 @@ struct SymbolIndex : public RObject {
     SEXPType type() const { return SEXPType::SYM; }
 
     /**
-     * Index into the `symbols` vector of the `Parsed` object.
+     * Index into the `symbols` vector of the `RdsFile` object.
      */
     size_t index;
 };
@@ -91,7 +91,7 @@ struct EnvironmentIndex : public RObject {
     SEXPType type() const { return env_type; }
 
     /**
-     * Index into the `environments` vector of the `Parsed` object.
+     * Index into the `environments` vector of the `RdsFile` object.
      * This is only used if `type()` returns `ENV`.
      */
     size_t index;
@@ -101,6 +101,24 @@ struct EnvironmentIndex : public RObject {
      * This can be modified if it changes after construction. 
      */
     SEXPType env_type;
+};
+
+/**
+ * @brief Reference to an external pointer.
+ */
+struct ExternalPointerIndex : public RObject {
+    /**
+     * @param i Value of the external pointer index.
+     */
+    ExternalPointerIndex(size_t i = -1) : index(i) {}
+
+
+    SEXPType type() const { return SEXPType::EXTPTR; }
+
+    /**
+     * Index into the `external_pointers` vector of the `RdsFile` object.
+     */
+    size_t index;
 };
 
 /**
