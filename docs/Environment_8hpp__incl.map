@@ -1,7 +1,7 @@
 <map id="rds2cpp/Environment.hpp" name="rds2cpp/Environment.hpp">
-<area shape="rect" id="node1" title="Representation of an R environment." coords="91,5,259,31"/>
-<area shape="rect" id="node2" title=" " coords="5,79,64,104"/>
-<area shape="rect" id="node3" title=" " coords="89,79,143,104"/>
-<area shape="rect" id="node4" href="$StringEncoding_8hpp.html" title="String encodings." coords="168,79,301,104"/>
-<area shape="rect" id="node5" href="$SEXPType_8hpp.html" title="R data types." coords="325,79,435,104"/>
+<area shape="rect" id="node1" title="Representation of an R environment." alt="" coords="91,5,259,31"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,79,64,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="89,79,143,104"/>
+<area shape="rect" id="node4" href="$StringEncoding_8hpp.html" title="String encodings." alt="" coords="168,79,301,104"/>
+<area shape="rect" id="node5" href="$SEXPType_8hpp.html" title="R data types." alt="" coords="325,79,435,104"/>
 </map>

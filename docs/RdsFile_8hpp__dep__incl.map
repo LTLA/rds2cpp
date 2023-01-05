@@ -1,6 +1,6 @@
 <map id="rds2cpp/RdsFile.hpp" name="rds2cpp/RdsFile.hpp">
-<area shape="rect" id="node1" title="Information about an RDS file." coords="100,5,240,31"/>
-<area shape="rect" id="node2" href="$parse__rds_8hpp.html" title="Parse an RDS file." coords="5,79,159,104"/>
-<area shape="rect" id="node4" href="$write__rds_8hpp.html" title="Write an RDS file." coords="183,79,333,104"/>
-<area shape="rect" id="node3" href="$rds2cpp_8hpp.html" title="Entrypoint header." coords="99,152,241,177"/>
+<area shape="rect" id="node1" title="Information about an RDS file." alt="" coords="100,5,240,31"/>
+<area shape="rect" id="node2" href="$parse__rds_8hpp.html" title="Parse an RDS file." alt="" coords="5,79,159,104"/>
+<area shape="rect" id="node4" href="$write__rds_8hpp.html" title="Write an RDS file." alt="" coords="183,79,333,104"/>
+<area shape="rect" id="node3" href="$rds2cpp_8hpp.html" title="Entrypoint header." alt="" coords="99,152,241,177"/>
 </map>

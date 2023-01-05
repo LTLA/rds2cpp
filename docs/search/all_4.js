@@ -7,5 +7,7 @@ var searchData=
   ['environment_2ehpp_4',['Environment.hpp',['../Environment_8hpp.html',1,'']]],
   ['environmentindex_5',['EnvironmentIndex',['../structrds2cpp_1_1EnvironmentIndex.html#ac50ff843b19bfaa8d3395bea0a517a38',1,'rds2cpp::EnvironmentIndex::EnvironmentIndex(SEXPType e=SEXPType::GLOBALENV_)'],['../structrds2cpp_1_1EnvironmentIndex.html#a968a0c890622b9e7514e8dd16674960b',1,'rds2cpp::EnvironmentIndex::EnvironmentIndex(size_t i)'],['../structrds2cpp_1_1EnvironmentIndex.html',1,'rds2cpp::EnvironmentIndex']]],
   ['environments_6',['environments',['../structrds2cpp_1_1RdsFile.html#aebd7594b4d63ea1537a6c460b482ce00',1,'rds2cpp::RdsFile']]],
-  ['expressionvector_7',['ExpressionVector',['../structrds2cpp_1_1ExpressionVector.html',1,'rds2cpp']]]
+  ['expressionvector_7',['ExpressionVector',['../structrds2cpp_1_1ExpressionVector.html',1,'rds2cpp']]],
+  ['external_5fpointers_8',['external_pointers',['../structrds2cpp_1_1RdsFile.html#a643c9a2ecb62557a061c52babc542b80',1,'rds2cpp::RdsFile']]],
+  ['externalpointerindex_9',['ExternalPointerIndex',['../structrds2cpp_1_1ExternalPointerIndex.html#ab2354f8940040b0236a2cbfdf5f5a3e3',1,'rds2cpp::ExternalPointerIndex::ExternalPointerIndex()'],['../structrds2cpp_1_1ExternalPointerIndex.html',1,'rds2cpp::ExternalPointerIndex']]]
 ];
