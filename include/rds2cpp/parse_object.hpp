@@ -9,7 +9,7 @@
 #include "SEXPType.hpp"
 #include "RObject.hpp"
 #include "SharedParseInfo.hpp"
-#include "utils.hpp"
+#include "utils_parse.hpp"
 
 #include "parse_atomic.hpp"
 #include "parse_list.hpp"

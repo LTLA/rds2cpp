@@ -8,7 +8,7 @@
 #include <limits>
 
 #include "RObject.hpp"
-#include "utils.hpp"
+#include "utils_parse.hpp"
 #include "parse_single_string.hpp"
 #include "parse_attributes.hpp"
 

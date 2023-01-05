@@ -1,7 +1,7 @@
 #ifndef RDS2CPP_STRING_HPP
 #define RDS2CPP_STRING_HPP
 
-#include "utils.hpp"
+#include "utils_parse.hpp"
 #include "SEXPType.hpp"
 #include "StringEncoding.hpp"
 #include <string>

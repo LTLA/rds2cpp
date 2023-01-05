@@ -7,7 +7,6 @@
 
 #include "RObject.hpp"
 #include "SharedWriteInfo.hpp"
-#include "utils.hpp"
 #include "utils_write.hpp"
 #include "write_single_string.hpp"
 #include "write_attributes.hpp"

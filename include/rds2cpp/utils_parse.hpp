@@ -1,5 +1,5 @@
-#ifndef RDS2CPP_UTILS_HPP
-#define RDS2CPP_UTILS_HPP
+#ifndef RDS2CPP_UTILS_PARSE_HPP
+#define RDS2CPP_UTILS_PARSE_HPP
 
 #include <algorithm>
 #include <vector>

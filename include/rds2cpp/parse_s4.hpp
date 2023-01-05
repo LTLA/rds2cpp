@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "RObject.hpp"
-#include "utils.hpp"
+#include "utils_parse.hpp"
 #include "SharedParseInfo.hpp"
 
 namespace rds2cpp {

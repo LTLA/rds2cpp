@@ -6,7 +6,7 @@
 
 #include "RObject.hpp"
 #include "SharedParseInfo.hpp"
-#include "utils.hpp"
+#include "utils_parse.hpp"
 
 namespace rds2cpp {
 

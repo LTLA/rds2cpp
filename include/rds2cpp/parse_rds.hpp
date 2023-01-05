@@ -6,7 +6,7 @@
 #include <cstdint>
 
 #include "RdsFile.hpp"
-#include "utils.hpp"
+#include "utils_parse.hpp"
 #include "SharedParseInfo.hpp"
 #include "parse_object.hpp"
 

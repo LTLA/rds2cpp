@@ -10,7 +10,7 @@
 #include "ExternalPointer.hpp"
 #include "RObject.hpp"
 #include "SEXPType.hpp"
-#include "utils.hpp"
+#include "utils_parse.hpp"
 
 namespace rds2cpp {
 
