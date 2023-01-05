@@ -4,6 +4,7 @@
 #include <array>
 #include "RObject.hpp"
 #include "Environment.hpp"
+#include "ExternalPointer.hpp"
 #include "Symbol.hpp"
 
 /**
@@ -77,6 +78,12 @@ struct RdsFile {
      * This can be referenced by the `index` in `SymbolIndex`.
      */
     std::vector<Symbol> symbols;
+
+    /**
+     * All external pointers inside the file.
+     * This can be referenced by the `index` in `ExternalPointerIndex`.
+     */
+    std::vector<ExternalPointer> external_pointers;
 };
 
 }

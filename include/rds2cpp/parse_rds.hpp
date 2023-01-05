@@ -99,6 +99,7 @@ RdsFile parse_rds(Reader& reader) {
     output.object = parse_object(reader, leftovers, shared);
     output.environments = std::move(shared.environments);
     output.symbols = std::move(shared.symbols);
+    output.external_pointers = std::move(shared.external_pointers);
 
     return output;
 }
