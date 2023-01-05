@@ -68,6 +68,9 @@ void write_object(const RObject* object, Writer& writer, std::vector<unsigned ch
         case SEXPType::GLOBALENV_:
             shared.write_environment(object, writer, buffer);
             break;
+        case SEXPType::EXTPTR:
+            shared.write_external_pointer(object, writer, buffer);
+            break;
         default:
             throw std::runtime_error("unsupported SEXP type '" + std::to_string(static_cast<int>(object->type())) + "' for writing");
     }
