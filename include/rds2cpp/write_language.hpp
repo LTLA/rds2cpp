@@ -17,19 +17,15 @@ void write_object(const RObject*, Writer&, std::vector<unsigned char>&, SharedWr
 template<class Writer>
 void write_language(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
     const LanguageObject& input = *static_cast<const LanguageObject*>(object);
-    bool has_attr = input.attributes.names.size();
 
     // Just another pairlist, but starting with a different SEXP type.
     buffer.clear();
-    buffer.push_back(0);
-    buffer.push_back(0); 
-    buffer.push_back(has_attr ? 0x2 : 0);
-    buffer.push_back(static_cast<unsigned char>(SEXPType::LANG));
+    inject_header(SEXPType::LANG, input.attributes, buffer);
     writer.write(buffer.data(), buffer.size());
 
-    if (has_attr) {
-        write_attributes(input.attributes, writer, buffer, shared);
-    }
+    // Attributes before the rest of the content.
+    write_attributes(input.attributes, writer, buffer, shared);
+
     shared.write_symbol(input.function_name, input.function_encoding, writer, buffer);
 
     const auto& values = input.argument_values;
@@ -40,10 +36,7 @@ void write_language(const RObject* object, Writer& writer, std::vector<unsigned 
 
     for (size_t i = 0; i < n; ++i) {
         buffer.clear();
-        buffer.push_back(0);
-        buffer.push_back(0); 
-        buffer.push_back(has_tag[i] ? 0x4 : 0);
-        buffer.push_back(static_cast<unsigned char>(SEXPType::LIST));
+        inject_next_pairlist_header(has_tag[i], buffer);
         writer.write(buffer.data(), buffer.size());
 
         if (has_tag[i]) {
@@ -53,10 +46,7 @@ void write_language(const RObject* object, Writer& writer, std::vector<unsigned 
     }
 
     buffer.clear();
-    buffer.push_back(0);
-    buffer.push_back(0);
-    buffer.push_back(0);
-    buffer.push_back(static_cast<unsigned char>(SEXPType::NILVALUE_));
+    inject_header(SEXPType::NILVALUE_, buffer);
     writer.write(buffer.data(), buffer.size());
     return;
 }

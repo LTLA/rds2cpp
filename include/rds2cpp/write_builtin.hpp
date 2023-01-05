@@ -16,7 +16,7 @@ void write_builtin(const RObject* object, Writer& writer, std::vector<unsigned c
     auto ptr = static_cast<const BuiltInFunction*>(object);
 
     buffer.clear();
-    inject_header<false>(*ptr, buffer);
+    inject_header(*ptr, buffer);
 
     size_t len = ptr->name.size();
     inject_length(len, buffer);

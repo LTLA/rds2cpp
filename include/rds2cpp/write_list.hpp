@@ -18,7 +18,7 @@ template<class Writer>
 void write_list(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
     auto ptr = static_cast<const GenericVector*>(object);
     buffer.clear();
-    inject_header<true>(*ptr, buffer);
+    inject_header(*ptr, buffer);
 
     size_t len = ptr->data.size();
     inject_length(len, buffer);

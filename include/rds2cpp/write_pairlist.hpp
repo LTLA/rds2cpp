@@ -26,8 +26,7 @@ void write_pairlist(const RObject* object, Writer& writer, std::vector<unsigned 
 
     for (size_t i = 0; i < n; ++i) {
         buffer.clear();
-        buffer.push_back(0);
-        buffer.push_back(0); 
+        buffer.insert(buffer.end(), 2, 0);
 
         // see logic in parse_pairlist.
         unsigned char x = 0;
@@ -37,8 +36,8 @@ void write_pairlist(const RObject* object, Writer& writer, std::vector<unsigned 
         if (has_tag[i]) {
             x |= 0x4;
         }
-
         buffer.push_back(x);
+
         buffer.push_back(static_cast<unsigned char>(SEXPType::LIST));
         writer.write(buffer.data(), buffer.size());
 
@@ -53,10 +52,7 @@ void write_pairlist(const RObject* object, Writer& writer, std::vector<unsigned 
     }
 
     buffer.clear();
-    buffer.push_back(0);
-    buffer.push_back(0);
-    buffer.push_back(0);
-    buffer.push_back(static_cast<unsigned char>(SEXPType::NILVALUE_));
+    inject_header(SEXPType::NILVALUE_, buffer);
     writer.write(buffer.data(), buffer.size());
     return;
 }

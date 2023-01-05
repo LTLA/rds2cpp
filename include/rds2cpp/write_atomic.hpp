@@ -18,7 +18,8 @@ namespace atomic_internal {
 template<class Vector>
 void set_vector_header(Vector& vec, std::vector<unsigned char>& buffer) {
     buffer.clear();
-    inject_header<true>(vec, buffer);    
+    inject_header(vec, buffer);
+    return;
 }
 
 template<class Vector, class Writer>

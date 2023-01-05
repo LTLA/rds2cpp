@@ -45,8 +45,7 @@ void write_object(const RObject* object, Writer& writer, std::vector<unsigned ch
         case SEXPType::NIL:
         case SEXPType::NILVALUE_:
             buffer.clear();
-            buffer.resize(4);
-            buffer[3] = static_cast<unsigned char>(SEXPType::NILVALUE_); // just using 255 consistently, as this seems to be what R uses for NULLs.
+            inject_header(SEXPType::NILVALUE_, buffer);
             writer.write(buffer.data(), buffer.size());
             break;
         case SEXPType::LIST:

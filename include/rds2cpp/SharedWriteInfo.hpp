@@ -76,12 +76,9 @@ public:
         }
 
         buffer.clear();
-        buffer.push_back(0);
-        buffer.push_back(0);
-        buffer.push_back(0);
-        buffer.push_back(static_cast<unsigned char>(SEXPType::SYM));
-
+        inject_header(SEXPType::SYM, buffer);
         writer.write(buffer.data(), buffer.size());
+
         write_single_string(value, encoding, false, writer, buffer);
 
         host[value] = reference_count;
@@ -101,7 +98,7 @@ public:
             write_reference(candidate, writer, buffer);
         } else {
             const auto& sym = (*known_symbols)[index];
-            known_symbol_mappings[index] = write_symbol(sym.name, sym.encoding, writer, buffer);
+            candidate = write_symbol(sym.name, sym.encoding, writer, buffer);
         }
     }
 
@@ -123,11 +120,8 @@ public:
 
         const auto& ext = (*known_external_pointers)[index];
 
-        buffer.resize(4);
-        buffer[0] = 0;
-        buffer[1] = 0;
-        buffer[2] = (ext.attributes.names.size() ? 0x2 : 0);
-        buffer[3] = static_cast<unsigned char>(SEXPType::EXTPTR);
+        buffer.clear();
+        inject_header(SEXPType::EXTPTR, ext.attributes, buffer);
         writer.write(buffer.data(), buffer.size());
 
         write_object(ext.protection.get(), writer, buffer, *this);
@@ -145,11 +139,8 @@ public:
         auto env_type = ptr->env_type;
 
         if (env_type == SEXPType::GLOBALENV_) {
-            buffer.resize(4);
-            buffer[0] = 0;
-            buffer[1] = 0;
-            buffer[2] = 0;
-            buffer[3] = static_cast<unsigned char>(SEXPType::GLOBALENV_);
+            buffer.clear();
+            inject_header(SEXPType::GLOBALENV_, buffer);
             writer.write(buffer.data(), buffer.size());
             return;
         }
@@ -167,19 +158,12 @@ public:
         candidate = reference_count++;
         const auto& env = (*known_environments)[index];
 
-        {
-            buffer.resize(8);
-            buffer[0] = 0;
-            buffer[1] = 0;
-            buffer[2] = 0;
-            buffer[3] = static_cast<unsigned char>(SEXPType::ENV);
+        buffer.clear();
+        inject_header(SEXPType::ENV, env.attributes, buffer);
 
-            buffer[4] = 0;
-            buffer[5] = 0;
-            buffer[6] = 0;
-            buffer[7] = env.locked;
-            writer.write(buffer.data(), buffer.size());
-        }
+        buffer.insert(buffer.end(), 3, 0);
+        buffer.push_back(env.locked);
+        writer.write(buffer.data(), buffer.size());
 
         {
             EnvironmentIndex parent;
@@ -196,11 +180,8 @@ public:
         if (len) {
             // Creating a tagged pairlist per element.
             for (size_t i = 0; i < len; ++i) {
-                buffer.resize(4);
-                buffer[0] = 0;
-                buffer[1] = 0;
-                buffer[2] = 0x4; 
-                buffer[3] = static_cast<unsigned char>(SEXPType::LIST);
+                buffer.clear();
+                inject_next_pairlist_header(true, buffer);
                 writer.write(buffer.data(), buffer.size());
 
                 write_symbol(names[i], encodings[i], writer, buffer);
@@ -208,32 +189,21 @@ public:
             }
         }
 
-        // This either terminates the pairlist or indicates that there 
-        // is nothing in the unhashed store.
-        buffer.resize(4);
-        buffer[0] = 0;
-        buffer[1] = 0;
-        buffer[2] = 0;
-        buffer[3] = static_cast<unsigned char>(SEXPType::NILVALUE_);
+        // Terminating the pairlist.
+        buffer.clear();
+        inject_header(SEXPType::NILVALUE_, buffer);
         writer.write(buffer.data(), buffer.size());
 
         // We're not saving a hash table, because I don't want to have to
         // reproduce R's environment hashing logic.
-        {
-            buffer.resize(4);
-            buffer[0] = 0;
-            buffer[1] = 0;
-            buffer[2] = 0;
-            buffer[3] = static_cast<unsigned char>(SEXPType::NILVALUE_);
-            writer.write(buffer.data(), buffer.size());
-        }
+        buffer.clear();
+        inject_header(SEXPType::NILVALUE_, buffer);
+        writer.write(buffer.data(), buffer.size());
 
         if (!write_attributes(env.attributes, writer, buffer, *this)) {
-            buffer.resize(4);
-            buffer[0] = 0;
-            buffer[1] = 0;
-            buffer[2] = 0;
-            buffer[3] = static_cast<unsigned char>(SEXPType::NILVALUE_);
+            // Finishing with NULL if there aren't any attributes.
+            buffer.clear();
+            inject_header(SEXPType::NILVALUE_, buffer);
             writer.write(buffer.data(), buffer.size());
         }
     }

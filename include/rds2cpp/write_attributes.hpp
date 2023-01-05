@@ -29,24 +29,15 @@ bool write_attributes(const Attributes& attr, Writer& writer, std::vector<unsign
 
     for (size_t a = 0; a < nattr; ++a) {
         buffer.clear();
-
-        // Adding the header.
-        buffer.push_back(0);
-        buffer.push_back(0);
-        buffer.push_back(4); // has tag.
-        buffer.push_back(static_cast<unsigned char>(SEXPType::LIST));
+        inject_next_pairlist_header(true, buffer);
         writer.write(buffer.data(), buffer.size());
 
-        // Tag and value.
         shared.write_symbol(attr.names[a], attr.encodings[a], writer, buffer);
         write_object(attr.values[a].get(), writer, buffer, shared);
     }
 
     buffer.clear();
-    buffer.push_back(0);
-    buffer.push_back(0);
-    buffer.push_back(0);
-    buffer.push_back(static_cast<unsigned char>(SEXPType::NILVALUE_));
+    inject_header(SEXPType::NILVALUE_, buffer);
     writer.write(buffer.data(), buffer.size());
 
     return true;

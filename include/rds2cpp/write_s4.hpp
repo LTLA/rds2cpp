@@ -25,11 +25,7 @@ void write_s4(const RObject* object, Writer& writer, std::vector<unsigned char>&
     buffer.push_back(static_cast<unsigned char>(SEXPType::S4));
 
     // Adding the header.
-    buffer.push_back(0);
-    buffer.push_back(0);
-    buffer.push_back(4);
-    buffer.push_back(static_cast<unsigned char>(SEXPType::LIST));
-
+    inject_next_pairlist_header(true, buffer);
     writer.write(buffer.data(), buffer.size());
 
     // Injecting the name of the tag.
