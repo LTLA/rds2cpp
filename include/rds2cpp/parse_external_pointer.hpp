@@ -17,15 +17,16 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
 
 template<class Reader>
 ExternalPointerIndex parse_external_pointer_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, SharedParseInfo& shared) {
-    ExternalPointer new_extptr;
-    new_extptr.protection = parse_object(reader, leftovers, shared);
-    new_extptr.tag = parse_object(reader, leftovers, shared);
+    auto idx = shared.request_external_pointer();
+    auto& extptr = shared.external_pointers[idx];
 
+    extptr.protection = parse_object(reader, leftovers, shared);
+    extptr.tag = parse_object(reader, leftovers, shared);
     if (has_attributes(header)) {
-        parse_attributes(reader, leftovers, new_extptr.attributes, shared);
+        parse_attributes(reader, leftovers, extptr.attributes, shared);
     }
 
-    return ExternalPointerIndex(shared.add_external_pointer(std::move(new_extptr)));
+    return ExternalPointerIndex(idx);
 }
 
 }

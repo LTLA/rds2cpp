@@ -36,67 +36,35 @@ private:
         return index - 1;
     }
 
-    size_t check_environment_index(size_t i) const {
+    size_t check_reference_index(size_t i, SEXPType type, const std::string& value) const {
         if (i >= mappings.size()) {
             throw std::runtime_error("index for REFSXP is out of range");
         }
         const auto& chosen = mappings[i];
-        if (chosen.first != SEXPType::ENV) {
-            throw std::runtime_error("expected REFSXP to point to an environment");
-        }
-        return chosen.second;
-    }
-
-    size_t check_symbol_index(size_t i) const {
-        if (i >= mappings.size()) {
-            throw std::runtime_error("index for REFSXP is out of range");
-        }
-        const auto& chosen = mappings[i];
-        if (chosen.first != SEXPType::SYM) {
-            throw std::runtime_error("expected REFSXP to point to a symbol");
-        }
-        return chosen.second;
-    }
-
-    size_t check_external_pointer_index(size_t i) const {
-        if (i >= mappings.size()) {
-            throw std::runtime_error("index for REFSXP is out of range");
-        }
-        const auto& chosen = mappings[i];
-        if (chosen.first != SEXPType::EXTPTR) {
-            throw std::runtime_error("expected REFSXP to point to a external pointer");
+        if (chosen.first != type) {
+            throw std::runtime_error("expected REFSXP to point to " + value);
         }
         return chosen.second;
     }
 
 public:
-    size_t add_symbol(Symbol s) {
+    size_t request_symbol() {
         size_t index = symbols.size();
         mappings.emplace_back(SEXPType::SYM, index);
-        symbols.emplace_back(std::move(s));
+        symbols.resize(index + 1);
         return index;
-    }
-
-    const Symbol& get_symbol(size_t i) const {
-        auto j = check_symbol_index(i);
-        return symbols[j];
     }
 
     size_t get_symbol_index(const Header& header) const {
         size_t i = compute_reference_index(header); 
-        return check_symbol_index(i);
-    }
-
-    const Symbol& get_symbol(const Header& header) const {
-        size_t j = get_symbol_index(header);
-        return symbols[j];
+        return check_reference_index(i, SEXPType::SYM, "a symbol");
     }
 
 public:
-    size_t add_external_pointer(ExternalPointer s) {
+    size_t request_external_pointer() {
         size_t index = external_pointers.size();
         mappings.emplace_back(SEXPType::EXTPTR, index);
-        external_pointers.emplace_back(std::move(s));
+        external_pointers.resize(index + 1);
         return index;
     }
 
@@ -110,19 +78,9 @@ public:
         return index;
     }
 
-    const Environment& get_environment(size_t i) const {
-        auto j = check_environment_index(i);
-        return environments[j];
-    }
-
     size_t get_environment_index(const Header& header) const {
         size_t i = compute_reference_index(header); 
-        return check_environment_index(i);
-    }
-
-    const Environment& get_environment(const Header& header) const {
-        auto j = get_environment_index(header);
-        return environments[j];
+        return check_reference_index(i, SEXPType::ENV, "an environment");
     }
 
 public:

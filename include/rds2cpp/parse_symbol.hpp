@@ -19,11 +19,11 @@ SymbolIndex parse_symbol_body(Reader& reader, std::vector<unsigned char>& leftov
         throw new std::runtime_error("expected a non-missing string for a symbol");
     }
 
-    Symbol new_symb;
-    new_symb.name = str.value;
-    new_symb.encoding = str.encoding;
+    size_t idx = shared.request_symbol();
+    shared.symbols[idx].name = str.value;
+    shared.symbols[idx].encoding = str.encoding;
 
-    return SymbolIndex(shared.add_symbol(std::move(new_symb)));
+    return SymbolIndex(idx);
 }
 
 }
