@@ -6,7 +6,7 @@ test_that("function serialization works correctly", {
     y <- quote(cbind(12, 'foo'))
     saveRDS(y, file=tmp)
 
-    info <- rds2cpp::parse_details(tmp)
+    info <- rds2cpp::parse(tmp)
     expect_true(attr(info$value, "pretend-to-be-a-language"))
     expect_identical(info$value[[1]], "cbind")
 
@@ -32,7 +32,7 @@ test_that("function serialization works correctly for named arguments", {
     y <- quote(aaron(foo=12, bar='foo'))
     saveRDS(y, file=tmp)
 
-    info <- rds2cpp::parse_details(tmp)
+    info <- rds2cpp::parse(tmp)
     expect_true(attr(info$value, "pretend-to-be-a-language"))
     expect_identical(info$value[[1]], "aaron")
 
@@ -59,13 +59,13 @@ test_that("function serialization works correctly for nested function calls", {
     y <- quote(x + y + z)
     saveRDS(y, file=tmp)
 
-    info <- rds2cpp::parse_details(tmp)
+    info <- rds2cpp::parse(tmp)
     expect_true(attr(info$value, "pretend-to-be-a-language"))
     expect_identical(info$value[[1]], "+")
     expect_identical(info$value[[2]][[1]][[1]], "+")
-    expect_identical(info$symbols[info$value[[2]][[1]][[2]][[1]]$id + 1], "x")
-    expect_identical(info$symbols[info$value[[2]][[1]][[2]][[2]]$id + 1], "y")
-    expect_identical(info$symbols[info$value[[2]][[2]]$id + 1], "z")
+    expect_identical(info$symbols[info$value[[2]][[1]][[2]][[1]]$symbol_id + 1], "x")
+    expect_identical(info$symbols[info$value[[2]][[1]][[2]][[2]]$symbol_id + 1], "y")
+    expect_identical(info$symbols[info$value[[2]][[2]]$symbol_id + 1], "z")
 })
 
 test_that("function writing works correctly for nested function calls", {
@@ -90,12 +90,12 @@ test_that("function serialization works correctly with attributes", {
     attr(y, "foo") <- "BAR"
     saveRDS(y, file=tmp)
 
-    info <- rds2cpp::parse_details(tmp)
+    info <- rds2cpp::parse(tmp)
     expect_true(attr(info$value, "pretend-to-be-a-language"))
     expect_identical(attr(info$value, "foo"), "BAR")
 
     expect_identical(info$value[[1]], "%%")
-    expect_identical(info$symbols[info$value[[2]][[1]]$id + 1], "x")
+    expect_identical(info$symbols[info$value[[2]][[1]]$symbol_id + 1], "x")
     expect_identical(info$value[[2]][[2]], 1)
 })
 

@@ -6,14 +6,14 @@ test_that("parsing expression vectors works as expected", {
     tmp <- tempfile(fileext=".rds")
     saveRDS(y, file=tmp)
 
-    info <- rds2cpp::parse_details(tmp)
+    info <- rds2cpp::parse(tmp)
     expect_true(attr(info$value, "pretend-to-be-an-expression"))
     expect_identical(info$value[[1]], 1) # constant is directly read in as itself.
-    expect_identical(info$symbols[info$value[[2]]$id + 1], "aaron")
+    expect_identical(info$symbols[info$value[[2]]$symbol_id + 1], "aaron")
     expect_identical(info$value[[3]][[1]], "lun")
-    expect_identical(info$symbols[info$value[[3]][[2]][[1]]$id + 1L], "aaron")
-    expect_identical(info$symbols[info$value[[3]][[2]][[2]]$id + 1L], "tin")
-    expect_identical(info$symbols[info$value[[3]][[2]][[3]]$id + 1L], "long")
+    expect_identical(info$symbols[info$value[[3]][[2]][[1]]$symbol_id + 1L], "aaron")
+    expect_identical(info$symbols[info$value[[3]][[2]][[2]]$symbol_id + 1L], "tin")
+    expect_identical(info$symbols[info$value[[3]][[2]][[3]]$symbol_id + 1L], "long")
 })
 
 test_that("writing expression vectors works as expected", {
@@ -46,7 +46,7 @@ test_that("parsing expression vectors works with attributes", {
     tmp <- tempfile(fileext=".rds")
     saveRDS(y, file=tmp)
 
-    info <- rds2cpp::parse_details(tmp)
+    info <- rds2cpp::parse(tmp)
     expect_true(attr(info$value, "pretend-to-be-an-expression"))
     expect_identical(attr(info$value, "foo"), "BAR")
 })

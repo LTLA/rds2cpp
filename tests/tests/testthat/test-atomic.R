@@ -20,7 +20,7 @@ test_that("integer vector loading works as expected", {
         y <- as.integer(y)
         saveRDS(y, file=tmp)
         roundtrip <- rds2cpp:::parse(tmp)
-        expect_identical(roundtrip, y)
+        expect_identical(roundtrip$value, y)
     }
 })
 
@@ -50,7 +50,7 @@ test_that("logical vector loading works as expected", {
     for (y in logical.scenarios) {
         saveRDS(y, file=tmp)
         roundtrip <- rds2cpp:::parse(tmp)
-        expect_identical(roundtrip, y)
+        expect_identical(roundtrip$value, y)
     }
 })
 
@@ -84,7 +84,7 @@ test_that("double vector loading works as expected", {
     for (y in double.scenarios) {
         saveRDS(y, file=tmp)
         roundtrip <- rds2cpp:::parse(tmp)
-        expect_identical(roundtrip, y)
+        expect_identical(roundtrip$value, y)
     }
 })
 
@@ -104,7 +104,7 @@ test_that("raw vector loading works as expected", {
     y <- as.raw(sample(256, 99, replace=TRUE) - 1)
     saveRDS(y, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
-    expect_identical(roundtrip, y)
+    expect_identical(roundtrip$value, y)
 })
 
 test_that("raw vector writing works as expected", {
@@ -136,7 +136,7 @@ test_that("complex vector loading works as expected", {
     for (y in complex.scenarios) {
         saveRDS(y, file=tmp)
         roundtrip <- rds2cpp:::parse(tmp)
-        expect_identical(roundtrip, y)
+        expect_identical(roundtrip$value, y)
     }
 })
 
@@ -168,7 +168,7 @@ test_that("character vector loading works as expected", {
     for (y in string.scenarios) {
         saveRDS(y, file=tmp)
         roundtrip <- rds2cpp:::parse(tmp)
-        expect_identical(roundtrip, y)
+        expect_identical(roundtrip$value, y)
     }
 })
 
@@ -192,7 +192,7 @@ test_that("attributes for atomic vectors are loaded correctly", {
     tmp <- tempfile(fileext=".rds")
     saveRDS(attr_vals, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
-    expect_identical(roundtrip, attr_vals)
+    expect_identical(roundtrip$value, attr_vals)
 })
 
 test_that("attributes for atomic vectors are written correctly", {

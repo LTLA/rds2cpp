@@ -8,8 +8,8 @@ test_that("built-in function loading works as expected", {
     for (y in builtin.scenarios) {
         saveRDS(y, file=tmp)
         roundtrip <- rds2cpp:::parse(tmp)
-        expect_true(attr(roundtrip, "pretend-to-be-a-builtin"))
-        expect_identical(get(roundtrip[[1]], envir=baseenv()), y)
+        expect_true(attr(roundtrip$value, "pretend-to-be-a-builtin"))
+        expect_identical(get(roundtrip$value[[1]], envir=baseenv()), y)
     }
 })
 

@@ -16,7 +16,7 @@ test_that("list loading works as expected", {
     for (y in list.scenarios) {
         saveRDS(y, file=tmp)
         roundtrip <- rds2cpp:::parse(tmp)
-        expect_identical(roundtrip, y)
+        expect_identical(roundtrip$value, y)
     }
 })
 
@@ -39,12 +39,12 @@ test_that("data frame loading works as expected", {
     tmp <- tempfile(fileext=".rds")
     saveRDS(test.df, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
-    expect_identical(roundtrip, test.df)
+    expect_identical(roundtrip$value, test.df)
 
     # Works with row names.
     saveRDS(test.df.with.rownames, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
-    expect_identical(roundtrip, test.df.with.rownames)
+    expect_identical(roundtrip$value, test.df.with.rownames)
 })
 
 test_that("data frame loading works as expected", {

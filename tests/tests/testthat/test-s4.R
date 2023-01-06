@@ -13,7 +13,7 @@ test_that("S4 object loading works as expected", {
     for (y in s4.scenarios) {
         saveRDS(y, file=tmp)
         roundtrip <- rds2cpp:::parse(tmp)
-        expect_identical(roundtrip, y)
+        expect_identical(roundtrip$value, y)
     }
 })
 

@@ -7,8 +7,8 @@ test_that("external pointer parsing works as expected", {
     tmp <- tempfile(fileext=".rds")
     saveRDS(ptr, file=tmp)
 
-    roundtrip <- rds2cpp:::parse_details(tmp)
-    expect_identical(roundtrip$value, list(id=0L))
+    roundtrip <- rds2cpp:::parse(tmp)
+    expect_identical(roundtrip$value, list(external_pointer_id=0L))
     expect_identical(length(roundtrip$external_pointers), 1L)
     expect_true(is.list(roundtrip$external_pointers[[1]]$protection))
     expect_true(is.integer(roundtrip$external_pointers[[1]]$tag))
@@ -54,8 +54,8 @@ test_that("external pointer parsing behaves properly as a reference object", {
     tmp <- tempfile(fileext=".rds")
     saveRDS(list(ptr, ptr2, ptr2, ptr), file=tmp)
 
-    roundtrip <- rds2cpp:::parse_details(tmp)
-    expect_identical(roundtrip$value, list(list(id=0L), list(id=1L), list(id=1L), list(id=0L)))
+    roundtrip <- rds2cpp:::parse(tmp)
+    expect_identical(roundtrip$value, list(list(external_pointer_id=0L), list(external_pointer_id=1L), list(external_pointer_id=1L), list(external_pointer_id=0L)))
     expect_identical(length(roundtrip$external_pointers), 2L)
 })
 
@@ -109,7 +109,7 @@ test_that("external pointer parsing works with attributes", {
     tmp <- tempfile(fileext=".rds")
     saveRDS(ptr, file=tmp)
 
-    roundtrip <- rds2cpp:::parse_details(tmp)
+    roundtrip <- rds2cpp:::parse(tmp)
     expect_identical(attr(roundtrip$external_pointers[[1]], "foo"), "BAR")
 })
 

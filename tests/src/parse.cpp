@@ -47,6 +47,7 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         }
  
         auto output = Rcpp::List::create(Rcpp::Named("data") = data_output, Rcpp::Named("tag") = tag_output);
+        output.attr("pretend-to-be-a-pairlist") = Rcpp::LogicalVector::create(1);
         add_attributes(list->attributes, output);
         return output;
     }
@@ -158,20 +159,21 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         add_attributes(expr->attributes, output);
         return output;
 
+    // Reference types are generated with a pointer.
     } else if (input->type() == rds2cpp::SEXPType::SYM) {
         auto sdx = static_cast<const rds2cpp::SymbolIndex*>(input);
-        return Rcpp::List::create(Rcpp::Named("id") = Rcpp::IntegerVector::create(sdx->index));
+        return Rcpp::List::create(Rcpp::Named("symbol_id") = Rcpp::IntegerVector::create(sdx->index));
 
     } else if (input->type() == rds2cpp::SEXPType::ENV) {
         auto edx = static_cast<const rds2cpp::EnvironmentIndex*>(input);
-        return Rcpp::List::create(Rcpp::Named("id") = Rcpp::IntegerVector::create(edx->index));
+        return Rcpp::List::create(Rcpp::Named("environment_id") = Rcpp::IntegerVector::create(edx->index));
 
     } else if (input->type() == rds2cpp::SEXPType::EXTPTR) {
-        auto edx = static_cast<const rds2cpp::ExternalPointerIndex*>(input);
-        return Rcpp::List::create(Rcpp::Named("id") = Rcpp::IntegerVector::create(edx->index));
+        auto epdx = static_cast<const rds2cpp::ExternalPointerIndex*>(input);
+        return Rcpp::List::create(Rcpp::Named("external_pointer_id") = Rcpp::IntegerVector::create(epdx->index));
 
     } else if (input->type() == rds2cpp::SEXPType::GLOBALENV_) {
-        return Rcpp::List::create(Rcpp::Named("id") = Rcpp::IntegerVector::create(-1));
+        return Rcpp::List::create(Rcpp::Named("environment_id") = Rcpp::IntegerVector::create(-1));
     }
 
     return R_NilValue;
@@ -180,16 +182,6 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
 //' @export
 //[[Rcpp::export(rng=false)]]
 Rcpp::RObject parse(std::string file_name) {
-    auto output = rds2cpp::parse_rds(file_name);
-    if (output.object == nullptr) {
-        return R_NilValue;
-    } 
-    return convert(output.object.get());
-}
-
-//' @export
-//[[Rcpp::export(rng=false)]]
-Rcpp::RObject parse_details(std::string file_name) {
     auto output = rds2cpp::parse_rds(file_name);
     if (output.object == nullptr) {
         return R_NilValue;
@@ -211,7 +203,7 @@ Rcpp::RObject parse_details(std::string file_name) {
 
         auto curout = Rcpp::List::create(
             Rcpp::Named("variables") = vars,
-            Rcpp::Named("parent") = Rcpp::IntegerVector::create(env.parent == static_cast<size_t>(-1) ? -1 : static_cast<int>(env.parent)),
+            Rcpp::Named("parent") = Rcpp::IntegerVector::create(env.parent_type == rds2cpp::SEXPType::GLOBALENV_ ? -1 : static_cast<int>(env.parent)),
             Rcpp::Named("locked") = env.locked
         );
         add_attributes(env.attributes, curout);

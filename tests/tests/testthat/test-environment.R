@@ -8,10 +8,10 @@ test_that("empty environment loading works as expected", {
         y <- new.env()
         tmp <- tempfile(fileext=".rds")
         saveRDS(y, file=tmp)
-        rds2cpp:::parse_details(tmp)
+        rds2cpp:::parse(tmp)
     }, envir=.GlobalEnv)
 
-    expect_identical(roundtrip$value$id, 0L)
+    expect_identical(roundtrip$value$environment_id, 0L)
     expect_identical(length(roundtrip$environments), 1L)
     expect_identical(roundtrip$environments[[1]]$parent, -1L)
     expect_identical(length(roundtrip$environments[[1]]$variables), 0L)
@@ -19,7 +19,7 @@ test_that("empty environment loading works as expected", {
 
     saveRDS(.GlobalEnv, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
-    expect_identical(roundtrip$id, -1L)
+    expect_identical(roundtrip$value$environment_id, -1L)
 })
 
 test_that("empty environment writing works as expected", {
@@ -58,10 +58,10 @@ test_that("locked environment loading works as expected", {
         lockEnvironment(y)
         tmp <- tempfile(fileext=".rds")
         saveRDS(y, file=tmp)
-        rds2cpp:::parse_details(tmp)
+        rds2cpp:::parse(tmp)
     }, envir=.GlobalEnv)
 
-    expect_identical(roundtrip$value$id, 0L)
+    expect_identical(roundtrip$value$environment_id, 0L)
     expect_identical(length(roundtrip$environments), 1L)
     expect_identical(roundtrip$environments[[1]]$parent, -1L)
     expect_identical(length(roundtrip$environments[[1]]$variables), 0L)
@@ -92,7 +92,7 @@ test_that("non-empty environment loading works as expected", {
 
         tmp <- tempfile(fileext=".rds")
         saveRDS(y, file=tmp)
-        list(roundtrip = rds2cpp:::parse_details(tmp), ref = y)
+        list(roundtrip = rds2cpp:::parse(tmp), ref = y)
     }, envir=.GlobalEnv)
 
     roundtrip <- output$roundtrip
@@ -100,7 +100,7 @@ test_that("non-empty environment loading works as expected", {
     expect_identical(length(roundtrip$environments), 1L)
     expect_identical(length(roundtrip$environments[[1]]$variables), 2L)
 
-    expect_identical(roundtrip$value$id, 0L)
+    expect_identical(roundtrip$value$environment_id, 0L)
     expect_identical(roundtrip$environments[[1]]$parent, -1L)
     expect_identical(roundtrip$environments[[1]]$variables$AAA, ref$AAA)
     expect_identical(roundtrip$environments[[1]]$variables$BBB, ref$BBB)
@@ -113,7 +113,7 @@ test_that("non-empty environment loading works as expected", {
         y$Michael <- list(1:5)
 
         saveRDS(y, file=tmp)
-        list(roundtrip = rds2cpp:::parse_details(tmp), ref = y)
+        list(roundtrip = rds2cpp:::parse(tmp), ref = y)
     }, envir=.GlobalEnv)
 
     roundtrip <- output$roundtrip
@@ -121,7 +121,7 @@ test_that("non-empty environment loading works as expected", {
     expect_identical(length(roundtrip$environments), 1L)
     expect_identical(length(roundtrip$environments[[1]]$variables), 3L)
 
-    expect_identical(roundtrip$value$id, 0L)
+    expect_identical(roundtrip$value$environment_id, 0L)
     expect_identical(roundtrip$environments[[1]]$parent, -1L)
     expect_identical(roundtrip$environments[[1]]$variables$Aaron, ref$Aaron)
     expect_identical(roundtrip$environments[[1]]$variables$Jayaram, ref$Jayaram)
@@ -136,7 +136,7 @@ test_that("unhashed environment loading works as expected", {
 
         tmp <- tempfile(fileext=".rds")
         saveRDS(y, file=tmp)
-        list(roundtrip = rds2cpp:::parse_details(tmp), ref = y)
+        list(roundtrip = rds2cpp:::parse(tmp), ref = y)
     }, envir=.GlobalEnv)
 
     roundtrip <- output$roundtrip
@@ -144,7 +144,7 @@ test_that("unhashed environment loading works as expected", {
     expect_identical(length(roundtrip$environments), 1L)
     expect_identical(length(roundtrip$environments[[1]]$variables), 2L)
 
-    expect_identical(roundtrip$value$id, 0L)
+    expect_identical(roundtrip$value$environment_id, 0L)
     expect_identical(roundtrip$environments[[1]]$parent, -1L)
     expect_identical(roundtrip$environments[[1]]$variables$AAA, ref$AAA)
     expect_identical(roundtrip$environments[[1]]$variables$BBB, ref$BBB)
@@ -161,7 +161,7 @@ test_that("environment hash chains are correclty loaded", {
 
         tmp <- tempfile(fileext=".rds")
         saveRDS(y, file=tmp)
-        list(roundtrip = rds2cpp:::parse_details(tmp), ref = y)
+        list(roundtrip = rds2cpp:::parse(tmp), ref = y)
     }, envir=.GlobalEnv)
 
     roundtrip <- output$roundtrip
@@ -194,11 +194,11 @@ test_that("parsing environment references works as expected", {
         y <- new.env()
         tmp <- tempfile(fileext=".rds")
         saveRDS(list(y, y), file=tmp)
-        rds2cpp:::parse_details(tmp)
+        rds2cpp:::parse(tmp)
     }, envir=.GlobalEnv)
 
-    expect_identical(roundtrip$value[[1]]$id, 0L)
-    expect_identical(roundtrip$value[[2]]$id, 0L)
+    expect_identical(roundtrip$value[[1]]$environment_id, 0L)
+    expect_identical(roundtrip$value[[2]]$environment_id, 0L)
 
     expect_identical(length(roundtrip$environments), 1L)
     expect_identical(roundtrip$environments[[1]]$parent, -1L)
@@ -210,13 +210,13 @@ test_that("parsing environment references works as expected", {
         z <- new.env()
         z$foo <- "BAR"
         saveRDS(list(z, y, z, y), file=tmp)
-        rds2cpp:::parse_details(tmp)
+        rds2cpp:::parse(tmp)
     }, envir=.GlobalEnv)
 
-    expect_identical(roundtrip$value[[1]]$id, 0L)
-    expect_identical(roundtrip$value[[2]]$id, 1L)
-    expect_identical(roundtrip$value[[3]]$id, 0L)
-    expect_identical(roundtrip$value[[4]]$id, 1L)
+    expect_identical(roundtrip$value[[1]]$environment_id, 0L)
+    expect_identical(roundtrip$value[[2]]$environment_id, 1L)
+    expect_identical(roundtrip$value[[3]]$environment_id, 0L)
+    expect_identical(roundtrip$value[[4]]$environment_id, 1L)
 
     expect_identical(length(roundtrip$environments), 2L)
 
@@ -233,15 +233,15 @@ test_that("parsing environment references works as expected", {
         z <- new.env()
         z$foo <- "BAR"
         saveRDS(list(.GlobalEnv, z, y, z, y, .GlobalEnv), file=tmp)
-        rds2cpp:::parse_details(tmp)
+        rds2cpp:::parse(tmp)
     }, envir=.GlobalEnv)
 
-    expect_identical(roundtrip2$value[[1]]$id, -1L)
-    expect_identical(roundtrip2$value[[2]]$id, 0L)
-    expect_identical(roundtrip2$value[[3]]$id, 1L)
-    expect_identical(roundtrip2$value[[4]]$id, 0L)
-    expect_identical(roundtrip2$value[[5]]$id, 1L)
-    expect_identical(roundtrip2$value[[6]]$id, -1L)
+    expect_identical(roundtrip2$value[[1]]$environment_id, -1L)
+    expect_identical(roundtrip2$value[[2]]$environment_id, 0L)
+    expect_identical(roundtrip2$value[[3]]$environment_id, 1L)
+    expect_identical(roundtrip2$value[[4]]$environment_id, 0L)
+    expect_identical(roundtrip2$value[[5]]$environment_id, 1L)
+    expect_identical(roundtrip2$value[[6]]$environment_id, -1L)
 
     expect_identical(roundtrip$environments, roundtrip2$environments)
 })
@@ -307,10 +307,10 @@ test_that("environment parenthood works as expected when parsing", {
 
         tmp <- tempfile(fileext=".rds")
         saveRDS(z, file=tmp)
-        rds2cpp:::parse_details(tmp)
+        rds2cpp:::parse(tmp)
     }, envir=.GlobalEnv)
 
-    expect_identical(roundtrip$value$id, 0L)
+    expect_identical(roundtrip$value$environment_id, 0L)
     expect_identical(length(roundtrip$environments), 2L)
 
     expect_identical(roundtrip$environments[[1]]$parent, 1L)
@@ -334,10 +334,10 @@ test_that("environment parenthood works as expected when parsing", {
 
         tmp <- tempfile(fileext=".rds")
         saveRDS(list(z1, z2), file=tmp)
-        rds2cpp:::parse_details(tmp)
+        rds2cpp:::parse(tmp)
     }, envir=.GlobalEnv)
 
-    expect_identical(roundtrip$value, list(list(id=0L), list(id=2L)))
+    expect_identical(roundtrip$value, list(list(environment_id=0L), list(environment_id=2L)))
     expect_identical(length(roundtrip$environments), 3L)
 
     expect_identical(roundtrip$environments[[1]]$parent, 1L)
@@ -412,12 +412,12 @@ test_that("self-references are properly resolved", {
 
         tmp <- tempfile(fileext=".rds")
         saveRDS(y, file=tmp)
-        list(roundtrip = rds2cpp:::parse_details(tmp), ref = y)
+        list(roundtrip = rds2cpp:::parse(tmp), ref = y)
     }, envir=.GlobalEnv)
 
     roundtrip <- output$roundtrip
     ref <- output$ref
-    expect_identical(roundtrip$value, list(id=0L))
+    expect_identical(roundtrip$value, list(environment_id=0L))
     expect_identical(length(roundtrip$environments), 1L)
 
     expect_identical(roundtrip$environments[[1]]$parent, -1L)
@@ -425,7 +425,7 @@ test_that("self-references are properly resolved", {
 
     expect_identical(roundtrip$environments[[1]]$variables$foo, 1:10)
     expect_identical(roundtrip$environments[[1]]$variables$bar, as.character(100:200))
-    expect_identical(roundtrip$environments[[1]]$variables$stuff, list(id=0L)) # can refer to itself, no probs.
+    expect_identical(roundtrip$environments[[1]]$variables$stuff, list(environment_id=0L)) # can refer to itself, no probs.
 })
 
 test_that("environment attributes are parsed correctly", {
@@ -435,10 +435,10 @@ test_that("environment attributes are parsed correctly", {
         attr(y, "name") <- "natalie portman"
         tmp <- tempfile(fileext=".rds")
         saveRDS(y, file=tmp)
-        rds2cpp:::parse_details(tmp)
+        rds2cpp:::parse(tmp)
     }, envir=.GlobalEnv)
 
-    expect_identical(roundtrip$value$id, 0L)
+    expect_identical(roundtrip$value$environment_id, 0L)
     expect_identical(length(roundtrip$environments), 1L)
     expect_identical(roundtrip$environments[[1]]$parent, -1L)
 
@@ -456,10 +456,10 @@ test_that("environment attributes are parsed correctly", {
 
         tmp <- tempfile(fileext=".rds")
         saveRDS(list(y, z), file=tmp)
-        rds2cpp:::parse_details(tmp)
+        rds2cpp:::parse(tmp)
     }, envir=.GlobalEnv)
 
-    expect_identical(roundtrip$value, list(list(id=0L), list(id=0L)))
+    expect_identical(roundtrip$value, list(list(environment_id=0L), list(environment_id=0L)))
     expect_identical(attr(roundtrip$environments[[1]], "name"), "jessica biel")
 })
 

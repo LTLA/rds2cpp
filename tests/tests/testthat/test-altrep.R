@@ -16,7 +16,7 @@ test_that("compact integer loading works as expected", {
 
         saveRDS(y, file=tmp)
         roundtrip <- rds2cpp:::parse(tmp)
-        expect_identical(roundtrip, y)
+        expect_identical(roundtrip$value, y)
     }
 })
 
@@ -29,7 +29,7 @@ test_that("attribute wrapping for integers works as expected", {
     tmp <- tempfile(fileext=".rds")
     saveRDS(x, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
-    expect_identical(roundtrip, x)
+    expect_identical(roundtrip$value, x)
 
     # Create a fresh ALTREP because the last one was realized.
     x <- 200:100
@@ -40,7 +40,7 @@ test_that("attribute wrapping for integers works as expected", {
 
     saveRDS(x, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
-    expect_identical(roundtrip, x)
+    expect_identical(roundtrip$value, x)
 })
 
 test_that("deferred string for integers works as expected", {
@@ -51,7 +51,7 @@ test_that("deferred string for integers works as expected", {
     tmp <- tempfile(fileext=".rds")
     saveRDS(x, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
-    expect_identical(roundtrip, x)
+    expect_identical(roundtrip$value, x)
 
     # With NA's.
     x <- c(NA_integer_, 1:10, NA_integer_)
@@ -61,7 +61,7 @@ test_that("deferred string for integers works as expected", {
     tmp <- tempfile(fileext=".rds")
     saveRDS(x, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
-    expect_identical(roundtrip, x)
+    expect_identical(roundtrip$value, x)
 })
 
 test_that("deferred string for doubles works as expected", {
@@ -72,7 +72,7 @@ test_that("deferred string for doubles works as expected", {
     tmp <- tempfile(fileext=".rds")
     saveRDS(x, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
-    expect_identical(roundtrip, x)
+    expect_identical(roundtrip$value, x)
 
     # With weird things.
     x <- c(NaN, 1:10, Inf, -Inf, NA)
@@ -82,6 +82,6 @@ test_that("deferred string for doubles works as expected", {
     tmp <- tempfile(fileext=".rds")
     saveRDS(x, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
-    expect_identical(roundtrip, x)
+    expect_identical(roundtrip$value, x)
 })
 
