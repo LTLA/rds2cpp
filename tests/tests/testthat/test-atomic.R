@@ -193,6 +193,15 @@ test_that("attributes for atomic vectors are loaded correctly", {
     saveRDS(attr_vals, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
     expect_identical(roundtrip$value, attr_vals)
+
+    # Works if the attributes are wiped; this should be the
+    # same as not setting them in the first place.
+    wiped <- attr_vals
+    attributes(wiped) <- NULL
+    names(wiped) <- NULL
+    saveRDS(wiped, file=tmp)
+    roundtrip <- rds2cpp:::parse(tmp)
+    expect_identical(roundtrip$value, wiped)
 })
 
 test_that("attributes for atomic vectors are written correctly", {
