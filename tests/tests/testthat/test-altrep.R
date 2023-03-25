@@ -31,10 +31,22 @@ test_that("attribute wrapping for integers works as expected", {
     roundtrip <- rds2cpp:::parse(tmp)
     expect_identical(roundtrip$value, x)
 
-    # Create a fresh ALTREP because the last one was realized.
+    # Checking that we can add more than names. Here, we
+    # create a fresh ALTREP because the last one was realized.
     x <- 200:100
     names(x) <- sprintf("GENE_%s", seq_along(x))
     attr(x, "FOO") <- "BAR"
+    expect_output(.Internal(inspect(x)), "wrapper")
+    expect_output(.Internal(inspect(x)), "compact")
+
+    saveRDS(x, file=tmp)
+    roundtrip <- rds2cpp:::parse(tmp)
+    expect_identical(roundtrip$value, x)
+
+    # Checking that our code works with empty attribute lists.
+    # Again, create a fresh ALTREP because the last one was realized.
+    x <- 20:100
+    names(x) <- NULL
     expect_output(.Internal(inspect(x)), "wrapper")
     expect_output(.Internal(inspect(x)), "compact")
 

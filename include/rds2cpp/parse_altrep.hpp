@@ -83,7 +83,12 @@ Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& lefto
 
     // Now we can finally get the attributes, which makes up the rest of the pairlist.
     auto coerced = static_cast<Vector*>(contents.get());
-    parse_attributes(reader, leftovers, coerced->attributes, shared);
+    auto attrheader = parse_header(reader, leftovers);
+    if (attrheader[3] == static_cast<unsigned>(SEXPType::LIST)) {
+        parse_attributes_body(reader, leftovers, attrheader, coerced->attributes, shared);
+    } else if (attrheader[3] != static_cast<unsigned>(SEXPType::NILVALUE_)) {
+        throw std::runtime_error("wrap_* ALTREP's attributes should be a pairlist or NULL");
+    }
 
     return IntegerVector(std::move(*coerced));
 }
