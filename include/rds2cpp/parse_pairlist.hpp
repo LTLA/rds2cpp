@@ -66,10 +66,12 @@ void recursive_parse(Reader& reader, std::vector<unsigned char>& leftovers, Pair
 }
 
 template<class Reader>
-PairList parse_pairlist_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, SharedParseInfo& shared) {
+PairList parse_pairlist_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, SharedParseInfo& shared) try {
     PairList output;
     pairlist_internal::recursive_parse(reader, leftovers, output, header, shared);
     return output;
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse a pairlist body:\n  - ") + e.what());
 }
 
 }

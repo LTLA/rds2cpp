@@ -29,7 +29,7 @@ PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, const Header&
 namespace altrep_internal {
 
 template<class Vector, class Reader>
-Vector parse_numeric_compact_seq(Reader& reader, std::vector<unsigned char>& leftovers) {
+Vector parse_numeric_compact_seq(Reader& reader, std::vector<unsigned char>& leftovers) try {
     auto header = parse_header(reader, leftovers);
     if (header[3] != static_cast<unsigned char>(SEXPType::REAL)) {
         throw std::runtime_error("expected compact_seq to store sequence information in doubles");
@@ -55,19 +55,22 @@ Vector parse_numeric_compact_seq(Reader& reader, std::vector<unsigned char>& lef
     }
 
     return output;
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse compact numeric ALTREP:\n  - ") + e.what());
 }
 
 template<class Vector, class Reader>
-Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) {
+Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) try {
     auto plist_header = parse_header(reader, leftovers);
     if (plist_header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
-        throw std::runtime_error("expected pairlist in wrapper ALTREP's payload");
+        throw std::runtime_error("expected pairlist in wrap_* ALTREP's payload");
     }
 
     // First pairlist element is a CONS cell where the first value is the wrapped integer vector.
+
     auto contents = parse_object(reader, leftovers, shared);
     if (contents->type() != Vector::vector_sexp_type) {
-        throw std::runtime_error("incorrectly typed contents in wrapper ALTREP's payload");
+        throw std::runtime_error("incorrectly typed contents in wrap_* ALTREP's payload");
     }
 
     // Second cons value is the wrapping metadata, we don't care about it.
@@ -90,11 +93,13 @@ Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& lefto
         throw std::runtime_error("wrap_* ALTREP's attributes should be a pairlist or NULL");
     }
 
-    return IntegerVector(std::move(*coerced));
+    return Vector(std::move(*coerced));
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse attribute-wrapped ALTREP:\n  - ") + e.what());
 }
 
 template<class Reader>
-StringVector parse_deferred_string(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) {
+StringVector parse_deferred_string(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) try {
     auto plist_header = parse_header(reader, leftovers);
     if (plist_header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected pairlist in deferred_string ALTREP's payload");
@@ -166,12 +171,14 @@ StringVector parse_deferred_string(Reader& reader, std::vector<unsigned char>& l
     }
 
     return output;
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse deferred string ALTREP:\n  - ") + e.what());
 }
 
 }
 
 template<class Reader>
-std::unique_ptr<RObject> parse_altrep_body(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) {
+std::unique_ptr<RObject> parse_altrep_body(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) try {
     auto header = parse_header(reader, leftovers);
     if (header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected ALTREP description to be a pairlist");
@@ -201,6 +208,8 @@ std::unique_ptr<RObject> parse_altrep_body(Reader& reader, std::vector<unsigned 
     }
 
     return output;
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse ALTREP body:\n  - ") + e.what());
 }
 
 }

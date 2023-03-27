@@ -21,7 +21,7 @@ EnvironmentIndex parse_global_environment_body(Reader& reader, std::vector<unsig
 }
 
 template<class Reader>
-EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, SharedParseInfo& shared) {
+EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, SharedParseInfo& shared) try {
     // Need to provision the environment first, so that internal references are valid.
     size_t eindex = shared.request_environment();
     Environment new_env;
@@ -121,7 +121,9 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
 
     shared.environments[eindex] = std::move(new_env);
     return EnvironmentIndex(eindex);
-};
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse a new environment body:\n  - ") + e.what());
+}
 
 }
 

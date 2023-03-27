@@ -39,13 +39,14 @@ RdsFile parse_rds(Reader& reader) {
     // Reading the header first.
     {
         std::vector<unsigned char> accumulated;
-        bool ok = extract_up_to(reader, leftovers, 14,
-            [&](const unsigned char* buffer, size_t n, size_t) -> void {
-                accumulated.insert(accumulated.end(), buffer, buffer + n);
-            }
-        );
-        if (!ok) {
-            throw std::runtime_error("RDS file is too short to contain the header");
+        try {
+            extract_up_to(reader, leftovers, 14,
+                [&](const unsigned char* buffer, size_t n, size_t) -> void {
+                    accumulated.insert(accumulated.end(), buffer, buffer + n);
+                }
+            );
+        } catch (std::exception& e) {
+            throw std::runtime_error(std::string("failed to read the header from the RDS preamble:\n  - ") + e.what());
         }
 
         if (static_cast<char>(accumulated[0]) != 'X' && static_cast<char>(accumulated[1]) != '\n') {
@@ -72,25 +73,27 @@ RdsFile parse_rds(Reader& reader) {
     // Reading this undocumented section about the string encoding.
     {
         size_t encoding_length = 0;
-        bool ok = extract_up_to(reader, leftovers, 4,
-            [&](const unsigned char* buffer, size_t n, size_t) -> void {
-                for (size_t b = 0; b < n; ++b) {
-                    encoding_length <<= 8;
-                    encoding_length += buffer[b];
+        try {
+            extract_up_to(reader, leftovers, 4,
+                [&](const unsigned char* buffer, size_t n, size_t) -> void {
+                    for (size_t b = 0; b < n; ++b) {
+                        encoding_length <<= 8;
+                        encoding_length += buffer[b];
+                    }
                 }
-            }
-        );
-        if (!ok) {
-            throw std::runtime_error("RDS file is too short to contain the encoding length");
+            );
+        } catch (std::exception& e) {
+            throw std::runtime_error(std::string("failed to read the encoding length from the RDS preamble:\n  - ") + e.what());
         }
 
-        ok = extract_up_to(reader, leftovers, encoding_length,
-            [&](const unsigned char* buffer, size_t n, size_t) -> void {
-                output.encoding.insert(output.encoding.end(), buffer, buffer + n);
-            }
-        );
-        if (!ok) {
-            throw std::runtime_error("RDS file is too short to contain the encoding string");
+        try {
+            extract_up_to(reader, leftovers, encoding_length,
+                [&](const unsigned char* buffer, size_t n, size_t) -> void {
+                    output.encoding.insert(output.encoding.end(), buffer, buffer + n);
+                }
+            );
+        } catch (std::exception& e) {
+            throw std::runtime_error(std::string("failed to read the encoding string from the RDS preamble:\n  - ") + e.what());
         }
     }
 

@@ -15,7 +15,7 @@ struct StringInfo {
 };
 
 template<class Reader>
-StringInfo parse_single_string(Reader& reader, std::vector<unsigned char>& leftovers) {
+StringInfo parse_single_string(Reader& reader, std::vector<unsigned char>& leftovers) try {
     auto header = parse_header(reader, leftovers);
     std::reverse(header.begin(), header.end()); // make it little-endian for easier indexing.
     if (header[0] != static_cast<unsigned char>(SEXPType::CHAR)) {
@@ -25,7 +25,7 @@ StringInfo parse_single_string(Reader& reader, std::vector<unsigned char>& lefto
     // Getting the string length; all strings are less than 2^31-1,
     // see https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Long-vectors.
     uint32_t strlen = 0;
-    bool ok = extract_up_to(reader, leftovers, 4, 
+    extract_up_to(reader, leftovers, 4, 
         [&](const unsigned char* buffer, size_t n, size_t) -> void {
             for (size_t x = 0; x < n; ++x) {
                 strlen <<= 8;
@@ -33,24 +33,18 @@ StringInfo parse_single_string(Reader& reader, std::vector<unsigned char>& lefto
             }
         }
     );
-    if (!ok) {
-        throw std::runtime_error("failed to parse the string length in a character vector");
-    }
 
     StringInfo output;
     output.missing = (strlen == static_cast<uint32_t>(-1));
 
     if (!output.missing) {
         auto& str = output.value;
-        bool ok = extract_up_to(reader, leftovers, strlen,
+        extract_up_to(reader, leftovers, strlen,
             [&](const unsigned char* buffer, size_t n, size_t) -> void {
                 auto ptr = reinterpret_cast<const char*>(buffer);
                 str.insert(str.end(), ptr, ptr + n);
             }
         );
-        if (!ok) {
-            throw std::runtime_error("failed to parse the string in a character vector");
-        }
 
         /* String encoding is stored in the gp field, from bits 12 to 27 in the header.
          * We make life easier by just accessing the relevant byte below, after adjusting
@@ -72,6 +66,8 @@ StringInfo parse_single_string(Reader& reader, std::vector<unsigned char>& lefto
     }
 
     return output;
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse a single CHARSXP:\n  - ") + e.what());
 }
 
 }

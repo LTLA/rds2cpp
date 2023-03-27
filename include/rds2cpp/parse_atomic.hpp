@@ -20,14 +20,11 @@ Vector parse_integer_or_logical_body(Reader& reader, std::vector<unsigned char>&
 
     constexpr size_t width = 4;
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    bool ok = extract_up_to(reader, leftovers, width * len,
+    extract_up_to(reader, leftovers, width * len,
         [&](const unsigned char* buffer, size_t n, size_t i) -> void {
             std::copy(buffer, buffer + n, ptr + i);
         }
     );
-    if (!ok) {
-        throw std::runtime_error("failed to parse data for an integer/logical vector");
-    }
 
     // Flipping endianness.
     if (little_endian()) {
@@ -43,30 +40,31 @@ Vector parse_integer_or_logical_body(Reader& reader, std::vector<unsigned char>&
 }
 
 template<class Reader>
-IntegerVector parse_integer_body(Reader& reader, std::vector<unsigned char>& leftovers) {
+IntegerVector parse_integer_body(Reader& reader, std::vector<unsigned char>& leftovers) try {
     return atomic_internal::parse_integer_or_logical_body<IntegerVector>(reader, leftovers);
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse data for an integer vector") + e.what());
 }
 
 template<class Reader>
-LogicalVector parse_logical_body(Reader& reader, std::vector<unsigned char>& leftovers) {
+LogicalVector parse_logical_body(Reader& reader, std::vector<unsigned char>& leftovers) try {
     return atomic_internal::parse_integer_or_logical_body<LogicalVector>(reader, leftovers);
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse data for a logical vector") + e.what());
 }
 
 template<class Reader>
-DoubleVector parse_double_body(Reader& reader, std::vector<unsigned char>& leftovers) {
+DoubleVector parse_double_body(Reader& reader, std::vector<unsigned char>& leftovers) try {
     size_t len = get_length(reader, leftovers);
     DoubleVector output(len);
 
     constexpr size_t width = 8;
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    bool ok = extract_up_to(reader, leftovers, width * len,
+    extract_up_to(reader, leftovers, width * len,
         [&](const unsigned char* buffer, size_t n, size_t i) -> void {
             std::copy(buffer, buffer + n, ptr + i);
         }
     );
-    if (!ok) {
-        throw std::runtime_error("failed to parse data for a double vector");
-    }
 
     // Flipping endianness.
     if (little_endian()) {
@@ -77,41 +75,39 @@ DoubleVector parse_double_body(Reader& reader, std::vector<unsigned char>& lefto
     }
 
     return output;
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse data for a double vector:  - ") + e.what());
 }
 
 template<class Reader>
-RawVector parse_raw_body(Reader& reader, std::vector<unsigned char>& leftovers) {
+RawVector parse_raw_body(Reader& reader, std::vector<unsigned char>& leftovers) try {
     size_t len = get_length(reader, leftovers);
     RawVector output(len);
 
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    bool ok = extract_up_to(reader, leftovers, len,
+    extract_up_to(reader, leftovers, len,
         [&](const unsigned char* buffer, size_t n, size_t i) -> void {
             std::copy(buffer, buffer + n, ptr + i);
         }
     );
-    if (!ok) {
-        throw std::runtime_error("failed to parse data for a raw vector");
-    }
 
     return output;
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse data for a raw vector") + e.what());
 }
 
 template<class Reader>
-ComplexVector parse_complex_body(Reader& reader, std::vector<unsigned char>& leftovers) {
+ComplexVector parse_complex_body(Reader& reader, std::vector<unsigned char>& leftovers) try {
     size_t len = get_length(reader, leftovers);
     ComplexVector output(len);
 
     constexpr size_t width = 16;
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    bool ok = extract_up_to(reader, leftovers, width * len,
+    extract_up_to(reader, leftovers, width * len,
         [&](const unsigned char* buffer, size_t n, size_t i) -> void {
             std::copy(buffer, buffer + n, ptr + i);
         }
     );
-    if (!ok) {
-        throw std::runtime_error("failed to parse data for a complex vector");
-    }
 
     // Flipping endianness for each double.
     if (little_endian()) {
@@ -122,10 +118,12 @@ ComplexVector parse_complex_body(Reader& reader, std::vector<unsigned char>& lef
     }
 
     return output;
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse data for a complex vector") + e.what());
 }
 
 template<class Reader>
-StringVector parse_string_body(Reader& reader, std::vector<unsigned char>& leftovers) {
+StringVector parse_string_body(Reader& reader, std::vector<unsigned char>& leftovers) try {
     size_t len = get_length(reader, leftovers);
     StringVector output(len);
     for (size_t i = 0; i < len; ++i) {
@@ -135,6 +133,8 @@ StringVector parse_string_body(Reader& reader, std::vector<unsigned char>& lefto
         output.missing[i] = str.missing;
     }
     return output;
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse data for a string vector") + e.what());
 }
 
 }

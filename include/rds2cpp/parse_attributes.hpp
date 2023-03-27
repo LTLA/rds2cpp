@@ -18,7 +18,7 @@ inline bool has_attributes(const Header& header) {
 }
 
 template<class Reader>
-void parse_attributes_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, Attributes& output, SharedParseInfo& shared) {
+void parse_attributes_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, Attributes& output, SharedParseInfo& shared) try {
     auto plist = parse_pairlist_body(reader, leftovers, header, shared);
 
     size_t nnodes = plist.data.size();
@@ -31,17 +31,20 @@ void parse_attributes_body(Reader& reader, std::vector<unsigned char>& leftovers
     output.values.swap(plist.data);
     output.names.swap(plist.tag_names);
     output.encodings.swap(plist.tag_encodings);
-    return;
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse attribute data:\n  - ") + e.what());
 }
 
 template<class Reader>
-void parse_attributes(Reader& reader, std::vector<unsigned char>& leftovers, Attributes& output, SharedParseInfo& shared) {
+void parse_attributes(Reader& reader, std::vector<unsigned char>& leftovers, Attributes& output, SharedParseInfo& shared) try {
     auto header = parse_header(reader, leftovers);
     if (header[3] != static_cast<unsigned>(SEXPType::LIST)) {
         throw std::runtime_error("attributes should be a pairlist");
     }
     parse_attributes_body(reader, leftovers, header, output, shared);
     return;
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse attributes:\n  - ") + e.what());
 }
 
 }

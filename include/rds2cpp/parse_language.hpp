@@ -16,7 +16,7 @@ template<class Reader>
 PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, const Header&, SharedParseInfo&);
 
 template<class Reader>
-LanguageObject parse_language_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, SharedParseInfo& shared) {
+LanguageObject parse_language_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, SharedParseInfo& shared) try {
     LanguageObject output;
 
     auto contents = parse_pairlist_body(reader, leftovers, header, shared);
@@ -48,6 +48,8 @@ LanguageObject parse_language_body(Reader& reader, std::vector<unsigned char>& l
     output.argument_values = std::move(contents.data);
 
     return output;
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse an R language object's body:\n  - ") + e.what());
 }
 
 }

@@ -17,7 +17,7 @@ template<class Reader>
 PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, const Header&, SharedParseInfo&);
 
 template<class Reader>
-S4Object parse_s4_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, SharedParseInfo& shared) {
+S4Object parse_s4_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, SharedParseInfo& shared) try {
     if (!(header[2] & 0x2) || !(header[2] & 0x1) || !(header[1] & 0x1)) {
         throw std::runtime_error("S4 objects should have object, attribute, and gp-S4 bits set in header");
     }
@@ -77,6 +77,8 @@ S4Object parse_s4_body(Reader& reader, std::vector<unsigned char>& leftovers, co
     }
 
     return output;
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse an S4 object's body:\n  - ") + e.what());
 }
 
 }

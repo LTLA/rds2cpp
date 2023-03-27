@@ -9,7 +9,7 @@
 namespace rds2cpp {
 
 template<class Reader, class Function>
-bool extract_up_to(Reader& reader, std::vector<unsigned char>& leftovers, size_t expected, Function fun) {
+void extract_up_to(Reader& reader, std::vector<unsigned char>& leftovers, size_t expected, Function fun) {
     size_t processed = std::min(expected, leftovers.size());
     fun(leftovers.data(), processed, 0);
     std::copy(leftovers.begin() + processed, leftovers.end(), leftovers.begin());
@@ -18,7 +18,7 @@ bool extract_up_to(Reader& reader, std::vector<unsigned char>& leftovers, size_t
     bool remaining = true;
     while (processed < expected) {
         if (!remaining) {
-            return false;
+            throw std::runtime_error("no more bytes to read");
         }
 
         remaining = reader();
@@ -35,24 +35,22 @@ bool extract_up_to(Reader& reader, std::vector<unsigned char>& leftovers, size_t
             break;
         }
     }
-
-    return true;
 }
 
 template<class Reader>
 size_t get_length(Reader& reader, std::vector<unsigned char>& leftovers) {
     uint32_t initial = 0;
-
-    bool ok = extract_up_to(reader, leftovers, 4, 
-        [&](const unsigned char* buffer, size_t n, size_t) -> void {
-            for (size_t b = 0; b < n; ++b) {
-                initial <<= 8;
-                initial += buffer[b];
+    try {
+        extract_up_to(reader, leftovers, 4, 
+            [&](const unsigned char* buffer, size_t n, size_t) -> void {
+                for (size_t b = 0; b < n; ++b) {
+                    initial <<= 8;
+                    initial += buffer[b];
+                }
             }
-        }
-    );
-    if (!ok) {
-        throw std::runtime_error("failed to extract vector length");
+        );
+    } catch (std::exception& e) {
+        throw std::runtime_error(std::string("failed to extract vector length:\n  - ") + e.what());
     }
 
     if (initial != static_cast<uint32_t>(-1)) {
@@ -61,16 +59,17 @@ size_t get_length(Reader& reader, std::vector<unsigned char>& leftovers) {
 
     // Hack to deal with large lengths. 
     uint64_t full = 0;
-    ok = extract_up_to(reader, leftovers, 8, 
-        [&](const unsigned char* buffer, size_t n, size_t) -> void {
-            for (size_t b = 0; b < n; ++b) {
-                full <<= 8;
-                full += buffer[b];
+    try {
+        extract_up_to(reader, leftovers, 8, 
+            [&](const unsigned char* buffer, size_t n, size_t) -> void {
+                for (size_t b = 0; b < n; ++b) {
+                    full <<= 8;
+                    full += buffer[b];
+                }
             }
-        }
-    );
-    if (!ok) {
-        throw std::runtime_error("failed to extract large vector length");
+        );
+    } catch (std::exception& e) {
+        throw std::runtime_error(std::string("failed to extract large vector length:\n  - ") + e.what());
     }
 
     return full;
@@ -85,19 +84,18 @@ inline bool little_endian() {
 typedef std::array<unsigned char, 4> Header;
 
 template<class Reader>
-Header parse_header(Reader& reader, std::vector<unsigned char>& leftovers) {
+Header parse_header(Reader& reader, std::vector<unsigned char>& leftovers) try {
     Header details;
-    bool ok = extract_up_to(reader, leftovers, 4,
+    extract_up_to(reader, leftovers, 4,
         [&](const unsigned char* buffer, size_t n, size_t i) -> void {
             for (size_t b = 0; b < n; ++b, ++i) {
                 details[i] = buffer[b];
             }
         }
     );
-    if (!ok) {
-        throw std::runtime_error("missing or incomplete object header");
-    }
     return details;
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse the R object header:\n  - ") + e.what());
 }
 
 template<class Pointer, class Object>

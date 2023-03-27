@@ -13,7 +13,7 @@
 namespace rds2cpp {
 
 template<class Reader>
-SymbolIndex parse_symbol_body(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) {
+SymbolIndex parse_symbol_body(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) try {
     auto str = parse_single_string(reader, leftovers);
     if (str.missing) {
         throw new std::runtime_error("expected a non-missing string for a symbol");
@@ -24,6 +24,8 @@ SymbolIndex parse_symbol_body(Reader& reader, std::vector<unsigned char>& leftov
     shared.symbols[idx].encoding = str.encoding;
 
     return SymbolIndex(idx);
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse a symbol body:\n  - ") + e.what());
 }
 
 }

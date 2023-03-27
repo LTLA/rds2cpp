@@ -14,13 +14,15 @@ template<class Reader>
 std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&, SharedParseInfo& shared);
 
 template<class Reader>
-ExpressionVector parse_expression_body(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) {
+ExpressionVector parse_expression_body(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) try {
     size_t len = get_length(reader, leftovers);
     ExpressionVector output(len);
     for (size_t i = 0; i < len; ++i) {
         output.data[i] = parse_object(reader, leftovers, shared);
     }
     return output;
+} catch (std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse an expression body:\n  - ") + e.what());
 }
 
 }

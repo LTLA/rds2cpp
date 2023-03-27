@@ -10,11 +10,11 @@
 namespace rds2cpp {
 
 template<class Reader>
-BuiltInFunction parse_builtin_body(Reader& reader, std::vector<unsigned char>& leftovers) {
+BuiltInFunction parse_builtin_body(Reader& reader, std::vector<unsigned char>& leftovers) try {
     size_t len = get_length(reader, leftovers);
 
     BuiltInFunction output;
-    bool ok = extract_up_to(reader, leftovers, len,
+    extract_up_to(reader, leftovers, len,
         [&](const unsigned char* buffer, size_t n, size_t) -> void {
             auto ptr = reinterpret_cast<const char*>(buffer);
             output.name.insert(output.name.end(), ptr, ptr + n);
@@ -22,6 +22,8 @@ BuiltInFunction parse_builtin_body(Reader& reader, std::vector<unsigned char>& l
     );
     
     return output;
+} catch(std::exception& e) {
+    throw std::runtime_error(std::string("failed to parse built-in function body:\n  - ") + e.what());
 }
 
 }
