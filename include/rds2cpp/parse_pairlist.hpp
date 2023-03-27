@@ -71,7 +71,7 @@ PairList parse_pairlist_body(Reader& reader, std::vector<unsigned char>& leftove
     pairlist_internal::recursive_parse(reader, leftovers, output, header, shared);
     return output;
 } catch (std::exception& e) {
-    throw std::runtime_error(std::string("failed to parse a pairlist body:\n  - ") + e.what());
+    throw traceback("failed to parse a pairlist body", e);
 }
 
 }

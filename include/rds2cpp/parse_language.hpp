@@ -49,7 +49,7 @@ LanguageObject parse_language_body(Reader& reader, std::vector<unsigned char>& l
 
     return output;
 } catch (std::exception& e) {
-    throw std::runtime_error(std::string("failed to parse an R language object's body:\n  - ") + e.what());
+    throw traceback("failed to parse an R language object's body", e);
 }
 
 }

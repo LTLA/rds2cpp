@@ -37,6 +37,10 @@ void extract_up_to(Reader& reader, std::vector<unsigned char>& leftovers, size_t
     }
 }
 
+inline std::runtime_error traceback(std::string base, const std::exception& e) {
+    return std::runtime_error(base + "\n  - " + e.what());
+}
+
 template<class Reader>
 size_t get_length(Reader& reader, std::vector<unsigned char>& leftovers) {
     uint32_t initial = 0;
@@ -50,7 +54,7 @@ size_t get_length(Reader& reader, std::vector<unsigned char>& leftovers) {
             }
         );
     } catch (std::exception& e) {
-        throw std::runtime_error(std::string("failed to extract vector length:\n  - ") + e.what());
+        throw traceback("failed to extract vector length", e);
     }
 
     if (initial != static_cast<uint32_t>(-1)) {
@@ -69,7 +73,7 @@ size_t get_length(Reader& reader, std::vector<unsigned char>& leftovers) {
             }
         );
     } catch (std::exception& e) {
-        throw std::runtime_error(std::string("failed to extract large vector length:\n  - ") + e.what());
+        throw traceback("failed to extract large vector length", e);
     }
 
     return full;
@@ -95,7 +99,7 @@ Header parse_header(Reader& reader, std::vector<unsigned char>& leftovers) try {
     );
     return details;
 } catch (std::exception& e) {
-    throw std::runtime_error(std::string("failed to parse the R object header:\n  - ") + e.what());
+    throw traceback("failed to parse the R object header", e);
 }
 
 template<class Pointer, class Object>

@@ -121,7 +121,7 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
     shared.environments[eindex] = std::move(new_env);
     return EnvironmentIndex(eindex);
 } catch (std::exception& e) {
-    throw std::runtime_error(std::string("failed to parse a new environment body:\n  - ") + e.what());
+    throw traceback("failed to parse a new environment body", e);
 }
 
 }

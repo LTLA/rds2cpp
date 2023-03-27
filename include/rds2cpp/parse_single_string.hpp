@@ -67,7 +67,7 @@ StringInfo parse_single_string(Reader& reader, std::vector<unsigned char>& lefto
 
     return output;
 } catch (std::exception& e) {
-    throw std::runtime_error(std::string("failed to parse a single CHARSXP:\n  - ") + e.what());
+    throw traceback("failed to parse a single CHARSXP", e);
 }
 
 }

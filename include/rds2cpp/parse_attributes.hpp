@@ -32,7 +32,7 @@ void parse_attributes_body(Reader& reader, std::vector<unsigned char>& leftovers
     output.names.swap(plist.tag_names);
     output.encodings.swap(plist.tag_encodings);
 } catch (std::exception& e) {
-    throw std::runtime_error(std::string("failed to parse attribute data:\n  - ") + e.what());
+    throw traceback("failed to parse attribute contents", e);
 }
 
 template<class Reader>
@@ -44,7 +44,7 @@ void parse_attributes(Reader& reader, std::vector<unsigned char>& leftovers, Att
     parse_attributes_body(reader, leftovers, header, output, shared);
     return;
 } catch (std::exception& e) {
-    throw std::runtime_error(std::string("failed to parse attributes:\n  - ") + e.what());
+    throw traceback("failed to parse attributes", e);
 }
 
 }

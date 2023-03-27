@@ -21,12 +21,12 @@ GenericVector parse_list_body(Reader& reader, std::vector<unsigned char>& leftov
         try {
             output.data[i] = parse_object(reader, leftovers, shared);
         } catch (std::exception& e) {
-            throw std::runtime_error(std::string("failed to parse list element ") + std::to_string(i + 1) + ":\n  - " + e.what());
+            throw traceback("failed to parse list element " + std::to_string(i + 1), e);
         }
     }
     return output;
 } catch (std::exception& e) {
-    throw std::runtime_error(std::string("failed to parse an R list body:\n  - ") + e.what());
+    throw traceback("failed to parse an R list body", e);
 }
 
 }

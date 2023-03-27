@@ -56,7 +56,7 @@ Vector parse_numeric_compact_seq(Reader& reader, std::vector<unsigned char>& lef
 
     return output;
 } catch (std::exception& e) {
-    throw std::runtime_error(std::string("failed to parse compact numeric ALTREP:\n  - ") + e.what());
+    throw traceback("failed to parse compact numeric ALTREP", e);
 }
 
 template<class Vector, class Reader>
@@ -95,7 +95,7 @@ Vector parse_attribute_wrapper(Reader& reader, std::vector<unsigned char>& lefto
 
     return Vector(std::move(*coerced));
 } catch (std::exception& e) {
-    throw std::runtime_error(std::string("failed to parse attribute-wrapped ALTREP:\n  - ") + e.what());
+    throw traceback("failed to parse attribute-wrapped ALTREP", e);
 }
 
 template<class Reader>
@@ -172,7 +172,7 @@ StringVector parse_deferred_string(Reader& reader, std::vector<unsigned char>& l
 
     return output;
 } catch (std::exception& e) {
-    throw std::runtime_error(std::string("failed to parse deferred string ALTREP:\n  - ") + e.what());
+    throw traceback("failed to parse deferred string ALTREP", e);
 }
 
 }
@@ -209,7 +209,7 @@ std::unique_ptr<RObject> parse_altrep_body(Reader& reader, std::vector<unsigned 
 
     return output;
 } catch (std::exception& e) {
-    throw std::runtime_error(std::string("failed to parse ALTREP body:\n  - ") + e.what());
+    throw traceback("failed to parse ALTREP body", e);
 }
 
 }

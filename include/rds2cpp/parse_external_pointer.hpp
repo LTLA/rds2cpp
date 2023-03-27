@@ -28,7 +28,7 @@ ExternalPointerIndex parse_external_pointer_body(Reader& reader, std::vector<uns
 
     return ExternalPointerIndex(idx);
 } catch (std::exception& e) {
-    throw std::runtime_error(std::string("failed to parse an external pointer body:\n  - ") + e.what());
+    throw traceback("failed to parse an external pointer body", e);
 }
 
 }

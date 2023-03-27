@@ -22,7 +22,7 @@ ExpressionVector parse_expression_body(Reader& reader, std::vector<unsigned char
     }
     return output;
 } catch (std::exception& e) {
-    throw std::runtime_error(std::string("failed to parse an expression body:\n  - ") + e.what());
+    throw traceback("failed to parse an expression body", e);
 }
 
 }

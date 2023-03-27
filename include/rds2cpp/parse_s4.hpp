@@ -78,7 +78,7 @@ S4Object parse_s4_body(Reader& reader, std::vector<unsigned char>& leftovers, co
 
     return output;
 } catch (std::exception& e) {
-    throw std::runtime_error(std::string("failed to parse an S4 object's body:\n  - ") + e.what());
+    throw traceback("failed to parse an S4 object's body", e);
 }
 
 }

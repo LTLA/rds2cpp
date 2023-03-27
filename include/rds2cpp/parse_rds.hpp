@@ -45,7 +45,7 @@ RdsFile parse_rds(Reader& reader) {
                 }
             );
         } catch (std::exception& e) {
-            throw std::runtime_error(std::string("failed to read the header from the RDS preamble:\n  - ") + e.what());
+            throw traceback("failed to read the header from the RDS preamble", e);
         }
 
         if (static_cast<char>(accumulated[0]) != 'X' && static_cast<char>(accumulated[1]) != '\n') {
@@ -82,7 +82,7 @@ RdsFile parse_rds(Reader& reader) {
                 }
             );
         } catch (std::exception& e) {
-            throw std::runtime_error(std::string("failed to read the encoding length from the RDS preamble:\n  - ") + e.what());
+            throw traceback("failed to read the encoding length from the RDS preamble", e);
         }
 
         try {
@@ -92,7 +92,7 @@ RdsFile parse_rds(Reader& reader) {
                 }
             );
         } catch (std::exception& e) {
-            throw std::runtime_error(std::string("failed to read the encoding string from the RDS preamble:\n  - ") + e.what());
+            throw traceback("failed to read the encoding string from the RDS preamble", e);
         }
     }
 
