@@ -27,7 +27,7 @@ inline void inject_length(size_t value, std::vector<unsigned char>& buffer) {
     inject_integer(-1, buffer);
     uint64_t big = value;
 
-    auto ptr = reinterpret_cast<unsigned char*>(&value);
+    auto ptr = reinterpret_cast<unsigned char*>(&big);
     constexpr size_t width = 8;
     if (little_endian()) {
         std::reverse(ptr, ptr + width/2);
