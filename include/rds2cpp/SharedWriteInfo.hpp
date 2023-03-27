@@ -44,10 +44,10 @@ public:
         reference_count(1), 
         symbol_mappings(static_cast<int>(StringEncoding::ASCII) + 1),
         known_symbols(&s),
-        known_symbol_mappings(s.size()),
         known_environments(&e),
-        known_environment_mappings(e.size()),
         known_external_pointers(&ex),
+        known_symbol_mappings(s.size()),
+        known_environment_mappings(e.size()),
         known_external_pointer_mappings(ex.size())
     {}
 

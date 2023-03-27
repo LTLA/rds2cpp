@@ -60,13 +60,13 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
         pointerize_(Null());
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::ENV)) {
-        pointerize_(parse_new_environment_body(reader, leftovers, details, shared));
+        pointerize_(parse_new_environment_body(reader, leftovers, shared));
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::EXTPTR)) {
         pointerize_(parse_external_pointer_body(reader, leftovers, details, shared));
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::GLOBALENV_)) {
-        pointerize_(parse_global_environment_body(reader, leftovers, shared));
+        pointerize_(parse_global_environment_body());
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::REF)) {
         output = shared.resolve_reference(details);

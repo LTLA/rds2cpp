@@ -33,7 +33,7 @@ S4Object parse_s4_body(Reader& reader, std::vector<unsigned char>& leftovers, co
     size_t nslots = slot_plist.data.size();
     bool found_class = false;
 
-    for (auto s = 0; s < nslots; ++s) {
+    for (size_t s = 0; s < nslots; ++s) {
         if (!slot_plist.has_tag[s]) {
             throw std::runtime_error("all slots in an S4 object should be named");
         }

@@ -14,14 +14,13 @@ namespace rds2cpp {
 template<class Reader>
 PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, SharedParseInfo&);
 
-template<class Reader>
-EnvironmentIndex parse_global_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) {
+inline EnvironmentIndex parse_global_environment_body() {
     // Rely on default constructor.
     return EnvironmentIndex();
 }
 
 template<class Reader>
-EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, SharedParseInfo& shared) try {
+EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) try {
     // Need to provision the environment first, so that internal references are valid.
     size_t eindex = shared.request_environment();
     Environment new_env;
@@ -48,7 +47,7 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
         new_env.parent_type = SEXPType::ENV;
 
     } else if (lastbit == static_cast<unsigned char>(SEXPType::ENV)) {
-        auto env = parse_new_environment_body(reader, leftovers, parent, shared);
+        auto env = parse_new_environment_body(reader, leftovers, shared);
         new_env.parent = env.index;
         new_env.parent_type = SEXPType::ENV;
 

@@ -34,7 +34,6 @@ RdsFile parse_rds(Reader& reader) {
     RdsFile output(false);
 
     std::vector<unsigned char> leftovers;
-    bool remaining = true;
 
     // Reading the header first.
     {
