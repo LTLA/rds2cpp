@@ -50,7 +50,15 @@ void recursive_parse(Reader& reader, std::vector<unsigned char>& leftovers, Pair
         output.tag_encodings.resize(n);
     }
 
-    output.data.push_back(parse_object(reader, leftovers, shared));
+    try {
+        output.data.push_back(parse_object(reader, leftovers, shared));
+    } catch (std::exception& e) {
+        if (output.tag_names.back().empty()) {
+            throw traceback("failed to parse unnamed pairlist element " + std::to_string(output.tag_names.size()), e);
+        } else {
+            throw traceback("failed to parse pairlist element '" + output.tag_names.back() + "'", e);
+        }
+    }
 
     auto next_header = parse_header(reader, leftovers);
     if (next_header[3] == static_cast<unsigned char>(SEXPType::NILVALUE_)) {
