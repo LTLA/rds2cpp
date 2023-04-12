@@ -74,6 +74,16 @@ test_that("deferred string for integers works as expected", {
     saveRDS(x, file=tmp)
     roundtrip <- rds2cpp:::parse(tmp)
     expect_identical(roundtrip$value, x)
+
+    # Works when we store it inside a list; this checks that
+    # we pick up the terminus of the deferred_list correctly.
+    y <- list(x, "foobar")
+    expect_output(.Internal(inspect(y[[1]])), "deferred")
+
+    tmp <- tempfile(fileext=".rds")
+    saveRDS(y, file=tmp)
+    roundtrip <- rds2cpp:::parse(tmp)
+    expect_identical(roundtrip$value, y)
 })
 
 test_that("deferred string for doubles works as expected", {

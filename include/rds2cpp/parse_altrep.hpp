@@ -170,6 +170,12 @@ StringVector parse_deferred_string(Reader& reader, std::vector<unsigned char>& l
         throw std::runtime_error("deferred_string ALTREP's metadata should be a length-1 integer vector");
     }
 
+    // Chomp up the null.
+    auto terminator = parse_header(reader, leftovers);
+    if (terminator[3] != static_cast<unsigned char>(SEXPType::NILVALUE_)) {
+        throw std::runtime_error("failed to terminate a deferred string ALTREP correctly");
+    }
+
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse deferred string ALTREP", e);
