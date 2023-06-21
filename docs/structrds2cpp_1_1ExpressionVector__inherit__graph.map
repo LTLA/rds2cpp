@@ -1,4 +1,5 @@
 <map id="rds2cpp::ExpressionVector" name="rds2cpp::ExpressionVector">
-<area shape="rect" id="node1" title="Expression vector." alt="" coords="5,79,180,104"/>
-<area shape="rect" id="node2" href="$structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects." alt="" coords="32,5,153,31"/>
+<area shape="rect" id="Node000001" title="Expression vector." alt="" coords="5,79,180,105"/>
+<area shape="rect" id="Node000002" href="$structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects." alt="" coords="32,5,153,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,46,95,79,90,79,90,46"/>
 </map>
