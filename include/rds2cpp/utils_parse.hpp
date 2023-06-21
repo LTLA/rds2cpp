@@ -15,13 +15,11 @@ void extract_up_to(Reader& reader, std::vector<unsigned char>& leftovers, size_t
     std::copy(leftovers.begin() + processed, leftovers.end(), leftovers.begin());
     leftovers.resize(leftovers.size() - processed);
 
-    bool remaining = true;
     while (processed < expected) {
-        if (!remaining) {
+        if (!reader.load()) {
             throw std::runtime_error("no more bytes to read");
         }
 
-        remaining = reader();
         const unsigned char * buffer = reader.buffer();
         size_t available = reader.available();
 
