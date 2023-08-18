@@ -216,6 +216,7 @@ $(function() {
 <div class="ttc" id="astructrds2cpp_1_1RdsFile_html_aebd7594b4d63ea1537a6c460b482ce00"><div class="ttname"><a href="structrds2cpp_1_1RdsFile.html#aebd7594b4d63ea1537a6c460b482ce00">rds2cpp::RdsFile::environments</a></div><div class="ttdeci">std::vector&lt; Environment &gt; environments</div><div class="ttdef"><b>Definition</b> RdsFile.hpp:74</div></div>
 <div class="ttc" id="astructrds2cpp_1_1StringVector_html_a2ae3a82394b91bef285ad744f537fc39"><div class="ttname"><a href="structrds2cpp_1_1StringVector.html#a2ae3a82394b91bef285ad744f537fc39">rds2cpp::StringVector::add</a></div><div class="ttdeci">void add(std::string d, StringEncoding enc=StringEncoding::UTF8)</div><div class="ttdef"><b>Definition</b> RObject.hpp:262</div></div>
 </div><!-- fragment --><h1>Building projects</h1>
+<h2>CMake with <code>FetchContent</code></h2>
 <p>If you're using CMake, you just need to add something like this to your <code>CMakeLists.txt</code>:</p>
 <div class="fragment"><div class="line">include(FetchContent)</div>
 <div class="line"> </div>
@@ -232,7 +233,18 @@ $(function() {
 <div class="line"> </div>
 <div class="line"># For libaries</div>
 <div class="line">target_link_libraries(mylib INTERFACE rds2cpp)</div>
-</div><!-- fragment --><h1>Known limitations</h1>
+</div><!-- fragment --><h2>CMake using <code>find_package()</code></h2>
+<p>You can install the library by cloning a suitable version of this repository and running the following commands:</p>
+<div class="fragment"><div class="line">mkdir build &amp;&amp; cd build</div>
+<div class="line">cmake .. </div>
+<div class="line">cmake --build . --target install</div>
+</div><!-- fragment --><p>Then you can use <code>find_package()</code> as usual:</p>
+<div class="fragment"><div class="line">find_package(ltla_rds2cpp CONFIG REQUIRED)</div>
+<div class="line">target_link_libraries(mylib INTERFACE ltla::rds2cpp)</div>
+</div><!-- fragment --><h2>Manual</h2>
+<p>If you're not using CMake, the simple approach is to just copy the files in the [<code>include/</code>](include) subdirectory - either directly or with Git submodules - and include their path during compilation with, e.g., GCC's <code>-I</code>.</p>
+<p>You'll also need to add the <a href="https://github.com/LTLA/byteme"><b>byteme</b></a> header-only library to the compiler's search path. Normally, when using CMake, this is automatically linked to Zlib; this will now need to be done manually.</p>
+<h1>Known limitations</h1>
 <p>This library may not support RDS files created using <code>saveRDS()</code> with non-default parameters.</p>
 <p>Environments are written without a hash table, so as to avoid the need to replicate R's string hashing logic. This may result in slower retrieval of variables when those environments are loaded into an R session.</p>
 <p>Currently, no support is provided for unserializing built-in functions or user-defined closures. </p>
