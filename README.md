@@ -174,6 +174,8 @@ rds2cpp::write_rds(file_info, "my_env.rds");
 
 ## Building projects
 
+### CMake with `FetchContent`
+
 If you're using CMake, you just need to add something like this to your `CMakeLists.txt`:
 
 ```
@@ -197,6 +199,31 @@ target_link_libraries(myexe rds2cpp)
 # For libaries
 target_link_libraries(mylib INTERFACE rds2cpp)
 ```
+
+### CMake using `find_package()`
+
+You can install the library by cloning a suitable version of this repository and running the following commands:
+
+```sh
+mkdir build && cd build
+cmake .. 
+cmake --build . --target install
+```
+
+Then you can use `find_package()` as usual:
+
+```cmake
+find_package(ltla_rds2cpp CONFIG REQUIRED)
+target_link_libraries(mylib INTERFACE ltla::rds2cpp)
+```
+
+### Manual
+
+If you're not using CMake, the simple approach is to just copy the files in the [`include/`](include) subdirectory -
+either directly or with Git submodules - and include their path during compilation with, e.g., GCC's `-I`.
+
+You'll also need to add the [**byteme**](https://github.com/LTLA/byteme) header-only library to the compiler's search path.
+Normally, when using CMake, this is automatically linked to Zlib; this will now need to be done manually.
 
 ## Known limitations
 
