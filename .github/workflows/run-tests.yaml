@@ -18,6 +18,9 @@ jobs:
     - name: Get latest CMake
       uses: lukka/get-cmake@latest
 
+    - name: Install Zlib
+      run: apt-get update && apt-get install zlib1g-dev
+
     - name: Configure the build 
       run: cmake -S . -B build 
 
@@ -38,9 +41,6 @@ jobs:
       shell: Rscript {0}
       run: |
         install.packages(c("Rcpp", "testthat"))
-
-    - name: Install Zlib
-      run: apt-get update && apt-get install zlib1g-dev
 
     - name: Install the test package
       run: R CMD INSTALL tests
