@@ -24,6 +24,16 @@ endif()
 
 target_link_libraries(rds2cpp INTERFACE ltla::byteme)
 
+# Tests
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    option(RDS2CPP_TESTS "Build rds2cpp's tests." ON)
+else()
+    option(RDS2CPP_TESTS "Build rds2cpp's tests." OFF)
+endif()
+if(RDS2CPP_TESTS)
+    add_subdirectory(examples)
+endif()
+
 # Install
 install(DIRECTORY include/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ltla_rds2cpp)

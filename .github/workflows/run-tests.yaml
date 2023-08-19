@@ -21,6 +21,9 @@ jobs:
     - name: Configure the build 
       run: cmake -S . -B build 
 
+    - name: Run the build 
+      run: cmake --build build 
+
     - name: Set directories
       run: |
         echo "R_PKG_DIR=${R_HOME}/site-library" >> $GITHUB_ENV
