@@ -58,7 +58,7 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, rds2cpp::Rds
         output.reset(ptr);
 
         ptr->data.resize(vec.size());
-        for (size_t i = 0; i < vec.size(); ++i) {
+        for (size_t i = 0, end = vec.size(); i < end; ++i) {
             ptr->data[i] = std::complex<double>(vec[i].r, vec[i].i);
         }
 
@@ -88,7 +88,7 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, rds2cpp::Rds
             ptr->encodings.resize(vec.size(), rds2cpp::StringEncoding::UTF8);
             ptr->missing.resize(vec.size(), false);
 
-            for (size_t i = 0; i < vec.size(); ++i) {
+            for (size_t i = 0, end = vec.size(); i < end; ++i) {
                 Rcpp::String current(vec[i]);
                 if (current == NA_STRING) {
                     ptr->missing[i] = true;
@@ -119,7 +119,7 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, rds2cpp::Rds
                 names = vec.attr("names");
             }
 
-            for (size_t i = 0; i < vec.size(); ++i) {
+            for (size_t i = 0, end = vec.size(); i < end; ++i) {
                 ptr->data.push_back(unconvert(vec[i], globals));
                 std::string curname;
                 if (has_names) {
@@ -158,7 +158,7 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, rds2cpp::Rds
                     latest.locked = is_locked[0];
 
                     Rcpp::CharacterVector names = vec.attr("names");
-                    for (size_t i = 0; i < vec.size(); ++i) {
+                    for (size_t i = 0, end = vec.size(); i < end; ++i) {
                         latest.variable_names.emplace_back(Rcpp::String(names[i]).get_cstring());
                         latest.variable_encodings.push_back(rds2cpp::StringEncoding::UTF8);
                         latest.variable_values.push_back(unconvert(vec[i], globals));
@@ -191,7 +191,7 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, rds2cpp::Rds
                 argnames = arguments.names();
             }
 
-            for (size_t a = 0; a < arguments.size(); ++a) {
+            for (size_t a = 0, end = arguments.size(); a < end; ++a) {
                 if (argnames.size()) {
                     std::string candidate = Rcpp::String(argnames[a]).get_cstring();
                     if (!candidate.empty()) {
@@ -206,8 +206,8 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, rds2cpp::Rds
         } else if (vec.hasAttribute("pretend-to-be-an-expression")) {
             auto ptr = new rds2cpp::ExpressionVector;
             output.reset(ptr);
-            for (size_t i = 0; i < vec.size(); ++i) {
-                ptr->data.push_back(unconvert(vec[i], globals));
+            for (const auto& v : vec) {
+                ptr->data.push_back(unconvert(v, globals));
             }
             add_attributes_except(x, ptr, globals, { "pretend-to-be-an-expression" });
 
@@ -232,8 +232,8 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, rds2cpp::Rds
         } else {
             auto ptr = new rds2cpp::GenericVector;
             output.reset(ptr);
-            for (size_t i = 0; i < vec.size(); ++i) {
-                ptr->data.push_back(unconvert(vec[i], globals));
+            for (const auto& v : vec) {
+                ptr->data.push_back(unconvert(v, globals));
             }
             add_attributes(x, ptr, globals);
         }

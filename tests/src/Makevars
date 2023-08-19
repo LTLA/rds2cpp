@@ -1,2 +1,2 @@
-PKG_CPPFLAGS += -I../../include -I../../build/_deps/byteme-src/include
+PKG_CPPFLAGS += -I../../include -I../../build/_deps/byteme-src/include -Wall -Wpedantic -Wextra
 PKG_LIBS += -lz
