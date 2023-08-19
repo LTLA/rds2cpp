@@ -1,9 +1,13 @@
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 
 name: Run tests
 
 jobs:
-  build:
+  test:
     name: Run tests
     runs-on: ubuntu-latest
     container: rocker/rstudio:latest
@@ -22,7 +26,7 @@ jobs:
         echo "R_PKG_DIR=${R_HOME}/site-library" >> $GITHUB_ENV
 
     - name: Restore the package directory
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ env.R_PKG_DIR }}
         key: preinstalled-packages
