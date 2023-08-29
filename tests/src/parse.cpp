@@ -174,6 +174,12 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
 
     } else if (input->type() == rds2cpp::SEXPType::GLOBALENV_) {
         return Rcpp::List::create(Rcpp::Named("environment_id") = Rcpp::IntegerVector::create(-1));
+
+    } else if (input->type() == rds2cpp::SEXPType::BASEENV_) {
+        return Rcpp::List::create(Rcpp::Named("environment_id") = Rcpp::IntegerVector::create(-2));
+
+    } else if (input->type() == rds2cpp::SEXPType::EMPTYENV_) {
+        return Rcpp::List::create(Rcpp::Named("environment_id") = Rcpp::IntegerVector::create(-3));
     }
 
     return R_NilValue;
@@ -201,9 +207,22 @@ Rcpp::RObject parse(std::string file_name) {
         }
         vars.attr("names") = varnames;
 
+        int parent_code = 0;
+        if (env.parent_type == rds2cpp::SEXPType::ENV) {
+            parent_code = static_cast<int>(env.parent);
+        } else if (env.parent_type == rds2cpp::SEXPType::GLOBALENV_) {
+            parent_code = -1;
+        } else if (env.parent_type == rds2cpp::SEXPType::BASEENV_) {
+            parent_code = -2;
+        } else if (env.parent_type == rds2cpp::SEXPType::EMPTYENV_) {
+            parent_code = -3;
+        } else {
+            throw std::runtime_error("oops, don't know how to handle a parent type of " + std::to_string(static_cast<int>(env.parent_type)));
+        }
+
         auto curout = Rcpp::List::create(
             Rcpp::Named("variables") = vars,
-            Rcpp::Named("parent") = Rcpp::IntegerVector::create(env.parent_type == rds2cpp::SEXPType::GLOBALENV_ ? -1 : static_cast<int>(env.parent)),
+            Rcpp::Named("parent") = parent_code,
             Rcpp::Named("locked") = env.locked
         );
         add_attributes(env.attributes, curout);

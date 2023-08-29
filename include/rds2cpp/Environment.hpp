@@ -30,6 +30,7 @@ struct Environment {
 
     /**
      * Type of the parent environment.
+     * This is usually one of `SEXPType::ENV`, `SEXPType::GLOBALENV_` or `SEXPType::BASEENV_`.
      */
     SEXPType parent_type = SEXPType::GLOBALENV_;
 

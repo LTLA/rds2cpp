@@ -15,8 +15,15 @@ template<class Reader>
 PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, SharedParseInfo&);
 
 inline EnvironmentIndex parse_global_environment_body() {
-    // Rely on default constructor.
-    return EnvironmentIndex();
+    return EnvironmentIndex(SEXPType::GLOBALENV_);
+}
+
+inline EnvironmentIndex parse_base_environment_body() {
+    return EnvironmentIndex(SEXPType::BASEENV_);
+}
+
+inline EnvironmentIndex parse_empty_environment_body() {
+    return EnvironmentIndex(SEXPType::EMPTYENV_);
 }
 
 template<class Reader>
@@ -53,6 +60,12 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
 
     } else if (lastbit == static_cast<unsigned char>(SEXPType::GLOBALENV_)) {
         new_env.parent_type = SEXPType::GLOBALENV_;
+
+    } else if (lastbit == static_cast<unsigned char>(SEXPType::BASEENV_)) {
+        new_env.parent_type = SEXPType::BASEENV_;
+
+    } else if (lastbit == static_cast<unsigned char>(SEXPType::EMPTYENV_)) {
+        new_env.parent_type = SEXPType::EMPTYENV_;
 
     } else {
         throw std::runtime_error("could not resolve the parent environment");

@@ -50,6 +50,52 @@ test_that("empty environment writing works as expected", {
     expect_identical(roundtrip, .GlobalEnv)
 })
 
+test_that("base environment loading works as expected", {
+    tmp <- tempfile(fileext=".rds")
+    y <- baseenv()
+    saveRDS(y, file=tmp)
+
+    roundtrip <- rds2cpp:::parse(tmp)
+    expect_identical(roundtrip$value$environment_id, -2L)
+    expect_identical(length(roundtrip$environments), 0L)
+
+    # Adding the baseenv as a parent.
+    tmp <- tempfile(fileext=".rds")
+    y <- new.env(parent=baseenv())
+    y$AA <- 1:5
+    saveRDS(y, file=tmp)
+    roundtrip <- rds2cpp:::parse(tmp)
+
+    expect_identical(roundtrip$value$environment_id, 0L)
+    expect_identical(length(roundtrip$environments), 1L)
+    expect_identical(roundtrip$environments[[1]]$parent, -2L)
+    expect_identical(ls(roundtrip$environments[[1]]$variables), "AA")
+    expect_false(roundtrip$environments[[1]]$locked)
+})
+
+test_that("empty environment loading works as expected", {
+    tmp <- tempfile(fileext=".rds")
+    y <- emptyenv()
+    saveRDS(y, file=tmp)
+
+    roundtrip <- rds2cpp:::parse(tmp)
+    expect_identical(roundtrip$value$environment_id, -3L)
+    expect_identical(length(roundtrip$environments), 0L)
+
+    # Adding the emptyenv as a parent.
+    tmp <- tempfile(fileext=".rds")
+    y <- new.env(parent=emptyenv())
+    y$AA <- 1:5
+    saveRDS(y, file=tmp)
+    roundtrip <- rds2cpp:::parse(tmp)
+
+    expect_identical(roundtrip$value$environment_id, 0L)
+    expect_identical(length(roundtrip$environments), 1L)
+    expect_identical(roundtrip$environments[[1]]$parent, -3L)
+    expect_identical(ls(roundtrip$environments[[1]]$variables), "AA")
+    expect_false(roundtrip$environments[[1]]$locked)
+})
+
 test_that("locked environment loading works as expected", {
     # local() is needed to deal with the fact that the parent
     # environment is mangled somewhat by testthat.
