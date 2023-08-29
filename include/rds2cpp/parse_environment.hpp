@@ -64,11 +64,14 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
     } else if (lastbit == static_cast<unsigned char>(SEXPType::BASEENV_)) {
         new_env.parent_type = SEXPType::BASEENV_;
 
-    } else if (lastbit == static_cast<unsigned char>(SEXPType::EMPTYENV_)) {
+    } else if (lastbit == static_cast<unsigned char>(SEXPType::NILVALUE_)) { // handle weirdness when unserializing igraph graph objects... oh well.
+        new_env.parent_type = SEXPType::BASEENV_;
+
+    } else if (lastbit == static_cast<unsigned char>(SEXPType::EMPTYENV_)) { 
         new_env.parent_type = SEXPType::EMPTYENV_;
 
     } else {
-        throw std::runtime_error("could not resolve the parent environment");
+        throw std::runtime_error("could not resolve the parent environment (" + std::to_string(lastbit) + ")");
     }
 
     auto unhashed = parse_header(reader, leftovers); 
