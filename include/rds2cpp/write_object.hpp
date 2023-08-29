@@ -65,6 +65,8 @@ void write_object(const RObject* object, Writer& writer, std::vector<unsigned ch
             break;
         case SEXPType::ENV: 
         case SEXPType::GLOBALENV_:
+        case SEXPType::BASEENV_:
+        case SEXPType::EMPTYENV_:
             shared.write_environment(object, writer, buffer);
             break;
         case SEXPType::EXTPTR:

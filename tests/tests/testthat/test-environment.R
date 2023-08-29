@@ -448,6 +448,37 @@ test_that("environment parenthood works as expected when writing", {
     expect_identical(roundtrip$third$maya, z$third$maya)
 })
 
+test_that("writers work with the special environments", {
+    z <- list(
+        first = {
+            y <- list()
+            attr(y, "pretend-to-be-an-environment") <- TRUE
+            attr(y, "environment-index") <- -1L
+            y
+        },
+        second = {
+            y <- list()
+            attr(y, "pretend-to-be-an-environment") <- TRUE
+            attr(y, "environment-index") <- -2L
+            y
+        },
+        third = {
+            y <- list()
+            attr(y, "pretend-to-be-an-environment") <- TRUE
+            attr(y, "environment-index") <- -3L
+            y
+        }
+    )
+
+    tmp <- tempfile(fileext=".rds")
+    rds2cpp::write(z, file=tmp)
+    roundtrip <- readRDS(tmp)
+
+    expect_identical(roundtrip$first, .GlobalEnv)
+    expect_identical(roundtrip$second, baseenv())
+    expect_identical(roundtrip$third, emptyenv())
+})
+
 test_that("self-references are properly resolved", {
     output <- local({
         y <- new.env()

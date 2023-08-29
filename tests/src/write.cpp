@@ -169,8 +169,18 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, rds2cpp::Rds
                 } else if (static_cast<size_t>(index) > globals.environments.size()) {
                     throw std::runtime_error("environment index out of range");
                 }
-            } else {
+
+            } else if (index == -1) {
                 ptr->env_type = rds2cpp::SEXPType::GLOBALENV_;
+
+            } else if (index == -2) {
+                ptr->env_type = rds2cpp::SEXPType::BASEENV_;
+
+            } else if (index == -3) {
+                ptr->env_type = rds2cpp::SEXPType::EMPTYENV_;
+
+            } else {
+                throw std::runtime_error("unknown special environment index " + std::to_string(index));
             }
 
         } else if (vec.hasAttribute("pretend-to-be-a-builtin")) {
