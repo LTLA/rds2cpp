@@ -178,7 +178,7 @@ rds2cpp::write_rds(file_info, "my_env.rds");
 
 If you're using CMake, you just need to add something like this to your `CMakeLists.txt`:
 
-```
+```cmake
 include(FetchContent)
 
 FetchContent_Declare(
@@ -192,7 +192,7 @@ FetchContent_MakeAvailable(rds2cpp)
 
 Then you can link to **rds2cpp** to make the headers available during compilation:
 
-```
+```cmake
 # For executables:
 target_link_libraries(myexe rds2cpp)
 
