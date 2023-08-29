@@ -138,9 +138,9 @@ public:
         auto index = ptr->index;
         auto env_type = ptr->env_type;
 
-        if (env_type == SEXPType::GLOBALENV_) {
+        if (env_type == SEXPType::GLOBALENV_ || env_type == SEXPType::BASEENV_ || env_type == SEXPType::EMPTYENV_) {
             buffer.clear();
-            inject_header(SEXPType::GLOBALENV_, buffer);
+            inject_header(env_type, buffer);
             writer.write(buffer.data(), buffer.size());
             return;
         }
