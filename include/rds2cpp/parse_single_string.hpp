@@ -14,37 +14,37 @@ struct StringInfo {
     bool missing;
 };
 
-template<class Reader>
-StringInfo parse_single_string(Reader& reader, std::vector<unsigned char>& leftovers) try {
-    auto header = parse_header(reader, leftovers);
+template<class Source_>
+StringInfo parse_single_string(Source_& src) try {
+    auto header = parse_header(src);
     std::reverse(header.begin(), header.end()); // make it little-endian for easier indexing.
     if (header[0] != static_cast<unsigned char>(SEXPType::CHAR)) {
         throw std::runtime_error("expected a CHARSXP representation for a string");
     }
 
     // Getting the string length; all strings are less than 2^31-1,
-    // see https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Long-vectors.
-    uint32_t strlen = 0;
-    extract_up_to(reader, leftovers, 4, 
-        [&](const unsigned char* buffer, size_t n, size_t) -> void {
-            for (size_t x = 0; x < n; ++x) {
-                strlen <<= 8;
-                strlen += buffer[x];
-            }
+    // see https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Long-vectors
+    size_t strlen = 0;
+    for (int i = 0; i < 4; ++i) {
+        if (!src.advance()) {
+            throw empty_error();
         }
-    );
+        strlen <<= 8;
+        strlen += src.get();
+    }
 
     StringInfo output;
     output.missing = (strlen == static_cast<uint32_t>(-1));
 
     if (!output.missing) {
         auto& str = output.value;
-        extract_up_to(reader, leftovers, strlen,
-            [&](const unsigned char* buffer, size_t n, size_t) -> void {
-                auto ptr = reinterpret_cast<const char*>(buffer);
-                str.insert(str.end(), ptr, ptr + n);
+        str.resize(strlen);
+        for (size_t i = 0; i < strlen; ++i) {
+            if (!src.advance()) {
+                throw empty_error();
             }
-        );
+            str[i] = src.get();
+        }
 
         /* String encoding is stored in the gp field, from bits 12 to 27 in the header.
          * We make life easier by just accessing the relevant byte below, after adjusting

@@ -10,7 +10,7 @@
 #include "SharedParseInfo.hpp"
 #include "parse_object.hpp"
 
-#include "byteme/SomeFileReader.hpp"
+#include "byteme/byteme.hpp"
 
 /**
  * @file parse_rds.hpp
@@ -23,49 +23,86 @@ namespace rds2cpp {
 /**
  * Parse the contents of an RDS file.
  *
- * @tparam Reader A [`byteme::Reader`](https://ltla.github.io/byteme) class.
+ * @tparam parallel_ Whether to read and parse the file in parallel.
+ * @tparam Reader_ A [`byteme::Reader`](https://ltla.github.io/byteme) class, or any class with a compatible interface.
  *
  * @param reader Instance of a `Reader` class, containing the contents of the RDS file.
  *
  * @return An `RdsFile` object containing the contents of the RDS file.
  */
-template<class Reader>
-RdsFile parse_rds(Reader& reader) {
+template<bool parallel_ = false, class Reader_>
+RdsFile parse_rds(Reader_& reader) {
+    typename std::conditional<parallel_, 
+        byteme::PerByte<unsigned char, Reader_*>, 
+        byteme::PerByteParallel<unsigned char, Reader_*>
+    >::type src(&reader);
+
     RdsFile output(false);
 
-    std::vector<unsigned char> leftovers;
-
-    // Reading the header first.
+    // Reading the header first. This is the first and only time that 
+    // we need to do a src.valid() check, as we're using the current 
+    // position of the source; in all other cases, it can be assumed
+    // that the source needs to be advance()'d before get().
     {
-        std::vector<unsigned char> accumulated;
         try {
-            extract_up_to(reader, leftovers, 14,
-                [&](const unsigned char* buffer, size_t n, size_t) -> void {
-                    accumulated.insert(accumulated.end(), buffer, buffer + n);
-                }
-            );
+            if (!src.valid()) {
+                throw empty_error();
+            }
+            if (src.get() != 'X') {
+                throw std::runtime_error("only RDS files in XDR format are currently supported");
+            }
+
+            if (!src.advance()) {
+                throw empty_error();
+            }
+            if (src.get() != '\n') {
+                throw std::runtime_error("only RDS files in XDR format are currently supported");
+            }
         } catch (std::exception& e) {
             throw traceback("failed to read the header from the RDS preamble", e);
         }
 
-        if (static_cast<char>(accumulated[0]) != 'X' && static_cast<char>(accumulated[1]) != '\n') {
-            throw std::runtime_error("only RDS files in XDR format are currently supported");
-        }
-
         output.format_version = 0;
-        for (size_t pos = 2; pos < 6; ++pos) {
-            output.format_version <<= 8;
-            output.format_version += accumulated[pos];
+        try {
+            for (int i = 0; i < 4; ++i) {
+                if (!src.advance()) {
+                    throw empty_error();
+                }
+                output.format_version <<= 8;
+                output.format_version += src.get();
+            }
+        } catch (std::exception& e) {
+            throw traceback("failed to read the format version number from the RDS preamble", e);
+        } 
+
+        // Just skipping the first byte for the R reader/writer versions...
+        // unless we get up to a major version > 255, then we're in trouble.
+        try {
+            if (!src.advance()) {
+                throw empty_error();
+            }
+            for (int pos = 0; pos < 3; ++pos) {
+                if (!src.advance()) {
+                    throw empty_error();
+                }
+               output.writer_version[pos] = src.get();
+            }
+        } catch (std::exception& e) {
+            throw traceback("failed to read the writer version number from the RDS preamble", e);
         }
 
-        // Just skipping the first byte for the versions... unless we get up
-        // to a major version > 255, then we're in trouble.
-        for (size_t pos = 7; pos < 10; ++pos) {
-           output.writer_version[pos - 7] = accumulated[pos];
-        }
-
-        for (size_t pos = 11; pos < 14; ++pos) {
-           output.reader_version[pos - 11] = accumulated[pos];
+        try {
+            if (!src.advance()) {
+                throw empty_error();
+            }
+            for (int pos = 0; pos < 3; ++pos) {
+                if (!src.advance()) {
+                    throw empty_error();
+                }
+                output.reader_version[pos] = src.get();
+            }
+        } catch (std::exception& e) {
+            throw traceback("failed to read the reader version number from the RDS preamble", e);
         }
     }
 
@@ -73,24 +110,25 @@ RdsFile parse_rds(Reader& reader) {
     {
         size_t encoding_length = 0;
         try {
-            extract_up_to(reader, leftovers, 4,
-                [&](const unsigned char* buffer, size_t n, size_t) -> void {
-                    for (size_t b = 0; b < n; ++b) {
-                        encoding_length <<= 8;
-                        encoding_length += buffer[b];
-                    }
+            for (int b = 0; b < 4; ++b) {
+                if (!src.advance()) {
+                    throw empty_error();
                 }
-            );
+                encoding_length <<= 8;
+                encoding_length += src.get();
+            }
         } catch (std::exception& e) {
             throw traceback("failed to read the encoding length from the RDS preamble", e);
         }
 
         try {
-            extract_up_to(reader, leftovers, encoding_length,
-                [&](const unsigned char* buffer, size_t n, size_t) -> void {
-                    output.encoding.insert(output.encoding.end(), buffer, buffer + n);
+            output.encoding.reserve(encoding_length);
+            for (size_t b = 0; b < encoding_length; ++b) {
+                if (!src.advance()) {
+                    throw empty_error();
                 }
-            );
+                output.encoding.push_back(src.get());
+            }
         } catch (std::exception& e) {
             throw traceback("failed to read the encoding string from the RDS preamble", e);
         }
@@ -98,7 +136,7 @@ RdsFile parse_rds(Reader& reader) {
 
     // Now we can finally read the damn object.
     SharedParseInfo shared;
-    output.object = parse_object(reader, leftovers, shared);
+    output.object = parse_object(src, shared);
     output.environments = std::move(shared.environments);
     output.symbols = std::move(shared.symbols);
     output.external_pointers = std::move(shared.external_pointers);

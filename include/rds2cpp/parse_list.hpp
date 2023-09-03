@@ -10,16 +10,16 @@
 
 namespace rds2cpp {
 
-template<class Reader>
-std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&, SharedParseInfo& shared);
+template<class Source_>
+std::unique_ptr<RObject> parse_object(Source_&, SharedParseInfo& shared);
 
-template<class Reader>
-GenericVector parse_list_body(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) try {
-    size_t len = get_length(reader, leftovers);
+template<class Source_>
+GenericVector parse_list_body(Source_& src, SharedParseInfo& shared) try {
+    size_t len = get_length(src);
     GenericVector output(len);
     for (size_t i = 0; i < len; ++i) {
         try {
-            output.data[i] = parse_object(reader, leftovers, shared);
+            output.data[i] = parse_object(src, shared);
         } catch (std::exception& e) {
             throw traceback("failed to parse list element " + std::to_string(i + 1), e);
         }

@@ -13,18 +13,22 @@ namespace rds2cpp {
 
 namespace atomic_internal {
 
-template<class Vector, class Reader>
-Vector parse_integer_or_logical_body(Reader& reader, std::vector<unsigned char>& leftovers) {
-    size_t len = get_length(reader, leftovers);
+template<class Vector, class Source_>
+Vector parse_integer_or_logical_body(Source_& src) {
+    size_t len = get_length(src);
     Vector output(len);
 
     constexpr size_t width = 4;
+    static_assert(width == sizeof(decltype(output.data[0])));
+    size_t byte_length = width * len;
+
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    extract_up_to(reader, leftovers, width * len,
-        [&](const unsigned char* buffer, size_t n, size_t i) -> void {
-            std::copy(buffer, buffer + n, ptr + i);
+    for (size_t i = 0; i < byte_length; ++i) {
+        if (!src.advance()) {
+            throw empty_error();
         }
-    );
+        ptr[i] = src.get();
+    }
 
     // Flipping endianness.
     if (little_endian()) {
@@ -39,32 +43,36 @@ Vector parse_integer_or_logical_body(Reader& reader, std::vector<unsigned char>&
 
 }
 
-template<class Reader>
-IntegerVector parse_integer_body(Reader& reader, std::vector<unsigned char>& leftovers) try {
-    return atomic_internal::parse_integer_or_logical_body<IntegerVector>(reader, leftovers);
+template<class Source_>
+IntegerVector parse_integer_body(Source_& src) try {
+    return atomic_internal::parse_integer_or_logical_body<IntegerVector>(src);
 } catch (std::exception& e) {
     throw traceback("failed to parse data for an integer vector", e);
 }
 
-template<class Reader>
-LogicalVector parse_logical_body(Reader& reader, std::vector<unsigned char>& leftovers) try {
-    return atomic_internal::parse_integer_or_logical_body<LogicalVector>(reader, leftovers);
+template<class Source_>
+LogicalVector parse_logical_body(Source_& src) try {
+    return atomic_internal::parse_integer_or_logical_body<LogicalVector>(src);
 } catch (std::exception& e) {
     throw traceback("failed to parse data for a logical vector", e);
 }
 
-template<class Reader>
-DoubleVector parse_double_body(Reader& reader, std::vector<unsigned char>& leftovers) try {
-    size_t len = get_length(reader, leftovers);
+template<class Source_>
+DoubleVector parse_double_body(Source_& src) try {
+    size_t len = get_length(src);
     DoubleVector output(len);
 
     constexpr size_t width = 8;
+    static_assert(width == sizeof(decltype(output.data[0])));
+    size_t byte_length = width * len;
+
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    extract_up_to(reader, leftovers, width * len,
-        [&](const unsigned char* buffer, size_t n, size_t i) -> void {
-            std::copy(buffer, buffer + n, ptr + i);
+    for (size_t i = 0; i < byte_length; ++i) {
+        if (!src.advance()) {
+            throw empty_error();
         }
-    );
+        ptr[i] = src.get();
+    }
 
     // Flipping endianness.
     if (little_endian()) {
@@ -79,41 +87,48 @@ DoubleVector parse_double_body(Reader& reader, std::vector<unsigned char>& lefto
     throw traceback("failed to parse data for a double vector", e);
 }
 
-template<class Reader>
-RawVector parse_raw_body(Reader& reader, std::vector<unsigned char>& leftovers) try {
-    size_t len = get_length(reader, leftovers);
+template<class Source_>
+RawVector parse_raw_body(Source_& src) try {
+    size_t len = get_length(src);
     RawVector output(len);
 
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    extract_up_to(reader, leftovers, len,
-        [&](const unsigned char* buffer, size_t n, size_t i) -> void {
-            std::copy(buffer, buffer + n, ptr + i);
+    for (size_t i = 0; i < len; ++i) {
+        if (!src.advance()) {
+            throw empty_error();
         }
-    );
+        ptr[i] = src.get();
+    } 
 
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse data for a raw vector", e);
 }
 
-template<class Reader>
-ComplexVector parse_complex_body(Reader& reader, std::vector<unsigned char>& leftovers) try {
-    size_t len = get_length(reader, leftovers);
+template<class Source_>
+ComplexVector parse_complex_body(Source_& src) try {
+    size_t len = get_length(src);
     ComplexVector output(len);
 
     constexpr size_t width = 16;
+    static_assert(width == sizeof(decltype(output.data[0])));
+    size_t byte_length = width * len;
+
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    extract_up_to(reader, leftovers, width * len,
-        [&](const unsigned char* buffer, size_t n, size_t i) -> void {
-            std::copy(buffer, buffer + n, ptr + i);
+    for (size_t b = 0; b < byte_length; ++b) {
+        if (!src.advance()) {
+            throw empty_error();
         }
-    );
+        ptr[b] = src.get();
+    }
 
     // Flipping endianness for each double.
     if (little_endian()) {
+        constexpr size_t single_width = width / 2;
+        size_t single_length = len * 2;
         auto copy = ptr;
-        for (size_t n = 0; n < len * 2; ++n, copy += width / 2) {
-            std::reverse(copy, copy + width/2);
+        for (size_t n = 0; n < single_length; ++n, copy += single_width) {
+            std::reverse(copy, copy + single_width);
         }
     }
 
@@ -122,12 +137,12 @@ ComplexVector parse_complex_body(Reader& reader, std::vector<unsigned char>& lef
     throw traceback("failed to parse data for a complex vector", e);
 }
 
-template<class Reader>
-StringVector parse_string_body(Reader& reader, std::vector<unsigned char>& leftovers) try {
-    size_t len = get_length(reader, leftovers);
+template<class Source_>
+StringVector parse_string_body(Source_& src) try {
+    size_t len = get_length(src);
     StringVector output(len);
     for (size_t i = 0; i < len; ++i) {
-        auto str = parse_single_string(reader, leftovers);
+        auto str = parse_single_string(src);
         output.data[i] = str.value;
         output.encodings[i] = str.encoding;
         output.missing[i] = str.missing;

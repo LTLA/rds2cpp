@@ -10,15 +10,15 @@
 
 namespace rds2cpp {
 
-template<class Reader>
-std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&, SharedParseInfo& shared);
+template<class Source_>
+std::unique_ptr<RObject> parse_object(Source_&, SharedParseInfo& shared);
 
-template<class Reader>
-ExpressionVector parse_expression_body(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) try {
-    size_t len = get_length(reader, leftovers);
+template<class Source_>
+ExpressionVector parse_expression_body(Source_& src, SharedParseInfo& shared) try {
+    size_t len = get_length(src);
     ExpressionVector output(len);
     for (size_t i = 0; i < len; ++i) {
-        output.data[i] = parse_object(reader, leftovers, shared);
+        output.data[i] = parse_object(src, shared);
     }
     return output;
 } catch (std::exception& e) {

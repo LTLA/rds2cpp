@@ -26,9 +26,9 @@
 
 namespace rds2cpp {
 
-template<class Reader>
-std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) {
-    auto details = parse_header(reader, leftovers);
+template<class Source_>
+std::unique_ptr<RObject> parse_object(Source_& src, SharedParseInfo& shared) {
+    auto details = parse_header(src);
     auto sexp_type = details[3];
 
     std::unique_ptr<RObject> output;
@@ -45,25 +45,25 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
     };
 
     if (sexp_type == static_cast<unsigned char>(SEXPType::LIST)) {
-        pointerize_(parse_pairlist_body(reader, leftovers, details, shared));
+        pointerize_(parse_pairlist_body(src, details, shared));
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::SYM)) {
-        pointerize_(parse_symbol_body(reader, leftovers, shared));
+        pointerize_(parse_symbol_body(src, shared));
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::S4)) {
-        pointerize_(parse_s4_body(reader, leftovers, details, shared));
+        pointerize_(parse_s4_body(src, details, shared));
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::ALTREP_)) {
-        output = parse_altrep_body(reader, leftovers, shared);
+        output = parse_altrep_body(src, shared);
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::NIL) || sexp_type == static_cast<unsigned char>(SEXPType::NILVALUE_)) {
         pointerize_(Null());
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::ENV)) {
-        pointerize_(parse_new_environment_body(reader, leftovers, shared));
+        pointerize_(parse_new_environment_body(src, shared));
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::EXTPTR)) {
-        pointerize_(parse_external_pointer_body(reader, leftovers, details, shared));
+        pointerize_(parse_external_pointer_body(src, details, shared));
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::GLOBALENV_)) {
         pointerize_(parse_global_environment_body());
@@ -78,36 +78,36 @@ std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>
         output = shared.resolve_reference(details);
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::BUILTIN)) {
-        pointerize_(parse_builtin_body(reader, leftovers));
+        pointerize_(parse_builtin_body(src));
 
     } else if (sexp_type == static_cast<unsigned char>(SEXPType::LANG)) {
-        pointerize_(parse_language_body(reader, leftovers, details, shared));
+        pointerize_(parse_language_body(src, details, shared));
 
     } else {
         Attributes* attr = nullptr;
 
         if (sexp_type == static_cast<unsigned char>(SEXPType::INT)) {
-            attr = pointerize_attr(parse_integer_body(reader, leftovers));
+            attr = pointerize_attr(parse_integer_body(src));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::LGL)) { 
-            attr = pointerize_attr(parse_logical_body(reader, leftovers));
+            attr = pointerize_attr(parse_logical_body(src));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::RAW)) {
-            attr = pointerize_attr(parse_raw_body(reader, leftovers));
+            attr = pointerize_attr(parse_raw_body(src));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::REAL)) {
-            attr = pointerize_attr(parse_double_body(reader, leftovers));
+            attr = pointerize_attr(parse_double_body(src));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::CPLX)) {
-            attr = pointerize_attr(parse_complex_body(reader, leftovers));
+            attr = pointerize_attr(parse_complex_body(src));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::STR)) {
-            attr = pointerize_attr(parse_string_body(reader, leftovers));
+            attr = pointerize_attr(parse_string_body(src));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::VEC)) {
-            attr = pointerize_attr(parse_list_body(reader, leftovers, shared));
+            attr = pointerize_attr(parse_list_body(src, shared));
         } else if (sexp_type == static_cast<unsigned char>(SEXPType::EXPR)) {
-            attr = pointerize_attr(parse_expression_body(reader, leftovers, shared));
+            attr = pointerize_attr(parse_expression_body(src, shared));
         } else {
             throw std::runtime_error("cannot read unknown (or unsupported) SEXP type " + std::to_string(static_cast<int>(sexp_type)));
         }
 
         if (has_attributes(details) && attr) {
-            parse_attributes(reader, leftovers, *attr, shared);
+            parse_attributes(src, *attr, shared);
         }
     }
 
