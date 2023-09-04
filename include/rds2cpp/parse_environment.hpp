@@ -11,8 +11,8 @@
 
 namespace rds2cpp {
 
-template<class Reader>
-PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, SharedParseInfo&);
+template<class Source_>
+PairList parse_pairlist_body(Source_&, SharedParseInfo&);
 
 inline EnvironmentIndex parse_global_environment_body() {
     return EnvironmentIndex(SEXPType::GLOBALENV_);
@@ -26,27 +26,31 @@ inline EnvironmentIndex parse_empty_environment_body() {
     return EnvironmentIndex(SEXPType::EMPTYENV_);
 }
 
-template<class Reader>
-EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared) try {
+template<class Source_>
+EnvironmentIndex parse_new_environment_body(Source_& src, SharedParseInfo& shared) try {
     // Need to provision the environment first, so that internal references are valid.
     size_t eindex = shared.request_environment();
     Environment new_env;
 
     // Is it locked or not?
     uint32_t locked = 0;
-    extract_up_to(reader, leftovers, 4, [&](const unsigned char* buffer, size_t n, size_t) -> void {
-        for (size_t j = 0; j < n; ++j) {
-            locked <<= 8;
-            locked += buffer[j];
-        }        
-    });
+    for (int i = 0; i < 4; ++i) {
+        if (!src.advance()) {
+            throw empty_error();
+        }
+        locked <<= 8;
+        locked += src.get();
+    }
     new_env.locked = (locked > 0);
 
     // The next 4 bytes describe the parent environment.
     std::array<unsigned char, 4> parent;
-    extract_up_to(reader, leftovers, 4, [&](const unsigned char* buffer, size_t n, size_t i) -> void {
-        std::copy(buffer, buffer + n, parent.data() + i);
-    });
+    for (int i = 0; i < 4; ++i) {
+        if (!src.advance()) {
+            throw empty_error();
+        }
+        parent[i] = src.get();
+    }
 
     auto lastbit = parent[3];
     if (lastbit == static_cast<unsigned char>(SEXPType::REF)) {
@@ -54,7 +58,7 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
         new_env.parent_type = SEXPType::ENV;
 
     } else if (lastbit == static_cast<unsigned char>(SEXPType::ENV)) {
-        auto env = parse_new_environment_body(reader, leftovers, shared);
+        auto env = parse_new_environment_body(src, shared);
         new_env.parent = env.index;
         new_env.parent_type = SEXPType::ENV;
 
@@ -74,9 +78,9 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
         throw std::runtime_error("could not resolve the parent environment (" + std::to_string(lastbit) + ")");
     }
 
-    auto unhashed = parse_header(reader, leftovers); 
+    auto unhashed = parse_header(src); 
     if (unhashed[3] == static_cast<unsigned char>(SEXPType::LIST)) {
-        auto plist = parse_pairlist_body(reader, leftovers, unhashed, shared);
+        auto plist = parse_pairlist_body(src, unhashed, shared);
 
         for (size_t i = 0; i < plist.data.size(); ++i) {
             if (!plist.has_tag[i]) {
@@ -87,20 +91,20 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
             new_env.variable_encodings.emplace_back(plist.tag_encodings[i]);
         }
 
-        auto hashed = parse_header(reader, leftovers); 
+        auto hashed = parse_header(src); 
         if (hashed[3] != static_cast<unsigned char>(SEXPType::NILVALUE_)) {
             throw std::runtime_error("unhashed environment should not contain a non-NULL hash table");
         }
 
     } else if (unhashed[3] == static_cast<unsigned char>(SEXPType::NILVALUE_)) {
         // The next part is the hash table.
-        auto hash_header = parse_header(reader, leftovers);
+        auto hash_header = parse_header(src);
         if (hash_header[3] != static_cast<unsigned char>(SEXPType::VEC)) {
             throw std::runtime_error("environment's hash table should be a list");
         }
         new_env.hashed = true;
 
-        auto vec = parse_list_body(reader, leftovers, shared);
+        auto vec = parse_list_body(src, shared);
         for (size_t i = 0; i < vec.data.size(); ++i) {
             if (vec.data[i]->type() == SEXPType::NIL) {
                 continue;
@@ -127,9 +131,9 @@ EnvironmentIndex parse_new_environment_body(Reader& reader, std::vector<unsigned
     } 
 
     // Attributes or NULL.
-    auto attr_header = parse_header(reader, leftovers); 
+    auto attr_header = parse_header(src); 
     if (attr_header[3] == static_cast<unsigned>(SEXPType::LIST)) {
-        parse_attributes_body(reader, leftovers, attr_header, new_env.attributes, shared);
+        parse_attributes_body(src, attr_header, new_env.attributes, shared);
     } else if (attr_header[3] != static_cast<unsigned char>(SEXPType::NILVALUE_)) {
         throw std::runtime_error("environment should be terminated by a null");
     }

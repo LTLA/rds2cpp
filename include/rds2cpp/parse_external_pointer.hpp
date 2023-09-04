@@ -12,18 +12,18 @@
 
 namespace rds2cpp {
 
-template<class Reader>
-std::unique_ptr<RObject> parse_object(Reader& reader, std::vector<unsigned char>& leftovers, SharedParseInfo& shared);
+template<class Source_>
+std::unique_ptr<RObject> parse_object(Source_& src, SharedParseInfo& shared);
 
-template<class Reader>
-ExternalPointerIndex parse_external_pointer_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, SharedParseInfo& shared) try {
+template<class Source_>
+ExternalPointerIndex parse_external_pointer_body(Source_& src, const Header& header, SharedParseInfo& shared) try {
     auto idx = shared.request_external_pointer();
     auto& extptr = shared.external_pointers[idx];
 
-    extptr.protection = parse_object(reader, leftovers, shared);
-    extptr.tag = parse_object(reader, leftovers, shared);
+    extptr.protection = parse_object(src, shared);
+    extptr.tag = parse_object(src, shared);
     if (has_attributes(header)) {
-        parse_attributes(reader, leftovers, extptr.attributes, shared);
+        parse_attributes(src, extptr.attributes, shared);
     }
 
     return ExternalPointerIndex(idx);

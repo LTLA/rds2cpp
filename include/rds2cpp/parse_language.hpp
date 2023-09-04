@@ -12,14 +12,14 @@
 
 namespace rds2cpp {
 
-template<class Reader>
-PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, const Header&, SharedParseInfo&);
+template<class Source_>
+PairList parse_pairlist_body(Source_&, const Header&, SharedParseInfo&);
 
-template<class Reader>
-LanguageObject parse_language_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, SharedParseInfo& shared) try {
+template<class Source_>
+LanguageObject parse_language_body(Source_& src, const Header& header, SharedParseInfo& shared) try {
     LanguageObject output;
 
-    auto contents = parse_pairlist_body(reader, leftovers, header, shared);
+    auto contents = parse_pairlist_body(src, header, shared);
     output.attributes = std::move(contents.attributes);
 
     if (contents.has_tag.size() < 1) {

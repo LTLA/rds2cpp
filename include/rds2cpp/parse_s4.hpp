@@ -10,26 +10,26 @@
 
 namespace rds2cpp {
 
-template<class Reader>
-std::unique_ptr<RObject> parse_object(Reader&, std::vector<unsigned char>&, SharedParseInfo&);
+template<class Source_>
+std::unique_ptr<RObject> parse_object(Source_&, SharedParseInfo&);
 
-template<class Reader>
-PairList parse_pairlist_body(Reader&, std::vector<unsigned char>&, const Header&, SharedParseInfo&);
+template<class Source_>
+PairList parse_pairlist_body(Source_&, const Header&, SharedParseInfo&);
 
-template<class Reader>
-S4Object parse_s4_body(Reader& reader, std::vector<unsigned char>& leftovers, const Header& header, SharedParseInfo& shared) try {
+template<class Source_>
+S4Object parse_s4_body(Source_& src, const Header& header, SharedParseInfo& shared) try {
     if (!(header[2] & 0x2) || !(header[2] & 0x1) || !(header[1] & 0x1)) {
         throw std::runtime_error("S4 objects should have object, attribute, and gp-S4 bits set in header");
     }
 
     S4Object output;
 
-    auto slot_header = parse_header(reader, leftovers);
+    auto slot_header = parse_header(src);
     if (slot_header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("slots of an S4 object should be stored as a pairlist");
     }
 
-    auto slot_plist = parse_pairlist_body(reader, leftovers, slot_header, shared);
+    auto slot_plist = parse_pairlist_body(src, slot_header, shared);
     size_t nslots = slot_plist.data.size();
     bool found_class = false;
 

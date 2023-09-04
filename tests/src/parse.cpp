@@ -185,10 +185,7 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
     return R_NilValue;
 }
 
-//' @export
-//[[Rcpp::export(rng=false)]]
-Rcpp::RObject parse(std::string file_name) {
-    auto output = rds2cpp::parse_rds(file_name);
+Rcpp::RObject parse_output(const rds2cpp::RdsFile& output) {
     if (output.object == nullptr) {
         return R_NilValue;
     } 
@@ -259,4 +256,18 @@ Rcpp::RObject parse(std::string file_name) {
         Rcpp::Named("symbols") = all_symb,
         Rcpp::Named("external_pointers") = all_exts
     );
+}
+
+//' @export
+//[[Rcpp::export(rng=false)]]
+Rcpp::RObject parse(std::string file_name) {
+    auto output = rds2cpp::parse_rds(file_name);
+    return parse_output(output);
+}
+
+//' @export
+//[[Rcpp::export(rng=false)]]
+Rcpp::RObject parallel_parse(std::string file_name) {
+    auto output = rds2cpp::parse_rds<true>(file_name);
+    return parse_output(output);
 }

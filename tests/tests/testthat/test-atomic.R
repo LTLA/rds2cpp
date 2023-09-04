@@ -21,6 +21,9 @@ test_that("integer vector loading works as expected", {
         saveRDS(y, file=tmp)
         roundtrip <- rds2cpp:::parse(tmp)
         expect_identical(roundtrip$value, y)
+
+        roundtrip <- rds2cpp:::parallel_parse(tmp)
+        expect_identical(roundtrip$value, y)
     }
 })
 
