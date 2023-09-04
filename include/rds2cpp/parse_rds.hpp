@@ -147,13 +147,15 @@ RdsFile parse_rds(Reader_& reader) {
 /**
  * Parse the contents of an RDS file.
  *
+ * @tparam parallel_ Whether to read and parse the file in parallel.
  * @param file Path to an RDS file.
  *
  * @return An `RdsFile` object containing the contents of `file`.
  */
-inline RdsFile parse_rds(std::string file) {
+template<bool parallel_ = false>
+RdsFile parse_rds(std::string file) {
     byteme::SomeFileReader reader(file.c_str());
-    return parse_rds(reader);
+    return parse_rds<parallel_>(reader);
 }
 
 /**
