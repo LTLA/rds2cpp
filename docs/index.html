@@ -83,11 +83,11 @@ $(function() {
 <div class="line"> </div>
 <div class="line"><span class="comment">// Returns an object containing the file information,</span></div>
 <div class="line"><span class="comment">// e.g., R version used to read/write the file.</span></div>
-<div class="line"><span class="keyword">auto</span> file_info = <a class="code hl_function" href="namespacerds2cpp.html#a38106f23b66054a289c192d946c30601">rds2cpp::parse_rds</a>(fpath);</div>
+<div class="line"><span class="keyword">auto</span> file_info = <a class="code hl_function" href="namespacerds2cpp.html#a4dd275877d9e7c1adf5a2391e785d1f4">rds2cpp::parse_rds</a>(fpath);</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Get the pointer to the actual R object.</span></div>
 <div class="line"><span class="keyword">const</span> <span class="keyword">auto</span>&amp; ptr = file_info-&gt;object;</div>
-<div class="ttc" id="anamespacerds2cpp_html_a38106f23b66054a289c192d946c30601"><div class="ttname"><a href="namespacerds2cpp.html#a38106f23b66054a289c192d946c30601">rds2cpp::parse_rds</a></div><div class="ttdeci">RdsFile parse_rds(Reader &amp;reader)</div><div class="ttdef"><b>Definition</b> parse_rds.hpp:33</div></div>
+<div class="ttc" id="anamespacerds2cpp_html_a4dd275877d9e7c1adf5a2391e785d1f4"><div class="ttname"><a href="namespacerds2cpp.html#a4dd275877d9e7c1adf5a2391e785d1f4">rds2cpp::parse_rds</a></div><div class="ttdeci">RdsFile parse_rds(Reader_ &amp;reader)</div><div class="ttdef"><b>Definition</b> parse_rds.hpp:34</div></div>
 <div class="ttc" id="ards2cpp_8hpp_html"><div class="ttname"><a href="rds2cpp_8hpp.html">rds2cpp.hpp</a></div><div class="ttdoc">Entrypoint header.</div></div>
 </div><!-- fragment --><p>The type of the underlying object can then be queried for further examination. For example, if we wanted to process integer vectors:</p>
 <div class="fragment"><div class="line"><span class="keywordflow">if</span> (ptr-&gt;type() == rds2cpp::SEXPType::INT) {</div>
