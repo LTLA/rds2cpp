@@ -1,18 +1,18 @@
 <map id="rds2cpp/SEXPType.hpp" name="rds2cpp/SEXPType.hpp">
 <area shape="rect" id="Node000001" title="R data types." alt="" coords="99,5,258,31"/>
 <area shape="rect" id="Node000002" href="$Environment_8hpp.html" title="Representation of an R environment." alt="" coords="5,79,173,105"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,42,106,81,102,77,150,38"/>
-<area shape="rect" id="Node000007" href="$RObject_8hpp.html" title="Representations of unserialized R objects." alt="" coords="197,79,339,105"/>
-<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="206,38,254,77,251,81,203,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,43,106,81,102,77,150,39"/>
+<area shape="rect" id="Node000007" href="$RObject_8hpp.html" title="Representations of unserialized R objects." alt="" coords="196,79,339,105"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="207,39,254,77,251,81,203,43"/>
 <area shape="rect" id="Node000003" href="$RdsFile_8hpp.html" title="Information about an RDS file." alt="" coords="57,153,196,178"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,117,122,151,118,153,100,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,117,122,151,118,153,100,119"/>
 <area shape="rect" id="Node000004" href="$parse__rds_8hpp.html" title="Parse an RDS file." alt="" coords="17,226,169,252"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="117,193,101,227,96,225,112,190"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="117,193,101,227,96,225,112,191"/>
 <area shape="rect" id="Node000006" href="$write__rds_8hpp.html" title="Write an RDS file." alt="" coords="194,226,342,252"/>
-<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="164,183,245,223,242,228,162,188"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="165,183,245,223,242,228,163,188"/>
 <area shape="rect" id="Node000005" href="$rds2cpp_8hpp.html" title="Entrypoint header." alt="" coords="109,300,250,326"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="121,260,167,298,163,302,117,264"/>
-<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="243,264,196,302,193,298,240,260"/>
-<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="232,114,152,154,149,150,230,109"/>
-<area shape="poly" id="edge9_Node000007_Node000006" title=" " alt="" coords="270,119,270,226,265,226,265,119"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="121,260,167,298,163,302,118,264"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="243,264,196,302,193,298,239,260"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="231,114,152,154,149,150,229,110"/>
+<area shape="poly" id="edge9_Node000007_Node000006" title=" " alt="" coords="270,120,270,226,265,226,265,120"/>
 </map>

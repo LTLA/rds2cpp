@@ -1,12 +1,12 @@
 <map id="rds2cpp/Symbol.hpp" name="rds2cpp/Symbol.hpp">
 <area shape="rect" id="Node000001" title="Representation of an R symbol." alt="" coords="99,5,237,31"/>
-<area shape="rect" id="Node000002" href="$RdsFile_8hpp.html" title="Information about an RDS file." alt="" coords="99,79,238,105"/>
+<area shape="rect" id="Node000002" href="$RdsFile_8hpp.html" title="Information about an RDS file." alt="" coords="98,79,238,105"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,46,171,79,166,79,166,46"/>
 <area shape="rect" id="Node000003" href="$parse__rds_8hpp.html" title="Parse an RDS file." alt="" coords="5,153,158,178"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="144,116,98,154,94,150,141,112"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="143,117,98,154,94,150,140,113"/>
 <area shape="rect" id="Node000005" href="$write__rds_8hpp.html" title="Write an RDS file." alt="" coords="182,153,330,178"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="196,112,243,150,240,154,193,116"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="197,113,243,150,240,154,193,117"/>
 <area shape="rect" id="Node000004" href="$rds2cpp_8hpp.html" title="Entrypoint header." alt="" coords="98,226,239,252"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="109,186,155,224,152,228,106,190"/>
-<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="232,190,185,228,181,224,228,186"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="110,186,155,224,152,228,106,191"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="231,191,185,228,181,224,228,186"/>
 </map>

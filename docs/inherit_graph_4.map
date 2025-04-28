@@ -1,3 +1,37 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$structrds2cpp_1_1Symbol.html" title="An R symbol." alt="" coords="5,5,122,31"/>
+<area shape="rect" id="Node000000" href="$structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects." alt="" coords="5,524,126,549"/>
+<area shape="rect" id="Node000001" href="$structrds2cpp_1_1AtomicVector.html" title=" " alt="" coords="179,5,360,46"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="67,508,79,409,100,274,114,206,131,144,150,93,172,57,187,45,190,49,176,61,155,95,136,146,119,208,105,275,84,409,72,509"/>
+<area shape="rect" id="Node000002" href="$structrds2cpp_1_1AtomicVector.html" title=" " alt="" coords="177,71,362,111"/>
+<area shape="poly" id="edge2_Node000000_Node000002" title=" " alt="" coords="63,508,65,432,78,330,91,275,111,220,137,168,172,122,187,110,191,114,176,126,142,171,116,222,97,276,83,331,70,433,68,508"/>
+<area shape="rect" id="Node000003" href="$structrds2cpp_1_1AtomicVector.html" title=" " alt="" coords="174,136,365,177"/>
+<area shape="poly" id="edge3_Node000000_Node000003" title=" " alt="" coords="65,507,70,443,86,357,99,311,118,266,142,224,172,186,186,175,189,179,176,190,146,227,122,269,104,313,91,358,75,443,70,508"/>
+<area shape="rect" id="Node000004" href="$structrds2cpp_1_1AtomicVector.html" title=" " alt="" coords="178,200,360,256"/>
+<area shape="poly" id="edge4_Node000000_Node000004" title=" " alt="" coords="68,508,78,457,98,393,128,326,148,295,172,266,186,255,189,259,176,270,152,298,133,329,103,395,84,459,73,509"/>
+<area shape="rect" id="Node000005" href="$structrds2cpp_1_1AtomicVector.html" title=" " alt="" coords="192,280,346,336"/>
+<area shape="poly" id="edge5_Node000000_Node000005" title=" " alt="" coords="73,508,88,472,109,429,137,385,172,346,190,333,193,337,175,350,141,388,114,432,93,474,78,510"/>
+<area shape="rect" id="Node000006" href="$structrds2cpp_1_1AtomicVector.html" title="Vector of some atomic type." alt="" coords="191,360,348,401"/>
+<area shape="poly" id="edge6_Node000000_Node000006" title=" " alt="" coords="81,509,119,459,144,433,172,410,192,399,195,404,175,415,148,437,123,462,85,512"/>
+<area shape="rect" id="Node000007" href="$structrds2cpp_1_1BuiltInFunction.html" title="Built&#45;in function." alt="" coords="189,425,350,450"/>
+<area shape="poly" id="edge7_Node000000_Node000007" title=" " alt="" coords="92,511,129,484,173,459,202,449,203,454,175,464,132,489,95,516"/>
+<area shape="rect" id="Node000008" href="$structrds2cpp_1_1EnvironmentIndex.html" title="Reference to an environment." alt="" coords="181,474,358,500"/>
+<area shape="poly" id="edge8_Node000000_Node000008" title=" " alt="" coords="136,517,212,498,214,503,137,522"/>
+<area shape="rect" id="Node000009" href="$structrds2cpp_1_1ExpressionVector.html" title="Expression vector." alt="" coords="182,524,356,549"/>
+<area shape="poly" id="edge9_Node000000_Node000009" title=" " alt="" coords="141,534,182,534,182,539,141,539"/>
+<area shape="rect" id="Node000010" href="$structrds2cpp_1_1ExternalPointerIndex.html" title="Reference to an external pointer." alt="" coords="189,573,350,614"/>
+<area shape="poly" id="edge10_Node000000_Node000010" title=" " alt="" coords="129,551,195,570,194,575,128,557"/>
+<area shape="rect" id="Node000011" href="$structrds2cpp_1_1GenericVector.html" title="Generic vector, i.e., an ordinary R list." alt="" coords="191,638,348,664"/>
+<area shape="poly" id="edge11_Node000000_Node000011" title=" " alt="" coords="91,558,128,592,175,623,204,635,202,640,172,628,125,596,87,562"/>
+<area shape="rect" id="Node000012" href="$structrds2cpp_1_1LanguageObject.html" title="Language object, i.e., a function call." alt="" coords="185,688,354,713"/>
+<area shape="poly" id="edge12_Node000000_Node000012" title=" " alt="" coords="82,561,119,619,145,649,175,674,196,684,193,689,172,679,141,653,115,622,78,564"/>
+<area shape="rect" id="Node000013" href="$structrds2cpp_1_1Null.html" title="R&#39;s NULL value." alt="" coords="221,737,318,762"/>
+<area shape="poly" id="edge13_Node000000_Node000013" title=" " alt="" coords="77,563,91,600,111,644,139,687,175,724,197,736,221,743,220,748,195,740,172,728,135,690,106,646,86,602,72,565"/>
+<area shape="rect" id="Node000014" href="$structrds2cpp_1_1PairList.html" title="Pairlist, i.e., a linked list." alt="" coords="210,786,328,812"/>
+<area shape="poly" id="edge14_Node000000_Node000014" title=" " alt="" coords="74,564,84,610,104,667,133,724,153,750,175,773,192,783,211,790,209,795,189,788,172,777,149,754,129,727,99,669,79,611,69,565"/>
+<area shape="rect" id="Node000015" href="$structrds2cpp_1_1S4Object.html" title="S4 object." alt="" coords="206,836,333,861"/>
+<area shape="poly" id="edge15_Node000000_Node000015" title=" " alt="" coords="72,564,79,619,97,689,110,726,128,761,149,794,175,822,190,832,206,839,204,844,187,837,172,826,145,797,123,764,105,728,92,691,74,620,66,565"/>
+<area shape="rect" id="Node000016" href="$structrds2cpp_1_1StringVector.html" title="String vector." alt="" coords="197,885,342,910"/>
+<area shape="poly" id="edge16_Node000000_Node000016" title=" " alt="" coords="70,564,75,628,90,711,104,755,122,797,146,837,175,872,198,886,195,890,172,876,141,840,117,800,99,757,85,712,69,629,64,565"/>
+<area shape="rect" id="Node000017" href="$structrds2cpp_1_1SymbolIndex.html" title="Reference to a language symbol." alt="" coords="196,934,343,960"/>
+<area shape="poly" id="edge17_Node000000_Node000017" title=" " alt="" coords="68,565,70,637,84,733,97,784,116,834,142,880,175,921,197,935,194,939,172,925,138,883,111,836,92,785,78,734,65,637,63,565"/>
 </map>
