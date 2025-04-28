@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['data_0',['data',['../structrds2cpp_1_1AtomicVector.html#a87427d2862c982a09ac077ac6ad12eae',1,'rds2cpp::AtomicVector::data'],['../structrds2cpp_1_1StringVector.html#a800012da9c834c3b7aabbb8dd009e59b',1,'rds2cpp::StringVector::data'],['../structrds2cpp_1_1GenericVector.html#aca411f5b3a5609e4ba6fb450b4f935cb',1,'rds2cpp::GenericVector::data'],['../structrds2cpp_1_1PairList.html#a1bff4d9a02cd64c44908b9362317a893',1,'rds2cpp::PairList::data'],['../structrds2cpp_1_1ExpressionVector.html#aadc9b11e73169122c1a9e0a70de00044',1,'rds2cpp::ExpressionVector::data']]]
+  ['class_5fencoding_0',['class_encoding',['../structrds2cpp_1_1S4Object.html#a9aaea2ba7196414bc1f2118303de6887',1,'rds2cpp::S4Object']]],
+  ['class_5fname_1',['class_name',['../structrds2cpp_1_1S4Object.html#a7cb839f83694dc70d66c529848fd1e5f',1,'rds2cpp::S4Object']]],
+  ['compression_5flevel_2',['compression_level',['https://ltla.github.io/byteme/structbyteme_1_1GzipFileWriterOptions.html#a9072c378aefb629c314f80ff8b77a964',1,'byteme::GzipFileWriterOptions::compression_level'],['https://ltla.github.io/byteme/structbyteme_1_1ZlibBufferWriterOptions.html#a31ad029c8bd29c6edfe6e1228ee2aab7',1,'byteme::ZlibBufferWriterOptions::compression_level']]]
 ];

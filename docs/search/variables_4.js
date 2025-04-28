@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['file_5foptions_0',['file_options',['../structrds2cpp_1_1ParseRdsOptions.html#ace40bcfb11a4966058d06c5a988202ce',1,'rds2cpp::ParseRdsOptions']]],
-  ['format_5fversion_1',['format_version',['../structrds2cpp_1_1RdsFile.html#ab6c650f54af12a20cf39bb2f677411db',1,'rds2cpp::RdsFile']]],
-  ['function_5fencoding_2',['function_encoding',['../structrds2cpp_1_1LanguageObject.html#a88a7d031093931584fa21490500edc47',1,'rds2cpp::LanguageObject']]],
-  ['function_5fname_3',['function_name',['../structrds2cpp_1_1LanguageObject.html#ab70121438413651f1e6e6fc95a0bb7c0',1,'rds2cpp::LanguageObject']]]
+  ['encoding_0',['encoding',['../structrds2cpp_1_1Symbol.html#a98cc68e484cb112a40021d4cb1687054',1,'rds2cpp::Symbol::encoding'],['../structrds2cpp_1_1RdsFile.html#aa8a14e6d1edc325b3316576f75ddc4fb',1,'rds2cpp::RdsFile::encoding']]],
+  ['encodings_1',['encodings',['../structrds2cpp_1_1Attributes.html#ae2db31e6b60cfa8b94257154dd283dc2',1,'rds2cpp::Attributes::encodings'],['../structrds2cpp_1_1StringVector.html#a3e0ee119cdb7013bfe956df6d66165d6',1,'rds2cpp::StringVector::encodings']]],
+  ['env_5ftype_2',['env_type',['../structrds2cpp_1_1EnvironmentIndex.html#a1bf1c15fce2af818ff9b6cce9e12ae8f',1,'rds2cpp::EnvironmentIndex']]],
+  ['environments_3',['environments',['../structrds2cpp_1_1RdsFile.html#aebd7594b4d63ea1537a6c460b482ce00',1,'rds2cpp::RdsFile']]],
+  ['external_5fpointers_4',['external_pointers',['../structrds2cpp_1_1RdsFile.html#a643c9a2ecb62557a061c52babc542b80',1,'rds2cpp::RdsFile']]]
 ];

@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['symbolindex_0',['SymbolIndex',['../structrds2cpp_1_1SymbolIndex.html#a869b3accf667ee21d6e055ad475dc54c',1,'rds2cpp::SymbolIndex']]]
+  ['environmentindex_0',['EnvironmentIndex',['../structrds2cpp_1_1EnvironmentIndex.html#ac50ff843b19bfaa8d3395bea0a517a38',1,'rds2cpp::EnvironmentIndex::EnvironmentIndex(SEXPType e=SEXPType::GLOBALENV_)'],['../structrds2cpp_1_1EnvironmentIndex.html#a968a0c890622b9e7514e8dd16674960b',1,'rds2cpp::EnvironmentIndex::EnvironmentIndex(size_t i)']]],
+  ['externalpointerindex_1',['ExternalPointerIndex',['../structrds2cpp_1_1ExternalPointerIndex.html#ab2354f8940040b0236a2cbfdf5f5a3e3',1,'rds2cpp::ExternalPointerIndex']]],
+  ['extract_2',['extract',['https://ltla.github.io/byteme/classbyteme_1_1PerByteInterface.html#a8c61a374f234ea6051f015133d91a44c',1,'byteme::PerByteInterface']]]
 ];

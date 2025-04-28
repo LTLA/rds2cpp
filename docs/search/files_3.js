@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['sexptype_2ehpp_0',['SEXPType.hpp',['../SEXPType_8hpp.html',1,'']]],
-  ['stringencoding_2ehpp_1',['StringEncoding.hpp',['../StringEncoding_8hpp.html',1,'']]],
-  ['symbol_2ehpp_2',['Symbol.hpp',['../Symbol_8hpp.html',1,'']]]
+  ['gzipfilereader_2ehpp_0',['GzipFileReader.hpp',['https://ltla.github.io/byteme/GzipFileReader_8hpp.html',1,'']]],
+  ['gzipfilewriter_2ehpp_1',['GzipFileWriter.hpp',['https://ltla.github.io/byteme/GzipFileWriter_8hpp.html',1,'']]]
 ];

@@ -1,8 +1,4 @@
 var searchData=
 [
-  ['encoding_0',['encoding',['../structrds2cpp_1_1Symbol.html#a98cc68e484cb112a40021d4cb1687054',1,'rds2cpp::Symbol::encoding'],['../structrds2cpp_1_1RdsFile.html#aa8a14e6d1edc325b3316576f75ddc4fb',1,'rds2cpp::RdsFile::encoding']]],
-  ['encodings_1',['encodings',['../structrds2cpp_1_1Attributes.html#ae2db31e6b60cfa8b94257154dd283dc2',1,'rds2cpp::Attributes::encodings'],['../structrds2cpp_1_1StringVector.html#a3e0ee119cdb7013bfe956df6d66165d6',1,'rds2cpp::StringVector::encodings']]],
-  ['env_5ftype_2',['env_type',['../structrds2cpp_1_1EnvironmentIndex.html#a1bf1c15fce2af818ff9b6cce9e12ae8f',1,'rds2cpp::EnvironmentIndex']]],
-  ['environments_3',['environments',['../structrds2cpp_1_1RdsFile.html#aebd7594b4d63ea1537a6c460b482ce00',1,'rds2cpp::RdsFile']]],
-  ['external_5fpointers_4',['external_pointers',['../structrds2cpp_1_1RdsFile.html#a643c9a2ecb62557a061c52babc542b80',1,'rds2cpp::RdsFile']]]
+  ['data_0',['data',['../structrds2cpp_1_1AtomicVector.html#a87427d2862c982a09ac077ac6ad12eae',1,'rds2cpp::AtomicVector::data'],['../structrds2cpp_1_1StringVector.html#a800012da9c834c3b7aabbb8dd009e59b',1,'rds2cpp::StringVector::data'],['../structrds2cpp_1_1GenericVector.html#aca411f5b3a5609e4ba6fb450b4f935cb',1,'rds2cpp::GenericVector::data'],['../structrds2cpp_1_1PairList.html#a1bff4d9a02cd64c44908b9362317a893',1,'rds2cpp::PairList::data'],['../structrds2cpp_1_1ExpressionVector.html#aadc9b11e73169122c1a9e0a70de00044',1,'rds2cpp::ExpressionVector::data']]]
 ];

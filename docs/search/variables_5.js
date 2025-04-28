@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['has_5ftag_0',['has_tag',['../structrds2cpp_1_1PairList.html#ab5db0bbafb2affaa0f64532cb4c65388',1,'rds2cpp::PairList']]],
-  ['hashed_1',['hashed',['../structrds2cpp_1_1Environment.html#a3df071e70e181e3a763f09fd5c13162b',1,'rds2cpp::Environment']]]
+  ['file_5foptions_0',['file_options',['../structrds2cpp_1_1ParseRdsOptions.html#ace40bcfb11a4966058d06c5a988202ce',1,'rds2cpp::ParseRdsOptions']]],
+  ['format_5fversion_1',['format_version',['../structrds2cpp_1_1RdsFile.html#ab6c650f54af12a20cf39bb2f677411db',1,'rds2cpp::RdsFile']]],
+  ['function_5fencoding_2',['function_encoding',['../structrds2cpp_1_1LanguageObject.html#a88a7d031093931584fa21490500edc47',1,'rds2cpp::LanguageObject']]],
+  ['function_5fname_3',['function_name',['../structrds2cpp_1_1LanguageObject.html#ab70121438413651f1e6e6fc95a0bb7c0',1,'rds2cpp::LanguageObject']]]
 ];
