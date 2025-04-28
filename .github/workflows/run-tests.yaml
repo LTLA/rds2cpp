@@ -13,7 +13,7 @@ jobs:
     container: rocker/rstudio:latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Get latest CMake
       uses: lukka/get-cmake@latest
@@ -32,7 +32,7 @@ jobs:
         echo "R_PKG_DIR=${R_HOME}/site-library" >> $GITHUB_ENV
 
     - name: Restore the package directory
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ${{ env.R_PKG_DIR }}
         key: preinstalled-packages
@@ -50,4 +50,3 @@ jobs:
       run: |
         setwd("tests/tests")
         testthat::test_file("testthat.R", stop_on_failure=TRUE)
-
