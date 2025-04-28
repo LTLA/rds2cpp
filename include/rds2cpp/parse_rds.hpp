@@ -21,22 +21,40 @@
 namespace rds2cpp {
 
 /**
+ * @brief Options for `parse_rds()`.
+ */
+struct ParseRdsOptions {
+    /**
+     * Whether to read and parse the contents of the RDS file in parallel.
+     */
+    bool parallel = false;
+
+    /**
+     * Options for reading data from file.
+     * Only used in the `parse_rds()` overload that accepts a file path. 
+     */
+    byteme::SomeFileReaderOptions file_options;
+};
+
+/**
  * Parse the contents of an RDS file.
  *
- * @tparam parallel_ Whether to read and parse the file in parallel.
  * @tparam Reader_ A [`byteme::Reader`](https://ltla.github.io/byteme) class, or any class with a compatible interface.
  *
  * @param reader Instance of a `Reader` class, containing the contents of the RDS file.
+ * @param options Further options for parsing.
  *
  * @return An `RdsFile` object containing the contents of the RDS file.
  */
-template<bool parallel_ = false, class Reader_>
-RdsFile parse_rds(Reader_& reader) {
-    typename std::conditional<parallel_, 
-        byteme::PerByte<unsigned char, Reader_*>, 
-        byteme::PerByteParallel<unsigned char, Reader_*>
-    >::type src(&reader);
-
+template<class Reader_>
+RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
+    std::unique_ptr<byteme::PerByteInterface<unsigned char> > srcptr;
+    if (options.parallel) {
+        srcptr.reset(new byteme::PerByteParallel<unsigned char, Reader_*>(&reader));
+    } else {
+        srcptr.reset(new byteme::PerByteSerial<unsigned char, Reader_*>(&reader));
+    }
+    auto& src = *srcptr; 
     RdsFile output(false);
 
     // Reading the header first. This is the first and only time that 
@@ -147,15 +165,14 @@ RdsFile parse_rds(Reader_& reader) {
 /**
  * Parse the contents of an RDS file.
  *
- * @tparam parallel_ Whether to read and parse the file in parallel.
  * @param file Path to an RDS file.
+ * @param options Further options for parsing.
  *
  * @return An `RdsFile` object containing the contents of `file`.
  */
-template<bool parallel_ = false>
-RdsFile parse_rds(std::string file) {
-    byteme::SomeFileReader reader(file.c_str());
-    return parse_rds<parallel_>(reader);
+inline RdsFile parse_rds(std::string file, const ParseRdsOptions& options) {
+    byteme::SomeFileReader reader(file.c_str(), options.file_options);
+    return parse_rds(reader, options);
 }
 
 /**

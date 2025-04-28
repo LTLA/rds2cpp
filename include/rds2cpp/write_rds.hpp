@@ -61,7 +61,7 @@ void write_rds(const RdsFile& info, Writer& writer) {
  * @param path Path to the output file.
  */
 inline void write_rds(const RdsFile& info, const char* path) {
-    byteme::GzipFileWriter writer(path);
+    byteme::GzipFileWriter writer(path, {});
     write_rds(info, writer);
     return;
 }

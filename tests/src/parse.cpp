@@ -261,13 +261,15 @@ Rcpp::RObject parse_output(const rds2cpp::RdsFile& output) {
 //' @export
 //[[Rcpp::export(rng=false)]]
 Rcpp::RObject parse(std::string file_name) {
-    auto output = rds2cpp::parse_rds(file_name);
+    auto output = rds2cpp::parse_rds(file_name, {});
     return parse_output(output);
 }
 
 //' @export
 //[[Rcpp::export(rng=false)]]
 Rcpp::RObject parallel_parse(std::string file_name) {
-    auto output = rds2cpp::parse_rds<true>(file_name);
+    rds2cpp::ParseRdsOptions opts;
+    opts.parallel = true;
+    auto output = rds2cpp::parse_rds(file_name, opts);
     return parse_output(output);
 }

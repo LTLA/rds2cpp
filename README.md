@@ -19,7 +19,7 @@ Given a path to an RDS file, the `parse_rds()` function will return a pointer to
 
 // Returns an object containing the file information,
 // e.g., R version used to read/write the file.
-auto file_info = rds2cpp::parse_rds(fpath);
+auto file_info = rds2cpp::parse_rds(fpath, {});
 
 // Get the pointer to the actual R object.
 const auto& ptr = file_info->object;
