@@ -39,7 +39,7 @@ struct ParseRdsOptions {
 /**
  * Parse the contents of an RDS file.
  *
- * @tparam Reader_ A [`byteme::Reader`](https://ltla.github.io/byteme) class, or any class with a compatible interface.
+ * @tparam Reader_ A `byteme::Reader` class, or any class with a compatible interface.
  *
  * @param reader Instance of a `Reader` class, containing the contents of the RDS file.
  * @param options Further options for parsing.

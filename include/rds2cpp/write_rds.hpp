@@ -22,7 +22,7 @@ namespace rds2cpp {
 /**
  * Convert an R object into the RDS format and write it to a specified output.
  *
- * @tparam Writer A [`byteme::Writer`](https://ltla.github.io/byteme) class.
+ * @tparam Writer A `byteme::Writer` class, or any class with a compatible interface.
  *
  * @param info Information about the RDS file to be written, including a pointer to a valid `RObject`.
  * @param writer Instance of a `Writer` class, where the RDS file is to be written.
