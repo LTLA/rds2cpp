@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['temp_5ffile_5fpath_2ehpp_0',['temp_file_path.hpp',['https://ltla.github.io/byteme/temp__file__path_8hpp.html',1,'']]]
+  ['write_5frds_2ehpp_0',['write_rds.hpp',['../write__rds_8hpp.html',1,'']]],
+  ['writer_2ehpp_1',['Writer.hpp',['https://ltla.github.io/byteme/Writer_8hpp.html',1,'']]]
 ];
