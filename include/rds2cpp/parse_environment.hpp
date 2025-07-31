@@ -45,12 +45,7 @@ EnvironmentIndex parse_new_environment_body(Source_& src, SharedParseInfo& share
 
     // The next 4 bytes describe the parent environment.
     std::array<unsigned char, 4> parent;
-    for (int i = 0; i < 4; ++i) {
-        if (!src.advance()) {
-            throw empty_error();
-        }
-        parent[i] = src.get();
-    }
+    quick_extract(src, parent.size(), parent.data());
 
     auto lastbit = parent[3];
     if (lastbit == static_cast<unsigned char>(SEXPType::REF)) {

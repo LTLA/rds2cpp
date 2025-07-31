@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 
 project(rds2cpp
-    VERSION 1.1.0
+    VERSION 1.2.0
     DESCRIPTION "Standalone C++ library for reading RDS files"
     LANGUAGES CXX)
 
@@ -19,7 +19,7 @@ option(RDS2CPP_FETCH_EXTERN "Automatically fetch rds2cpp's external dependencies
 if(RDS2CPP_FETCH_EXTERN)
     add_subdirectory(extern)
 else()
-    find_package(ltla_byteme CONFIG REQUIRED)
+    find_package(ltla_byteme 2.0.1 CONFIG REQUIRED)
 endif()
 
 target_link_libraries(rds2cpp INTERFACE ltla::byteme)

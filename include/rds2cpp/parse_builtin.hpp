@@ -14,12 +14,12 @@ BuiltInFunction parse_builtin_body(Source_& src) try {
     size_t len = get_length(src);
 
     BuiltInFunction output;
-    output.name.resize(len);
+    output.name.reserve(len); // don't resize and use extract() on string::data, as that pointer is read-only AFAICT.
     for (size_t i = 0; i < len; ++i) {
         if (!src.advance()) {
             throw empty_error();
         }
-        output.name[i] = src.get();
+        output.name.push_back(as_char(src.get()));
     }
 
     return output;

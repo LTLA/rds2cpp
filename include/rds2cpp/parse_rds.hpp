@@ -99,12 +99,7 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
             if (!src.advance()) {
                 throw empty_error();
             }
-            for (int pos = 0; pos < 3; ++pos) {
-                if (!src.advance()) {
-                    throw empty_error();
-                }
-               output.writer_version[pos] = src.get();
-            }
+            quick_extract(src, output.writer_version.size(), output.writer_version.data());
         } catch (std::exception& e) {
             throw traceback("failed to read the writer version number from the RDS preamble", e);
         }
@@ -113,12 +108,7 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
             if (!src.advance()) {
                 throw empty_error();
             }
-            for (int pos = 0; pos < 3; ++pos) {
-                if (!src.advance()) {
-                    throw empty_error();
-                }
-                output.reader_version[pos] = src.get();
-            }
+            quick_extract(src, output.reader_version.size(), output.reader_version.data());
         } catch (std::exception& e) {
             throw traceback("failed to read the reader version number from the RDS preamble", e);
         }
@@ -140,12 +130,12 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
         }
 
         try {
-            output.encoding.reserve(encoding_length);
+            output.encoding.reserve(encoding_length); // don't resize and use extract() on string::data, as that pointer is read-only AFAICT.
             for (size_t b = 0; b < encoding_length; ++b) {
                 if (!src.advance()) {
                     throw empty_error();
                 }
-                output.encoding.push_back(src.get());
+                output.encoding.push_back(as_char(src.get()));
             }
         } catch (std::exception& e) {
             throw traceback("failed to read the encoding string from the RDS preamble", e);

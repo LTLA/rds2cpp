@@ -21,14 +21,8 @@ Vector parse_integer_or_logical_body(Source_& src) {
     constexpr size_t width = 4;
     static_assert(width == sizeof(decltype(output.data[0])));
     size_t byte_length = width * len;
-
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    for (size_t i = 0; i < byte_length; ++i) {
-        if (!src.advance()) {
-            throw empty_error();
-        }
-        ptr[i] = src.get();
-    }
+    quick_extract(src, byte_length, ptr);
 
     // Flipping endianness.
     if (little_endian()) {
@@ -65,14 +59,8 @@ DoubleVector parse_double_body(Source_& src) try {
     constexpr size_t width = 8;
     static_assert(width == sizeof(decltype(output.data[0])));
     size_t byte_length = width * len;
-
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    for (size_t i = 0; i < byte_length; ++i) {
-        if (!src.advance()) {
-            throw empty_error();
-        }
-        ptr[i] = src.get();
-    }
+    quick_extract(src, byte_length, ptr);
 
     // Flipping endianness.
     if (little_endian()) {
@@ -93,12 +81,7 @@ RawVector parse_raw_body(Source_& src) try {
     RawVector output(len);
 
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    for (size_t i = 0; i < len; ++i) {
-        if (!src.advance()) {
-            throw empty_error();
-        }
-        ptr[i] = src.get();
-    } 
+    quick_extract(src, len, ptr);
 
     return output;
 } catch (std::exception& e) {
@@ -113,14 +96,8 @@ ComplexVector parse_complex_body(Source_& src) try {
     constexpr size_t width = 16;
     static_assert(width == sizeof(decltype(output.data[0])));
     size_t byte_length = width * len;
-
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
-    for (size_t b = 0; b < byte_length; ++b) {
-        if (!src.advance()) {
-            throw empty_error();
-        }
-        ptr[b] = src.get();
-    }
+    quick_extract(src, byte_length, ptr);
 
     // Flipping endianness for each double.
     if (little_endian()) {

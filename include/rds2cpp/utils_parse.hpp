@@ -17,6 +17,18 @@ inline std::runtime_error empty_error() {
 }
 
 template<class Source_>
+void quick_extract(Source_& src, size_t len, unsigned char* output) {
+    auto extracted = src.advance_and_extract(len, output);
+    if (extracted != len) {
+        throw empty_error();
+    }
+}
+
+inline char as_char(unsigned char val) {
+    return *reinterpret_cast<const char*>(&val); // make sure we interpret this as a char.
+}
+
+template<class Source_>
 size_t get_length(Source_& src) {
     uint32_t initial = 0;
     try {
@@ -63,13 +75,7 @@ typedef std::array<unsigned char, 4> Header;
 template<class Source_>
 Header parse_header(Source_& src) try {
     Header details;
-    int i = 0;
-    for (int b = 0; b < 4; ++b, ++i) {
-        if (!src.advance()) {
-            throw empty_error();
-        }
-        details[i] = src.get();
-    }
+    quick_extract(src, details.size(), details.data());
     return details;
 } catch (std::exception& e) {
     throw traceback("failed to parse the R object header", e);

@@ -37,13 +37,12 @@ StringInfo parse_single_string(Source_& src) try {
     output.missing = (strlen == static_cast<uint32_t>(-1));
 
     if (!output.missing) {
-        auto& str = output.value;
-        str.resize(strlen);
+        output.value.reserve(strlen); // don't resize and use extract() on string::data, as that pointer is read-only AFAICT.
         for (size_t i = 0; i < strlen; ++i) {
             if (!src.advance()) {
                 throw empty_error();
             }
-            str[i] = src.get();
+            output.value.push_back(as_char(src.get()));
         }
 
         /* String encoding is stored in the gp field, from bits 12 to 27 in the header.
