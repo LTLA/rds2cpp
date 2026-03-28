@@ -210,10 +210,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>size_t</type>
+      <type>std::size_t</type>
       <name>parent</name>
       <anchorfile>structrds2cpp_1_1Environment.html</anchorfile>
-      <anchor>ae729557dda55babd8df86b1edd6bfa1e</anchor>
+      <anchor>ad24c7d1b18fba1a4782f58e18c16f84d</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -260,8 +260,8 @@
       <type></type>
       <name>EnvironmentIndex</name>
       <anchorfile>structrds2cpp_1_1EnvironmentIndex.html</anchorfile>
-      <anchor>a968a0c890622b9e7514e8dd16674960b</anchor>
-      <arglist>(size_t i)</arglist>
+      <anchor>ad5fd3a53d8905ce57d4f5a6af19488d6</anchor>
+      <arglist>(std::size_t i)</arglist>
     </member>
     <member kind="function">
       <type>SEXPType</type>
@@ -271,10 +271,10 @@
       <arglist>() const</arglist>
     </member>
     <member kind="variable">
-      <type>size_t</type>
+      <type>std::size_t</type>
       <name>index</name>
       <anchorfile>structrds2cpp_1_1EnvironmentIndex.html</anchorfile>
-      <anchor>a48847650f3aacbb87796282b9124492d</anchor>
+      <anchor>a00e76569d5e9b1f904352996c0110279</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -319,8 +319,8 @@
       <type></type>
       <name>ExternalPointerIndex</name>
       <anchorfile>structrds2cpp_1_1ExternalPointerIndex.html</anchorfile>
-      <anchor>ab2354f8940040b0236a2cbfdf5f5a3e3</anchor>
-      <arglist>(size_t i=-1)</arglist>
+      <anchor>a4f20f212090309c01d4613e849c9bde7</anchor>
+      <arglist>(std::size_t i=-1)</arglist>
     </member>
     <member kind="function">
       <type>SEXPType</type>
@@ -330,10 +330,10 @@
       <arglist>() const</arglist>
     </member>
     <member kind="variable">
-      <type>size_t</type>
+      <type>std::size_t</type>
       <name>index</name>
       <anchorfile>structrds2cpp_1_1ExternalPointerIndex.html</anchorfile>
-      <anchor>acaea291afd1811bda8b37e7396dcecb5</anchor>
+      <anchor>ad09c2e76474e0eeb71417df0f6a4ef2d</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -561,10 +561,10 @@
     <name>rds2cpp::RdsFile</name>
     <filename>structrds2cpp_1_1RdsFile.html</filename>
     <member kind="variable">
-      <type>uint32_t</type>
+      <type>std::uint32_t</type>
       <name>format_version</name>
       <anchorfile>structrds2cpp_1_1RdsFile.html</anchorfile>
-      <anchor>ab6c650f54af12a20cf39bb2f677411db</anchor>
+      <anchor>a8f3d3af80e9596fdf6194d8852b72c96</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -755,8 +755,8 @@
       <type></type>
       <name>SymbolIndex</name>
       <anchorfile>structrds2cpp_1_1SymbolIndex.html</anchorfile>
-      <anchor>a869b3accf667ee21d6e055ad475dc54c</anchor>
-      <arglist>(size_t i=-1)</arglist>
+      <anchor>a8421bb3b43aa2d7f9d4c19b5f8d8ba8f</anchor>
+      <arglist>(std::size_t i=-1)</arglist>
     </member>
     <member kind="function">
       <type>SEXPType</type>
@@ -766,10 +766,10 @@
       <arglist>() const</arglist>
     </member>
     <member kind="variable">
-      <type>size_t</type>
+      <type>std::size_t</type>
       <name>index</name>
       <anchorfile>structrds2cpp_1_1SymbolIndex.html</anchorfile>
-      <anchor>ac28d8149a99c22f704505c81f1c9be2a</anchor>
+      <anchor>af7ba8616abc0946b36059273e39b7842</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -795,17 +795,17 @@
     <class kind="struct">rds2cpp::Symbol</class>
     <class kind="struct">rds2cpp::SymbolIndex</class>
     <member kind="typedef">
-      <type>AtomicVector&lt; int32_t, SEXPType::INT &gt;</type>
+      <type>AtomicVector&lt; std::int32_t, SEXPType::INT &gt;</type>
       <name>IntegerVector</name>
       <anchorfile>namespacerds2cpp.html</anchorfile>
-      <anchor>a648cbbcf5f0bb0dae27d33af67ccf004</anchor>
+      <anchor>ab89469f3aced5eee88403ce898f17164</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
-      <type>AtomicVector&lt; int32_t, SEXPType::LGL &gt;</type>
+      <type>AtomicVector&lt; std::int32_t, SEXPType::LGL &gt;</type>
       <name>LogicalVector</name>
       <anchorfile>namespacerds2cpp.html</anchorfile>
-      <anchor>a21605c7006141fdd9e46a065fafb2fb9</anchor>
+      <anchor>abe57d9e29f573546451e5da85ea5c9ee</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">

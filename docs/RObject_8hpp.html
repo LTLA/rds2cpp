@@ -102,25 +102,34 @@ $(function(){ initResizable(false); });
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
+<code>#include &lt;cstddef&gt;</code><br />
 <code>#include &lt;complex&gt;</code><br />
 <code>#include &quot;<a class="el" href="SEXPType_8hpp_source.html">SEXPType.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="StringEncoding_8hpp_source.html">StringEncoding.hpp</a>&quot;</code><br />
+<code>#include &quot;utils_other.hpp&quot;</code><br />
+<code>#include &quot;sanisizer/sanisizer.hpp&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for RObject.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="RObject_8hpp__incl.png" border="0" usemap="#ards2cpp_2RObject_8hpp" alt=""/></div>
 <map name="ards2cpp_2RObject_8hpp" id="ards2cpp_2RObject_8hpp">
-<area shape="rect" title="Representations of unserialized R objects." alt="" coords="135,5,277,31"/>
+<area shape="rect" title="Representations of unserialized R objects." alt="" coords="279,5,421,31"/>
 <area shape="rect" title=" " alt="" coords="5,79,63,105"/>
-<area shape="poly" title=" " alt="" coords="178,34,78,75,76,70,176,29"/>
+<area shape="poly" title=" " alt="" coords="288,34,79,81,77,76,287,29"/>
 <area shape="rect" title=" " alt="" coords="86,79,147,105"/>
-<area shape="poly" title=" " alt="" coords="193,34,145,71,142,67,189,29"/>
-<area shape="rect" title=" " alt="" coords="171,79,241,105"/>
-<area shape="poly" title=" " alt="" coords="209,31,209,63,203,63,203,31"/>
-<area shape="rect" href="SEXPType_8hpp.html" title="R data types." alt="" coords="265,79,374,105"/>
-<area shape="poly" title=" " alt="" coords="227,29,289,68,286,73,224,34"/>
-<area shape="rect" href="StringEncoding_8hpp.html" title="String encodings." alt="" coords="397,79,530,105"/>
-<area shape="poly" title=" " alt="" coords="250,29,406,72,404,77,249,34"/>
+<area shape="poly" title=" " alt="" coords="311,34,163,79,161,74,310,29"/>
+<area shape="rect" title=" " alt="" coords="171,79,236,105"/>
+<area shape="poly" title=" " alt="" coords="326,34,243,74,241,69,324,29"/>
+<area shape="rect" title=" " alt="" coords="259,79,329,105"/>
+<area shape="poly" title=" " alt="" coords="343,33,315,68,311,65,339,30"/>
+<area shape="rect" href="SEXPType_8hpp.html" title="R data types." alt="" coords="353,79,462,105"/>
+<area shape="poly" title=" " alt="" coords="362,30,390,65,386,68,357,33"/>
+<area shape="rect" href="StringEncoding_8hpp.html" title="String encodings." alt="" coords="485,79,618,105"/>
+<area shape="poly" title=" " alt="" coords="385,29,504,71,502,76,383,34"/>
+<area shape="rect" title=" " alt="" coords="641,79,747,105"/>
+<area shape="poly" title=" " alt="" coords="409,29,627,74,626,79,408,34"/>
+<area shape="rect" title=" " alt="" coords="770,79,922,105"/>
+<area shape="poly" title=" " alt="" coords="422,27,755,75,755,80,421,32"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -197,14 +206,14 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a648cbbcf5f0bb0dae27d33af67ccf004" id="r_a648cbbcf5f0bb0dae27d33af67ccf004"><td class="memItemLeft" align="right" valign="top"><a id="a648cbbcf5f0bb0dae27d33af67ccf004" name="a648cbbcf5f0bb0dae27d33af67ccf004"></a>
-typedef <a class="el" href="structrds2cpp_1_1AtomicVector.html">AtomicVector</a>&lt; int32_t, SEXPType::INT &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>rds2cpp::IntegerVector</b></td></tr>
-<tr class="memdesc:a648cbbcf5f0bb0dae27d33af67ccf004"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integer vector. <br /></td></tr>
-<tr class="separator:a648cbbcf5f0bb0dae27d33af67ccf004"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21605c7006141fdd9e46a065fafb2fb9" id="r_a21605c7006141fdd9e46a065fafb2fb9"><td class="memItemLeft" align="right" valign="top"><a id="a21605c7006141fdd9e46a065fafb2fb9" name="a21605c7006141fdd9e46a065fafb2fb9"></a>
-typedef <a class="el" href="structrds2cpp_1_1AtomicVector.html">AtomicVector</a>&lt; int32_t, SEXPType::LGL &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>rds2cpp::LogicalVector</b></td></tr>
-<tr class="memdesc:a21605c7006141fdd9e46a065fafb2fb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logical vector. <br /></td></tr>
-<tr class="separator:a21605c7006141fdd9e46a065fafb2fb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab89469f3aced5eee88403ce898f17164" id="r_ab89469f3aced5eee88403ce898f17164"><td class="memItemLeft" align="right" valign="top"><a id="ab89469f3aced5eee88403ce898f17164" name="ab89469f3aced5eee88403ce898f17164"></a>
+typedef <a class="el" href="structrds2cpp_1_1AtomicVector.html">AtomicVector</a>&lt; std::int32_t, SEXPType::INT &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>rds2cpp::IntegerVector</b></td></tr>
+<tr class="memdesc:ab89469f3aced5eee88403ce898f17164"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integer vector. <br /></td></tr>
+<tr class="separator:ab89469f3aced5eee88403ce898f17164"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe57d9e29f573546451e5da85ea5c9ee" id="r_abe57d9e29f573546451e5da85ea5c9ee"><td class="memItemLeft" align="right" valign="top"><a id="abe57d9e29f573546451e5da85ea5c9ee" name="abe57d9e29f573546451e5da85ea5c9ee"></a>
+typedef <a class="el" href="structrds2cpp_1_1AtomicVector.html">AtomicVector</a>&lt; std::int32_t, SEXPType::LGL &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>rds2cpp::LogicalVector</b></td></tr>
+<tr class="memdesc:abe57d9e29f573546451e5da85ea5c9ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logical vector. <br /></td></tr>
+<tr class="separator:abe57d9e29f573546451e5da85ea5c9ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a233aabb04ace22331d96dd485292f4" id="r_a3a233aabb04ace22331d96dd485292f4"><td class="memItemLeft" align="right" valign="top"><a id="a3a233aabb04ace22331d96dd485292f4" name="a3a233aabb04ace22331d96dd485292f4"></a>
 typedef <a class="el" href="structrds2cpp_1_1AtomicVector.html">AtomicVector</a>&lt; double, SEXPType::REAL &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>rds2cpp::DoubleVector</b></td></tr>
 <tr class="memdesc:a3a233aabb04ace22331d96dd485292f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Double-precision vector. <br /></td></tr>
