@@ -101,39 +101,29 @@ $(function(){ initResizable(false); });
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="parse__rds_8hpp_source.html">parse_rds.hpp</a>&gt;</code></p>
-<div class="dynheader">
-Collaboration diagram for rds2cpp::ParseRdsOptions:</div>
-<div class="dyncontent">
-<div class="center"><img src="structrds2cpp_1_1ParseRdsOptions__coll__graph.png" border="0" usemap="#ards2cpp_1_1ParseRdsOptions_coll__map" alt="Collaboration graph"/></div>
-<map name="ards2cpp_1_1ParseRdsOptions_coll__map" id="ards2cpp_1_1ParseRdsOptions_coll__map">
-<area shape="rect" title="Options for parse_rds()." alt="" coords="23,94,198,120"/>
-<area shape="rect" target="_parent" href="https://ltla.github.io/byteme/structbyteme_1_1SomeFileReaderOptions.html" title=" " alt="" coords="5,5,216,31"/>
-<area shape="poly" title=" " alt="" coords="113,47,113,94,108,94,108,47"/>
-</map>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a1dd6bd4c10e4685d02cc45f6c60fc6f2" id="r_a1dd6bd4c10e4685d02cc45f6c60fc6f2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1dd6bd4c10e4685d02cc45f6c60fc6f2">parallel</a> = false</td></tr>
 <tr class="separator:a1dd6bd4c10e4685d02cc45f6c60fc6f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace40bcfb11a4966058d06c5a988202ce" id="r_ace40bcfb11a4966058d06c5a988202ce"><td class="memItemLeft" align="right" valign="top"><a class="elRef" href="https://ltla.github.io/byteme/structbyteme_1_1SomeFileReaderOptions.html">byteme::SomeFileReaderOptions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace40bcfb11a4966058d06c5a988202ce">file_options</a></td></tr>
-<tr class="separator:ace40bcfb11a4966058d06c5a988202ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4ba63c29226fef224ffa0c44a20bb0b" id="r_ad4ba63c29226fef224ffa0c44a20bb0b"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad4ba63c29226fef224ffa0c44a20bb0b">buffer_size</a> = 65536</td></tr>
+<tr class="separator:ad4ba63c29226fef224ffa0c44a20bb0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Options for <code><a class="el" href="namespacerds2cpp.html#a6e8135078d12460c602af9c3933eb435">parse_rds()</a></code>. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="ace40bcfb11a4966058d06c5a988202ce" name="ace40bcfb11a4966058d06c5a988202ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ace40bcfb11a4966058d06c5a988202ce">&#9670;&#160;</a></span>file_options</h2>
+<a id="ad4ba63c29226fef224ffa0c44a20bb0b" name="ad4ba63c29226fef224ffa0c44a20bb0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4ba63c29226fef224ffa0c44a20bb0b">&#9670;&#160;</a></span>buffer_size</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="elRef" href="https://ltla.github.io/byteme/structbyteme_1_1SomeFileReaderOptions.html">byteme::SomeFileReaderOptions</a> rds2cpp::ParseRdsOptions::file_options</td>
+          <td class="memname">std::size_t rds2cpp::ParseRdsOptions::buffer_size = 65536</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Options for reading data from file. Only used in the <code><a class="el" href="namespacerds2cpp.html#a6e8135078d12460c602af9c3933eb435">parse_rds()</a></code> overload that accepts a file path. </p>
+<p>Size of the buffer for storing read bytes before parsing. Larger values improve speed at the cost of memory efficiency. </p>
 
 </div>
 </div>

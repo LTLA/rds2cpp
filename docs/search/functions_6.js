@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['istreamreader_0',['IstreamReader',['https://ltla.github.io/byteme/classbyteme_1_1IstreamReader.html#a19247e8caa4d21b5195556a0bf776aa6',1,'byteme::IstreamReader']]]
+  ['ostreamwriter_0',['OstreamWriter',['https://ltla.github.io/byteme/classbyteme_1_1OstreamWriter.html#a3cbc4a7eec70e40dd6a1c370f165084c',1,'byteme::OstreamWriter']]]
 ];

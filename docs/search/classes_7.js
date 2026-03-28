@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['null_0',['Null',['../structrds2cpp_1_1Null.html',1,'rds2cpp']]]
+  ['ostreamwriter_0',['OstreamWriter',['https://ltla.github.io/byteme/classbyteme_1_1OstreamWriter.html',1,'byteme']]]
 ];

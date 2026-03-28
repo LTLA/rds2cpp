@@ -550,10 +550,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>byteme::SomeFileReaderOptions</type>
-      <name>file_options</name>
+      <type>std::size_t</type>
+      <name>buffer_size</name>
       <anchorfile>structrds2cpp_1_1ParseRdsOptions.html</anchorfile>
-      <anchor>ace40bcfb11a4966058d06c5a988202ce</anchor>
+      <anchor>ad4ba63c29226fef224ffa0c44a20bb0b</anchor>
       <arglist></arglist>
     </member>
   </compound>
