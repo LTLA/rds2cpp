@@ -6,6 +6,8 @@
 #include <cstdint>
 #include <memory>
 
+#include "byteme/byteme.hpp"
+
 namespace rds2cpp {
 
 inline std::runtime_error traceback(std::string base, const std::exception& e) {
@@ -16,9 +18,11 @@ inline std::runtime_error empty_error() {
     return std::runtime_error("no more bytes to read");
 }
 
-template<class Source_>
-void quick_extract(Source_& src, size_t len, unsigned char* output) {
-    auto extracted = src.advance_and_extract(len, output);
+inline void quick_extract(byteme::BufferedReader<unsigned char>& src, size_t len, unsigned char* output) {
+    if (!src.advance()) {
+        throw empty_error();
+    }
+    auto extracted = src.extract_until(len, output);
     if (extracted != len) {
         throw empty_error();
     }

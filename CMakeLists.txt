@@ -19,7 +19,7 @@ option(RDS2CPP_FETCH_EXTERN "Automatically fetch rds2cpp's external dependencies
 if(RDS2CPP_FETCH_EXTERN)
     add_subdirectory(extern)
 else()
-    find_package(ltla_byteme 2.0.1 CONFIG REQUIRED)
+    find_package(ltla_byteme 2.1.3 CONFIG REQUIRED)
 endif()
 
 target_link_libraries(rds2cpp INTERFACE ltla::byteme)

@@ -30,10 +30,10 @@ struct ParseRdsOptions {
     bool parallel = false;
 
     /**
-     * Options for reading data from file.
-     * Only used in the `parse_rds()` overload that accepts a file path. 
+     * Size of the buffer for storing read bytes before parsing.
+     * Larger values improve speed at the cost of memory efficiency.
      */
-    byteme::SomeFileReaderOptions file_options;
+    std::size_t buffer_size = 65536;
 };
 
 /**
@@ -48,11 +48,11 @@ struct ParseRdsOptions {
  */
 template<class Reader_>
 RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
-    std::unique_ptr<byteme::PerByteInterface<unsigned char> > srcptr;
+    std::unique_ptr<byteme::BufferedReader<unsigned char> > srcptr;
     if (options.parallel) {
-        srcptr.reset(new byteme::PerByteParallel<unsigned char, Reader_*>(&reader));
+        srcptr.reset(new byteme::SerialBufferedReader<unsigned char, Reader_*>(&reader, options.buffer_size));
     } else {
-        srcptr.reset(new byteme::PerByteSerial<unsigned char, Reader_*>(&reader));
+        srcptr.reset(new byteme::ParallelBufferedReader<unsigned char, Reader_*>(&reader, options.buffer_size));
     }
     auto& src = *srcptr; 
     RdsFile output(false);
@@ -153,15 +153,15 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
 }
 
 /**
- * Parse the contents of an RDS file.
+ * Parse the contents of a Gzip-compressed RDS file.
  *
- * @param file Path to an RDS file.
+ * @param file Path to a Gzip-compressed RDS file.
  * @param options Further options for parsing.
  *
  * @return An `RdsFile` object containing the contents of `file`.
  */
 inline RdsFile parse_rds(std::string file, const ParseRdsOptions& options) {
-    byteme::SomeFileReader reader(file.c_str(), options.file_options);
+    byteme::GzipFileReader reader(file.c_str(), {});
     return parse_rds(reader, options);
 }
 
