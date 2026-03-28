@@ -1,13 +1,16 @@
 #ifndef RDS2CPP_PARSE_ATOMIC_HPP
 #define RDS2CPP_PARSE_ATOMIC_HPP
 
-#include <cstdint>
+#include <cstddef>
 #include <vector>
 #include <algorithm>
+#include <stdexcept>
 
 #include "RObject.hpp"
 #include "utils_parse.hpp"
 #include "parse_single_string.hpp"
+
+#include "sanisizer/sanisizer.hpp"
 
 namespace rds2cpp {
 
@@ -15,19 +18,19 @@ namespace atomic_internal {
 
 template<class Vector, class Source_>
 Vector parse_integer_or_logical_body(Source_& src) {
-    size_t len = get_length(src);
+    const auto len = get_length(src);
     Vector output(len);
 
-    constexpr size_t width = 4;
+    constexpr int width = 4;
     static_assert(width == sizeof(decltype(output.data[0])));
-    size_t byte_length = width * len;
+    const auto byte_length = sanisizer::product_unsafe<std::size_t>(width, len); // must be safe if we successfully allocated output.data.
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
     quick_extract(src, byte_length, ptr);
 
     // Flipping endianness.
     if (little_endian()) {
         auto copy = ptr;
-        for (size_t n = 0; n < len; ++n, copy += width) {
+        for (I<decltype(len)> n = 0; n < len; ++n, copy += width) {
             std::reverse(copy, copy + width);
         }
     }
@@ -53,12 +56,12 @@ LogicalVector parse_logical_body(Source_& src) try {
 
 template<class Source_>
 DoubleVector parse_double_body(Source_& src) try {
-    size_t len = get_length(src);
+    const auto len = get_length(src);
     DoubleVector output(len);
 
-    constexpr size_t width = 8;
+    constexpr int width = 8;
     static_assert(width == sizeof(decltype(output.data[0])));
-    size_t byte_length = width * len;
+    const auto byte_length = sanisizer::product_unsafe<std::size_t>(width, len); // must be safe if we successfully allocated output.data.
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
     quick_extract(src, byte_length, ptr);
 
@@ -77,7 +80,7 @@ DoubleVector parse_double_body(Source_& src) try {
 
 template<class Source_>
 RawVector parse_raw_body(Source_& src) try {
-    size_t len = get_length(src);
+    const auto len = get_length(src);
     RawVector output(len);
 
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
@@ -90,21 +93,21 @@ RawVector parse_raw_body(Source_& src) try {
 
 template<class Source_>
 ComplexVector parse_complex_body(Source_& src) try {
-    size_t len = get_length(src);
+    const auto len = get_length(src);
     ComplexVector output(len);
 
-    constexpr size_t width = 16;
+    constexpr int width = 16;
     static_assert(width == sizeof(decltype(output.data[0])));
-    size_t byte_length = width * len;
+    const auto byte_length = sanisizer::product_unsafe<std::size_t>(width, len); // must be safe if we successfully allocated output.data.
     auto ptr = reinterpret_cast<unsigned char*>(output.data.data());
     quick_extract(src, byte_length, ptr);
 
     // Flipping endianness for each double.
     if (little_endian()) {
-        constexpr size_t single_width = width / 2;
-        size_t single_length = len * 2;
+        constexpr std::size_t single_width = width / 2;
+        const auto single_length = sanisizer::product_unsafe<std::size_t>(len, 2); // must be safe, see logic above.
         auto copy = ptr;
-        for (size_t n = 0; n < single_length; ++n, copy += single_width) {
+        for (I<decltype(single_length)> n = 0; n < single_length; ++n, copy += single_width) {
             std::reverse(copy, copy + single_width);
         }
     }
@@ -116,9 +119,9 @@ ComplexVector parse_complex_body(Source_& src) try {
 
 template<class Source_>
 StringVector parse_string_body(Source_& src) try {
-    size_t len = get_length(src);
+    const auto len = get_length(src);
     StringVector output(len);
-    for (size_t i = 0; i < len; ++i) {
+    for (I<decltype(len)> i = 0; i < len; ++i) {
         auto str = parse_single_string(src);
         output.data[i] = str.value;
         output.encodings[i] = str.encoding;

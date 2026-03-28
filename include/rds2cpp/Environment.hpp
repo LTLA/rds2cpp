@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <string>
+#include <cstddef>
+
 #include "StringEncoding.hpp"
 #include "SEXPType.hpp"
 
@@ -38,7 +40,7 @@ struct Environment {
      * Index of the parent environment.
      * This should only be used if `parent_type` is `SEXPType::ENV`.
      */
-    size_t parent = -1;
+    std::size_t parent = -1;
 
     /**
      * Names of the variables inside this environment.

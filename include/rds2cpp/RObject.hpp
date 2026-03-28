@@ -3,10 +3,14 @@
 
 #include <vector>
 #include <cstdint>
+#include <cstddef>
 #include <complex>
 
 #include "SEXPType.hpp"
 #include "StringEncoding.hpp"
+#include "utils_other.hpp"
+
+#include "sanisizer/sanisizer.hpp"
 
 /**
  * @file RObject.hpp
@@ -55,7 +59,7 @@ struct SymbolIndex : public RObject {
     /**
      * @param i Value of the symbol index.
      */
-    SymbolIndex(size_t i = -1) : index(i) {}
+    SymbolIndex(std::size_t i = -1) : index(i) {}
 
 
     SEXPType type() const { return SEXPType::SYM; }
@@ -63,7 +67,7 @@ struct SymbolIndex : public RObject {
     /**
      * Index into the `symbols` vector of the `RdsFile` object.
      */
-    size_t index;
+    std::size_t index;
 };
 
 /**
@@ -82,7 +86,7 @@ struct EnvironmentIndex : public RObject {
      *
      * @param i Value of the environment index. 
      */
-    EnvironmentIndex(size_t i): index(i), env_type(SEXPType::ENV) {}
+    EnvironmentIndex(std::size_t i): index(i), env_type(SEXPType::ENV) {}
 
     /**
      * Type of environment.
@@ -94,7 +98,7 @@ struct EnvironmentIndex : public RObject {
      * Index into the `environments` vector of the `RdsFile` object.
      * This is only used if `type()` returns `ENV`.
      */
-    size_t index;
+    std::size_t index;
 
     /**
      * Type of the environment, as returned by `type()`.
@@ -110,7 +114,7 @@ struct ExternalPointerIndex : public RObject {
     /**
      * @param i Value of the external pointer index.
      */
-    ExternalPointerIndex(size_t i = -1) : index(i) {}
+    ExternalPointerIndex(std::size_t i = -1) : index(i) {}
 
 
     SEXPType type() const { return SEXPType::EXTPTR; }
@@ -118,7 +122,7 @@ struct ExternalPointerIndex : public RObject {
     /**
      * Index into the `external_pointers` vector of the `RdsFile` object.
      */
-    size_t index;
+    std::size_t index;
 };
 
 /**
@@ -179,7 +183,10 @@ struct AtomicVector : public RObject {
     /**
      * @cond
      */
-    AtomicVector(size_t n = 0) : data(n) {}
+    AtomicVector(std::size_t n = 0) :
+        data(sanisizer::cast<I<decltype(data.size())> >(n))
+    {}
+
     static constexpr SEXPType vector_sexp_type = stype;
     /**
      * @endcond
@@ -201,12 +208,12 @@ struct AtomicVector : public RObject {
 /**
  * @brief Integer vector.
  */
-typedef AtomicVector<int32_t, SEXPType::INT> IntegerVector;
+typedef AtomicVector<std::int32_t, SEXPType::INT> IntegerVector;
 
 /**
  * @brief Logical vector.
  */
-typedef AtomicVector<int32_t, SEXPType::LGL> LogicalVector;
+typedef AtomicVector<std::int32_t, SEXPType::LGL> LogicalVector;
 
 /**
  * @brief Double-precision vector.
@@ -230,7 +237,11 @@ struct StringVector : public RObject {
     /**
      * @cond
      */
-    StringVector(size_t n = 0) : data(n), encodings(n), missing(n) {}
+    StringVector(std::size_t n = 0) :
+        data(sanisizer::cast<I<decltype(data.size())> >(n)),
+        encodings(sanisizer::cast<I<decltype(encodings.size())> >(n)),
+        missing(sanisizer::cast<I<decltype(missing.size())> >(n))
+    {}
     /**
      * @endcond
      */
@@ -287,7 +298,9 @@ struct GenericVector : public RObject {
     /**
      * @cond
      */
-    GenericVector(size_t n = 0) : data(n) {}
+    GenericVector(std::size_t n = 0) :
+        data(sanisizer::cast<I<decltype(data.size())> >(n))
+    {}
     /**
      * @endcond
      */
@@ -515,7 +528,7 @@ struct LanguageObject : public RObject {
      * This should not be owned by any other resource.
      */
     void add_argument(RObject* d) {
-        argument_names.resize(argument_names.size() + 1);
+        argument_names.emplace_back();
         argument_values.emplace_back(d);
         argument_has_name.push_back(false);
         argument_encodings.push_back(StringEncoding::NONE);
@@ -527,7 +540,7 @@ struct LanguageObject : public RObject {
      * @param d Pointer to the argument value.
      */
     void add_argument(std::unique_ptr<RObject> d) {
-        argument_names.resize(argument_names.size() + 1);
+        argument_names.emplace_back();
         argument_values.push_back(std::move(d));
         argument_has_name.push_back(false);
         argument_encodings.push_back(StringEncoding::NONE);
@@ -546,7 +559,9 @@ struct ExpressionVector : public RObject {
     /**
      * @cond
      */
-    ExpressionVector(size_t n = 0) : data(n) {}
+    ExpressionVector(std::size_t n = 0) :
+        data(sanisizer::cast<I<decltype(data.size())> >(n))
+    {}
     /**
      * @endcond
      */

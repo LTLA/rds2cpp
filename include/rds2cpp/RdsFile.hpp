@@ -2,6 +2,8 @@
 #define RDS2CPP_RDSFILE_HPP
 
 #include <array>
+#include <cstdint>
+
 #include "RObject.hpp"
 #include "Environment.hpp"
 #include "ExternalPointer.hpp"
@@ -45,7 +47,7 @@ struct RdsFile {
     /**
      * Version of the RDS format.
      */
-    uint32_t format_version;
+    std::uint32_t format_version;
 
     /**
      * R version used to write the file as major-minor-patch integers.

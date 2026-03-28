@@ -4,21 +4,22 @@
 #include <algorithm>
 #include <vector>
 #include <cstdint>
+#include <cstddef>
+
 #include "utils_parse.hpp"
 
 namespace rds2cpp {
 
-inline void inject_integer(int32_t value, std::vector<unsigned char>& buffer) {
+inline void inject_integer(std::int32_t value, std::vector<unsigned char>& buffer) {
     auto ptr = reinterpret_cast<unsigned char*>(&value);
-    constexpr size_t width = 4;
-
+    constexpr std::size_t width = 4;
     if (little_endian()) {
         std::reverse(ptr, ptr + width);
     }
     buffer.insert(buffer.end(), ptr, ptr + width);
 }
 
-inline void inject_length(size_t value, std::vector<unsigned char>& buffer) {
+inline void inject_length(std::size_t value, std::vector<unsigned char>& buffer) {
     if (value <= 2147483647) {
         inject_integer(value, buffer);
         return;
@@ -28,7 +29,7 @@ inline void inject_length(size_t value, std::vector<unsigned char>& buffer) {
     uint64_t big = value;
 
     auto ptr = reinterpret_cast<unsigned char*>(&big);
-    constexpr size_t width = 8;
+    constexpr std::size_t width = 8;
     if (little_endian()) {
         std::reverse(ptr, ptr + width/2);
         std::reverse(ptr + width/2, ptr + width);
@@ -37,7 +38,7 @@ inline void inject_length(size_t value, std::vector<unsigned char>& buffer) {
     buffer.insert(buffer.end(), ptr, ptr + width);
 }
 
-inline void inject_string(const char* ptr, size_t n, std::vector<unsigned char>& buffer) {
+inline void inject_string(const char* ptr, std::size_t n, std::vector<unsigned char>& buffer) {
     auto p = reinterpret_cast<const unsigned char*>(ptr);
     buffer.insert(buffer.end(), p, p + n);
 }

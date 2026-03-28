@@ -1,9 +1,7 @@
 #ifndef RDS2CPP_PARSE_SYMBOL_HPP
 #define RDS2CPP_PARSE_SYMBOL_HPP
 
-#include <cstdint>
-#include <vector>
-#include <algorithm>
+#include <stdexcept>
 
 #include "RObject.hpp"
 #include "SharedParseInfo.hpp"
@@ -19,7 +17,7 @@ SymbolIndex parse_symbol_body(Reader& reader, SharedParseInfo& shared) try {
         throw new std::runtime_error("expected a non-missing string for a symbol");
     }
 
-    size_t idx = shared.request_symbol();
+    const auto idx = shared.request_symbol();
     shared.symbols[idx].name = str.value;
     shared.symbols[idx].encoding = str.encoding;
 

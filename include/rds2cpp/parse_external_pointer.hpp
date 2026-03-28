@@ -1,9 +1,7 @@
 #ifndef RDS2CPP_PARSE_EXTERNAL_POINTER_HPP
 #define RDS2CPP_PARSE_EXTERNAL_POINTER_HPP
 
-#include <cstdint>
-#include <vector>
-#include <algorithm>
+#include <stdexcept>
 #include <memory>
 
 #include "RObject.hpp"

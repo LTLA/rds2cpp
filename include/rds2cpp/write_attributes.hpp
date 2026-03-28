@@ -15,7 +15,7 @@ namespace rds2cpp {
 
 template<class Writer>
 bool write_attributes(const Attributes& attr, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
-    size_t nattr = attr.names.size();
+    const auto nattr = attr.names.size();
     if (!nattr) {
         return false;
     }
@@ -27,7 +27,7 @@ bool write_attributes(const Attributes& attr, Writer& writer, std::vector<unsign
         throw std::runtime_error("vectors of attribute names and values should have the same length");
     }
 
-    for (size_t a = 0; a < nattr; ++a) {
+    for (I<decltype(nattr)> a = 0; a < nattr; ++a) {
         buffer.clear();
         inject_next_pairlist_header(true, buffer);
         writer.write(buffer.data(), buffer.size());

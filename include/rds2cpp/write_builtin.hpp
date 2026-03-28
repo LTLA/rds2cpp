@@ -18,7 +18,7 @@ void write_builtin(const RObject* object, Writer& writer, std::vector<unsigned c
     buffer.clear();
     inject_header(*ptr, buffer);
 
-    size_t len = ptr->name.size();
+    const auto len = sanisizer::cast<std::size_t>(ptr->name.size());
     inject_length(len, buffer);
 
     inject_string(ptr->name.c_str(), len, buffer);

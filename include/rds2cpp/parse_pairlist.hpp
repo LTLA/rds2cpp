@@ -1,8 +1,9 @@
 #ifndef RDS2CPP_PARSE_PAIRLIST_HPP
 #define RDS2CPP_PARSE_PAIRLIST_HPP
 
-#include <cstdint>
+#include <cstddef>
 #include <vector>
+#include <stdexcept>
 
 #include "RObject.hpp"
 #include "SharedParseInfo.hpp"
@@ -30,7 +31,7 @@ void recursive_parse(Source_& src, PairList& output, const Header& header, Share
     output.has_tag.push_back(has_tag);
     if (has_tag) {
         auto header = parse_header(src);
-        size_t sindex;
+        std::size_t sindex;
 
         if (header[3] == static_cast<unsigned char>(SEXPType::SYM)) {
             auto sdx = parse_symbol_body(src, shared);
@@ -45,9 +46,8 @@ void recursive_parse(Source_& src, PairList& output, const Header& header, Share
         output.tag_names.push_back(sym.name);
         output.tag_encodings.push_back(sym.encoding);
     } else {
-        auto n = output.tag_names.size() + 1;
-        output.tag_names.resize(n);
-        output.tag_encodings.resize(n);
+        output.tag_names.emplace_back();
+        output.tag_encodings.emplace_back();
     }
 
     try {

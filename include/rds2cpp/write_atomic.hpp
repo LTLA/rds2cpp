@@ -28,19 +28,19 @@ void write_integer_or_logical_body(const RObject* obj, Writer& writer, std::vect
     set_vector_header(vec, buffer);
 
     const auto& values = vec.data;
-    auto len = values.size();
+    const auto len = sanisizer::cast<std::size_t>(values.size());
     inject_length(len, buffer);
     writer.write(buffer.data(), buffer.size());
 
     auto ptr = reinterpret_cast<const unsigned char*>(values.data());
-    constexpr size_t width = 4;
-    size_t nbytes = len * width;
+    constexpr std::size_t width = 4;
+    const auto nbytes = sanisizer::product_unsafe<std::size_t>(len, width); // must be safe, otheriwse 'values' would have never been allocated.
 
     if (little_endian()) {
         buffer.clear();
         buffer.insert(buffer.end(), ptr, ptr + nbytes);
         auto copy = buffer.data();
-        for (size_t n = 0; n < len; ++n, copy += width) {
+        for (I<decltype(len)> n = 0; n < len; ++n, copy += width) {
             std::reverse(copy, copy + width);
         }
         writer.write(buffer.data(), buffer.size());
@@ -69,19 +69,19 @@ void write_double(const RObject* obj, Writer& writer, std::vector<unsigned char>
     atomic_internal::set_vector_header(vec, buffer);
 
     const auto& values = vec.data;
-    auto len = values.size();
+    const auto len = sanisizer::cast<std::size_t>(values.size());
     inject_length(len, buffer);
     writer.write(buffer.data(), buffer.size());
 
     auto ptr = reinterpret_cast<const unsigned char*>(values.data());
-    constexpr size_t width = 8;
-    size_t nbytes = len * width;
+    constexpr std::size_t width = 8;
+    const auto nbytes = sanisizer::product_unsafe<std::size_t>(len, width); // must be safe, otehrwise 'values''would never have been allocated.
     
     if (little_endian()) {
         buffer.clear();
         buffer.insert(buffer.end(), ptr, ptr + nbytes);
         auto copy = buffer.data();
-        for (size_t n = 0; n < len; ++n, copy += width) {
+        for (I<decltype(len)> n = 0; n < len; ++n, copy += width) {
             std::reverse(copy, copy + width);
         }
         writer.write(buffer.data(), buffer.size());
@@ -98,7 +98,7 @@ void write_raw(const RObject* obj, Writer& writer, std::vector<unsigned char>& b
     atomic_internal::set_vector_header(vec, buffer);
 
     const auto& values = vec.data;
-    auto len = values.size();
+    const auto len = sanisizer::cast<std::size_t>(values.size());
     inject_length(len, buffer);
     writer.write(buffer.data(), buffer.size());
 
@@ -112,20 +112,23 @@ void write_complex(const RObject* obj, Writer& writer, std::vector<unsigned char
     atomic_internal::set_vector_header(vec, buffer);
 
     const auto& values = vec.data;
-    auto len = values.size();
+    const auto len = sanisizer::cast<std::size_t>(values.size());
     inject_length(len, buffer);
     writer.write(buffer.data(), buffer.size());
 
     auto ptr = reinterpret_cast<const unsigned char*>(values.data());
-    constexpr size_t width = 16;
-    size_t nbytes = len * width;
+    constexpr std::size_t width = 16;
+    const auto nbytes = sanisizer::product_unsafe<std::size_t>(len, width); // must be safe, otherwise 'values' would never be allocated.
 
     if (little_endian()) {
         buffer.clear();
         buffer.insert(buffer.end(), ptr, ptr + nbytes);
         auto copy = buffer.data();
-        for (size_t n = 0; n < len * 2; ++n, copy += width / 2) {
-            std::reverse(copy, copy + width/2);
+
+        const auto single_len = sanisizer::product_unsafe<std::size_t>(len, 2); // must be safe, see above.
+        const std::size_t single_width = width / 2;
+        for (I<decltype(len)> n = 0; n < single_len; ++n, copy += single_width) {
+            std::reverse(copy, copy + single_width);
         }
         writer.write(buffer.data(), buffer.size());
     } else {
@@ -141,7 +144,7 @@ void write_string(const RObject* obj, Writer& writer, std::vector<unsigned char>
     atomic_internal::set_vector_header(vec, buffer);
 
     const auto& values = vec.data;
-    auto len = values.size();
+    const auto len = sanisizer::cast<std::size_t>(values.size());
     inject_length(len, buffer);
     writer.write(buffer.data(), buffer.size());
 
@@ -152,7 +155,7 @@ void write_string(const RObject* obj, Writer& writer, std::vector<unsigned char>
         throw std::runtime_error("vectors of strings and missingness should have the same length");
     }
 
-    for (size_t i = 0; i < len; ++i) {
+    for (I<decltype(len)> i = 0; i < len; ++i) {
         write_single_string(vec.data[i], vec.encodings[i], vec.missing[i], writer, buffer);
     }
     write_attributes(vec.attributes, writer, buffer, shared);

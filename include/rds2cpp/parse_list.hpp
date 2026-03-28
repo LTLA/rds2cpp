@@ -15,9 +15,9 @@ std::unique_ptr<RObject> parse_object(Source_&, SharedParseInfo& shared);
 
 template<class Source_>
 GenericVector parse_list_body(Source_& src, SharedParseInfo& shared) try {
-    size_t len = get_length(src);
+    const auto len = get_length(src);
     GenericVector output(len);
-    for (size_t i = 0; i < len; ++i) {
+    for (I<decltype(len)> i = 0; i < len; ++i) {
         try {
             output.data[i] = parse_object(src, shared);
         } catch (std::exception& e) {

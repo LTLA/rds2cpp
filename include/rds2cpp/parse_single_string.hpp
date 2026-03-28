@@ -1,10 +1,12 @@
 #ifndef RDS2CPP_STRING_HPP
 #define RDS2CPP_STRING_HPP
 
+#include <cstdint>
+#include <string>
+
 #include "utils_parse.hpp"
 #include "SEXPType.hpp"
 #include "StringEncoding.hpp"
-#include <string>
 
 namespace rds2cpp {
 
@@ -24,7 +26,7 @@ StringInfo parse_single_string(Source_& src) try {
 
     // Getting the string length; all strings are less than 2^31-1,
     // see https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Long-vectors
-    size_t strlen = 0;
+    std::uint32_t strlen = 0;
     for (int i = 0; i < 4; ++i) {
         if (!src.advance()) {
             throw empty_error();
@@ -38,7 +40,7 @@ StringInfo parse_single_string(Source_& src) try {
 
     if (!output.missing) {
         output.value.reserve(strlen); // don't resize and use extract() on string::data, as that pointer is read-only AFAICT.
-        for (size_t i = 0; i < strlen; ++i) {
+        for (I<decltype(strlen)> i = 0; i < strlen; ++i) {
             if (!src.advance()) {
                 throw empty_error();
             }

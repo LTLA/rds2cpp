@@ -5,6 +5,7 @@
 #include <array>
 #include <algorithm>
 #include <cstdint>
+#include <stdexcept>
 
 #include "SEXPType.hpp"
 #include "RObject.hpp"

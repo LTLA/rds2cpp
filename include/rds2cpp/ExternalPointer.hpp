@@ -1,9 +1,8 @@
 #ifndef RDS2CPP_EXTERNAL_POINTER_HPP
 #define RDS2CPP_EXTERNAL_POINTER_HPP
 
-#include <vector>
-#include <string>
 #include <memory>
+
 #include "RObject.hpp"
 
 /**

@@ -23,9 +23,9 @@ template<class Writer>
 void write_object(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared);
 
 struct SharedWriteInfo {
-    size_t reference_count;
+    std::size_t reference_count;
 
-    std::vector<std::unordered_map<std::string, size_t> > symbol_mappings;
+    std::vector<std::unordered_map<std::string, std::size_t> > symbol_mappings;
 
     const std::vector<Symbol>* known_symbols;
 
@@ -33,7 +33,7 @@ struct SharedWriteInfo {
 
     const std::vector<ExternalPointer>* known_external_pointers;
 
-    std::vector<size_t> known_symbol_mappings, known_environment_mappings, known_external_pointer_mappings;
+    std::vector<std::size_t> known_symbol_mappings, known_environment_mappings, known_external_pointer_mappings;
 
 public:
     SharedWriteInfo(
@@ -42,18 +42,18 @@ public:
         const std::vector<ExternalPointer>& ex
     ) :
         reference_count(1), 
-        symbol_mappings(static_cast<int>(StringEncoding::ASCII) + 1),
+        symbol_mappings(sanisizer::sum<I<decltype(symbol_mappings.size())> >(static_cast<int>(StringEncoding::ASCII), 1)),
         known_symbols(&s),
         known_environments(&e),
         known_external_pointers(&ex),
-        known_symbol_mappings(s.size()),
-        known_environment_mappings(e.size()),
-        known_external_pointer_mappings(ex.size())
+        known_symbol_mappings(sanisizer::cast<I<decltype(known_symbol_mappings.size())> >(s.size())),
+        known_environment_mappings(sanisizer::cast<I<decltype(known_environment_mappings.size())> >(e.size())),
+        known_external_pointer_mappings(sanisizer::cast<I<decltype(known_external_pointer_mappings.size())> >(ex.size()))
     {}
 
 private:
     template<class Writer>
-    static void write_reference(size_t ref, Writer& writer, std::vector<unsigned char>& buffer) {
+    static void write_reference(std::size_t ref, Writer& writer, std::vector<unsigned char>& buffer) {
         buffer.resize(4);
         buffer[2] = ref & 255;
         ref >>= 8;
@@ -67,7 +67,7 @@ private:
 
 public:
     template<class Writer>
-    size_t write_symbol(const std::string& value, StringEncoding encoding, Writer& writer, std::vector<unsigned char>& buffer) {
+    std::size_t write_symbol(const std::string& value, StringEncoding encoding, Writer& writer, std::vector<unsigned char>& buffer) {
         auto& host = symbol_mappings[static_cast<int>(encoding)];
         auto it = host.find(value);
         if (it != host.end()) {
@@ -81,8 +81,11 @@ public:
 
         write_single_string(value, encoding, false, writer, buffer);
 
+        const auto old_reference_count = reference_count;
         host[value] = reference_count;
-        return reference_count++;
+        reference_count = sanisizer::sum<I<decltype(reference_count)> >(reference_count, 1); // safely incrementing this count.
+
+        return old_reference_count;
     }
 
     template<class Writer>
@@ -116,7 +119,8 @@ public:
             write_reference(candidate, writer, buffer);
             return;
         }
-        candidate = reference_count++;
+        candidate = reference_count;
+        reference_count = sanisizer::sum<I<decltype(reference_count)> >(reference_count, 1); // safely incrementing this count.
 
         const auto& ext = (*known_external_pointers)[index];
 
@@ -176,10 +180,10 @@ public:
         const auto& encodings = env.variable_encodings;
         const auto& values = env.variable_values;
 
-        size_t len = names.size();
+        const auto len = names.size();
         if (len) {
             // Creating a tagged pairlist per element.
-            for (size_t i = 0; i < len; ++i) {
+            for (I<decltype(len)> i = 0; i < len; ++i) {
                 buffer.clear();
                 inject_next_pairlist_header(true, buffer);
                 writer.write(buffer.data(), buffer.size());

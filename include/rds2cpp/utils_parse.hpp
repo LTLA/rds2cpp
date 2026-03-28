@@ -4,7 +4,11 @@
 #include <algorithm>
 #include <vector>
 #include <cstdint>
+#include <cstddef>
 #include <memory>
+#include <stdexcept>
+
+#include "utils_other.hpp"
 
 #include "byteme/byteme.hpp"
 
@@ -18,7 +22,7 @@ inline std::runtime_error empty_error() {
     return std::runtime_error("no more bytes to read");
 }
 
-inline void quick_extract(byteme::BufferedReader<unsigned char>& src, size_t len, unsigned char* output) {
+inline void quick_extract(byteme::BufferedReader<unsigned char>& src, std::size_t len, unsigned char* output) {
     if (!src.advance()) {
         throw empty_error();
     }
@@ -33,8 +37,8 @@ inline char as_char(unsigned char val) {
 }
 
 template<class Source_>
-size_t get_length(Source_& src) {
-    uint32_t initial = 0;
+std::size_t get_length(Source_& src) {
+    std::uint32_t initial = 0;
     try {
         for (int b = 0; b < 4; ++b) {
             if (!src.advance()) {
@@ -47,14 +51,14 @@ size_t get_length(Source_& src) {
         throw traceback("failed to extract vector length", e);
     }
 
-    if (initial != static_cast<uint32_t>(-1)) {
-        return initial;
+    if (initial != static_cast<std::uint32_t>(-1)) {
+        return sanisizer::cast<std::size_t>(initial);
     }
 
     // Hack to deal with large lengths. 
-    uint64_t full = 0;
+    std::uint64_t full = 0;
     try {
-        for (size_t b = 0; b < 8; ++b) {
+        for (int b = 0; b < 8; ++b) {
             if (!src.advance()) {
                 throw empty_error();
             }
@@ -65,11 +69,11 @@ size_t get_length(Source_& src) {
         throw traceback("failed to extract large vector length", e);
     }
 
-    return full;
+    return sanisizer::cast<std::size_t>(full);
 }
 
 inline bool little_endian() {
-    const uint32_t value = 1;
+    const std::uint32_t value = 1;
     auto lsb = reinterpret_cast<const unsigned char *>(&value);
     return (*lsb == 1);
 }

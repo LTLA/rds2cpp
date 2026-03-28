@@ -32,9 +32,9 @@ void write_language(const RObject* object, Writer& writer, std::vector<unsigned 
     const auto& has_tag = input.argument_has_name;
     const auto& tag_names = input.argument_names;
     const auto& tag_encodings = input.argument_encodings;
-    size_t n = values.size();
+    const auto n = values.size();
 
-    for (size_t i = 0; i < n; ++i) {
+    for (I<decltype(n)> i = 0; i < n; ++i) {
         buffer.clear();
         inject_next_pairlist_header(has_tag[i], buffer);
         writer.write(buffer.data(), buffer.size());

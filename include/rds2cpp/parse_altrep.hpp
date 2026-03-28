@@ -2,15 +2,19 @@
 #define RDS2CPP_PARSE_ALTREP_HPP
 
 #include <cstdint>
+#include <cstddef>
 #include <vector>
 #include <algorithm>
 #include <sstream>
 #include <limits>
+#include <memory>
 
 #include "RObject.hpp"
 #include "utils_parse.hpp"
 #include "parse_single_string.hpp"
 #include "parse_attributes.hpp"
+
+#include "sanisizer/sanisizer.hpp"
 
 namespace rds2cpp {
 
@@ -41,11 +45,11 @@ Vector parse_numeric_compact_seq(Source_& src) try {
         throw std::runtime_error("expected compact_seq's sequence information to be of length 3");
     }
 
-    size_t len = ranges[0];
+    auto len = sanisizer::from_float<std::size_t>(ranges[0]);
     double start = ranges[1], step = ranges[2];
 
     Vector output(len);
-    for (size_t i = 0; i < len; ++i, start += step) {
+    for (I<decltype(len)> i = 0; i < len; ++i, start += step) {
         output.data[i] = start;
     }
 
@@ -111,11 +115,11 @@ StringVector parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
 
     if (contents->type() == SEXPType::INT){
         auto cast = static_cast<IntegerVector*>(contents.get());
-        size_t n = cast->data.size();
+        const auto n = cast->data.size();
         output = StringVector(n);
 
-        for (size_t i = 0; i < n; ++i) {
-            if (cast->data[i] == std::numeric_limits<int32_t>::min()) { // see R_ext/Arith.h
+        for (I<decltype(n)> i = 0; i < n; ++i) {
+            if (cast->data[i] == std::numeric_limits<std::int32_t>::min()) { // see R_ext/Arith.h
                 output.missing[i] = true;
             } else {
                 output.data[i] = std::to_string(cast->data[i]);
@@ -127,10 +131,11 @@ StringVector parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
         std::ostringstream converter;
         converter.precision(std::numeric_limits<double>::max_digits10);
         auto cast = static_cast<DoubleVector*>(contents.get());
-        bool lw = (little_endian() ? 0 : 1); // see R_ext/Arith.h
+        const bool lw = (little_endian() ? 0 : 1); // see R_ext/Arith.h
         output = StringVector(cast->data.size());
 
-        for (size_t i = 0; i < cast->data.size(); ++i) {
+        const auto datalen = cast->data.size();
+        for (I<decltype(datalen)> i = 0; i < datalen; ++i) {
             output.encodings[i] = StringEncoding::ASCII;
 
             if (std::isfinite(cast->data[i])) {
@@ -139,7 +144,7 @@ StringVector parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
                 converter.str(std::string());
 
             } else if (std::isnan(cast->data[i])) {
-                auto ptr = reinterpret_cast<uint32_t*>(&(cast->data[i]));
+                auto ptr = reinterpret_cast<std::uint32_t*>(&(cast->data[i]));
                 if (ptr[lw] == 1954) { // see R_ext/Arith.h.
                     output.missing[i] = true;
                 } else {

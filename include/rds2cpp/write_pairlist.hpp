@@ -21,10 +21,10 @@ void write_pairlist(const RObject* object, Writer& writer, std::vector<unsigned 
     const auto& has_tag = ptr->has_tag;
     const auto& tag_names = ptr->tag_names;
     const auto& tag_encodings = ptr->tag_encodings;
-    size_t n = values.size();
-    bool has_attr = !ptr->attributes.names.empty();
+    const auto n = values.size();
+    const bool has_attr = !ptr->attributes.names.empty();
 
-    for (size_t i = 0; i < n; ++i) {
+    for (I<decltype(n)> i = 0; i < n; ++i) {
         buffer.clear();
         buffer.insert(buffer.end(), 2, 0);
 

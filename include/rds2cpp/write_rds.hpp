@@ -43,7 +43,7 @@ void write_rds(const RdsFile& info, Writer& writer) {
         buffer.push_back(x);
     }
 
-    size_t encoding_len = info.encoding.size();
+    const auto encoding_len = sanisizer::cast<std::int32_t>(info.encoding.size());
     inject_integer(encoding_len, buffer);
     inject_string(info.encoding.c_str(), encoding_len, buffer);
     writer.write(buffer.data(), buffer.size());

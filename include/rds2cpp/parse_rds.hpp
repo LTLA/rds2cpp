@@ -2,7 +2,7 @@
 #define RDS2CPP_PARSE_HPP
 
 #include <memory>
-#include <algorithm>
+#include <stdexcept>
 #include <cstdint>
 
 #include "RdsFile.hpp"
@@ -11,6 +11,7 @@
 #include "parse_object.hpp"
 
 #include "byteme/byteme.hpp"
+#include "sanisizer/sanisizer.hpp"
 
 /**
  * @file parse_rds.hpp
@@ -33,7 +34,7 @@ struct ParseRdsOptions {
      * Size of the buffer for storing read bytes before parsing.
      * Larger values improve speed at the cost of memory efficiency.
      */
-    std::size_t buffer_size = 65536;
+    std::size_t buffer_size = sanisizer::cap<std::size_t>(65536);
 };
 
 /**
@@ -116,7 +117,7 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
 
     // Reading this undocumented section about the string encoding.
     {
-        size_t encoding_length = 0;
+        std::uint32_t encoding_length = 0;
         try {
             for (int b = 0; b < 4; ++b) {
                 if (!src.advance()) {
@@ -131,7 +132,7 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
 
         try {
             output.encoding.reserve(encoding_length); // don't resize and use extract() on string::data, as that pointer is read-only AFAICT.
-            for (size_t b = 0; b < encoding_length; ++b) {
+            for (I<decltype(encoding_length)> b = 0; b < encoding_length; ++b) {
                 if (!src.advance()) {
                     throw empty_error();
                 }

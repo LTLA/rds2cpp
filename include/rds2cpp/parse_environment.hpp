@@ -29,11 +29,11 @@ inline EnvironmentIndex parse_empty_environment_body() {
 template<class Source_>
 EnvironmentIndex parse_new_environment_body(Source_& src, SharedParseInfo& shared) try {
     // Need to provision the environment first, so that internal references are valid.
-    size_t eindex = shared.request_environment();
+    const auto eindex = shared.request_environment();
     Environment new_env;
 
     // Is it locked or not?
-    uint32_t locked = 0;
+    std::uint32_t locked = 0;
     for (int i = 0; i < 4; ++i) {
         if (!src.advance()) {
             throw empty_error();
@@ -77,7 +77,8 @@ EnvironmentIndex parse_new_environment_body(Source_& src, SharedParseInfo& share
     if (unhashed[3] == static_cast<unsigned char>(SEXPType::LIST)) {
         auto plist = parse_pairlist_body(src, unhashed, shared);
 
-        for (size_t i = 0; i < plist.data.size(); ++i) {
+        const auto plist_len = plist.data.size();
+        for (I<decltype(plist_len)> i = 0; i < plist_len; ++i) {
             if (!plist.has_tag[i]) {
                 throw std::runtime_error("unhashed environment values should be respresented in a tagged pairlist");
             }
@@ -100,7 +101,8 @@ EnvironmentIndex parse_new_environment_body(Source_& src, SharedParseInfo& share
         new_env.hashed = true;
 
         auto vec = parse_list_body(src, shared);
-        for (size_t i = 0; i < vec.data.size(); ++i) {
+        const auto veclen = vec.data.size();
+        for (I<decltype(veclen)> i = 0; i < veclen; ++i) {
             if (vec.data[i]->type() == SEXPType::NIL) {
                 continue;
             }
@@ -110,8 +112,8 @@ EnvironmentIndex parse_new_environment_body(Source_& src, SharedParseInfo& share
             }
 
             auto plist = static_cast<PairList*>(vec.data[i].get());
-            auto nelements = plist->data.size();
-            for (size_t j = 0; j < nelements; ++j) {
+            const auto nelements = plist->data.size();
+            for (I<decltype(nelements)> j = 0; j < nelements; ++j) {
                 if (!plist->has_tag[j]) {
                     throw std::runtime_error("environment values should be represented as a length-1 tagged pairlists");
                 }

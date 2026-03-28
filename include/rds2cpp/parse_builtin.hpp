@@ -11,11 +11,11 @@ namespace rds2cpp {
 
 template<class Source_>
 BuiltInFunction parse_builtin_body(Source_& src) try {
-    size_t len = get_length(src);
+    const auto len = get_length(src);
 
     BuiltInFunction output;
     output.name.reserve(len); // don't resize and use extract() on string::data, as that pointer is read-only AFAICT.
-    for (size_t i = 0; i < len; ++i) {
+    for (I<decltype(len)> i = 0; i < len; ++i) {
         if (!src.advance()) {
             throw empty_error();
         }

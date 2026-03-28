@@ -1,8 +1,9 @@
 #ifndef RDS2CPP_PARSE_S4_HPP
 #define RDS2CPP_PARSE_S4_HPP
 
-#include <cstdint>
 #include <vector>
+#include <stdexcept>
+#include <memory>
 
 #include "RObject.hpp"
 #include "utils_parse.hpp"
@@ -30,10 +31,10 @@ S4Object parse_s4_body(Source_& src, const Header& header, SharedParseInfo& shar
     }
 
     auto slot_plist = parse_pairlist_body(src, slot_header, shared);
-    size_t nslots = slot_plist.data.size();
+    const auto nslots = slot_plist.data.size();
     bool found_class = false;
 
-    for (size_t s = 0; s < nslots; ++s) {
+    for (I<decltype(nslots)> s = 0; s < nslots; ++s) {
         if (!slot_plist.has_tag[s]) {
             throw std::runtime_error("all slots in an S4 object should be named");
         }
@@ -84,4 +85,3 @@ S4Object parse_s4_body(Source_& src, const Header& header, SharedParseInfo& shar
 }
 
 #endif
-

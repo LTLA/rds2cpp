@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <stdexcept>
 
 #include "RObject.hpp"
 #include "utils_parse.hpp"
@@ -15,9 +16,9 @@ std::unique_ptr<RObject> parse_object(Source_&, SharedParseInfo& shared);
 
 template<class Source_>
 ExpressionVector parse_expression_body(Source_& src, SharedParseInfo& shared) try {
-    size_t len = get_length(src);
+    const auto len = get_length(src);
     ExpressionVector output(len);
-    for (size_t i = 0; i < len; ++i) {
+    for (I<decltype(len)> i = 0; i < len; ++i) {
         output.data[i] = parse_object(src, shared);
     }
     return output;

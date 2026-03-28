@@ -21,8 +21,8 @@ template<class Source_>
 void parse_attributes_body(Source_& src, const Header& header, Attributes& output, SharedParseInfo& shared) try {
     auto plist = parse_pairlist_body(src, header, shared);
 
-    size_t nnodes = plist.data.size();
-    for (size_t t = 0; t < nnodes; ++t) {
+    const auto nnodes = plist.data.size();
+    for (I<decltype(nnodes)> t = 0; t < nnodes; ++t) {
         if (!plist.has_tag[t]) {
             throw std::runtime_error("all attributes should be named");
         }
