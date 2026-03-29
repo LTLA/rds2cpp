@@ -273,3 +273,29 @@ Rcpp::RObject parallel_parse(std::string file_name) {
     auto output = rds2cpp::parse_rds(file_name, opts);
     return parse_output(output);
 }
+
+//' @export
+//[[Rcpp::export(rng=false)]]
+double parse_length(Rcpp::RawVector raw) {
+    byteme::RawBufferReader reader(raw.begin(), raw.size());
+    byteme::SerialBufferedReader<unsigned char, byteme::Reader*> src(&reader, 100);
+    return rds2cpp::get_length(src);
+}
+
+//' @export
+//[[Rcpp::export(rng=false)]]
+Rcpp::List parse_single_string(Rcpp::RawVector raw) {
+    byteme::RawBufferReader reader(raw.begin(), raw.size());
+    byteme::SerialBufferedReader<unsigned char, byteme::Reader*> src(&reader, 100);
+    auto payload = rds2cpp::parse_single_string(src);
+
+    std::string encoding;
+    switch (payload.encoding) {
+        case rds2cpp::StringEncoding::NONE: encoding = "NONE"; break;
+        case rds2cpp::StringEncoding::UTF8: encoding = "UTF8"; break;
+        case rds2cpp::StringEncoding::ASCII: encoding = "ASCII"; break;
+        case rds2cpp::StringEncoding::LATIN1: encoding = "LATIN1"; break;
+    }
+
+    return Rcpp::List::create(payload.value, encoding, payload.missing);
+}

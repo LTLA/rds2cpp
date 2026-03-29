@@ -63,10 +63,10 @@ std::size_t get_length(Source_& src) {
     }
 
     if (initial != -1) {
+        if (initial < 0) {
+            throw std::runtime_error("vector length should be non-negative");
+        }
         return sanisizer::cast<std::size_t>(initial);
-    }
-    if (initial < 0) {
-        throw std::runtime_error("vector length should be non-negative");
     }
 
     // Dealing with large lengths, represented as two unsigned integers according to Section 1.8 of R-internals.

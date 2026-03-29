@@ -30,6 +30,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// parse_length
+double parse_length(Rcpp::RawVector raw);
+RcppExport SEXP _rds2cpp_parse_length(SEXP rawSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::RawVector >::type raw(rawSEXP);
+    rcpp_result_gen = Rcpp::wrap(parse_length(raw));
+    return rcpp_result_gen;
+END_RCPP
+}
+// parse_single_string
+Rcpp::List parse_single_string(Rcpp::RawVector raw);
+RcppExport SEXP _rds2cpp_parse_single_string(SEXP rawSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::RawVector >::type raw(rawSEXP);
+    rcpp_result_gen = Rcpp::wrap(parse_single_string(raw));
+    return rcpp_result_gen;
+END_RCPP
+}
 // write
 Rcpp::RObject write(Rcpp::RObject x, std::string file_name);
 RcppExport SEXP _rds2cpp_write(SEXP xSEXP, SEXP file_nameSEXP) {
@@ -45,6 +65,8 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_rds2cpp_parse", (DL_FUNC) &_rds2cpp_parse, 1},
     {"_rds2cpp_parallel_parse", (DL_FUNC) &_rds2cpp_parallel_parse, 1},
+    {"_rds2cpp_parse_length", (DL_FUNC) &_rds2cpp_parse_length, 1},
+    {"_rds2cpp_parse_single_string", (DL_FUNC) &_rds2cpp_parse_single_string, 1},
     {"_rds2cpp_write", (DL_FUNC) &_rds2cpp_write, 2},
     {NULL, NULL, 0}
 };

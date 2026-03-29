@@ -12,8 +12,8 @@ namespace rds2cpp {
 
 struct StringInfo {
     std::string value;
-    StringEncoding encoding;
-    bool missing;
+    StringEncoding encoding = StringEncoding::NONE;
+    bool missing = false;
 };
 
 template<class Source_>

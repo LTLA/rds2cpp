@@ -12,6 +12,16 @@ parallel_parse <- function(file_name) {
 }
 
 #' @export
+parse_length <- function(raw) {
+    .Call('_rds2cpp_parse_length', PACKAGE = 'rds2cpp', raw)
+}
+
+#' @export
+parse_single_string <- function(raw) {
+    .Call('_rds2cpp_parse_single_string', PACKAGE = 'rds2cpp', raw)
+}
+
+#' @export
 write <- function(x, file_name) {
     .Call('_rds2cpp_write', PACKAGE = 'rds2cpp', x, file_name)
 }
