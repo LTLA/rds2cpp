@@ -56,7 +56,8 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
         srcptr.reset(new byteme::ParallelBufferedReader<unsigned char, Reader_*>(&reader, options.buffer_size));
     }
     auto& src = *srcptr; 
-    RdsFile output(false);
+
+    RdsFile output;
 
     // Reading the header first. This is the first and only time that 
     // we need to do a src.valid() check, as we're using the current 
@@ -88,22 +89,21 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
             throw traceback("failed to read the format version number from the RDS preamble", e);
         } 
 
-        // Just skipping the first byte for the R reader/writer versions...
-        // unless we get up to a major version > 255, then we're in trouble.
+        // Using int32_t for the versions as the R_Version macro operates with signed integers AFIACT.
         try {
-            if (!src.advance()) {
-                throw empty_error();
-            }
-            quick_extract(src, output.writer_version.size(), output.writer_version.data());
+            auto writer_version = quick_integer<std::int32_t>(src);
+            output.writer_version.major = (writer_version >> 16);
+            output.writer_version.minor = (writer_version >> 8) & 255;
+            output.writer_version.patch = writer_version & 255;
         } catch (std::exception& e) {
             throw traceback("failed to read the writer version number from the RDS preamble", e);
         }
 
         try {
-            if (!src.advance()) {
-                throw empty_error();
-            }
-            quick_extract(src, output.reader_version.size(), output.reader_version.data());
+            auto reader_version = quick_integer<std::int32_t>(src);
+            output.reader_version.major = (reader_version >> 16);
+            output.reader_version.minor = (reader_version >> 8) & 255;
+            output.reader_version.patch = reader_version & 255;
         } catch (std::exception& e) {
             throw traceback("failed to read the reader version number from the RDS preamble", e);
         }
@@ -122,13 +122,15 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
         }
 
         try {
-            output.encoding.reserve(encoding_length); // don't resize and use extract() on string::data, as that pointer is read-only AFAICT.
+            std::string encoding;
+            encoding.reserve(encoding_length); // don't resize and use extract() on string::data, as that pointer is read-only AFAICT.
             for (I<decltype(encoding_length)> b = 0; b < encoding_length; ++b) {
                 if (!src.advance()) {
                     throw empty_error();
                 }
-                output.encoding.push_back(as_char(src.get()));
+                encoding.push_back(as_char(src.get()));
             }
+            output.encoding = string_encoding_from_name(encoding);
         } catch (std::exception& e) {
             throw traceback("failed to read the encoding string from the RDS preamble", e);
         }

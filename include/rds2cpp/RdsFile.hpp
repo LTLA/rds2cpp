@@ -18,51 +18,48 @@
 namespace rds2cpp {
 
 /**
+ * @brief Major-minor-patch version.
+ */
+struct Version {
+    /**
+     * Major version.
+     */
+    std::int16_t major = 3;
+
+    /**
+     * Minor version.
+     */
+    std::uint8_t minor = 5;
+
+    /**
+     * Patch version.
+     */
+    std::uint8_t patch = 0;
+};
+
+/**
  * @brief Contents of the parsed RDS file.
  */
 struct RdsFile {
-    RdsFile() {
-        format_version = 3;            
-
-        writer_version[0] = 4;
-        writer_version[1] = 2;
-        writer_version[2] = 0;
-
-        reader_version[0] = 3;
-        reader_version[1] = 5;
-        reader_version[2] = 0;
-
-        encoding = "UTF-8";
-    }
-
-    /**
-     * @cond
-     */
-    // Avoid any initialization.
-    RdsFile(bool) {}
-    /**
-     * @endcond
-     */
-
     /**
      * Version of the RDS format.
      */
-    std::int32_t format_version;
+    std::int32_t format_version = 3;
 
     /**
      * R version used to write the file as major-minor-patch integers.
      */
-    std::array<unsigned char, 3> writer_version;
+    Version writer_version;
 
     /**
-     * Minimum R version required to read the file as major-minor-patch integers.
+     * Minimum R version required to read the file.
      */
-    std::array<unsigned char, 3> reader_version;
+    Version reader_version;
 
     /**
-     * Encoding required to read the file.
+     * String encoding used to write the file, for conversion of unflagged strings.
      */
-    std::string encoding;
+    StringEncoding encoding = StringEncoding::UTF8;
 
     /**
      * The unserialized object.

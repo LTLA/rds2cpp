@@ -22,3 +22,16 @@ test_that("string extraction works correctly", {
     expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^5, 9, 255, 255, 255, 255))), list("", "NONE", TRUE))
     expect_error(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^5, 9, 255, 0, 0, 0))), "non-negative");
 })
+
+test_that("RDS preamble extraction works correctly", {
+    tmp <- tempfile(fileext=".rds")
+    y <- as.integer(1:20)
+    saveRDS(y, file=tmp)
+
+    payload <- rds2cpp:::parse_preamble(tmp)
+    expect_identical(payload$format_version, 3L)
+    expect_identical(paste(payload$writer_version, collapse="."), paste0(R.Version()$major, ".", R.Version()$minor))
+    expect_identical(paste(payload$reader_version, collapse="."), "3.5.0")
+
+    expect_true(payload$string_encoding %in% c("UTF-8", "latin1", "bytes", "unknown"))
+})

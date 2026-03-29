@@ -299,3 +299,28 @@ Rcpp::List parse_single_string(Rcpp::RawVector raw) {
 
     return Rcpp::List::create(payload.value, encoding, payload.missing);
 }
+
+//' @export
+//[[Rcpp::export(rng=false)]]
+Rcpp::List parse_preamble(std::string file_name) {
+    auto parsed = rds2cpp::parse_rds(file_name, {});
+
+    Rcpp::List output;
+    output["format_version"] = parsed.format_version;
+
+    output["writer_version"] = Rcpp::IntegerVector::create(
+        parsed.writer_version.major,
+        parsed.writer_version.minor,
+        parsed.writer_version.patch
+    );
+
+    output["reader_version"] = Rcpp::IntegerVector::create(
+        parsed.reader_version.major,
+        parsed.reader_version.minor,
+        parsed.reader_version.patch
+    );
+
+    output["string_encoding"] = rds2cpp::string_encoding_to_name(parsed.encoding);
+
+    return output;
+}

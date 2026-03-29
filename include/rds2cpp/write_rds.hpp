@@ -33,19 +33,25 @@ void write_rds(const RdsFile& info, Writer& writer) {
     inject_string("X\n", 2, buffer);
     inject_integer(info.format_version, buffer);
 
-    buffer.push_back(0);
-    for (auto x : info.writer_version) {
-        buffer.push_back(x);
-    }
+    // Mimic the behavior of the R_Version macro.
+    inject_integer(
+        sanisizer::product_unsafe<std::int32_t>(info.writer_version.major, 65536) +
+        sanisizer::product_unsafe<std::int32_t>(info.writer_version.minor, 256) +
+        static_cast<std::int32_t>(info.writer_version.patch),
+        buffer
+    );
 
-    buffer.push_back(0);
-    for (auto x : info.reader_version) {
-        buffer.push_back(x);
-    }
+    inject_integer(
+        sanisizer::product_unsafe<std::int32_t>(info.reader_version.major, 65536) +
+        sanisizer::product_unsafe<std::int32_t>(info.reader_version.minor, 256) +
+        static_cast<std::int32_t>(info.reader_version.patch),
+        buffer
+    );
 
-    const auto encoding_len = sanisizer::cast<std::int32_t>(info.encoding.size());
-    inject_integer(encoding_len, buffer);
-    inject_string(info.encoding.c_str(), encoding_len, buffer);
+    const std::string encoding = string_encoding_to_name(info.encoding);
+    inject_integer(sanisizer::cast<std::int32_t>(encoding.size()), buffer);
+    inject_string(encoding.c_str(), encoding.size(), buffer);
+
     writer.write(buffer.data(), buffer.size());
 
     SharedWriteInfo shared(info.symbols, info.environments, info.external_pointers);
