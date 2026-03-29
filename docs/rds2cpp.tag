@@ -561,10 +561,10 @@
     <name>rds2cpp::RdsFile</name>
     <filename>structrds2cpp_1_1RdsFile.html</filename>
     <member kind="variable">
-      <type>std::uint32_t</type>
+      <type>std::int32_t</type>
       <name>format_version</name>
       <anchorfile>structrds2cpp_1_1RdsFile.html</anchorfile>
-      <anchor>a8f3d3af80e9596fdf6194d8852b72c96</anchor>
+      <anchor>a36bb8010e5bb3b2cff1a03ac6cabb861</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
