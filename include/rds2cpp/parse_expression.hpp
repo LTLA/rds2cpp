@@ -24,6 +24,7 @@ ExpressionVector parse_expression_body(Source_& src, SharedParseInfo& shared) tr
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse an expression body", e);
+    return ExpressionVector();
 }
 
 }

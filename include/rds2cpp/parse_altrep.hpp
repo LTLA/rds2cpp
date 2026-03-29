@@ -61,6 +61,7 @@ Vector parse_numeric_compact_seq(Source_& src) try {
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse compact numeric ALTREP", e);
+    return Vector();
 }
 
 template<class Vector, class Source_>
@@ -100,6 +101,7 @@ Vector parse_attribute_wrapper(Source_& src, SharedParseInfo& shared) try {
     return Vector(std::move(*coerced));
 } catch (std::exception& e) {
     throw traceback("failed to parse attribute-wrapped ALTREP", e);
+    return Vector();
 }
 
 template<class Source_>
@@ -184,6 +186,7 @@ StringVector parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse deferred string ALTREP", e);
+    return StringVector();
 }
 
 }
@@ -221,6 +224,7 @@ std::unique_ptr<RObject> parse_altrep_body(Source_& src, SharedParseInfo& shared
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse ALTREP body", e);
+    return std::unique_ptr<RObject>();
 }
 
 }

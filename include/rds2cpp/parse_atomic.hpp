@@ -45,6 +45,7 @@ IntegerVector parse_integer_body(Source_& src) try {
     return atomic_internal::parse_integer_or_logical_body<IntegerVector>(src);
 } catch (std::exception& e) {
     throw traceback("failed to parse data for an integer vector", e);
+    return IntegerVector();
 }
 
 template<class Source_>
@@ -52,6 +53,7 @@ LogicalVector parse_logical_body(Source_& src) try {
     return atomic_internal::parse_integer_or_logical_body<LogicalVector>(src);
 } catch (std::exception& e) {
     throw traceback("failed to parse data for a logical vector", e);
+    return LogicalVector();
 }
 
 template<class Source_>
@@ -76,6 +78,7 @@ DoubleVector parse_double_body(Source_& src) try {
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse data for a double vector", e);
+    return DoubleVector();
 }
 
 template<class Source_>
@@ -89,6 +92,7 @@ RawVector parse_raw_body(Source_& src) try {
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse data for a raw vector", e);
+    return RawVector();
 }
 
 template<class Source_>
@@ -115,6 +119,7 @@ ComplexVector parse_complex_body(Source_& src) try {
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse data for a complex vector", e);
+    return ComplexVector();
 }
 
 template<class Source_>
@@ -130,6 +135,7 @@ StringVector parse_string_body(Source_& src) try {
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse data for a string vector", e);
+    return StringVector();
 }
 
 }

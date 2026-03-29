@@ -27,6 +27,7 @@ GenericVector parse_list_body(Source_& src, SharedParseInfo& shared) try {
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse an R list body", e);
+    return GenericVector();
 }
 
 }

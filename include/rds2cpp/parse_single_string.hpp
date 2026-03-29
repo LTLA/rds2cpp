@@ -69,6 +69,7 @@ StringInfo parse_single_string(Source_& src) try {
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse a single CHARSXP", e);
+    return StringInfo();
 }
 
 }

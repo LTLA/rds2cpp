@@ -27,6 +27,7 @@ ExternalPointerIndex parse_external_pointer_body(Source_& src, const Header& hea
     return ExternalPointerIndex(idx);
 } catch (std::exception& e) {
     throw traceback("failed to parse an external pointer body", e);
+    return ExternalPointerIndex();
 }
 
 }

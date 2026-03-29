@@ -87,6 +87,7 @@ Header parse_header(Source_& src) try {
     return details;
 } catch (std::exception& e) {
     throw traceback("failed to parse the R object header", e);
+    return Header();
 }
 
 template<class Pointer, class Object>

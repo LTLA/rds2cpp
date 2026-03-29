@@ -139,6 +139,7 @@ EnvironmentIndex parse_new_environment_body(Source_& src, SharedParseInfo& share
     return EnvironmentIndex(eindex);
 } catch (std::exception& e) {
     throw traceback("failed to parse a new environment body", e);
+    return EnvironmentIndex();
 }
 
 }

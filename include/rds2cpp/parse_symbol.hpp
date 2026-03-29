@@ -24,6 +24,7 @@ SymbolIndex parse_symbol_body(Reader& reader, SharedParseInfo& shared) try {
     return SymbolIndex(idx);
 } catch (std::exception& e) {
     throw traceback("failed to parse a symbol body", e);
+    return SymbolIndex();
 }
 
 }

@@ -80,6 +80,7 @@ S4Object parse_s4_body(Source_& src, const Header& header, SharedParseInfo& shar
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse an S4 object's body", e);
+    return S4Object();
 }
 
 }

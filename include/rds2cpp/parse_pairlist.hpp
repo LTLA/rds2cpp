@@ -80,6 +80,7 @@ PairList parse_pairlist_body(Source_& src, const Header& header, SharedParseInfo
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse a pairlist body", e);
+    return PairList();
 }
 
 }

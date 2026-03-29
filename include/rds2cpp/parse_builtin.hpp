@@ -25,6 +25,7 @@ BuiltInFunction parse_builtin_body(Source_& src) try {
     return output;
 } catch(std::exception& e) {
     throw traceback("failed to parse built-in function body", e);
+    return BuiltInFunction();
 }
 
 }

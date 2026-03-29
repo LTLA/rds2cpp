@@ -50,6 +50,7 @@ LanguageObject parse_language_body(Source_& src, const Header& header, SharedPar
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse an R language object's body", e);
+    return LanguageObject();
 }
 
 }
