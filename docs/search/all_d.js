@@ -12,5 +12,6 @@ var searchData=
   ['parse_5frds_2ehpp_9',['parse_rds.hpp',['../parse__rds_8hpp.html',1,'']]],
   ['parsed_10',['Parsed',['../namespacerds2cpp.html#a9a4371900eec82463a3aa0a2a9d5cce1',1,'rds2cpp']]],
   ['parserdsoptions_11',['ParseRdsOptions',['../structrds2cpp_1_1ParseRdsOptions.html',1,'rds2cpp']]],
-  ['position_12',['position',['https://ltla.github.io/byteme/classbyteme_1_1BufferedReader.html#ab2e8c16f833432e10414208a89fb26c6',1,'byteme::BufferedReader']]]
+  ['patch_12',['patch',['../structrds2cpp_1_1Version.html#a4726e61de639e8ea832152a77391b8c6',1,'rds2cpp::Version']]],
+  ['position_13',['position',['https://ltla.github.io/byteme/classbyteme_1_1BufferedReader.html#ab2e8c16f833432e10414208a89fb26c6',1,'byteme::BufferedReader']]]
 ];

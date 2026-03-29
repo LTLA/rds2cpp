@@ -32,6 +32,7 @@
     <includes id="RObject_8hpp" name="RObject.hpp" local="yes" import="no" module="no" objc="no">RObject.hpp</includes>
     <includes id="Environment_8hpp" name="Environment.hpp" local="yes" import="no" module="no" objc="no">Environment.hpp</includes>
     <includes id="Symbol_8hpp" name="Symbol.hpp" local="yes" import="no" module="no" objc="no">Symbol.hpp</includes>
+    <class kind="struct">rds2cpp::Version</class>
     <class kind="struct">rds2cpp::RdsFile</class>
     <namespace>rds2cpp</namespace>
   </compound>
@@ -568,24 +569,24 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>std::array&lt; unsigned char, 3 &gt;</type>
+      <type>Version</type>
       <name>writer_version</name>
       <anchorfile>structrds2cpp_1_1RdsFile.html</anchorfile>
-      <anchor>a24c37c4e7b3356ed5a1301dec32d4b78</anchor>
+      <anchor>ae7e4ddf579c65e8c215f9a93e8c9034e</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>std::array&lt; unsigned char, 3 &gt;</type>
+      <type>Version</type>
       <name>reader_version</name>
       <anchorfile>structrds2cpp_1_1RdsFile.html</anchorfile>
-      <anchor>af2f3476dad325933efd2ae685bb0491b</anchor>
+      <anchor>a65d8062cd2c5c9724e768e5fa06e0c8e</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>std::string</type>
+      <type>StringEncoding</type>
       <name>encoding</name>
       <anchorfile>structrds2cpp_1_1RdsFile.html</anchorfile>
-      <anchor>aa8a14e6d1edc325b3316576f75ddc4fb</anchor>
+      <anchor>a73060cd59750fab6f9c02f614f828aac</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -773,6 +774,31 @@
       <arglist></arglist>
     </member>
   </compound>
+  <compound kind="struct">
+    <name>rds2cpp::Version</name>
+    <filename>structrds2cpp_1_1Version.html</filename>
+    <member kind="variable">
+      <type>std::int16_t</type>
+      <name>major</name>
+      <anchorfile>structrds2cpp_1_1Version.html</anchorfile>
+      <anchor>ac69ba03e7779f2e3ca957503ad460d54</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::uint8_t</type>
+      <name>minor</name>
+      <anchorfile>structrds2cpp_1_1Version.html</anchorfile>
+      <anchor>ad46ea20a8769f0a49783cd53869bdf85</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::uint8_t</type>
+      <name>patch</name>
+      <anchorfile>structrds2cpp_1_1Version.html</anchorfile>
+      <anchor>a4726e61de639e8ea832152a77391b8c6</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
   <compound kind="namespace">
     <name>rds2cpp</name>
     <filename>namespacerds2cpp.html</filename>
@@ -794,6 +820,7 @@
     <class kind="struct">rds2cpp::StringVector</class>
     <class kind="struct">rds2cpp::Symbol</class>
     <class kind="struct">rds2cpp::SymbolIndex</class>
+    <class kind="struct">rds2cpp::Version</class>
     <member kind="typedef">
       <type>AtomicVector&lt; std::int32_t, SEXPType::INT &gt;</type>
       <name>IntegerVector</name>
