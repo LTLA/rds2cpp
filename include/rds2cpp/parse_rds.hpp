@@ -83,13 +83,7 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
 
         output.format_version = 0;
         try {
-            for (int i = 0; i < 4; ++i) {
-                if (!src.advance()) {
-                    throw empty_error();
-                }
-                output.format_version <<= 8;
-                output.format_version += src.get();
-            }
+            output.format_version = quick_integer<I<decltype(output.format_version)> >(src);
         } catch (std::exception& e) {
             throw traceback("failed to read the format version number from the RDS preamble", e);
         } 
@@ -117,14 +111,11 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
 
     // Reading this undocumented section about the string encoding.
     {
-        std::uint32_t encoding_length = 0;
+        std::int32_t encoding_length = 0;
         try {
-            for (int b = 0; b < 4; ++b) {
-                if (!src.advance()) {
-                    throw empty_error();
-                }
-                encoding_length <<= 8;
-                encoding_length += src.get();
+            encoding_length = quick_integer<I<decltype(encoding_length)> >(src);
+            if (encoding_length < 0) {
+                throw std::runtime_error("encoding length should be non-negative");
             }
         } catch (std::exception& e) {
             throw traceback("failed to read the encoding length from the RDS preamble", e);

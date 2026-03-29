@@ -26,19 +26,16 @@ StringInfo parse_single_string(Source_& src) try {
 
     // Getting the string length; all strings are less than 2^31-1,
     // see https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Long-vectors
-    std::uint32_t strlen = 0;
-    for (int i = 0; i < 4; ++i) {
-        if (!src.advance()) {
-            throw empty_error();
-        }
-        strlen <<= 8;
-        strlen += src.get();
-    }
+    const auto strlen = quick_integer<std::int32_t>(src);
 
     StringInfo output;
-    output.missing = (strlen == static_cast<uint32_t>(-1));
+    output.missing = (strlen == -1);
 
     if (!output.missing) {
+        if (strlen < 0) {
+            throw std::runtime_error("length of a non-missing string should be non-negative");
+        }
+
         output.value.reserve(strlen); // don't resize and use extract() on string::data, as that pointer is read-only AFAICT.
         for (I<decltype(strlen)> i = 0; i < strlen; ++i) {
             if (!src.advance()) {

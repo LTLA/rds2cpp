@@ -33,14 +33,7 @@ EnvironmentIndex parse_new_environment_body(Source_& src, SharedParseInfo& share
     Environment new_env;
 
     // Is it locked or not?
-    std::uint32_t locked = 0;
-    for (int i = 0; i < 4; ++i) {
-        if (!src.advance()) {
-            throw empty_error();
-        }
-        locked <<= 8;
-        locked += src.get();
-    }
+    const auto locked = quick_integer<std::int32_t>(src);
     new_env.locked = (locked > 0);
 
     // The next 4 bytes describe the parent environment.

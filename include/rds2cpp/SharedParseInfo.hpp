@@ -29,13 +29,15 @@ struct SharedParseInfo {
 
 private:
     std::size_t compute_reference_index(const Header& header) const {
-        std::uint32_t index = 0;
+        // Shouldn't matter that we use a signed integer here,
+        // as the left-shifts should never get to the sign bit.
+        std::int32_t index = 0;
         for (int i = 0; i < 3; ++i) {
             index <<= 8;
             index += header[i];
         }
 
-        if (index == 0 || index > mappings.size()) {
+        if (index <= 0 || sanisizer::is_greater_than(index, mappings.size())) {
             throw std::runtime_error("index of REFSXP is out of range");
         }
         return sanisizer::cast<std::size_t>(index - 1);

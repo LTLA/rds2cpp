@@ -47,7 +47,7 @@ struct RdsFile {
     /**
      * Version of the RDS format.
      */
-    std::uint32_t format_version;
+    std::int32_t format_version;
 
     /**
      * R version used to write the file as major-minor-patch integers.
