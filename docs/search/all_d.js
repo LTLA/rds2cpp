@@ -3,7 +3,7 @@ var searchData=
   ['package_5fencoding_0',['package_encoding',['../structrds2cpp_1_1S4Object.html#a048e7b648052c8b12d7fc5b2bcca38c9',1,'rds2cpp::S4Object']]],
   ['package_5fname_1',['package_name',['../structrds2cpp_1_1S4Object.html#ac01786753fa1f33a5382527df8c42450',1,'rds2cpp::S4Object']]],
   ['pairlist_2',['PairList',['../structrds2cpp_1_1PairList.html',1,'rds2cpp']]],
-  ['parallel_3',['parallel',['../structrds2cpp_1_1ParseRdsOptions.html#a1dd6bd4c10e4685d02cc45f6c60fc6f2',1,'rds2cpp::ParseRdsOptions']]],
+  ['parallel_3',['parallel',['../structrds2cpp_1_1ParseRdsOptions.html#a1dd6bd4c10e4685d02cc45f6c60fc6f2',1,'rds2cpp::ParseRdsOptions::parallel'],['../structrds2cpp_1_1WriteRdsOptions.html#a4c1ef6a267e94b861da682d8ad326248',1,'rds2cpp::WriteRdsOptions::parallel']]],
   ['parallelbufferedreader_4',['ParallelBufferedReader',['https://ltla.github.io/byteme/classbyteme_1_1ParallelBufferedReader.html',1,'byteme::ParallelBufferedReader&lt; typename Type_, class Pointer_ &gt;'],['https://ltla.github.io/byteme/classbyteme_1_1ParallelBufferedReader.html#ab0097f7773c2b49bd9d96f6bd57c3f94',1,'byteme::ParallelBufferedReader::ParallelBufferedReader()']]],
   ['parallelbufferedwriter_5',['ParallelBufferedWriter',['https://ltla.github.io/byteme/classbyteme_1_1ParallelBufferedWriter.html',1,'byteme::ParallelBufferedWriter&lt; typename Type_, class Pointer_ &gt;'],['https://ltla.github.io/byteme/classbyteme_1_1ParallelBufferedWriter.html#a269dc96008f8783973324b72b605f85d',1,'byteme::ParallelBufferedWriter::ParallelBufferedWriter()']]],
   ['parent_6',['parent',['../structrds2cpp_1_1Environment.html#ad24c7d1b18fba1a4782f58e18c16f84d',1,'rds2cpp::Environment']]],

@@ -157,6 +157,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1Version.html">Version</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Major-minor-patch version.  <a href="structrds2cpp_1_1Version.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1WriteRdsOptions.html">WriteRdsOptions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options for <code><a class="el" href="#a9820d2a851cbdd58a6d874d124f8782b">write_rds()</a></code>.  <a href="structrds2cpp_1_1WriteRdsOptions.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -255,13 +258,13 @@ Functions</h2></td></tr>
 <tr class="separator:a6e8135078d12460c602af9c3933eb435"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a241c3b1eaf4075a72418c89407e76a20" id="r_a241c3b1eaf4075a72418c89407e76a20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structrds2cpp_1_1RdsFile.html">RdsFile</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a241c3b1eaf4075a72418c89407e76a20">parse_rds</a> (std::string file, const <a class="el" href="structrds2cpp_1_1ParseRdsOptions.html">ParseRdsOptions</a> &amp;options)</td></tr>
 <tr class="separator:a241c3b1eaf4075a72418c89407e76a20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c53787e1d5fea7c789ba4fd4fab0849" id="r_a5c53787e1d5fea7c789ba4fd4fab0849"><td class="memTemplParams" colspan="2">template&lt;class Writer &gt; </td></tr>
-<tr class="memitem:a5c53787e1d5fea7c789ba4fd4fab0849"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a5c53787e1d5fea7c789ba4fd4fab0849">write_rds</a> (const <a class="el" href="structrds2cpp_1_1RdsFile.html">RdsFile</a> &amp;info, Writer &amp;writer)</td></tr>
-<tr class="separator:a5c53787e1d5fea7c789ba4fd4fab0849"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3c23d14258573a432b6cdfeba665108" id="r_ae3c23d14258573a432b6cdfeba665108"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3c23d14258573a432b6cdfeba665108">write_rds</a> (const <a class="el" href="structrds2cpp_1_1RdsFile.html">RdsFile</a> &amp;info, const char *path)</td></tr>
-<tr class="separator:ae3c23d14258573a432b6cdfeba665108"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93b6a68b81f3697000b504c6d8950f43" id="r_a93b6a68b81f3697000b504c6d8950f43"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93b6a68b81f3697000b504c6d8950f43">write_rds</a> (const <a class="el" href="structrds2cpp_1_1RdsFile.html">RdsFile</a> &amp;info, std::string path)</td></tr>
-<tr class="separator:a93b6a68b81f3697000b504c6d8950f43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9820d2a851cbdd58a6d874d124f8782b" id="r_a9820d2a851cbdd58a6d874d124f8782b"><td class="memTemplParams" colspan="2">template&lt;class Writer &gt; </td></tr>
+<tr class="memitem:a9820d2a851cbdd58a6d874d124f8782b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a9820d2a851cbdd58a6d874d124f8782b">write_rds</a> (const <a class="el" href="structrds2cpp_1_1RdsFile.html">RdsFile</a> &amp;info, Writer &amp;writer, const <a class="el" href="structrds2cpp_1_1WriteRdsOptions.html">WriteRdsOptions</a> &amp;options)</td></tr>
+<tr class="separator:a9820d2a851cbdd58a6d874d124f8782b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e18f0eebfa774156f2a0c423523fb35" id="r_a9e18f0eebfa774156f2a0c423523fb35"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e18f0eebfa774156f2a0c423523fb35">write_rds</a> (const <a class="el" href="structrds2cpp_1_1RdsFile.html">RdsFile</a> &amp;info, const char *path, const <a class="el" href="structrds2cpp_1_1WriteRdsOptions.html">WriteRdsOptions</a> &amp;options)</td></tr>
+<tr class="separator:a9e18f0eebfa774156f2a0c423523fb35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6753c4d78d1a90d712884496687262c" id="r_ad6753c4d78d1a90d712884496687262c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad6753c4d78d1a90d712884496687262c">write_rds</a> (const <a class="el" href="structrds2cpp_1_1RdsFile.html">RdsFile</a> &amp;info, std::string path, const <a class="el" href="structrds2cpp_1_1WriteRdsOptions.html">WriteRdsOptions</a> &amp;options)</td></tr>
+<tr class="separator:ad6753c4d78d1a90d712884496687262c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Parse an RDS file in C++. </p>
@@ -417,8 +420,8 @@ template&lt;class Reader_ &gt; </div>
 
 </div>
 </div>
-<a id="ae3c23d14258573a432b6cdfeba665108" name="ae3c23d14258573a432b6cdfeba665108"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3c23d14258573a432b6cdfeba665108">&#9670;&#160;</a></span>write_rds() <span class="overload">[1/3]</span></h2>
+<a id="a9e18f0eebfa774156f2a0c423523fb35" name="a9e18f0eebfa774156f2a0c423523fb35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e18f0eebfa774156f2a0c423523fb35">&#9670;&#160;</a></span>write_rds() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -434,7 +437,12 @@ template&lt;class Reader_ &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>path</em></span>&#160;)</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>path</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structrds2cpp_1_1WriteRdsOptions.html">WriteRdsOptions</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>options</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -448,14 +456,15 @@ template&lt;class Reader_ &gt; </div>
   <table class="params">
     <tr><td class="paramname">info</td><td>Information about the RDS file to be written, including a pointer to a valid <code><a class="el" href="structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects.">RObject</a></code>. </td></tr>
     <tr><td class="paramname">path</td><td>Path to the output file. </td></tr>
+    <tr><td class="paramname">options</td><td>Further options. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a93b6a68b81f3697000b504c6d8950f43" name="a93b6a68b81f3697000b504c6d8950f43"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a93b6a68b81f3697000b504c6d8950f43">&#9670;&#160;</a></span>write_rds() <span class="overload">[2/3]</span></h2>
+<a id="ad6753c4d78d1a90d712884496687262c" name="ad6753c4d78d1a90d712884496687262c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6753c4d78d1a90d712884496687262c">&#9670;&#160;</a></span>write_rds() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -471,7 +480,12 @@ template&lt;class Reader_ &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>path</em></span>&#160;)</td>
+          <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>path</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structrds2cpp_1_1WriteRdsOptions.html">WriteRdsOptions</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>options</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -485,14 +499,15 @@ template&lt;class Reader_ &gt; </div>
   <table class="params">
     <tr><td class="paramname">info</td><td>Information about the RDS file to be written, including a pointer to a valid <code><a class="el" href="structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects.">RObject</a></code>. </td></tr>
     <tr><td class="paramname">path</td><td>Path to the output file. </td></tr>
+    <tr><td class="paramname">options</td><td>Further options. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a5c53787e1d5fea7c789ba4fd4fab0849" name="a5c53787e1d5fea7c789ba4fd4fab0849"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c53787e1d5fea7c789ba4fd4fab0849">&#9670;&#160;</a></span>write_rds() <span class="overload">[3/3]</span></h2>
+<a id="a9820d2a851cbdd58a6d874d124f8782b" name="a9820d2a851cbdd58a6d874d124f8782b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9820d2a851cbdd58a6d874d124f8782b">&#9670;&#160;</a></span>write_rds() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -507,7 +522,12 @@ template&lt;class Writer &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Writer &amp;</td>          <td class="paramname"><span class="paramname"><em>writer</em></span>&#160;)</td>
+          <td class="paramtype">Writer &amp;</td>          <td class="paramname"><span class="paramname"><em>writer</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structrds2cpp_1_1WriteRdsOptions.html">WriteRdsOptions</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>options</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">

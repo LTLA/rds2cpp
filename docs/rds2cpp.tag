@@ -84,6 +84,7 @@
     <filename>write__rds_8hpp.html</filename>
     <includes id="RdsFile_8hpp" name="RdsFile.hpp" local="yes" import="no" module="no" objc="no">RdsFile.hpp</includes>
     <includes id="RObject_8hpp" name="RObject.hpp" local="yes" import="no" module="no" objc="no">RObject.hpp</includes>
+    <class kind="struct">rds2cpp::WriteRdsOptions</class>
     <namespace>rds2cpp</namespace>
   </compound>
   <compound kind="struct">
@@ -799,6 +800,24 @@
       <arglist></arglist>
     </member>
   </compound>
+  <compound kind="struct">
+    <name>rds2cpp::WriteRdsOptions</name>
+    <filename>structrds2cpp_1_1WriteRdsOptions.html</filename>
+    <member kind="variable">
+      <type>bool</type>
+      <name>parallel</name>
+      <anchorfile>structrds2cpp_1_1WriteRdsOptions.html</anchorfile>
+      <anchor>a4c1ef6a267e94b861da682d8ad326248</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::size_t</type>
+      <name>buffer_size</name>
+      <anchorfile>structrds2cpp_1_1WriteRdsOptions.html</anchorfile>
+      <anchor>a793d0dbbfb9c6d2c3665a628b3053d61</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
   <compound kind="namespace">
     <name>rds2cpp</name>
     <filename>namespacerds2cpp.html</filename>
@@ -821,6 +840,7 @@
     <class kind="struct">rds2cpp::Symbol</class>
     <class kind="struct">rds2cpp::SymbolIndex</class>
     <class kind="struct">rds2cpp::Version</class>
+    <class kind="struct">rds2cpp::WriteRdsOptions</class>
     <member kind="typedef">
       <type>AtomicVector&lt; std::int32_t, SEXPType::INT &gt;</type>
       <name>IntegerVector</name>
@@ -941,22 +961,22 @@
       <type>void</type>
       <name>write_rds</name>
       <anchorfile>namespacerds2cpp.html</anchorfile>
-      <anchor>a5c53787e1d5fea7c789ba4fd4fab0849</anchor>
-      <arglist>(const RdsFile &amp;info, Writer &amp;writer)</arglist>
+      <anchor>a9820d2a851cbdd58a6d874d124f8782b</anchor>
+      <arglist>(const RdsFile &amp;info, Writer &amp;writer, const WriteRdsOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>write_rds</name>
       <anchorfile>namespacerds2cpp.html</anchorfile>
-      <anchor>ae3c23d14258573a432b6cdfeba665108</anchor>
-      <arglist>(const RdsFile &amp;info, const char *path)</arglist>
+      <anchor>a9e18f0eebfa774156f2a0c423523fb35</anchor>
+      <arglist>(const RdsFile &amp;info, const char *path, const WriteRdsOptions &amp;options)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>write_rds</name>
       <anchorfile>namespacerds2cpp.html</anchorfile>
-      <anchor>a93b6a68b81f3697000b504c6d8950f43</anchor>
-      <arglist>(const RdsFile &amp;info, std::string path)</arglist>
+      <anchor>ad6753c4d78d1a90d712884496687262c</anchor>
+      <arglist>(const RdsFile &amp;info, std::string path, const WriteRdsOptions &amp;options)</arglist>
     </member>
   </compound>
   <compound kind="page">

@@ -97,77 +97,89 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define RDS2CPP_WRITE_RDS_HPP</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="RdsFile_8hpp.html">RdsFile.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="RObject_8hpp.html">RObject.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;utils_write.hpp&quot;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;write_object.hpp&quot;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;SharedWriteInfo.hpp&quot;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="codeRef" href="https://ltla.github.io/byteme/GzipFileWriter_8hpp.html">byteme/GzipFileWriter.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacerds2cpp.html">rds2cpp</a> {</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keyword">template</span>&lt;<span class="keyword">class</span> Writer&gt;</div>
-<div class="foldopen" id="foldopen00031" data-start="{" data-end="}">
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="namespacerds2cpp.html#a5c53787e1d5fea7c789ba4fd4fab0849">   31</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacerds2cpp.html#a5c53787e1d5fea7c789ba4fd4fab0849">write_rds</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structrds2cpp_1_1RdsFile.html">RdsFile</a>&amp; info, Writer&amp; writer) {</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    std::vector&lt;unsigned char&gt; buffer;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    inject_string(<span class="stringliteral">&quot;X\n&quot;</span>, 2, buffer);</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    inject_integer(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a36bb8010e5bb3b2cff1a03ac6cabb861">format_version</a>, buffer);</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="comment">// Mimic the behavior of the R_Version macro.</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    inject_integer(</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        sanisizer::product_unsafe&lt;std::int32_t&gt;(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#ae7e4ddf579c65e8c215f9a93e8c9034e">writer_version</a>.<a class="code hl_variable" href="structrds2cpp_1_1Version.html#ac69ba03e7779f2e3ca957503ad460d54">major</a>, 65536) +</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        sanisizer::product_unsafe&lt;std::int32_t&gt;(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#ae7e4ddf579c65e8c215f9a93e8c9034e">writer_version</a>.<a class="code hl_variable" href="structrds2cpp_1_1Version.html#ad46ea20a8769f0a49783cd53869bdf85">minor</a>, 256) +</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keyword">static_cast&lt;</span>std::int32_t<span class="keyword">&gt;</span>(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#ae7e4ddf579c65e8c215f9a93e8c9034e">writer_version</a>.<a class="code hl_variable" href="structrds2cpp_1_1Version.html#a4726e61de639e8ea832152a77391b8c6">patch</a>),</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        buffer</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    );</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    inject_integer(</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        sanisizer::product_unsafe&lt;std::int32_t&gt;(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a65d8062cd2c5c9724e768e5fa06e0c8e">reader_version</a>.<a class="code hl_variable" href="structrds2cpp_1_1Version.html#ac69ba03e7779f2e3ca957503ad460d54">major</a>, 65536) +</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        sanisizer::product_unsafe&lt;std::int32_t&gt;(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a65d8062cd2c5c9724e768e5fa06e0c8e">reader_version</a>.<a class="code hl_variable" href="structrds2cpp_1_1Version.html#ad46ea20a8769f0a49783cd53869bdf85">minor</a>, 256) +</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keyword">static_cast&lt;</span>std::int32_t<span class="keyword">&gt;</span>(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a65d8062cd2c5c9724e768e5fa06e0c8e">reader_version</a>.<a class="code hl_variable" href="structrds2cpp_1_1Version.html#a4726e61de639e8ea832152a77391b8c6">patch</a>),</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        buffer</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    );</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keyword">const</span> std::string encoding = string_encoding_to_name(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a73060cd59750fab6f9c02f614f828aac">encoding</a>);</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    inject_integer(sanisizer::cast&lt;std::int32_t&gt;(encoding.size()), buffer);</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    inject_string(encoding.c_str(), encoding.size(), buffer);</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    writer.write(buffer.data(), buffer.size());</div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;cstddef&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="codeRef" href="https://ltla.github.io/byteme/byteme_8hpp.html">byteme/byteme.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;sanisizer/sanisizer.hpp&quot;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="RdsFile_8hpp.html">RdsFile.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="RObject_8hpp.html">RObject.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;utils_write.hpp&quot;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;write_object.hpp&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;SharedWriteInfo.hpp&quot;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacerds2cpp.html">rds2cpp</a> {</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="foldopen" id="foldopen00027" data-start="{" data-end="};">
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="structrds2cpp_1_1WriteRdsOptions.html">   27</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structrds2cpp_1_1WriteRdsOptions.html">WriteRdsOptions</a> {</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="structrds2cpp_1_1WriteRdsOptions.html#a4c1ef6a267e94b861da682d8ad326248">   31</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="structrds2cpp_1_1WriteRdsOptions.html#a4c1ef6a267e94b861da682d8ad326248">parallel</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="structrds2cpp_1_1WriteRdsOptions.html#a793d0dbbfb9c6d2c3665a628b3053d61">   37</a></span>    std::size_t <a class="code hl_variable" href="structrds2cpp_1_1WriteRdsOptions.html#a793d0dbbfb9c6d2c3665a628b3053d61">buffer_size</a> = sanisizer::cap&lt;std::size_t&gt;(65536);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>};</div>
+</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="keyword">template</span>&lt;<span class="keyword">class</span> Writer&gt;</div>
+<div class="foldopen" id="foldopen00049" data-start="{" data-end="}">
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="namespacerds2cpp.html#a9820d2a851cbdd58a6d874d124f8782b">   49</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespacerds2cpp.html#a9820d2a851cbdd58a6d874d124f8782b">write_rds</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structrds2cpp_1_1RdsFile.html">RdsFile</a>&amp; info, Writer&amp; writer, <span class="keyword">const</span> <a class="code hl_struct" href="structrds2cpp_1_1WriteRdsOptions.html">WriteRdsOptions</a>&amp; options) {</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    std::unique_ptr&lt;byteme::BufferedWriter&lt;unsigned char&gt; &gt; bufwriter;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordflow">if</span> (options.<a class="code hl_variable" href="structrds2cpp_1_1WriteRdsOptions.html#a4c1ef6a267e94b861da682d8ad326248">parallel</a>) {</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        bufwriter.reset(<span class="keyword">new</span> <a class="code hl_classRef" href="https://ltla.github.io/byteme/classbyteme_1_1ParallelBufferedWriter.html">byteme::ParallelBufferedWriter&lt;unsigned char, Writer*&gt;</a>(&amp;writer, options.<a class="code hl_variable" href="structrds2cpp_1_1WriteRdsOptions.html#a793d0dbbfb9c6d2c3665a628b3053d61">buffer_size</a>));</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        bufwriter.reset(<span class="keyword">new</span> <a class="code hl_classRef" href="https://ltla.github.io/byteme/classbyteme_1_1SerialBufferedWriter.html">byteme::SerialBufferedWriter&lt;unsigned char, Writer*&gt;</a>(&amp;writer, options.<a class="code hl_variable" href="structrds2cpp_1_1WriteRdsOptions.html#a793d0dbbfb9c6d2c3665a628b3053d61">buffer_size</a>));</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    }</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    SharedWriteInfo shared(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a5ed3f4f1d927bbba3b9803d77f440968">symbols</a>, info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#aebd7594b4d63ea1537a6c460b482ce00">environments</a>, info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a643c9a2ecb62557a061c52babc542b80">external_pointers</a>);</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    write_object(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a4d451375c25d57d203169dce2bed1507">object</a>.get(), writer, buffer, shared); </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    bufwriter-&gt;write(<span class="stringliteral">&quot;X\n&quot;</span>);</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    inject_integer&lt;std::int32_t&gt;(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a36bb8010e5bb3b2cff1a03ac6cabb861">format_version</a>, *bufwriter);</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>}</div>
-</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="foldopen" id="foldopen00069" data-start="{" data-end="}">
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="namespacerds2cpp.html#ae3c23d14258573a432b6cdfeba665108">   69</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacerds2cpp.html#a5c53787e1d5fea7c789ba4fd4fab0849">write_rds</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structrds2cpp_1_1RdsFile.html">RdsFile</a>&amp; info, <span class="keyword">const</span> <span class="keywordtype">char</span>* path) {</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <a class="code hl_classRef" href="https://ltla.github.io/byteme/classbyteme_1_1GzipFileWriter.html">byteme::GzipFileWriter</a> writer(path, {});</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <a class="code hl_function" href="namespacerds2cpp.html#a5c53787e1d5fea7c789ba4fd4fab0849">write_rds</a>(info, writer);</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>}</div>
-</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="comment">// Mimic the behavior of the R_Version macro.</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    inject_integer&lt;std::int32_t, std::int32_t&gt;(</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        sanisizer::product_unsafe&lt;std::int32_t&gt;(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#ae7e4ddf579c65e8c215f9a93e8c9034e">writer_version</a>.<a class="code hl_variable" href="structrds2cpp_1_1Version.html#ac69ba03e7779f2e3ca957503ad460d54">major</a>, 65536) +</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        sanisizer::product_unsafe&lt;std::int32_t&gt;(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#ae7e4ddf579c65e8c215f9a93e8c9034e">writer_version</a>.<a class="code hl_variable" href="structrds2cpp_1_1Version.html#ad46ea20a8769f0a49783cd53869bdf85">minor</a>, 256) +</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="keyword">static_cast&lt;</span>std::int32_t<span class="keyword">&gt;</span>(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#ae7e4ddf579c65e8c215f9a93e8c9034e">writer_version</a>.<a class="code hl_variable" href="structrds2cpp_1_1Version.html#a4726e61de639e8ea832152a77391b8c6">patch</a>),</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        *bufwriter</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    );</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    inject_integer&lt;std::int32_t, std::int32_t&gt;(</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        sanisizer::product_unsafe&lt;std::int32_t&gt;(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a65d8062cd2c5c9724e768e5fa06e0c8e">reader_version</a>.<a class="code hl_variable" href="structrds2cpp_1_1Version.html#ac69ba03e7779f2e3ca957503ad460d54">major</a>, 65536) +</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        sanisizer::product_unsafe&lt;std::int32_t&gt;(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a65d8062cd2c5c9724e768e5fa06e0c8e">reader_version</a>.<a class="code hl_variable" href="structrds2cpp_1_1Version.html#ad46ea20a8769f0a49783cd53869bdf85">minor</a>, 256) +</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <span class="keyword">static_cast&lt;</span>std::int32_t<span class="keyword">&gt;</span>(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a65d8062cd2c5c9724e768e5fa06e0c8e">reader_version</a>.<a class="code hl_variable" href="structrds2cpp_1_1Version.html#a4726e61de639e8ea832152a77391b8c6">patch</a>),</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        *bufwriter</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    );</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="foldopen" id="foldopen00081" data-start="{" data-end="}">
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="namespacerds2cpp.html#a93b6a68b81f3697000b504c6d8950f43">   81</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacerds2cpp.html#a5c53787e1d5fea7c789ba4fd4fab0849">write_rds</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structrds2cpp_1_1RdsFile.html">RdsFile</a>&amp; info, std::string path) {</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <a class="code hl_function" href="namespacerds2cpp.html#a5c53787e1d5fea7c789ba4fd4fab0849">write_rds</a>(info, path.c_str());</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>}</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keyword">const</span> std::string encoding = string_encoding_to_name(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a73060cd59750fab6f9c02f614f828aac">encoding</a>);</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    inject_integer&lt;std::int32_t&gt;(sanisizer::cast&lt;std::int32_t&gt;(encoding.size()), *bufwriter);</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    bufwriter-&gt;write(encoding);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    SharedWriteInfo shared(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a5ed3f4f1d927bbba3b9803d77f440968">symbols</a>, info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#aebd7594b4d63ea1537a6c460b482ce00">environments</a>, info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a643c9a2ecb62557a061c52babc542b80">external_pointers</a>);</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    write_object(info.<a class="code hl_variable" href="structrds2cpp_1_1RdsFile.html#a4d451375c25d57d203169dce2bed1507">object</a>.get(), *bufwriter, shared); </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>}</div>
 </div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>}</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aGzipFileWriter_8hpp_html"><div class="ttname"><a href="https://ltla.github.io/byteme/GzipFileWriter_8hpp.html">GzipFileWriter.hpp</a></div></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="foldopen" id="foldopen00090" data-start="{" data-end="}">
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno"><a class="line" href="namespacerds2cpp.html#a9e18f0eebfa774156f2a0c423523fb35">   90</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacerds2cpp.html#a9820d2a851cbdd58a6d874d124f8782b">write_rds</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structrds2cpp_1_1RdsFile.html">RdsFile</a>&amp; info, <span class="keyword">const</span> <span class="keywordtype">char</span>* path, <span class="keyword">const</span> <a class="code hl_struct" href="structrds2cpp_1_1WriteRdsOptions.html">WriteRdsOptions</a>&amp; options) {</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <a class="code hl_classRef" href="https://ltla.github.io/byteme/classbyteme_1_1GzipFileWriter.html">byteme::GzipFileWriter</a> writer(path, {});</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <a class="code hl_function" href="namespacerds2cpp.html#a9820d2a851cbdd58a6d874d124f8782b">write_rds</a>(info, writer, options);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>}</div>
+</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
+<div class="foldopen" id="foldopen00102" data-start="{" data-end="}">
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="namespacerds2cpp.html#ad6753c4d78d1a90d712884496687262c">  102</a></span><span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="namespacerds2cpp.html#a9820d2a851cbdd58a6d874d124f8782b">write_rds</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structrds2cpp_1_1RdsFile.html">RdsFile</a>&amp; info, std::string path, <span class="keyword">const</span> <a class="code hl_struct" href="structrds2cpp_1_1WriteRdsOptions.html">WriteRdsOptions</a>&amp; options) {</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    <a class="code hl_function" href="namespacerds2cpp.html#a9820d2a851cbdd58a6d874d124f8782b">write_rds</a>(info, path.c_str(), options);</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>}</div>
+</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>}</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aRObject_8hpp_html"><div class="ttname"><a href="RObject_8hpp.html">RObject.hpp</a></div><div class="ttdoc">Representations of unserialized R objects.</div></div>
 <div class="ttc" id="aRdsFile_8hpp_html"><div class="ttname"><a href="RdsFile_8hpp.html">RdsFile.hpp</a></div><div class="ttdoc">Information about an RDS file.</div></div>
+<div class="ttc" id="abyteme_8hpp_html"><div class="ttname"><a href="https://ltla.github.io/byteme/byteme_8hpp.html">byteme.hpp</a></div></div>
 <div class="ttc" id="aclassbyteme_1_1GzipFileWriter_html"><div class="ttname"><a href="https://ltla.github.io/byteme/classbyteme_1_1GzipFileWriter.html">byteme::GzipFileWriter</a></div></div>
+<div class="ttc" id="aclassbyteme_1_1ParallelBufferedWriter_html"><div class="ttname"><a href="https://ltla.github.io/byteme/classbyteme_1_1ParallelBufferedWriter.html">byteme::ParallelBufferedWriter</a></div></div>
+<div class="ttc" id="aclassbyteme_1_1SerialBufferedWriter_html"><div class="ttname"><a href="https://ltla.github.io/byteme/classbyteme_1_1SerialBufferedWriter.html">byteme::SerialBufferedWriter</a></div></div>
 <div class="ttc" id="anamespacerds2cpp_html"><div class="ttname"><a href="namespacerds2cpp.html">rds2cpp</a></div><div class="ttdoc">Parse an RDS file in C++.</div><div class="ttdef"><b>Definition</b> StringEncoding.hpp:12</div></div>
-<div class="ttc" id="anamespacerds2cpp_html_a5c53787e1d5fea7c789ba4fd4fab0849"><div class="ttname"><a href="namespacerds2cpp.html#a5c53787e1d5fea7c789ba4fd4fab0849">rds2cpp::write_rds</a></div><div class="ttdeci">void write_rds(const RdsFile &amp;info, Writer &amp;writer)</div><div class="ttdef"><b>Definition</b> write_rds.hpp:31</div></div>
+<div class="ttc" id="anamespacerds2cpp_html_a9820d2a851cbdd58a6d874d124f8782b"><div class="ttname"><a href="namespacerds2cpp.html#a9820d2a851cbdd58a6d874d124f8782b">rds2cpp::write_rds</a></div><div class="ttdeci">void write_rds(const RdsFile &amp;info, Writer &amp;writer, const WriteRdsOptions &amp;options)</div><div class="ttdef"><b>Definition</b> write_rds.hpp:49</div></div>
 <div class="ttc" id="astructrds2cpp_1_1RdsFile_html"><div class="ttname"><a href="structrds2cpp_1_1RdsFile.html">rds2cpp::RdsFile</a></div><div class="ttdoc">Contents of the parsed RDS file.</div><div class="ttdef"><b>Definition</b> RdsFile.hpp:43</div></div>
 <div class="ttc" id="astructrds2cpp_1_1RdsFile_html_a36bb8010e5bb3b2cff1a03ac6cabb861"><div class="ttname"><a href="structrds2cpp_1_1RdsFile.html#a36bb8010e5bb3b2cff1a03ac6cabb861">rds2cpp::RdsFile::format_version</a></div><div class="ttdeci">std::int32_t format_version</div><div class="ttdef"><b>Definition</b> RdsFile.hpp:47</div></div>
 <div class="ttc" id="astructrds2cpp_1_1RdsFile_html_a4d451375c25d57d203169dce2bed1507"><div class="ttname"><a href="structrds2cpp_1_1RdsFile.html#a4d451375c25d57d203169dce2bed1507">rds2cpp::RdsFile::object</a></div><div class="ttdeci">std::unique_ptr&lt; RObject &gt; object</div><div class="ttdef"><b>Definition</b> RdsFile.hpp:67</div></div>
@@ -180,6 +192,9 @@ $(function(){ initResizable(false); });
 <div class="ttc" id="astructrds2cpp_1_1Version_html_a4726e61de639e8ea832152a77391b8c6"><div class="ttname"><a href="structrds2cpp_1_1Version.html#a4726e61de639e8ea832152a77391b8c6">rds2cpp::Version::patch</a></div><div class="ttdeci">std::uint8_t patch</div><div class="ttdef"><b>Definition</b> RdsFile.hpp:37</div></div>
 <div class="ttc" id="astructrds2cpp_1_1Version_html_ac69ba03e7779f2e3ca957503ad460d54"><div class="ttname"><a href="structrds2cpp_1_1Version.html#ac69ba03e7779f2e3ca957503ad460d54">rds2cpp::Version::major</a></div><div class="ttdeci">std::int16_t major</div><div class="ttdef"><b>Definition</b> RdsFile.hpp:27</div></div>
 <div class="ttc" id="astructrds2cpp_1_1Version_html_ad46ea20a8769f0a49783cd53869bdf85"><div class="ttname"><a href="structrds2cpp_1_1Version.html#ad46ea20a8769f0a49783cd53869bdf85">rds2cpp::Version::minor</a></div><div class="ttdeci">std::uint8_t minor</div><div class="ttdef"><b>Definition</b> RdsFile.hpp:32</div></div>
+<div class="ttc" id="astructrds2cpp_1_1WriteRdsOptions_html"><div class="ttname"><a href="structrds2cpp_1_1WriteRdsOptions.html">rds2cpp::WriteRdsOptions</a></div><div class="ttdoc">Options for write_rds().</div><div class="ttdef"><b>Definition</b> write_rds.hpp:27</div></div>
+<div class="ttc" id="astructrds2cpp_1_1WriteRdsOptions_html_a4c1ef6a267e94b861da682d8ad326248"><div class="ttname"><a href="structrds2cpp_1_1WriteRdsOptions.html#a4c1ef6a267e94b861da682d8ad326248">rds2cpp::WriteRdsOptions::parallel</a></div><div class="ttdeci">bool parallel</div><div class="ttdef"><b>Definition</b> write_rds.hpp:31</div></div>
+<div class="ttc" id="astructrds2cpp_1_1WriteRdsOptions_html_a793d0dbbfb9c6d2c3665a628b3053d61"><div class="ttname"><a href="structrds2cpp_1_1WriteRdsOptions.html#a793d0dbbfb9c6d2c3665a628b3053d61">rds2cpp::WriteRdsOptions::buffer_size</a></div><div class="ttdeci">std::size_t buffer_size</div><div class="ttdef"><b>Definition</b> write_rds.hpp:37</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

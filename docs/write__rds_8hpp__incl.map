@@ -1,51 +1,53 @@
 <map id="rds2cpp/write_rds.hpp" name="rds2cpp/write_rds.hpp">
-<area shape="rect" id="Node000001" title="Write an RDS file." alt="" coords="559,5,707,31"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="90,226,147,252"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="589,34,521,55,444,81,365,116,287,155,156,221,154,216,285,150,363,111,443,77,519,50,588,29"/>
-<area shape="rect" id="Node000003" href="$RdsFile_8hpp.html" title="Information about an RDS file." alt="" coords="467,79,556,105"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="614,34,547,73,544,68,611,29"/>
-<area shape="rect" id="Node000006" href="$RObject_8hpp.html" title="Representations of unserialized R objects." alt="" coords="424,153,516,178"/>
-<area shape="poly" id="edge25_Node000001_Node000006" title=" " alt="" coords="559,27,531,34,503,45,478,60,458,80,452,94,451,108,459,138,454,140,446,109,447,92,453,78,475,56,501,40,529,29,558,22"/>
-<area shape="rect" id="Node000017" title=" " alt="" coords="581,79,685,105"/>
-<area shape="poly" id="edge26_Node000001_Node000017" title=" " alt="" coords="636,31,636,63,630,63,630,31"/>
-<area shape="rect" id="Node000018" title=" " alt="" coords="708,79,824,105"/>
-<area shape="poly" id="edge27_Node000001_Node000018" title=" " alt="" coords="657,29,731,69,729,74,654,34"/>
-<area shape="rect" id="Node000019" title=" " alt="" coords="848,79,986,105"/>
-<area shape="poly" id="edge28_Node000001_Node000019" title=" " alt="" coords="682,29,854,72,853,77,680,34"/>
-<area shape="rect" id="Node000020" href="/github/workspace/docs/byteme.tag$GzipFileWriter_8hpp.html" title=" " alt="" coords="1011,79,1183,105"/>
-<area shape="poly" id="edge29_Node000001_Node000020" title=" " alt="" coords="708,28,1003,73,1002,79,707,34"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="299,153,348,178"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="481,108,364,152,362,147,479,103"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="5,226,66,252"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="493,108,424,149,360,181,285,202,223,210,160,216,81,228,80,223,160,211,223,205,284,197,359,176,422,144,490,103"/>
-<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="507,106,487,141,482,138,502,104"/>
-<area shape="rect" id="Node000014" href="$Environment_8hpp.html" title="Representation of an R environment." alt="" coords="542,153,660,178"/>
-<area shape="poly" id="edge15_Node000003_Node000014" title=" " alt="" coords="528,103,576,141,572,145,525,107"/>
-<area shape="rect" id="Node000015" title=" " alt="" coords="684,153,816,178"/>
-<area shape="poly" id="edge21_Node000003_Node000015" title=" " alt="" coords="553,103,696,145,694,150,551,108"/>
-<area shape="rect" id="Node000016" href="$Symbol_8hpp.html" title="Representation of an R symbol." alt="" coords="841,153,929,178"/>
-<area shape="poly" id="edge22_Node000003_Node000016" title=" " alt="" coords="557,100,569,102,826,149,825,155,568,107,556,105"/>
-<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="424,178,163,229,161,223,423,173"/>
-<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="424,178,405,181,244,202,172,212,81,228,80,223,171,206,243,197,404,176,423,173"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="570,226,634,252"/>
-<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="494,177,568,216,565,221,491,181"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="172,226,241,252"/>
-<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="426,181,256,227,255,222,425,176"/>
-<area shape="rect" id="Node000009" href="$SEXPType_8hpp.html" title="R data types." alt="" coords="659,226,767,252"/>
-<area shape="poly" id="edge10_Node000006_Node000009" title=" " alt="" coords="512,176,658,219,656,224,511,181"/>
-<area shape="rect" id="Node000010" href="$StringEncoding_8hpp.html" title="String encodings." alt="" coords="791,226,923,252"/>
-<area shape="poly" id="edge11_Node000006_Node000010" title=" " alt="" coords="517,173,531,176,776,221,775,226,530,181,516,178"/>
-<area shape="rect" id="Node000012" title=" " alt="" coords="266,226,371,252"/>
-<area shape="poly" id="edge13_Node000006_Node000012" title=" " alt="" coords="446,181,359,222,357,217,443,176"/>
-<area shape="rect" id="Node000013" title=" " alt="" coords="394,226,546,252"/>
-<area shape="poly" id="edge14_Node000006_Node000013" title=" " alt="" coords="473,179,473,211,468,211,468,179"/>
-<area shape="rect" id="Node000011" title=" " alt="" coords="934,300,988,326"/>
-<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="876,250,932,289,929,293,873,255"/>
-<area shape="poly" id="edge16_Node000014_Node000002" title=" " alt="" coords="542,179,529,181,347,201,266,211,163,229,162,223,265,206,346,196,528,176,541,174"/>
-<area shape="poly" id="edge18_Node000014_Node000007" title=" " alt="" coords="604,179,604,210,599,211,598,179"/>
-<area shape="poly" id="edge20_Node000014_Node000009" title=" " alt="" coords="621,177,682,215,680,220,618,181"/>
-<area shape="poly" id="edge19_Node000014_Node000010" title=" " alt="" coords="645,176,799,219,798,224,644,181"/>
-<area shape="poly" id="edge17_Node000014_Node000011" title=" " alt="" coords="660,174,832,203,937,224,948,238,956,253,963,284,957,285,951,255,944,240,934,229,831,208,659,179"/>
-<area shape="poly" id="edge24_Node000016_Node000010" title=" " alt="" coords="883,180,870,213,865,211,878,178"/>
-<area shape="poly" id="edge23_Node000016_Node000011" title=" " alt="" coords="922,177,955,195,970,209,982,225,987,241,987,257,978,287,973,286,982,256,982,242,977,228,966,212,952,200,919,181"/>
+<area shape="rect" id="Node000001" title="Write an RDS file." alt="" coords="734,5,883,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,226,63,252"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="734,24,646,28,538,38,421,55,305,82,259,96,224,111,149,155,102,187,61,218,58,214,98,183,146,150,222,106,257,91,304,76,420,50,537,33,646,23,734,18"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="87,226,152,252"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="735,31,599,49,436,77,283,113,223,133,180,155,152,182,133,213,128,211,148,179,176,150,221,128,282,108,435,72,598,44,734,26"/>
+<area shape="rect" id="Node000004" href="/github/workspace/docs/byteme.tag$byteme_8hpp.html" title=" " alt="" coords="846,79,979,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="828,29,884,68,881,72,825,34"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="874,226,1026,252"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="813,31,821,64,836,103,856,128,880,151,933,213,929,216,876,154,852,132,832,106,816,66,808,32"/>
+<area shape="rect" id="Node000006" href="$RdsFile_8hpp.html" title="Information about an RDS file." alt="" coords="588,79,677,105"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="780,34,677,75,676,70,778,29"/>
+<area shape="rect" id="Node000009" href="$RObject_8hpp.html" title="Representations of unserialized R objects." alt="" coords="378,153,471,178"/>
+<area shape="poly" id="edge28_Node000001_Node000009" title=" " alt="" coords="743,34,663,53,578,81,512,113,457,146,454,141,509,109,576,77,662,48,742,29"/>
+<area shape="rect" id="Node000018" title=" " alt="" coords="1003,79,1108,105"/>
+<area shape="poly" id="edge29_Node000001_Node000018" title=" " alt="" coords="851,29,999,72,998,77,850,34"/>
+<area shape="rect" id="Node000019" title=" " alt="" coords="1131,79,1246,105"/>
+<area shape="poly" id="edge30_Node000001_Node000019" title=" " alt="" coords="874,29,1117,74,1116,80,873,34"/>
+<area shape="rect" id="Node000020" title=" " alt="" coords="1270,79,1408,105"/>
+<area shape="poly" id="edge31_Node000001_Node000020" title=" " alt="" coords="884,27,1255,76,1254,81,883,32"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="608,153,657,178"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="635,105,635,137,630,137,630,105"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="790,226,851,252"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="645,103,678,138,722,176,785,216,782,221,719,180,675,141,641,107"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="598,108,475,150,474,145,597,103"/>
+<area shape="rect" id="Node000015" href="$Environment_8hpp.html" title="Representation of an R environment." alt="" coords="190,153,307,178"/>
+<area shape="poly" id="edge18_Node000006_Node000015" title=" " alt="" coords="588,104,323,153,322,148,587,99"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="733,153,866,178"/>
+<area shape="poly" id="edge24_Node000006_Node000016" title=" " alt="" coords="662,103,758,144,756,149,660,108"/>
+<area shape="rect" id="Node000017" href="$Symbol_8hpp.html" title="Representation of an R symbol." alt="" coords="495,153,584,178"/>
+<area shape="poly" id="edge25_Node000006_Node000017" title=" " alt="" coords="618,107,569,145,565,141,615,103"/>
+<area shape="poly" id="edge9_Node000009_Node000002" title=" " alt="" coords="378,176,247,196,79,229,78,223,247,191,378,171"/>
+<area shape="poly" id="edge11_Node000009_Node000003" title=" " alt="" coords="379,180,167,229,166,224,378,175"/>
+<area shape="poly" id="edge17_Node000009_Node000005" title=" " alt="" coords="472,174,484,176,670,201,859,223,859,228,669,207,483,181,471,179"/>
+<area shape="poly" id="edge10_Node000009_Node000008" title=" " alt="" coords="472,173,484,176,776,227,775,233,483,181,471,179"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="515,226,585,252"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="447,177,517,216,514,221,445,181"/>
+<area shape="rect" id="Node000011" href="$SEXPType_8hpp.html" title="R data types." alt="" coords="226,226,335,252"/>
+<area shape="poly" id="edge13_Node000009_Node000011" title=" " alt="" coords="401,181,320,221,317,217,399,176"/>
+<area shape="rect" id="Node000012" href="$StringEncoding_8hpp.html" title="String encodings." alt="" coords="358,226,491,252"/>
+<area shape="poly" id="edge14_Node000009_Node000012" title=" " alt="" coords="427,179,427,211,422,211,422,179"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="609,226,715,252"/>
+<area shape="poly" id="edge16_Node000009_Node000014" title=" " alt="" coords="466,176,608,219,606,224,464,181"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="398,300,451,326"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="427,252,427,284,422,284,422,252"/>
+<area shape="poly" id="edge19_Node000015_Node000002" title=" " alt="" coords="213,181,78,226,76,221,211,176"/>
+<area shape="poly" id="edge21_Node000015_Node000003" title=" " alt="" coords="228,181,156,221,153,216,225,177"/>
+<area shape="poly" id="edge23_Node000015_Node000011" title=" " alt="" coords="256,177,271,211,267,213,252,180"/>
+<area shape="poly" id="edge22_Node000015_Node000012" title=" " alt="" coords="280,176,382,218,380,223,278,181"/>
+<area shape="poly" id="edge20_Node000015_Node000013" title=" " alt="" coords="239,181,226,196,215,214,211,233,216,251,226,259,242,268,286,283,383,303,382,308,284,288,240,273,223,264,212,253,205,233,210,212,222,193,235,177"/>
+<area shape="poly" id="edge27_Node000017_Node000012" title=" " alt="" coords="521,181,459,220,456,215,518,177"/>
+<area shape="poly" id="edge26_Node000017_Node000013" title=" " alt="" coords="585,175,673,200,710,213,729,225,735,239,729,254,711,268,684,280,614,297,535,307,467,312,467,307,535,302,613,291,683,275,709,263,725,250,730,239,725,228,708,218,671,205,583,181"/>
 </map>
