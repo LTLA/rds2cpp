@@ -8,6 +8,8 @@
 #include <sstream>
 #include <limits>
 #include <memory>
+#include <array>
+#include <type_traits>
 
 #include "RObject.hpp"
 #include "utils_parse.hpp"
@@ -32,8 +34,8 @@ PairList parse_pairlist_body(Source_&, const Header&, SharedParseInfo&);
 
 namespace altrep_internal {
 
-template<class Vector, class Source_>
-Vector parse_numeric_compact_seq(Source_& src) try {
+template<class Vector_, class Source_>
+Vector_ parse_numeric_compact_seq(Source_& src) try {
     auto header = parse_header(src);
     if (header[3] != static_cast<unsigned char>(SEXPType::REAL)) {
         throw std::runtime_error("expected compact_seq to store sequence information in doubles");
@@ -45,10 +47,29 @@ Vector parse_numeric_compact_seq(Source_& src) try {
         throw std::runtime_error("expected compact_seq's sequence information to be of length 3");
     }
 
-    auto len = sanisizer::from_float<std::size_t>(ranges[0]);
+    const auto len = sanisizer::from_float<std::size_t>(ranges[0]);
     double start = ranges[1], step = ranges[2];
 
-    Vector output(len);
+    typedef I<decltype(std::declval<Vector_>().data[0])> VectorValue;
+    if constexpr(std::is_integral<VectorValue>::value) {
+        static_assert(std::is_signed<VectorValue>::value);
+        if (len) {
+            std::array<double, 2> endpts { start, start + (ranges[0] - 1) * step };
+            constexpr int available_bits = std::numeric_limits<VectorValue>::digits;
+            for (auto x : endpts) {
+                if (!std::isfinite(x)) {
+                    throw std::runtime_error("non-finite boundaries for integer compact_seq");
+                }
+                const auto target = (x >= 0 ? x : -(x + 1)); // +1 as negative values get a bit more space in signed integers.
+                int bits = sanisizer::required_bits_for_float(std::trunc(target));
+                if (bits > available_bits) {
+                    throw std::runtime_error("overflow for integer compact_seq");
+                }
+            }
+        }
+    }
+
+    Vector_ output(len);
     for (I<decltype(len)> i = 0; i < len; ++i, start += step) {
         output.data[i] = start;
     }
@@ -61,7 +82,7 @@ Vector parse_numeric_compact_seq(Source_& src) try {
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse compact numeric ALTREP", e);
-    return Vector();
+    return Vector_();
 }
 
 template<class Vector, class Source_>
