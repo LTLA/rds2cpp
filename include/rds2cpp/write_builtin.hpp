@@ -11,19 +11,14 @@
 
 namespace rds2cpp {
 
-template<class Writer>
-void write_builtin(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer) {
+template<class BufferedWriter_>
+void write_builtin(const RObject* object, BufferedWriter_& bufwriter) {
     auto ptr = static_cast<const BuiltInFunction*>(object);
-
-    buffer.clear();
-    inject_header(*ptr, buffer);
+    inject_header(*ptr, bufwriter);
 
     const auto len = sanisizer::cast<std::size_t>(ptr->name.size());
-    inject_length(len, buffer);
-
-    inject_string(ptr->name.c_str(), len, buffer);
-    writer.write(buffer.data(), buffer.size());
-    return;
+    inject_length(len, bufwriter);
+    bufwriter.write(ptr->name);
 }
 
 }

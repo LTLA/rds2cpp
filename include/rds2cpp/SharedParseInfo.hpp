@@ -29,8 +29,7 @@ struct SharedParseInfo {
 
 private:
     std::size_t compute_reference_index(const Header& header) const {
-        // Shouldn't matter that we use a signed integer here,
-        // as the left-shifts should never get to the sign bit.
+        // Shouldn't matter that we use a signed integer here, as the left-shifts should never get to the sign bit.
         std::int32_t index = 0;
         for (int i = 0; i < 3; ++i) {
             index <<= 8;

@@ -19,8 +19,8 @@ namespace rds2cpp {
 
 struct SharedWriteInfo;
 
-template<class Writer>
-void write_object(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared);
+template<class BufferedWriter_>
+void write_object(const RObject* object, BufferedWriter_& bufwriter, SharedWriteInfo& shared);
 
 struct SharedWriteInfo {
     std::size_t reference_count;
@@ -52,34 +52,32 @@ public:
     {}
 
 private:
-    template<class Writer>
-    static void write_reference(std::size_t ref, Writer& writer, std::vector<unsigned char>& buffer) {
-        buffer.resize(4);
-        buffer[2] = ref & 255;
-        ref >>= 8;
-        buffer[1] = ref & 255;
-        ref >>= 8;
-        buffer[0] = ref & 255;
-        buffer[3] = static_cast<unsigned char>(SEXPType::REF);
-        writer.write(buffer.data(), buffer.size());
-        return;
+    template<class BufferedWriter_>
+    static void write_reference(std::size_t ref, BufferedWriter_& bufwriter) {
+        Header details;
+
+        // Opposite of SharedParseInfo::compute_reference_index.
+        for (int i = 0; i < 3; ++i) {
+            details[2 - i] = ref & 255;
+            ref >>= 8;
+        }
+
+        details[3] = static_cast<unsigned char>(SEXPType::REF);
+        bufwriter.write(details.data(), details.size());
     }
 
 public:
-    template<class Writer>
-    std::size_t write_symbol(const std::string& value, StringEncoding encoding, Writer& writer, std::vector<unsigned char>& buffer) {
+    template<class BufferedWriter_>
+    std::size_t write_symbol(const std::string& value, StringEncoding encoding, BufferedWriter_& bufwriter) {
         auto& host = symbol_mappings[static_cast<int>(encoding)];
         auto it = host.find(value);
         if (it != host.end()) {
-            write_reference(it->second, writer, buffer);
+            write_reference(it->second, bufwriter);
             return it->second;
         }
 
-        buffer.clear();
-        inject_header(SEXPType::SYM, buffer);
-        writer.write(buffer.data(), buffer.size());
-
-        write_single_string(value, encoding, false, writer, buffer);
+        inject_header(SEXPType::SYM, bufwriter);
+        write_single_string(value, encoding, false, bufwriter);
 
         const auto old_reference_count = reference_count;
         host[value] = reference_count;
@@ -88,26 +86,26 @@ public:
         return old_reference_count;
     }
 
-    template<class Writer>
-    void write_symbol(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
+    template<class BufferedWriter_>
+    void write_symbol(const RObject* obj, BufferedWriter_& bufwriter) {
         auto ptr = static_cast<const SymbolIndex*>(obj);
-        auto index = ptr->index;
+        const auto index = ptr->index;
         if (index >= known_symbol_mappings.size()) {
             throw std::runtime_error("symbol index out of range for supplied Symbol objects");
         }
 
         auto& candidate = known_symbol_mappings[index];
         if (candidate != 0) {
-            write_reference(candidate, writer, buffer);
+            write_reference(candidate, bufwriter);
         } else {
             const auto& sym = (*known_symbols)[index];
-            candidate = write_symbol(sym.name, sym.encoding, writer, buffer);
+            candidate = write_symbol(sym.name, sym.encoding, bufwriter);
         }
     }
 
 public:
-    template<class Writer>
-    void write_external_pointer(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
+    template<class BufferedWriter_>
+    void write_external_pointer(const RObject* obj, BufferedWriter_& bufwriter) {
         auto ptr = static_cast<const ExternalPointerIndex*>(obj);
         auto index = ptr->index;
         if (index >= known_external_pointer_mappings.size()) {
@@ -116,36 +114,28 @@ public:
 
         auto& candidate = known_external_pointer_mappings[index];
         if (candidate != 0) {
-            write_reference(candidate, writer, buffer);
+            write_reference(candidate, bufwriter);
             return;
         }
         candidate = reference_count;
         reference_count = sanisizer::sum<I<decltype(reference_count)> >(reference_count, 1); // safely incrementing this count.
 
         const auto& ext = (*known_external_pointers)[index];
-
-        buffer.clear();
-        inject_header(SEXPType::EXTPTR, ext.attributes, buffer);
-        writer.write(buffer.data(), buffer.size());
-
-        write_object(ext.protection.get(), writer, buffer, *this);
-        write_object(ext.tag.get(), writer, buffer, *this);
-        write_attributes(ext.attributes, writer, buffer, *this);
-
-        return;
+        inject_header(SEXPType::EXTPTR, ext.attributes, bufwriter);
+        write_object(ext.protection.get(), bufwriter, *this);
+        write_object(ext.tag.get(), bufwriter, *this);
+        write_attributes(ext.attributes, bufwriter, *this);
     }
 
 public:
-    template<class Writer>
-    void write_environment(const RObject* obj, Writer& writer, std::vector<unsigned char>& buffer) {
+    template<class BufferedWriter_>
+    void write_environment(const RObject* obj, BufferedWriter_& bufwriter) {
         auto ptr = static_cast<const EnvironmentIndex*>(obj);
         auto index = ptr->index;
         auto env_type = ptr->env_type;
 
         if (env_type == SEXPType::GLOBALENV_ || env_type == SEXPType::BASEENV_ || env_type == SEXPType::EMPTYENV_) {
-            buffer.clear();
-            inject_header(env_type, buffer);
-            writer.write(buffer.data(), buffer.size());
+            inject_header(env_type, bufwriter);
             return;
         }
 
@@ -155,25 +145,20 @@ public:
 
         auto& candidate = known_environment_mappings[index];
         if (candidate != 0) {
-            write_reference(candidate, writer, buffer);
+            write_reference(candidate, bufwriter);
             return;
         }
-
         candidate = reference_count++;
+
         const auto& env = (*known_environments)[index];
-
-        buffer.clear();
-        inject_header(SEXPType::ENV, env.attributes, buffer);
-
-        buffer.insert(buffer.end(), 3, 0);
-        buffer.push_back(env.locked);
-        writer.write(buffer.data(), buffer.size());
+        inject_header(SEXPType::ENV, env.attributes, bufwriter);
+        inject_integer<std::int32_t, std::int32_t>(env.locked, bufwriter);
 
         {
             EnvironmentIndex parent;
             parent.index = env.parent;
             parent.env_type = env.parent_type;
-            write_environment(&parent, writer, buffer);
+            write_environment(&parent, bufwriter);
         }
 
         const auto& names = env.variable_names;
@@ -184,31 +169,22 @@ public:
         if (len) {
             // Creating a tagged pairlist per element.
             for (I<decltype(len)> i = 0; i < len; ++i) {
-                buffer.clear();
-                inject_next_pairlist_header(true, buffer);
-                writer.write(buffer.data(), buffer.size());
-
-                write_symbol(names[i], encodings[i], writer, buffer);
-                write_object(values[i].get(), writer, buffer, *this);
+                inject_next_pairlist_header(true, bufwriter);
+                write_symbol(names[i], encodings[i], bufwriter);
+                write_object(values[i].get(), bufwriter, *this);
             }
         }
 
         // Terminating the pairlist.
-        buffer.clear();
-        inject_header(SEXPType::NILVALUE_, buffer);
-        writer.write(buffer.data(), buffer.size());
+        inject_header(SEXPType::NILVALUE_, bufwriter);
 
         // We're not saving a hash table, because I don't want to have to
         // reproduce R's environment hashing logic.
-        buffer.clear();
-        inject_header(SEXPType::NILVALUE_, buffer);
-        writer.write(buffer.data(), buffer.size());
+        inject_header(SEXPType::NILVALUE_, bufwriter);
 
-        if (!write_attributes(env.attributes, writer, buffer, *this)) {
+        if (!write_attributes(env.attributes, bufwriter, *this)) {
             // Finishing with NULL if there aren't any attributes.
-            buffer.clear();
-            inject_header(SEXPType::NILVALUE_, buffer);
-            writer.write(buffer.data(), buffer.size());
+            inject_header(SEXPType::NILVALUE_, bufwriter);
         }
     }
 };

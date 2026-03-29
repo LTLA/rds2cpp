@@ -8,44 +8,44 @@
 
 namespace rds2cpp {
 
-template<class Writer>
-void write_single_string(const std::string& value, StringEncoding encoding, bool missing, Writer& writer, std::vector<unsigned char>& buffer) {
-    buffer.clear();
-    buffer.resize(4);
-    buffer[3] = static_cast<unsigned char>(SEXPType::CHAR);
+template<class BufferedWriter_>
+void write_single_string(const std::string& value, StringEncoding encoding, bool missing, BufferedWriter_& bufwriter) {
+    Header details;
+    details[0] = 0;
+    details[1] = 0;
+    details[2] = 0;
+
+    // Reverse of the logic in parse_single_string.
+    // Note that the positions on the header aren't reversed here.
+    switch (encoding) {
+        case StringEncoding::NONE:
+            details[2] = 1 << (12 - 8 + 1);
+            break;
+        case StringEncoding::LATIN1:
+            details[2] = 1 << (12 - 8 + 2);
+            break;
+        case StringEncoding::UTF8:
+            details[2] = 1 << (12 - 8 + 3);
+            break;
+        case StringEncoding::ASCII:
+            details[1] = 1 << (12 - 16 + 6);
+            break;
+        default:
+            throw std::runtime_error("unsupported string encoding");
+    }
+
+    details[3] = static_cast<unsigned char>(SEXPType::CHAR);
+    bufwriter.write(details.data(), details.size());
 
     if (missing) {
-        inject_integer(-1, buffer);
+        inject_integer<std::int32_t, std::int32_t>(-1, bufwriter);
     } else {
         if (value.size() > 2147483647) {
             throw std::runtime_error("strings should be less than 2^31-1 characters in length");
         }
-
-        // Reverse of the logic in parse_single_string.
-        // Note that the positions on the buffer aren't reversed here.
-        switch (encoding) {
-            case StringEncoding::NONE:
-                buffer[2] = 1 << (12 - 8 + 1);
-                break;
-            case StringEncoding::LATIN1:
-                buffer[2] = 1 << (12 - 8 + 2);
-                break;
-            case StringEncoding::UTF8:
-                buffer[2] = 1 << (12 - 8 + 3);
-                break;
-            case StringEncoding::ASCII:
-                buffer[1] = 1 << (12 - 16 + 6);
-                break;
-            default:
-                throw std::runtime_error("unsupported string encoding");
-        }
-
-        inject_integer(value.size(), buffer);
-        inject_string(value.c_str(), value.size(), buffer);
+        inject_integer<std::int32_t, std::int32_t>(value.size(), bufwriter);
+        bufwriter.write(value);
     }
-
-    writer.write(buffer.data(), buffer.size());
-    return;
 }
 
 }

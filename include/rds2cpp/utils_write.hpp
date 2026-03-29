@@ -5,42 +5,33 @@
 #include <vector>
 #include <cstdint>
 #include <cstddef>
+#include <type_traits>
 
 #include "utils_parse.hpp"
 
 namespace rds2cpp {
 
-inline void inject_integer(std::int32_t value, std::vector<unsigned char>& buffer) {
+template<typename Target_, typename Type_, class BufferedWriter_>
+void inject_integer(Type_ value, BufferedWriter_& bufwriter) {
+    static_assert(std::is_same<Target_, Type_>::value); // force users to set the type to avoid implicit typing.
     auto ptr = reinterpret_cast<unsigned char*>(&value);
-    constexpr std::size_t width = 4;
+    constexpr std::size_t width = sizeof(Target_);
     if (little_endian()) {
         std::reverse(ptr, ptr + width);
     }
-    buffer.insert(buffer.end(), ptr, ptr + width);
+    bufwriter.write(ptr, width);
 }
 
-inline void inject_length(std::size_t value, std::vector<unsigned char>& buffer) {
+template<class BufferedWriter_>
+void inject_length(std::size_t value, BufferedWriter_& bufwriter) {
     if (value <= 2147483647) {
-        inject_integer(value, buffer);
-        return;
+        inject_integer<std::int32_t, std::int32_t>(value, bufwriter);
+    } else {
+        // See get_length() for the inverse logic.
+        inject_integer<std::int32_t, std::int32_t>(-1, bufwriter);
+        inject_integer<std::uint32_t>(sanisizer::cast<std::uint32_t>(value >> 32), bufwriter);
+        inject_integer<std::uint32_t>(static_cast<std::uint32_t>(value & 0xFFFFFFFF), bufwriter); // must fit in a uint32 as we're taking the lowest 32 bits.
     }
-
-    inject_integer(-1, buffer);
-    uint64_t big = value;
-
-    auto ptr = reinterpret_cast<unsigned char*>(&big);
-    constexpr std::size_t width = 8;
-    if (little_endian()) {
-        std::reverse(ptr, ptr + width/2);
-        std::reverse(ptr + width/2, ptr + width);
-    }
-
-    buffer.insert(buffer.end(), ptr, ptr + width);
-}
-
-inline void inject_string(const char* ptr, std::size_t n, std::vector<unsigned char>& buffer) {
-    auto p = reinterpret_cast<const unsigned char*>(ptr);
-    buffer.insert(buffer.end(), p, p + n);
 }
 
 template<class Object, typename = int>
@@ -70,40 +61,50 @@ inline unsigned char inject_attribute_header(Attributes& attributes) {
     return bit;
 }
 
-template<class Object>
-void inject_header(Object& vec, std::vector<unsigned char>& buffer) {
-    buffer.insert(buffer.end(), 2, 0);
+template<class Object_, class BufferedWriter_>
+void inject_header(Object_& vec, BufferedWriter_& bufwriter) {
+    Header details;
+    details[0] = 0;
+    details[1] = 0;
 
-    if constexpr(has_attributes_for_writing<Object>::value) {
-        buffer.push_back(inject_attribute_header(vec.attributes));
+    if constexpr(has_attributes_for_writing<Object_>::value) {
+        details[2] = inject_attribute_header(vec.attributes);
     } else {
-        buffer.push_back(0);
+        details[2] = 0;
     }
 
-    // cast from enum should be safe, as SEXPTypes are also unsigned chars.
-    buffer.push_back(static_cast<unsigned char>(vec.type())); 
-    return;
+    details[3] = static_cast<unsigned char>(vec.type()); // Cast from enum should be safe, as SEXPTypes are also unsigned chars.
+    bufwriter.write(details.data(), details.size());
 }
 
-inline void inject_header(SEXPType type, std::vector<unsigned char>& buffer) {
-    buffer.insert(buffer.end(), 3, 0);
-    buffer.push_back(static_cast<unsigned char>(type));
-    return;
+template<class BufferedWriter_>
+void inject_header(SEXPType type, BufferedWriter_& bufwriter) {
+    Header details;
+    details[0] = 0;
+    details[1] = 0;
+    details[2] = 0;
+    details[3] = static_cast<unsigned char>(type);
+    bufwriter.write(details.data(), details.size());
 }
 
-template<class Attributes>
-void inject_header(SEXPType type, Attributes& attributes, std::vector<unsigned char>& buffer) {
-    buffer.insert(buffer.end(), 2, 0);
-    buffer.push_back(inject_attribute_header(attributes));
-    buffer.push_back(static_cast<unsigned char>(type));
-    return;
+template<class Attributes_, class BufferedWriter_>
+void inject_header(SEXPType type, Attributes_& attributes, BufferedWriter_& bufwriter) {
+    Header details;
+    details[0] = 0;
+    details[1] = 0;
+    details[2] = inject_attribute_header(attributes);
+    details[3] = static_cast<unsigned char>(type);
+    bufwriter.write(details.data(), details.size());
 }
 
-inline void inject_next_pairlist_header(bool tagged, std::vector<unsigned char>& buffer) {
-    buffer.insert(buffer.end(), 2, 0);
-    buffer.push_back(tagged ? 0x4 : 0); // has tag.
-    buffer.push_back(static_cast<unsigned char>(SEXPType::LIST));
-    return;
+template<class BufferedWriter_>
+void inject_next_pairlist_header(bool tagged, BufferedWriter_& bufwriter) {
+    Header details;
+    details[0] = 0;
+    details[1] = 0;
+    details[2] = (tagged ? 0x4 : 0); // has tag.
+    details[3] = static_cast<unsigned char>(SEXPType::LIST);
+    bufwriter.write(details.data(), details.size());
 }
 
 }

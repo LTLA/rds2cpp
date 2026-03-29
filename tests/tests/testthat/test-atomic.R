@@ -34,6 +34,10 @@ test_that("integer vector writing works as expected", {
         rds2cpp::write(y, file_name=tmp)
         roundtrip <- readRDS(tmp)
         expect_identical(roundtrip, y)
+
+        rds2cpp:::parallel_write(y, file_name=tmp)
+        roundtrip <- readRDS(tmp)
+        expect_identical(roundtrip, y)
     }
 })
 

@@ -11,11 +11,11 @@
 
 namespace rds2cpp {
 
-template<class Writer>
-void write_object(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared);
+template<class BufferedWriter_>
+void write_object(const RObject* object, BufferedWriter_& bufwriter, SharedWriteInfo& shared);
 
-template<class Writer>
-void write_pairlist(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
+template<class BufferedWriter_>
+void write_pairlist(const RObject* object, BufferedWriter_& bufwriter, SharedWriteInfo& shared) {
     auto ptr = static_cast<const PairList*>(object);
     const auto& values = ptr->data;
     const auto& has_tag = ptr->has_tag;
@@ -25,8 +25,9 @@ void write_pairlist(const RObject* object, Writer& writer, std::vector<unsigned 
     const bool has_attr = !ptr->attributes.names.empty();
 
     for (I<decltype(n)> i = 0; i < n; ++i) {
-        buffer.clear();
-        buffer.insert(buffer.end(), 2, 0);
+        Header details;
+        details[0] = 0;
+        details[1] = 0;
 
         // see logic in parse_pairlist.
         unsigned char x = 0;
@@ -36,25 +37,22 @@ void write_pairlist(const RObject* object, Writer& writer, std::vector<unsigned 
         if (has_tag[i]) {
             x |= 0x4;
         }
-        buffer.push_back(x);
+        details[2] = x;
 
-        buffer.push_back(static_cast<unsigned char>(SEXPType::LIST));
-        writer.write(buffer.data(), buffer.size());
+        details[3] = static_cast<unsigned char>(SEXPType::LIST);
+        bufwriter.write(details.data(), details.size());
 
         if (i == 0 && has_attr) {
-            write_attributes(ptr->attributes, writer, buffer, shared);
+            write_attributes(ptr->attributes, bufwriter, shared);
         }
         if (has_tag[i]) {
-            shared.write_symbol(tag_names[i], tag_encodings[i], writer, buffer);
+            shared.write_symbol(tag_names[i], tag_encodings[i], bufwriter);
         }
 
-        write_object(values[i].get(), writer, buffer, shared); 
+        write_object(values[i].get(), bufwriter, shared); 
     }
 
-    buffer.clear();
-    inject_header(SEXPType::NILVALUE_, buffer);
-    writer.write(buffer.data(), buffer.size());
-    return;
+    inject_header(SEXPType::NILVALUE_, bufwriter);
 }
 
 }

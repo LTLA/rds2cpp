@@ -47,6 +47,6 @@ int main () {
     auto factors = new rds2cpp::GenericVector;
     obj.attributes.values.emplace_back(factors);
 
-    rds2cpp::write_rds(file_info, "my_matrix.rds");
+    rds2cpp::write_rds(file_info, "my_matrix.rds", {});
     return 0;
 }

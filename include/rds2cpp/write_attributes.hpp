@@ -13,8 +13,8 @@
 
 namespace rds2cpp {
 
-template<class Writer>
-bool write_attributes(const Attributes& attr, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
+template<class BufferedWriter_>
+bool write_attributes(const Attributes& attr, BufferedWriter_& bufwriter, SharedWriteInfo& shared) {
     const auto nattr = attr.names.size();
     if (!nattr) {
         return false;
@@ -28,18 +28,12 @@ bool write_attributes(const Attributes& attr, Writer& writer, std::vector<unsign
     }
 
     for (I<decltype(nattr)> a = 0; a < nattr; ++a) {
-        buffer.clear();
-        inject_next_pairlist_header(true, buffer);
-        writer.write(buffer.data(), buffer.size());
-
-        shared.write_symbol(attr.names[a], attr.encodings[a], writer, buffer);
-        write_object(attr.values[a].get(), writer, buffer, shared);
+        inject_next_pairlist_header(true, bufwriter);
+        shared.write_symbol(attr.names[a], attr.encodings[a], bufwriter);
+        write_object(attr.values[a].get(), bufwriter, shared);
     }
 
-    buffer.clear();
-    inject_header(SEXPType::NILVALUE_, buffer);
-    writer.write(buffer.data(), buffer.size());
-
+    inject_header(SEXPType::NILVALUE_, bufwriter);
     return true;
 }
 

@@ -11,24 +11,21 @@
 
 namespace rds2cpp {
 
-template<class Writer>
-void write_object(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared);
+template<class BufferedWriter_>
+void write_object(const RObject* object, BufferedWriter_& bufwriter, SharedWriteInfo& shared);
 
-template<class Writer>
-void write_list(const RObject* object, Writer& writer, std::vector<unsigned char>& buffer, SharedWriteInfo& shared) {
+template<class BufferedWriter_>
+void write_list(const RObject* object, BufferedWriter_& bufwriter, SharedWriteInfo& shared) {
     auto ptr = static_cast<const GenericVector*>(object);
-    buffer.clear();
-    inject_header(*ptr, buffer);
+    inject_header(*ptr, bufwriter);
 
     const auto len = sanisizer::cast<std::size_t>(ptr->data.size());
-    inject_length(len, buffer);
-    writer.write(buffer.data(), buffer.size());
+    inject_length(len, bufwriter);
 
-    for (I<decltype(len)> i = 0; i < len; ++i) {
-        write_object(ptr->data[i].get(), writer, buffer, shared);
+    for (const auto& x : ptr->data) {
+        write_object(x.get(), bufwriter, shared);
     }
-    write_attributes(ptr->attributes, writer, buffer, shared);
-    return;
+    write_attributes(ptr->attributes, bufwriter, shared);
 }
 
 }

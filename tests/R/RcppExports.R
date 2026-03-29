@@ -31,3 +31,8 @@ write <- function(x, file_name) {
     .Call('_rds2cpp_write', PACKAGE = 'rds2cpp', x, file_name)
 }
 
+#' @export
+parallel_write <- function(x, file_name) {
+    .Call('_rds2cpp_parallel_write', PACKAGE = 'rds2cpp', x, file_name)
+}
+
