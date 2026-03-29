@@ -133,7 +133,7 @@ StringVector parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
         std::ostringstream converter;
         converter.precision(std::numeric_limits<double>::max_digits10);
         auto cast = static_cast<DoubleVector*>(contents.get());
-        const bool lw = (little_endian() ? 0 : 1); // see R_ext/Arith.h
+        const bool lw = (little_endian() ? 0 : 1); // see arithmetic.c.
         output = StringVector(cast->data.size());
 
         const auto datalen = cast->data.size();
@@ -146,8 +146,16 @@ StringVector parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
                 converter.str(std::string());
 
             } else if (std::isnan(cast->data[i])) {
-                auto ptr = reinterpret_cast<std::uint32_t*>(&(cast->data[i]));
-                if (ptr[lw] == 1954) { // see R_ext/Arith.h.
+                // See arithmetic.c in the R source code to extract the NaN's payload.
+                // We copy the word to get around C++'s strict aliasing rules.
+                std::uint32_t payload;
+                std::copy_n(
+                    reinterpret_cast<const unsigned char*>(&(cast->data[i])) + lw * 4,
+                    4,
+                    reinterpret_cast<unsigned char*>(&payload)
+                );
+
+                if (payload == 1954) {
                     output.missing[i] = true;
                 } else {
                     output.data[i] = "NaN";
