@@ -2,9 +2,13 @@
 
 export(inspect)
 export(parallel_parse)
+export(parallel_write)
 export(parse)
 export(parse_length)
+export(parse_preamble)
+export(parse_rda)
 export(parse_single_string)
 export(write)
+export(write_rda)
 importFrom(Rcpp,sourceCpp)
 useDynLib(rds2cpp)

@@ -1,10 +1,11 @@
 #include "Rcpp.h"
 #include "rds2cpp/rds2cpp.hpp"
 
-std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, rds2cpp::RdsFile& globals);
+template<class File_>
+std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, File_& globals);
 
-template<class RdsObject>
-void add_attributes(const Rcpp::RObject& x, RdsObject* y, rds2cpp::RdsFile& globals) {
+template<class RdsObject_, class File_>
+void add_attributes(const Rcpp::RObject& x, RdsObject_* y, File_& globals) {
     const auto& attr_names = x.attributeNames();
     auto& attr_dest = y->attributes;
     for (const auto& attr : attr_names) {
@@ -14,8 +15,8 @@ void add_attributes(const Rcpp::RObject& x, RdsObject* y, rds2cpp::RdsFile& glob
     }
 }
 
-template<class RdsObject>
-void add_attributes_except(const Rcpp::RObject& x, RdsObject* y, rds2cpp::RdsFile& globals, const std::unordered_set<std::string>& excluded) {
+template<class RdsObject_, class File_>
+void add_attributes_except(const Rcpp::RObject& x, RdsObject_* y, File_& globals, const std::unordered_set<std::string>& excluded) {
     const auto& attr_names = x.attributeNames();
     auto& attr_dest = y->attributes;
     for (const auto& attr : attr_names) {
@@ -27,18 +28,19 @@ void add_attributes_except(const Rcpp::RObject& x, RdsObject* y, rds2cpp::RdsFil
     }
 }
 
-template<class SourceVector, class HostVector>
-std::unique_ptr<rds2cpp::RObject> prepare_simple_vector(const Rcpp::RObject& x, rds2cpp::RdsFile& globals) {
+template<class SourceVector_, class HostVector_, class File_>
+std::unique_ptr<rds2cpp::RObject> prepare_simple_vector(const Rcpp::RObject& x, File_& globals) {
     std::unique_ptr<rds2cpp::RObject> output;
-    SourceVector vec(x);
-    auto ptr = new HostVector;
+    SourceVector_ vec(x);
+    auto ptr = new HostVector_;
     output.reset(ptr);
     ptr->data.insert(ptr->data.end(), vec.begin(), vec.end());
     add_attributes(x, ptr, globals);
     return output;
 }
 
-std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, rds2cpp::RdsFile& globals) {
+template<class File_>
+std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, File_& globals) {
     if (x.sexp_type() == INTSXP) {
         return prepare_simple_vector<Rcpp::IntegerVector, rds2cpp::IntegerVector>(x, globals);
 
@@ -300,5 +302,19 @@ Rcpp::RObject parallel_write(Rcpp::RObject x, std::string file_name) {
     rds2cpp::WriteRdsOptions opt;
     opt.parallel = true;
     rds2cpp::write_rds(output, file_name, opt);
+    return R_NilValue;
+}
+
+//' @export
+//[[Rcpp::export(rng=false)]]
+Rcpp::RObject write_rda(Rcpp::RObject x, std::string file_name, bool parallel) {
+    rds2cpp::RdaFile output;
+    auto uncoverted = unconvert(x, output);
+    auto pl = dynamic_cast<rds2cpp::PairList*>(uncoverted.get());
+    output.contents = std::move(*pl);
+
+    rds2cpp::WriteRdaOptions opt;
+    opt.parallel = parallel;
+    rds2cpp::write_rda(output, file_name, opt);
     return R_NilValue;
 }

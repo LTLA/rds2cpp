@@ -1,5 +1,5 @@
-#ifndef RDS2CPP_RDSFILE_HPP
-#define RDS2CPP_RDSFILE_HPP
+#ifndef RDS2CPP_RDAFILE_HPP
+#define RDS2CPP_RDAFILE_HPP
 
 #include <array>
 #include <cstdint>
@@ -11,17 +11,17 @@
 #include "Version.hpp"
 
 /**
- * @file RdsFile.hpp
+ * @file RdaFile.hpp
  *
- * @brief Information about an RDS file.
+ * @brief Information about an RDA file.
  */
 
 namespace rds2cpp {
 
 /**
- * @brief Contents of the parsed RDS file.
+ * @brief Contents of the parsed RDA file.
  */
-struct RdsFile {
+struct RdaFile {
     /**
      * Version of the R serialization format.
      */
@@ -43,9 +43,10 @@ struct RdsFile {
     StringEncoding encoding = StringEncoding::UTF8;
 
     /**
-     * The unserialized object.
+     * The unserialized pairlist containing all saved objects.
+     * This pairlist will be tagged with the object names. 
      */
-    std::unique_ptr<RObject> object;
+    PairList contents;
 
     /**
      * All environments inside the file.

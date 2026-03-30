@@ -14,4 +14,7 @@ namespace rds2cpp {}
 #include "parse_rds.hpp"
 #include "write_rds.hpp"
 
+#include "parse_rda.hpp"
+#include "write_rda.hpp"
+
 #endif

@@ -1,6 +1,8 @@
 #include "Rcpp.h"
 #include "rds2cpp/rds2cpp.hpp"
 
+#include <type_traits>
+
 void assign_to_string(Rcpp::StringVector& output, size_t i, const std::string& value, rds2cpp::StringEncoding encoding) {
     cetype_t enc = CE_UTF8;
     if (encoding == rds2cpp::StringEncoding::ASCII) {
@@ -185,10 +187,13 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
     return R_NilValue;
 }
 
-Rcpp::RObject parse_output(const rds2cpp::RdsFile& output) {
-    if (output.object == nullptr) {
-        return R_NilValue;
-    } 
+template<typename File_>
+Rcpp::RObject parse_output(const File_& output) {
+    if constexpr(std::is_same<File_, rds2cpp::RdsFile>::value) {
+        if (output.object == nullptr) {
+            return R_NilValue;
+        } 
+    }
 
     // Fetching environments.
     size_t nenvs = output.environments.size();
@@ -250,12 +255,21 @@ Rcpp::RObject parse_output(const rds2cpp::RdsFile& output) {
         all_symb[s] = sym.name;
     }
 
-    return Rcpp::List::create(
-        Rcpp::Named("value") = convert(output.object.get()),           
-        Rcpp::Named("environments") = all_envs,
-        Rcpp::Named("symbols") = all_symb,
-        Rcpp::Named("external_pointers") = all_exts
-    );
+    if constexpr(std::is_same<File_, rds2cpp::RdsFile>::value) {
+        return Rcpp::List::create(
+            Rcpp::Named("value") = convert(output.object.get()),           
+            Rcpp::Named("environments") = all_envs,
+            Rcpp::Named("symbols") = all_symb,
+            Rcpp::Named("external_pointers") = all_exts
+        );
+    } else {
+        return Rcpp::List::create(
+            Rcpp::Named("value") = convert(&(output.contents)),
+            Rcpp::Named("environments") = all_envs,
+            Rcpp::Named("symbols") = all_symb,
+            Rcpp::Named("external_pointers") = all_exts
+        );
+    }
 }
 
 //' @export
@@ -271,6 +285,15 @@ Rcpp::RObject parallel_parse(std::string file_name) {
     rds2cpp::ParseRdsOptions opts;
     opts.parallel = true;
     auto output = rds2cpp::parse_rds(file_name, opts);
+    return parse_output(output);
+}
+
+//' @export
+//[[Rcpp::export(rng=false)]]
+Rcpp::RObject parse_rda(std::string file_name, bool parallel) {
+    rds2cpp::ParseRdaOptions opts;
+    opts.parallel = parallel;
+    auto output = rds2cpp::parse_rda(file_name, opts);
     return parse_output(output);
 }
 

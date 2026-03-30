@@ -1,32 +1,32 @@
-#ifndef RDS2CPP_PARSE_HPP
-#define RDS2CPP_PARSE_HPP
+#ifndef RDS2CPP_PARSE_RDA_HPP
+#define RDS2CPP_PARSE_RDA_HPP
 
 #include <memory>
 #include <stdexcept>
 #include <cstdint>
 
-#include "RdsFile.hpp"
+#include "RdaFile.hpp"
 #include "utils_parse.hpp"
 #include "SharedParseInfo.hpp"
-#include "parse_object.hpp"
+#include "parse_pairlist.hpp"
 
 #include "byteme/byteme.hpp"
 #include "sanisizer/sanisizer.hpp"
 
 /**
- * @file parse_rds.hpp
+ * @file parse_rda.hpp
  *
- * @brief Parse an RDS file.
+ * @brief Parse an RDA (a.k.a., RData) file.
  */
 
 namespace rds2cpp {
 
 /**
- * @brief Options for `parse_rds()`.
+ * @brief Options for `parse_rda()`.
  */
-struct ParseRdsOptions {
+struct ParseRdaOptions {
     /**
-     * Whether to read and parse the contents of the RDS file in parallel.
+     * Whether to read and parse the contents of the RDA file in parallel.
      */
     bool parallel = false;
 
@@ -38,17 +38,17 @@ struct ParseRdsOptions {
 };
 
 /**
- * Parse the contents of an RDS file.
+ * Parse the contents of an RDA file.
  *
  * @tparam Reader_ A `byteme::Reader` class, or any class with a compatible interface.
  *
- * @param reader Instance of a `Reader` class, containing the contents of the RDS file.
+ * @param reader Instance of a `Reader` class, containing the contents of the RDA file.
  * @param options Further options for parsing.
  *
- * @return An `RdsFile` object containing the contents of the RDS file.
+ * @return An `RdaFile` object containing the contents of the RDA file.
  */
 template<class Reader_>
-RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
+RdaFile parse_rda(Reader_& reader, const ParseRdaOptions& options) {
     std::unique_ptr<byteme::BufferedReader<unsigned char> > srcptr;
     if (options.parallel) {
         srcptr.reset(new byteme::SerialBufferedReader<unsigned char, Reader_*>(&reader, options.buffer_size));
@@ -57,7 +57,7 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
     }
     auto& src = *srcptr; 
 
-    RdsFile output;
+    RdaFile output;
 
     // Reading the header first. This is the first and only time that 
     // we need to do a src.valid() check, as we're using the current 
@@ -71,35 +71,47 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
 
             std::string header;
             header += as_char(src.get());
-            if (!src.advance()) {
-                throw empty_error();
+            for (int i = 0; i < 4; ++i) {
+                if (!src.advance()) {
+                    throw empty_error();
+                }
+                header += as_char(src.get());
             }
-            header += as_char(src.get());
+            if (header != "RDX2\n" && header != "RDX3\n") {
+                throw std::runtime_error("unsupported format are currently supported");
+            }
 
+            header.clear();
+            for (int i = 0; i < 2; ++i) {
+                if (!src.advance()) {
+                    throw empty_error();
+                }
+                header += as_char(src.get());
+            }
             if (header != "X\n") {
-                throw std::runtime_error("only RDS files in XDR format are currently supported");
+                throw std::runtime_error("only RDA files in XDR format are currently supported");
             }
         } catch (std::exception& e) {
-            throw traceback("failed to read the header from the RDS preamble", e);
+            throw traceback("failed to read the header from the RDA preamble", e);
         }
 
         output.format_version = 0;
         try {
             output.format_version = quick_integer<I<decltype(output.format_version)> >(src);
         } catch (std::exception& e) {
-            throw traceback("failed to read the format version number from the RDS preamble", e);
+            throw traceback("failed to read the format version number from the RDA preamble", e);
         } 
 
         try {
             output.writer_version = parse_version(src);
         } catch (std::exception& e) {
-            throw traceback("failed to read the writer version number from the RDS preamble", e);
+            throw traceback("failed to read the writer version number from the RDA preamble", e);
         }
 
         try {
             output.reader_version = parse_version(src);
         } catch (std::exception& e) {
-            throw traceback("failed to read the reader version number from the RDS preamble", e);
+            throw traceback("failed to read the reader version number from the RDA preamble", e);
         }
     }
 
@@ -112,7 +124,7 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
                 throw std::runtime_error("encoding length should be non-negative");
             }
         } catch (std::exception& e) {
-            throw traceback("failed to read the encoding length from the RDS preamble", e);
+            throw traceback("failed to read the encoding length from the RDA preamble", e);
         }
 
         try {
@@ -126,13 +138,20 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
             }
             output.encoding = string_encoding_from_name(encoding);
         } catch (std::exception& e) {
-            throw traceback("failed to read the encoding string from the RDS preamble", e);
+            throw traceback("failed to read the encoding string from the RDA preamble", e);
         }
     }
 
     // Now we can finally read the damn object.
     SharedParseInfo shared;
-    output.object = parse_object(src, shared);
+
+    auto details = parse_header(src);
+    auto sexp_type = details[3];
+    if (sexp_type != static_cast<unsigned char>(SEXPType::LIST)) {
+        throw std::runtime_error("expected RDA file to contain a pairlist");
+    }
+    output.contents = parse_pairlist_body(src, details, shared);
+
     output.environments = std::move(shared.environments);
     output.symbols = std::move(shared.symbols);
     output.external_pointers = std::move(shared.external_pointers);
@@ -141,22 +160,17 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
 }
 
 /**
- * Parse the contents of a Gzip-compressed RDS file.
+ * Parse the contents of a Gzip-compressed RDA file.
  *
- * @param file Path to a Gzip-compressed RDS file.
+ * @param file Path to a Gzip-compressed RDA file.
  * @param options Further options for parsing.
  *
- * @return An `RdsFile` object containing the contents of `file`.
+ * @return An `RdaFile` object containing the contents of `file`.
  */
-inline RdsFile parse_rds(std::string file, const ParseRdsOptions& options) {
+inline RdaFile parse_rda(std::string file, const ParseRdaOptions& options) {
     byteme::GzipFileReader reader(file.c_str(), {});
-    return parse_rds(reader, options);
+    return parse_rda(reader, options);
 }
-
-/**
- * Typedef for back-compatibility.
- */
-typedef RdsFile Parsed;
 
 }
 
