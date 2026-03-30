@@ -10,6 +10,14 @@
     <namespace>rds2cpp</namespace>
   </compound>
   <compound kind="file">
+    <name>parse_rda.hpp</name>
+    <path>rds2cpp/</path>
+    <filename>parse__rda_8hpp.html</filename>
+    <includes id="RdaFile_8hpp" name="RdaFile.hpp" local="yes" import="no" module="no" objc="no">RdaFile.hpp</includes>
+    <class kind="struct">rds2cpp::ParseRdaOptions</class>
+    <namespace>rds2cpp</namespace>
+  </compound>
+  <compound kind="file">
     <name>parse_rds.hpp</name>
     <path>rds2cpp/</path>
     <filename>parse__rds_8hpp.html</filename>
@@ -18,11 +26,24 @@
     <namespace>rds2cpp</namespace>
   </compound>
   <compound kind="file">
+    <name>RdaFile.hpp</name>
+    <path>rds2cpp/</path>
+    <filename>RdaFile_8hpp.html</filename>
+    <includes id="RObject_8hpp" name="RObject.hpp" local="yes" import="no" module="no" objc="no">RObject.hpp</includes>
+    <includes id="Environment_8hpp" name="Environment.hpp" local="yes" import="no" module="no" objc="no">Environment.hpp</includes>
+    <includes id="Symbol_8hpp" name="Symbol.hpp" local="yes" import="no" module="no" objc="no">Symbol.hpp</includes>
+    <includes id="Version_8hpp" name="Version.hpp" local="yes" import="no" module="no" objc="no">Version.hpp</includes>
+    <class kind="struct">rds2cpp::RdaFile</class>
+    <namespace>rds2cpp</namespace>
+  </compound>
+  <compound kind="file">
     <name>rds2cpp.hpp</name>
     <path>rds2cpp/</path>
     <filename>rds2cpp_8hpp.html</filename>
     <includes id="parse__rds_8hpp" name="parse_rds.hpp" local="yes" import="no" module="no" objc="no">parse_rds.hpp</includes>
     <includes id="write__rds_8hpp" name="write_rds.hpp" local="yes" import="no" module="no" objc="no">write_rds.hpp</includes>
+    <includes id="parse__rda_8hpp" name="parse_rda.hpp" local="yes" import="no" module="no" objc="no">parse_rda.hpp</includes>
+    <includes id="write__rda_8hpp" name="write_rda.hpp" local="yes" import="no" module="no" objc="no">write_rda.hpp</includes>
     <namespace>rds2cpp</namespace>
   </compound>
   <compound kind="file">
@@ -32,7 +53,7 @@
     <includes id="RObject_8hpp" name="RObject.hpp" local="yes" import="no" module="no" objc="no">RObject.hpp</includes>
     <includes id="Environment_8hpp" name="Environment.hpp" local="yes" import="no" module="no" objc="no">Environment.hpp</includes>
     <includes id="Symbol_8hpp" name="Symbol.hpp" local="yes" import="no" module="no" objc="no">Symbol.hpp</includes>
-    <class kind="struct">rds2cpp::Version</class>
+    <includes id="Version_8hpp" name="Version.hpp" local="yes" import="no" module="no" objc="no">Version.hpp</includes>
     <class kind="struct">rds2cpp::RdsFile</class>
     <namespace>rds2cpp</namespace>
   </compound>
@@ -76,6 +97,22 @@
     <filename>Symbol_8hpp.html</filename>
     <includes id="StringEncoding_8hpp" name="StringEncoding.hpp" local="yes" import="no" module="no" objc="no">StringEncoding.hpp</includes>
     <class kind="struct">rds2cpp::Symbol</class>
+    <namespace>rds2cpp</namespace>
+  </compound>
+  <compound kind="file">
+    <name>Version.hpp</name>
+    <path>rds2cpp/</path>
+    <filename>Version_8hpp.html</filename>
+    <class kind="struct">rds2cpp::Version</class>
+    <namespace>rds2cpp</namespace>
+  </compound>
+  <compound kind="file">
+    <name>write_rda.hpp</name>
+    <path>rds2cpp/</path>
+    <filename>write__rda_8hpp.html</filename>
+    <includes id="RdaFile_8hpp" name="RdaFile.hpp" local="yes" import="no" module="no" objc="no">RdaFile.hpp</includes>
+    <includes id="RObject_8hpp" name="RObject.hpp" local="yes" import="no" module="no" objc="no">RObject.hpp</includes>
+    <class kind="struct">rds2cpp::WriteRdaOptions</class>
     <namespace>rds2cpp</namespace>
   </compound>
   <compound kind="file">
@@ -542,6 +579,24 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>rds2cpp::ParseRdaOptions</name>
+    <filename>structrds2cpp_1_1ParseRdaOptions.html</filename>
+    <member kind="variable">
+      <type>bool</type>
+      <name>parallel</name>
+      <anchorfile>structrds2cpp_1_1ParseRdaOptions.html</anchorfile>
+      <anchor>ae60f070dbb39430d7633c985faedfce9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::size_t</type>
+      <name>buffer_size</name>
+      <anchorfile>structrds2cpp_1_1ParseRdaOptions.html</anchorfile>
+      <anchor>ad245f2d15d6f8d04a1a6d701fdc2bf0f</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>rds2cpp::ParseRdsOptions</name>
     <filename>structrds2cpp_1_1ParseRdsOptions.html</filename>
     <member kind="variable">
@@ -556,6 +611,66 @@
       <name>buffer_size</name>
       <anchorfile>structrds2cpp_1_1ParseRdsOptions.html</anchorfile>
       <anchor>ad4ba63c29226fef224ffa0c44a20bb0b</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>rds2cpp::RdaFile</name>
+    <filename>structrds2cpp_1_1RdaFile.html</filename>
+    <member kind="variable">
+      <type>std::int32_t</type>
+      <name>format_version</name>
+      <anchorfile>structrds2cpp_1_1RdaFile.html</anchorfile>
+      <anchor>afe64a1861b433f15d9d80d1ebce2c6a8</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Version</type>
+      <name>writer_version</name>
+      <anchorfile>structrds2cpp_1_1RdaFile.html</anchorfile>
+      <anchor>ad57612fce5f6bf9182b0e6db5a388ad2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Version</type>
+      <name>reader_version</name>
+      <anchorfile>structrds2cpp_1_1RdaFile.html</anchorfile>
+      <anchor>af275709f827cbbf8e227c13a2d7aed4f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>StringEncoding</type>
+      <name>encoding</name>
+      <anchorfile>structrds2cpp_1_1RdaFile.html</anchorfile>
+      <anchor>a800778c48e430d42d2bcbe04629a75a5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>PairList</type>
+      <name>contents</name>
+      <anchorfile>structrds2cpp_1_1RdaFile.html</anchorfile>
+      <anchor>a15057cf2f0eb39fbe0d989d1e8945c15</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::vector&lt; Environment &gt;</type>
+      <name>environments</name>
+      <anchorfile>structrds2cpp_1_1RdaFile.html</anchorfile>
+      <anchor>ac15125c490c48dcb86501df122e18b4d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::vector&lt; Symbol &gt;</type>
+      <name>symbols</name>
+      <anchorfile>structrds2cpp_1_1RdaFile.html</anchorfile>
+      <anchor>a533cbeb2fe57f68207fbbf79e1836133</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::vector&lt; ExternalPointer &gt;</type>
+      <name>external_pointers</name>
+      <anchorfile>structrds2cpp_1_1RdaFile.html</anchorfile>
+      <anchor>ab557f051bd04a7268d820a3d15db1ab3</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -801,6 +916,24 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>rds2cpp::WriteRdaOptions</name>
+    <filename>structrds2cpp_1_1WriteRdaOptions.html</filename>
+    <member kind="variable">
+      <type>bool</type>
+      <name>parallel</name>
+      <anchorfile>structrds2cpp_1_1WriteRdaOptions.html</anchorfile>
+      <anchor>ab9c5abf0e44472116403f011c1c0323c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::size_t</type>
+      <name>buffer_size</name>
+      <anchorfile>structrds2cpp_1_1WriteRdaOptions.html</anchorfile>
+      <anchor>a73a810055a36f72ae4c6ffbb44aa64d6</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>rds2cpp::WriteRdsOptions</name>
     <filename>structrds2cpp_1_1WriteRdsOptions.html</filename>
     <member kind="variable">
@@ -832,7 +965,9 @@
     <class kind="struct">rds2cpp::LanguageObject</class>
     <class kind="struct">rds2cpp::Null</class>
     <class kind="struct">rds2cpp::PairList</class>
+    <class kind="struct">rds2cpp::ParseRdaOptions</class>
     <class kind="struct">rds2cpp::ParseRdsOptions</class>
+    <class kind="struct">rds2cpp::RdaFile</class>
     <class kind="struct">rds2cpp::RdsFile</class>
     <class kind="struct">rds2cpp::RObject</class>
     <class kind="struct">rds2cpp::S4Object</class>
@@ -840,6 +975,7 @@
     <class kind="struct">rds2cpp::Symbol</class>
     <class kind="struct">rds2cpp::SymbolIndex</class>
     <class kind="struct">rds2cpp::Version</class>
+    <class kind="struct">rds2cpp::WriteRdaOptions</class>
     <class kind="struct">rds2cpp::WriteRdsOptions</class>
     <member kind="typedef">
       <type>AtomicVector&lt; std::int32_t, SEXPType::INT &gt;</type>
@@ -977,6 +1113,41 @@
       <anchorfile>namespacerds2cpp.html</anchorfile>
       <anchor>ad6753c4d78d1a90d712884496687262c</anchor>
       <arglist>(const RdsFile &amp;info, std::string path, const WriteRdsOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>RdaFile</type>
+      <name>parse_rda</name>
+      <anchorfile>namespacerds2cpp.html</anchorfile>
+      <anchor>a347bce96790a7ff868d7e60c82dbfe5c</anchor>
+      <arglist>(Reader_ &amp;reader, const ParseRdaOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>RdaFile</type>
+      <name>parse_rda</name>
+      <anchorfile>namespacerds2cpp.html</anchorfile>
+      <anchor>ae1acad6c6d88ec1426f6f4edb4427198</anchor>
+      <arglist>(std::string file, const ParseRdaOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>write_rda</name>
+      <anchorfile>namespacerds2cpp.html</anchorfile>
+      <anchor>a7b9cab5eeb106e16393b718fdab75b01</anchor>
+      <arglist>(const RdaFile &amp;info, Writer &amp;writer, const WriteRdaOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>write_rda</name>
+      <anchorfile>namespacerds2cpp.html</anchorfile>
+      <anchor>a00fc7eca7de39273a2810e2d12851b09</anchor>
+      <arglist>(const RdaFile &amp;info, const char *path, const WriteRdaOptions &amp;options)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>write_rda</name>
+      <anchorfile>namespacerds2cpp.html</anchorfile>
+      <anchor>a85f11896982f1b97f94318aca042d0ae</anchor>
+      <arglist>(const RdaFile &amp;info, std::string path, const WriteRdaOptions &amp;options)</arglist>
     </member>
   </compound>
   <compound kind="page">

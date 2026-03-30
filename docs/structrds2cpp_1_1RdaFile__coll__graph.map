@@ -1,0 +1,11 @@
+<map id="rds2cpp::RdaFile" name="rds2cpp::RdaFile">
+<area shape="rect" id="Node000001" title="Contents of the parsed RDA file." alt="" coords="64,198,181,223"/>
+<area shape="rect" id="Node000002" href="$structrds2cpp_1_1Version.html" title="Major&#45;minor&#45;patch version number, usually of R itself." alt="" coords="5,94,123,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="67,135,71,154,78,172,89,185,102,195,99,199,85,189,74,175,66,156,62,136"/>
+<area shape="rect" id="Node000003" href="$structrds2cpp_1_1PairList.html" title="Pairlist, i.e., a linked list." alt="" coords="146,94,264,120"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,135,166,175,141,199,137,195,162,172,190,132"/>
+<area shape="rect" id="Node000004" href="$structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects." alt="" coords="70,5,191,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="153,41,197,92,193,95,149,45"/>
+<area shape="rect" id="Node000005" href="$structrds2cpp_1_1Attributes.html" title="Attribute names and values." alt="" coords="215,5,345,31"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="262,45,218,95,214,92,258,41"/>
+</map>
