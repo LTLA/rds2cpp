@@ -2,13 +2,8 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @export
-parse <- function(file_name) {
-    .Call('_rds2cpp_parse', PACKAGE = 'rds2cpp', file_name)
-}
-
-#' @export
-parallel_parse <- function(file_name) {
-    .Call('_rds2cpp_parallel_parse', PACKAGE = 'rds2cpp', file_name)
+parse_rds <- function(file_name, parallel) {
+    .Call('_rds2cpp_parse_rds', PACKAGE = 'rds2cpp', file_name, parallel)
 }
 
 #' @export
@@ -27,18 +22,8 @@ parse_single_string <- function(raw) {
 }
 
 #' @export
-parse_preamble <- function(file_name) {
-    .Call('_rds2cpp_parse_preamble', PACKAGE = 'rds2cpp', file_name)
-}
-
-#' @export
-write <- function(x, file_name) {
-    .Call('_rds2cpp_write', PACKAGE = 'rds2cpp', x, file_name)
-}
-
-#' @export
-parallel_write <- function(x, file_name) {
-    .Call('_rds2cpp_parallel_write', PACKAGE = 'rds2cpp', x, file_name)
+write_rds <- function(x, file_name, parallel) {
+    .Call('_rds2cpp_write_rds', PACKAGE = 'rds2cpp', x, file_name, parallel)
 }
 
 #' @export

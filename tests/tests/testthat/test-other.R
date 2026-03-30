@@ -1,4 +1,4 @@
-# library(testthat); library(rds2cpp); source("test-other.R")
+# library(testthat); library(rds2cpp); source("setup.R"); source("test-other.R")
 
 test_that("length extraction works correctly", {
     # Remember this advances past the first byte.
@@ -13,13 +13,13 @@ test_that("length extraction works correctly", {
 })
 
 test_that("string extraction works correctly", {
-    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^7, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "UTF8", FALSE))
-    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^6, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "LATIN1", FALSE))
-    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 2^2, 0, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "ASCII", FALSE))
-    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^5, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "NONE", FALSE))
+    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^7, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "UTF-8", FALSE))
+    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^6, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "latin1", FALSE))
+    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 2^2, 0, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "unknown", FALSE))
+    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^5, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "bytes", FALSE))
 
-    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^7, 9, 0, 0, 0, 0))), list("", "UTF8", FALSE))
-    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^5, 9, 255, 255, 255, 255))), list("", "NONE", TRUE))
+    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^7, 9, 0, 0, 0, 0))), list("", "UTF-8", FALSE))
+    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^5, 9, 255, 255, 255, 255))), list("", "bytes", TRUE))
     expect_error(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^5, 9, 255, 0, 0, 0))), "non-negative");
 })
 
@@ -28,10 +28,24 @@ test_that("RDS preamble extraction works correctly", {
     y <- as.integer(1:20)
     saveRDS(y, file=tmp)
 
-    payload <- rds2cpp:::parse_preamble(tmp)
+    payload <- quick_parse(tmp)
     expect_identical(payload$format_version, 3L)
     expect_identical(paste(payload$writer_version, collapse="."), paste0(R.Version()$major, ".", R.Version()$minor))
     expect_identical(paste(payload$reader_version, collapse="."), "3.5.0")
 
     expect_true(payload$string_encoding %in% c("UTF-8", "latin1", "bytes", "unknown"))
+})
+
+set.seed(9999)
+test_that("parallelized read/write of RDS files", {
+    payload <- runif(100000)
+    tmp <- tempfile(fileext=".rds")
+    saveRDS(file=tmp, payload)
+
+    roundtrip <- rds2cpp::parse_rds(tmp, parallel=TRUE)
+    expect_identical(roundtrip$value, payload)
+
+    rds2cpp::write_rds(payload, tmp, parallel=TRUE)
+    roundtrip <- readRDS(tmp)
+    expect_identical(roundtrip, payload)
 })

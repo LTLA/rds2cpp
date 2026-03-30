@@ -1,5 +1,4 @@
-# This tests the correct saving and loading of atomic vectors.
-# library(testthat); library(rds2cpp); source("test-altrep.R")
+# library(testthat); library(rds2cpp); source("setup.R"); source("test-altrep.R")
 
 test_that("compact integer loading works as expected", {
     tmp <- tempfile(fileext=".rds")
@@ -15,7 +14,7 @@ test_that("compact integer loading works as expected", {
         expect_output(.Internal(inspect(y)), "compact")
 
         saveRDS(y, file=tmp)
-        roundtrip <- rds2cpp:::parse(tmp)
+        roundtrip <- quick_parse(tmp)
         expect_identical(roundtrip$value, y)
     }
 })
@@ -28,7 +27,7 @@ test_that("attribute wrapping for integers works as expected", {
 
     tmp <- tempfile(fileext=".rds")
     saveRDS(x, file=tmp)
-    roundtrip <- rds2cpp:::parse(tmp)
+    roundtrip <- quick_parse(tmp)
     expect_identical(roundtrip$value, x)
 
     # Checking that we can add more than names. Here, we
@@ -40,7 +39,7 @@ test_that("attribute wrapping for integers works as expected", {
     expect_output(.Internal(inspect(x)), "compact")
 
     saveRDS(x, file=tmp)
-    roundtrip <- rds2cpp:::parse(tmp)
+    roundtrip <- quick_parse(tmp)
     expect_identical(roundtrip$value, x)
 
     # Checking that our code works with empty attribute lists.
@@ -51,7 +50,7 @@ test_that("attribute wrapping for integers works as expected", {
     expect_output(.Internal(inspect(x)), "compact")
 
     saveRDS(x, file=tmp)
-    roundtrip <- rds2cpp:::parse(tmp)
+    roundtrip <- quick_parse(tmp)
     expect_identical(roundtrip$value, x)
 })
 
@@ -62,7 +61,7 @@ test_that("deferred string for integers works as expected", {
 
     tmp <- tempfile(fileext=".rds")
     saveRDS(x, file=tmp)
-    roundtrip <- rds2cpp:::parse(tmp)
+    roundtrip <- quick_parse(tmp)
     expect_identical(roundtrip$value, x)
 
     # With NA's.
@@ -72,7 +71,7 @@ test_that("deferred string for integers works as expected", {
 
     tmp <- tempfile(fileext=".rds")
     saveRDS(x, file=tmp)
-    roundtrip <- rds2cpp:::parse(tmp)
+    roundtrip <- quick_parse(tmp)
     expect_identical(roundtrip$value, x)
 
     # Works when we store it inside a list; this checks that
@@ -82,7 +81,7 @@ test_that("deferred string for integers works as expected", {
 
     tmp <- tempfile(fileext=".rds")
     saveRDS(y, file=tmp)
-    roundtrip <- rds2cpp:::parse(tmp)
+    roundtrip <- quick_parse(tmp)
     expect_identical(roundtrip$value, y)
 })
 
@@ -93,7 +92,7 @@ test_that("deferred string for doubles works as expected", {
 
     tmp <- tempfile(fileext=".rds")
     saveRDS(x, file=tmp)
-    roundtrip <- rds2cpp:::parse(tmp)
+    roundtrip <- quick_parse(tmp)
     expect_identical(roundtrip$value, x)
 
     # With weird things.
@@ -103,7 +102,7 @@ test_that("deferred string for doubles works as expected", {
 
     tmp <- tempfile(fileext=".rds")
     saveRDS(x, file=tmp)
-    roundtrip <- rds2cpp:::parse(tmp)
+    roundtrip <- quick_parse(tmp)
     expect_identical(roundtrip$value, x)
 })
 

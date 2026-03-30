@@ -2,8 +2,12 @@
 #include "rds2cpp/rds2cpp.hpp"
 
 #include <type_traits>
+#include <cstddef>
+#include <string>
+#include <complex>
+#include <type_traits>
 
-void assign_to_string(Rcpp::StringVector& output, size_t i, const std::string& value, rds2cpp::StringEncoding encoding) {
+void assign_to_string(Rcpp::StringVector& output, std::size_t i, const std::string& value, rds2cpp::StringEncoding encoding) {
     cetype_t enc = CE_UTF8;
     if (encoding == rds2cpp::StringEncoding::ASCII) {
         enc = CE_NATIVE;
@@ -11,19 +15,12 @@ void assign_to_string(Rcpp::StringVector& output, size_t i, const std::string& v
     output[i] = Rcpp::String(value, enc);
 }
 
-void assign_to_string(Rcpp::StringVector& output, size_t i, const std::string& value, rds2cpp::StringEncoding encoding, bool missing) {
-    if (missing) {
-        output[i] = NA_STRING;
-    } else {
-        assign_to_string(output, i, value, encoding);
-    }
-}
-
 Rcpp::RObject convert(const rds2cpp::RObject*);
 
 template<class Output>
 void add_attributes(const rds2cpp::Attributes& input, Output& output) {
-    for (size_t a = 0; a < input.names.size(); ++a) {
+    const std::size_t num_inputs = input.names.size();
+    for (std::size_t a = 0; a < num_inputs; ++a) {
         output.attr(input.names[a]) = convert(input.values[a].get());
     }
 }
@@ -33,14 +30,15 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         auto list = static_cast<const rds2cpp::PairList*>(input);
 
         const auto& data = list->data;
-        Rcpp::List data_output(data.size());
-        for (size_t i = 0; i < data.size(); ++i) {
+        const std::size_t num_data = data.size();
+        Rcpp::List data_output(num_data);
+        for (std::size_t i = 0; i < num_data; ++i) {
             data_output[i] = convert(data[i].get());
         }
 
-        size_t nnodes = data.size();
+        const std::size_t nnodes = data.size();
         Rcpp::StringVector tag_output(nnodes);
-        for (size_t i = 0; i < nnodes; ++i) {
+        for (std::size_t i = 0; i < nnodes; ++i) {
             if (list->has_tag[i]) {
                 assign_to_string(tag_output, i, list->tag_names[i], list->tag_encodings[i]);
             } else {
@@ -58,7 +56,8 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         auto s4 = static_cast<const rds2cpp::S4Object*>(input);
 
         Rcpp::S4 output(s4->class_name);
-        for (size_t s = 0; s < s4->attributes.names.size(); ++s) {
+        const std::size_t num_attributes = s4->attributes.names.size();
+        for (std::size_t s = 0; s < num_attributes; ++s) {
             output.slot(s4->attributes.names[s]) = convert(s4->attributes.values[s].get());
         }
 
@@ -96,8 +95,9 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
     } else if (input->type() == rds2cpp::SEXPType::CPLX) {
         auto cplx = static_cast<const rds2cpp::ComplexVector*>(input);
         const auto& data = cplx->data;
-        Rcpp::ComplexVector output(data.size());
-        for (size_t i = 0; i < data.size(); ++i) {
+        const std::size_t num_data = data.size();
+        Rcpp::ComplexVector output(num_data);
+        for (std::size_t i = 0; i < num_data; ++i) {
             output[i].r = std::real(data[i]);
             output[i].i = std::imag(data[i]);
         }
@@ -106,10 +106,14 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
 
     } else if (input->type() == rds2cpp::SEXPType::STR) {
         auto chr = static_cast<const rds2cpp::StringVector*>(input);
-        size_t nnodes = chr->data.size();
+        const std::size_t nnodes = chr->data.size();
         Rcpp::StringVector output(nnodes);
-        for (size_t i = 0; i < nnodes; ++i) {
-            assign_to_string(output, i, chr->data[i], chr->encodings[i], chr->missing[i]);
+        for (std::size_t i = 0; i < nnodes; ++i) {
+            if (chr->missing[i]) {
+                output[i] = NA_STRING;
+            } else {
+                assign_to_string(output, i, chr->data[i], chr->encodings[i]);
+            }
         }
         add_attributes(chr->attributes, output);
         return output;
@@ -117,8 +121,9 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
     } else if (input->type() == rds2cpp::SEXPType::VEC) {
         auto list = static_cast<const rds2cpp::GenericVector*>(input);
         const auto& data = list->data;
-        Rcpp::List output(data.size());
-        for (size_t i = 0; i < data.size(); ++i) {
+        const std::size_t num_data = data.size();
+        Rcpp::List output(num_data);
+        for (std::size_t i = 0; i < num_data; ++i) {
             output[i] = convert(data[i].get());
         }
         add_attributes(list->attributes, output);
@@ -136,10 +141,10 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
         Rcpp::List output(2);
         output[0] = Rcpp::CharacterVector::create(lang->function_name);
 
-        size_t nargs = lang->argument_values.size();
+        const std::size_t nargs = lang->argument_values.size();
         Rcpp::List args(nargs);
         Rcpp::CharacterVector names(nargs);
-        for (size_t i = 0; i < nargs; ++i) {
+        for (std::size_t i = 0; i < nargs; ++i) {
             args[i] = convert(lang->argument_values[i].get());
             names[i] = lang->argument_names[i]; 
         }
@@ -153,8 +158,9 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
     } else if (input->type() == rds2cpp::SEXPType::EXPR) {
         auto expr = static_cast<const rds2cpp::ExpressionVector*>(input);
         const auto& data = expr->data;
-        Rcpp::List output(data.size());
-        for (size_t i = 0; i < data.size(); ++i) {
+        const std::size_t num_data = data.size();
+        Rcpp::List output(num_data);
+        for (std::size_t i = 0; i < num_data; ++i) {
             output[i] = convert(data[i].get());
         }
         output.attr("pretend-to-be-an-expression") = Rcpp::LogicalVector::create(1);
@@ -187,25 +193,26 @@ Rcpp::RObject convert(const rds2cpp::RObject* input) {
     return R_NilValue;
 }
 
-template<typename File_>
-Rcpp::RObject parse_output(const File_& output) {
-    if constexpr(std::is_same<File_, rds2cpp::RdsFile>::value) {
-        if (output.object == nullptr) {
+template<typename RdxFile_>
+Rcpp::RObject parse_rdx(const RdxFile_& rdx_file) {
+    if constexpr(std::is_same<RdxFile_, rds2cpp::RdsFile>::value) {
+        if (rdx_file.object == nullptr) {
             return R_NilValue;
         } 
     }
 
     // Fetching environments.
-    size_t nenvs = output.environments.size();
+    std::size_t nenvs = rdx_file.environments.size();
     Rcpp::List all_envs(nenvs);
-    for (size_t e = 0; e < nenvs; ++e) {
-        const auto& env = output.environments[e];
+    for (std::size_t e = 0; e < nenvs; ++e) {
+        const auto& env = rdx_file.environments[e];
 
         Rcpp::List vars(env.variable_names.size());
         Rcpp::CharacterVector varnames(env.variable_names.size());
-        for (size_t i = 0; i < env.variable_names.size(); ++i) {
+        const std::size_t var_names = env.variable_names.size();
+        for (std::size_t i = 0; i < var_names; ++i) {
             vars[i] = convert(env.variable_values[i].get());
-            assign_to_string(varnames, i, env.variable_names[i], env.variable_encodings[i], false);
+            assign_to_string(varnames, i, env.variable_names[i], env.variable_encodings[i]);
         }
         vars.attr("names") = varnames;
 
@@ -233,59 +240,66 @@ Rcpp::RObject parse_output(const File_& output) {
     }
 
     // Fetching external pointers.
-    size_t nexts = output.external_pointers.size();
+    const std::size_t nexts = rdx_file.external_pointers.size();
     Rcpp::List all_exts(nexts);
-    for (size_t e = 0; e < nexts; ++e) {
-        const auto& ext = output.external_pointers[e];
+    for (std::size_t e = 0; e < nexts; ++e) {
+        const auto& ext = rdx_file.external_pointers[e];
 
-        Rcpp::List output = Rcpp::List::create(
+        Rcpp::List rdx_file = Rcpp::List::create(
             Rcpp::Named("protection") = convert(ext.protection.get()),
             Rcpp::Named("tag") = convert(ext.tag.get())
         );
-        add_attributes(ext.attributes, output);
+        add_attributes(ext.attributes, rdx_file);
 
-        all_exts[e] = output;
+        all_exts[e] = rdx_file;
     }
 
     // Fetching symbols.
-    size_t nsyms = output.symbols.size();
+    const std::size_t nsyms = rdx_file.symbols.size();
     Rcpp::StringVector all_symb(nsyms);
-    for (size_t s = 0; s < nsyms; ++s) {
-        const auto& sym = output.symbols[s];
+    for (std::size_t s = 0; s < nsyms; ++s) {
+        const auto& sym = rdx_file.symbols[s];
         all_symb[s] = sym.name;
     }
 
-    if constexpr(std::is_same<File_, rds2cpp::RdsFile>::value) {
-        return Rcpp::List::create(
-            Rcpp::Named("value") = convert(output.object.get()),           
-            Rcpp::Named("environments") = all_envs,
-            Rcpp::Named("symbols") = all_symb,
-            Rcpp::Named("external_pointers") = all_exts
-        );
+    auto output = Rcpp::List::create(
+        Rcpp::Named("environments") = all_envs,
+        Rcpp::Named("symbols") = all_symb,
+        Rcpp::Named("external_pointers") = all_exts
+    );
+
+    output["format_version"] = rdx_file.format_version;
+
+    output["writer_version"] = Rcpp::IntegerVector::create(
+        rdx_file.writer_version.major,
+        rdx_file.writer_version.minor,
+        rdx_file.writer_version.patch
+    );
+
+    output["reader_version"] = Rcpp::IntegerVector::create(
+        rdx_file.reader_version.major,
+        rdx_file.reader_version.minor,
+        rdx_file.reader_version.patch
+    );
+
+    output["string_encoding"] = rds2cpp::string_encoding_to_name(rdx_file.encoding);
+
+    if constexpr(std::is_same<RdxFile_, rds2cpp::RdsFile>::value) {
+        output["value"] = convert(rdx_file.object.get());
     } else {
-        return Rcpp::List::create(
-            Rcpp::Named("value") = convert(&(output.contents)),
-            Rcpp::Named("environments") = all_envs,
-            Rcpp::Named("symbols") = all_symb,
-            Rcpp::Named("external_pointers") = all_exts
-        );
+        output["value"] = convert(&(rdx_file.contents));
     }
+
+    return output;
 }
 
 //' @export
 //[[Rcpp::export(rng=false)]]
-Rcpp::RObject parse(std::string file_name) {
-    auto output = rds2cpp::parse_rds(file_name, {});
-    return parse_output(output);
-}
-
-//' @export
-//[[Rcpp::export(rng=false)]]
-Rcpp::RObject parallel_parse(std::string file_name) {
+Rcpp::RObject parse_rds(std::string file_name, bool parallel) {
     rds2cpp::ParseRdsOptions opts;
-    opts.parallel = true;
-    auto output = rds2cpp::parse_rds(file_name, opts);
-    return parse_output(output);
+    opts.parallel = parallel;
+    auto parsed = rds2cpp::parse_rds(file_name, opts);
+    return parse_rdx(parsed);
 }
 
 //' @export
@@ -293,8 +307,8 @@ Rcpp::RObject parallel_parse(std::string file_name) {
 Rcpp::RObject parse_rda(std::string file_name, bool parallel) {
     rds2cpp::ParseRdaOptions opts;
     opts.parallel = parallel;
-    auto output = rds2cpp::parse_rda(file_name, opts);
-    return parse_output(output);
+    auto parsed = rds2cpp::parse_rda(file_name, opts);
+    return parse_rdx(parsed);
 }
 
 //' @export
@@ -311,39 +325,6 @@ Rcpp::List parse_single_string(Rcpp::RawVector raw) {
     byteme::RawBufferReader reader(raw.begin(), raw.size());
     byteme::SerialBufferedReader<unsigned char, byteme::Reader*> src(&reader, 100);
     auto payload = rds2cpp::parse_single_string(src);
-
-    std::string encoding;
-    switch (payload.encoding) {
-        case rds2cpp::StringEncoding::NONE: encoding = "NONE"; break;
-        case rds2cpp::StringEncoding::UTF8: encoding = "UTF8"; break;
-        case rds2cpp::StringEncoding::ASCII: encoding = "ASCII"; break;
-        case rds2cpp::StringEncoding::LATIN1: encoding = "LATIN1"; break;
-    }
-
+    const std::string encoding = rds2cpp::string_encoding_to_name(payload.encoding);
     return Rcpp::List::create(payload.value, encoding, payload.missing);
-}
-
-//' @export
-//[[Rcpp::export(rng=false)]]
-Rcpp::List parse_preamble(std::string file_name) {
-    auto parsed = rds2cpp::parse_rds(file_name, {});
-
-    Rcpp::List output;
-    output["format_version"] = parsed.format_version;
-
-    output["writer_version"] = Rcpp::IntegerVector::create(
-        parsed.writer_version.major,
-        parsed.writer_version.minor,
-        parsed.writer_version.patch
-    );
-
-    output["reader_version"] = Rcpp::IntegerVector::create(
-        parsed.reader_version.major,
-        parsed.reader_version.minor,
-        parsed.reader_version.patch
-    );
-
-    output["string_encoding"] = rds2cpp::string_encoding_to_name(parsed.encoding);
-
-    return output;
 }

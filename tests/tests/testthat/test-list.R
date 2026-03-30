@@ -1,7 +1,4 @@
-# This tests the correct saving and loading of atomic vectors.
-# library(testthat); library(rds2cpp); source("test-list.R")
-
-########################################################
+# library(testthat); library(rds2cpp); source("setup.R"); source("test-list.R")
 
 list.scenarios <- list(
     list(runif(10), runif(20), runif(30)),
@@ -15,7 +12,7 @@ test_that("list loading works as expected", {
     tmp <- tempfile(fileext=".rds")
     for (y in list.scenarios) {
         saveRDS(y, file=tmp)
-        roundtrip <- rds2cpp:::parse(tmp)
+        roundtrip <- quick_parse(tmp)
         expect_identical(roundtrip$value, y)
     }
 })
@@ -23,7 +20,7 @@ test_that("list loading works as expected", {
 test_that("list writing works as expected", {
     tmp <- tempfile(fileext=".rds")
     for (y in list.scenarios) {
-        rds2cpp::write(y, tmp)
+        quick_write(y, tmp)
         roundtrip <- readRDS(tmp)
         expect_identical(roundtrip, y)
     }
@@ -38,23 +35,23 @@ rownames(test.df.with.rownames) <- paste0("FOO-", LETTERS[1:19])
 test_that("data frame loading works as expected", {
     tmp <- tempfile(fileext=".rds")
     saveRDS(test.df, file=tmp)
-    roundtrip <- rds2cpp:::parse(tmp)
+    roundtrip <- quick_parse(tmp)
     expect_identical(roundtrip$value, test.df)
 
     # Works with row names.
     saveRDS(test.df.with.rownames, file=tmp)
-    roundtrip <- rds2cpp:::parse(tmp)
+    roundtrip <- quick_parse(tmp)
     expect_identical(roundtrip$value, test.df.with.rownames)
 })
 
 test_that("data frame loading works as expected", {
     tmp <- tempfile(fileext=".rds")
-    rds2cpp::write(test.df, file=tmp)
+    quick_write(test.df, file=tmp)
     roundtrip <- readRDS(tmp)
     expect_identical(roundtrip, test.df)
 
     # Works with row names.
-    rds2cpp::write(test.df.with.rownames, file=tmp)
+    quick_write(test.df.with.rownames, file=tmp)
     roundtrip <- readRDS(tmp)
     expect_identical(roundtrip, test.df.with.rownames)
 })

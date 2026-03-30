@@ -1,12 +1,11 @@
-# This tests the correct saving and loading of symbols.
-# library(testthat); library(rds2cpp); source("test-expression.R")
+# library(testthat); library(rds2cpp); source("setup.R"); source("test-expression.R")
 
 test_that("parsing expression vectors works as expected", {
     y <- expression(1, aaron, lun(aaron, tin, long))
     tmp <- tempfile(fileext=".rds")
     saveRDS(y, file=tmp)
 
-    info <- rds2cpp::parse(tmp)
+    info <- quick_parse(tmp)
     expect_true(attr(info$value, "pretend-to-be-an-expression"))
     expect_identical(info$value[[1]], 1) # constant is directly read in as itself.
     expect_identical(info$symbols[info$value[[2]]$symbol_id + 1], "aaron")
@@ -34,7 +33,7 @@ test_that("writing expression vectors works as expected", {
     attr(y[[3]][[2]][[3]], "pretend-to-be-a-symbol") <- TRUE
 
     tmp <- tempfile(fileext=".rds")
-    rds2cpp::write(y, tmp)
+    quick_write(y, tmp)
 
     roundtrip <- readRDS(tmp)
     expect_identical(roundtrip, expression(1, aaron, lun(aaron, tin, long)))
@@ -46,7 +45,7 @@ test_that("parsing expression vectors works with attributes", {
     tmp <- tempfile(fileext=".rds")
     saveRDS(y, file=tmp)
 
-    info <- rds2cpp::parse(tmp)
+    info <- quick_parse(tmp)
     expect_true(attr(info$value, "pretend-to-be-an-expression"))
     expect_identical(attr(info$value, "foo"), "BAR")
 })
@@ -60,7 +59,7 @@ test_that("writing expression vectors works with attributes", {
     attr(y, "foo") <- "BAR"
 
     tmp <- tempfile(fileext=".rds")
-    rds2cpp::write(y, tmp)
+    quick_write(y, tmp)
 
     roundtrip <- readRDS(tmp)
     expect_identical(attr(roundtrip, "foo"), "BAR")

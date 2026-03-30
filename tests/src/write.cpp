@@ -1,11 +1,17 @@
 #include "Rcpp.h"
 #include "rds2cpp/rds2cpp.hpp"
 
-template<class File_>
-std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, File_& globals);
+#include <memory>
+#include <unordered_set>
+#include <stdexcept>
+#include <string>
+#include <cstddef>
 
-template<class RdsObject_, class File_>
-void add_attributes(const Rcpp::RObject& x, RdsObject_* y, File_& globals) {
+template<class RdxFile_>
+std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, RdxFile_& globals);
+
+template<class RdsObject_, class RdxFile_>
+void add_attributes(const Rcpp::RObject& x, RdsObject_* y, RdxFile_& globals) {
     const auto& attr_names = x.attributeNames();
     auto& attr_dest = y->attributes;
     for (const auto& attr : attr_names) {
@@ -15,8 +21,8 @@ void add_attributes(const Rcpp::RObject& x, RdsObject_* y, File_& globals) {
     }
 }
 
-template<class RdsObject_, class File_>
-void add_attributes_except(const Rcpp::RObject& x, RdsObject_* y, File_& globals, const std::unordered_set<std::string>& excluded) {
+template<class RdsObject_, class RdxFile_>
+void add_attributes_except(const Rcpp::RObject& x, RdsObject_* y, RdxFile_& globals, const std::unordered_set<std::string>& excluded) {
     const auto& attr_names = x.attributeNames();
     auto& attr_dest = y->attributes;
     for (const auto& attr : attr_names) {
@@ -28,8 +34,8 @@ void add_attributes_except(const Rcpp::RObject& x, RdsObject_* y, File_& globals
     }
 }
 
-template<class SourceVector_, class HostVector_, class File_>
-std::unique_ptr<rds2cpp::RObject> prepare_simple_vector(const Rcpp::RObject& x, File_& globals) {
+template<class SourceVector_, class HostVector_, class RdxFile_>
+std::unique_ptr<rds2cpp::RObject> prepare_simple_vector(const Rcpp::RObject& x, RdxFile_& globals) {
     std::unique_ptr<rds2cpp::RObject> output;
     SourceVector_ vec(x);
     auto ptr = new HostVector_;
@@ -39,8 +45,8 @@ std::unique_ptr<rds2cpp::RObject> prepare_simple_vector(const Rcpp::RObject& x, 
     return output;
 }
 
-template<class File_>
-std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, File_& globals) {
+template<class RdxFile_>
+std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, RdxFile_& globals) {
     if (x.sexp_type() == INTSXP) {
         return prepare_simple_vector<Rcpp::IntegerVector, rds2cpp::IntegerVector>(x, globals);
 
@@ -59,8 +65,9 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, File_& globa
         auto ptr = new rds2cpp::ComplexVector;
         output.reset(ptr);
 
-        ptr->data.resize(vec.size());
-        for (size_t i = 0, end = vec.size(); i < end; ++i) {
+        const std::size_t n = vec.size();
+        ptr->data.resize(n);
+        for (std::size_t i = 0; i < n; ++i) {
             ptr->data[i] = std::complex<double>(vec[i].r, vec[i].i);
         }
 
@@ -86,11 +93,12 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, File_& globa
             auto ptr = new rds2cpp::StringVector;
             output.reset(ptr);
 
-            ptr->data.resize(vec.size());
-            ptr->encodings.resize(vec.size(), rds2cpp::StringEncoding::UTF8);
-            ptr->missing.resize(vec.size(), false);
+            const std::size_t n = vec.size();
+            ptr->data.resize(n);
+            ptr->encodings.resize(n, rds2cpp::StringEncoding::UTF8);
+            ptr->missing.resize(n, false);
 
-            for (size_t i = 0, end = vec.size(); i < end; ++i) {
+            for (std::size_t i = 0; i < n; ++i) {
                 Rcpp::String current(vec[i]);
                 if (current == NA_STRING) {
                     ptr->missing[i] = true;
@@ -121,7 +129,8 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, File_& globa
                 names = vec.attr("names");
             }
 
-            for (size_t i = 0, end = vec.size(); i < end; ++i) {
+            const std::size_t n = vec.size();
+            for (std::size_t i = 0; i < n; ++i) {
                 ptr->data.push_back(unconvert(vec[i], globals));
                 std::string curname;
                 if (has_names) {
@@ -143,7 +152,7 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, File_& globa
 
             if (index >= 0) {
                 ptr->env_type = rds2cpp::SEXPType::ENV;
-                if (static_cast<size_t>(index) == globals.environments.size()) {
+                if (static_cast<std::size_t>(index) == globals.environments.size()) {
                     rds2cpp::Environment latest;
 
                     Rcpp::IntegerVector env_parent = vec.attr("environment-parent");
@@ -160,7 +169,8 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, File_& globa
                     latest.locked = is_locked[0];
 
                     Rcpp::CharacterVector names = vec.attr("names");
-                    for (size_t i = 0, end = vec.size(); i < end; ++i) {
+                    const std::size_t n = vec.size();
+                    for (std::size_t i = 0; i < n; ++i) {
                         latest.variable_names.emplace_back(Rcpp::String(names[i]).get_cstring());
                         latest.variable_encodings.push_back(rds2cpp::StringEncoding::UTF8);
                         latest.variable_values.push_back(unconvert(vec[i], globals));
@@ -168,7 +178,7 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, File_& globa
 
                     add_attributes_except(x, &latest, globals, { "pretend-to-be-an-environment", "environment-index", "environment-parent", "environment-locked", "names" });
                     globals.environments.push_back(std::move(latest));
-                } else if (static_cast<size_t>(index) > globals.environments.size()) {
+                } else if (static_cast<std::size_t>(index) > globals.environments.size()) {
                     throw std::runtime_error("environment index out of range");
                 }
 
@@ -203,7 +213,8 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, File_& globa
                 argnames = arguments.names();
             }
 
-            for (size_t a = 0, end = arguments.size(); a < end; ++a) {
+            const std::size_t num_args = arguments.size();
+            for (std::size_t a = 0; a < num_args; ++a) {
                 if (argnames.size()) {
                     std::string candidate = Rcpp::String(argnames[a]).get_cstring();
                     if (!candidate.empty()) {
@@ -231,13 +242,13 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, File_& globa
             output.reset(ptr);
             ptr->index = index;
 
-            if (static_cast<size_t>(index) == globals.external_pointers.size()) {
+            if (static_cast<std::size_t>(index) == globals.external_pointers.size()) {
                 rds2cpp::ExternalPointer latest;
                 latest.protection = unconvert(vec[0], globals);
                 latest.tag= unconvert(vec[1], globals);
                 add_attributes_except(x, &latest, globals, { "pretend-to-be-an-external-pointer", "external-pointer-index" });
                 globals.external_pointers.push_back(std::move(latest));
-            } else if (static_cast<size_t>(index) > globals.external_pointers.size()) {
+            } else if (static_cast<std::size_t>(index) > globals.external_pointers.size()) {
                 throw std::runtime_error("environment index out of range");
             }
 
@@ -287,20 +298,11 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, File_& globa
 
 //' @export
 //[[Rcpp::export(rng=false)]]
-Rcpp::RObject write(Rcpp::RObject x, std::string file_name) {
-    rds2cpp::RdsFile output;
-    output.object = unconvert(x, output);
-    rds2cpp::write_rds(output, file_name, {});
-    return R_NilValue;
-}
-
-//' @export
-//[[Rcpp::export(rng=false)]]
-Rcpp::RObject parallel_write(Rcpp::RObject x, std::string file_name) {
+Rcpp::RObject write_rds(Rcpp::RObject x, std::string file_name, bool parallel) {
     rds2cpp::RdsFile output;
     output.object = unconvert(x, output);
     rds2cpp::WriteRdsOptions opt;
-    opt.parallel = true;
+    opt.parallel = parallel;
     rds2cpp::write_rds(output, file_name, opt);
     return R_NilValue;
 }

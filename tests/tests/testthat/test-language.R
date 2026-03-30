@@ -1,12 +1,11 @@
-# Test that language serialization works correctly.
-# library(testthat); library(rds2cpp); source("test-language.R")
+# library(testthat); library(rds2cpp); source("setup.R"); source("test-language.R")
 
 test_that("function serialization works correctly", {
     tmp <- tempfile(fileext=".rds")
     y <- quote(cbind(12, 'foo'))
     saveRDS(y, file=tmp)
 
-    info <- rds2cpp::parse(tmp)
+    info <- quick_parse(tmp)
     expect_true(attr(info$value, "pretend-to-be-a-language"))
     expect_identical(info$value[[1]], "cbind")
 
@@ -22,7 +21,7 @@ test_that("function writing works correctly", {
     attr(y, "pretend-to-be-a-language") <- TRUE
 
     tmp <- tempfile(fileext=".rds")
-    rds2cpp::write(y, tmp)
+    quick_write(y, tmp)
     roundtrip <- readRDS(tmp)
     expect_identical(roundtrip, quote(cbind(12, 'foo')))
 })
@@ -32,7 +31,7 @@ test_that("function serialization works correctly for named arguments", {
     y <- quote(aaron(foo=12, bar='foo'))
     saveRDS(y, file=tmp)
 
-    info <- rds2cpp::parse(tmp)
+    info <- quick_parse(tmp)
     expect_true(attr(info$value, "pretend-to-be-a-language"))
     expect_identical(info$value[[1]], "aaron")
 
@@ -49,7 +48,7 @@ test_that("function writing works correctly with named arguments", {
     names(y[[2]]) <- c("foo", "bar")
 
     tmp <- tempfile(fileext=".rds")
-    rds2cpp::write(y, tmp)
+    quick_write(y, tmp)
     roundtrip <- readRDS(tmp)
     expect_identical(roundtrip, quote(aaron(foo=12, bar='foo')))
 })
@@ -59,7 +58,7 @@ test_that("function serialization works correctly for nested function calls", {
     y <- quote(x + y + z)
     saveRDS(y, file=tmp)
 
-    info <- rds2cpp::parse(tmp)
+    info <- quick_parse(tmp)
     expect_true(attr(info$value, "pretend-to-be-a-language"))
     expect_identical(info$value[[1]], "+")
     expect_identical(info$value[[2]][[1]][[1]], "+")
@@ -79,7 +78,7 @@ test_that("function writing works correctly for nested function calls", {
     attr(y[[2]][[1]], "pretend-to-be-a-language") <- TRUE
 
     tmp <- tempfile(fileext=".rds")
-    rds2cpp::write(y, tmp)
+    quick_write(y, tmp)
     roundtrip <- readRDS(tmp)
     expect_identical(roundtrip, quote(x + y + z))
 })
@@ -90,7 +89,7 @@ test_that("function serialization works correctly with attributes", {
     attr(y, "foo") <- "BAR"
     saveRDS(y, file=tmp)
 
-    info <- rds2cpp::parse(tmp)
+    info <- quick_parse(tmp)
     expect_true(attr(info$value, "pretend-to-be-a-language"))
     expect_identical(attr(info$value, "foo"), "BAR")
 
@@ -106,7 +105,7 @@ test_that("function writing works correctly with attributes", {
     attr(y, "pretend-to-be-a-language") <- TRUE
 
     tmp <- tempfile(fileext=".rds")
-    rds2cpp::write(y, tmp)
+    quick_write(y, tmp)
     roundtrip <- readRDS(tmp)
 
     expect_identical(attr(roundtrip, "foo"), "BAR")

@@ -1,7 +1,4 @@
-# This tests the correct saving and loading of atomic vectors.
-# library(testthat); library(rds2cpp); source("test-atomic.R")
-
-########################################################
+# library(testthat); library(rds2cpp); source("setup.R"); source("test-atomic.R")
 
 integer.scenarios <- list(
     sample(15),
@@ -19,10 +16,7 @@ test_that("integer vector loading works as expected", {
     for (y in integer.scenarios) {
         y <- as.integer(y)
         saveRDS(y, file=tmp)
-        roundtrip <- rds2cpp:::parse(tmp)
-        expect_identical(roundtrip$value, y)
-
-        roundtrip <- rds2cpp:::parallel_parse(tmp)
+        roundtrip <- quick_parse(tmp)
         expect_identical(roundtrip$value, y)
     }
 })
@@ -31,11 +25,7 @@ test_that("integer vector writing works as expected", {
     tmp <- tempfile(fileext=".rds")
     for (y in integer.scenarios) {
         y <- as.integer(y)
-        rds2cpp::write(y, file_name=tmp)
-        roundtrip <- readRDS(tmp)
-        expect_identical(roundtrip, y)
-
-        rds2cpp:::parallel_write(y, file_name=tmp)
+        quick_write(y, file_name=tmp)
         roundtrip <- readRDS(tmp)
         expect_identical(roundtrip, y)
     }
@@ -56,7 +46,7 @@ test_that("logical vector loading works as expected", {
     tmp <- tempfile(fileext=".rds")
     for (y in logical.scenarios) {
         saveRDS(y, file=tmp)
-        roundtrip <- rds2cpp:::parse(tmp)
+        roundtrip <- quick_parse(tmp)
         expect_identical(roundtrip$value, y)
     }
 })
@@ -64,7 +54,7 @@ test_that("logical vector loading works as expected", {
 test_that("logical vector writing works as expected", {
     tmp <- tempfile(fileext=".rds")
     for (y in logical.scenarios) {
-        rds2cpp::write(y, file_name=tmp)
+        quick_write(y, file_name=tmp)
         roundtrip <- readRDS(tmp)
         expect_identical(roundtrip, y)
     }
@@ -90,7 +80,7 @@ test_that("double vector loading works as expected", {
     tmp <- tempfile(fileext=".rds")
     for (y in double.scenarios) {
         saveRDS(y, file=tmp)
-        roundtrip <- rds2cpp:::parse(tmp)
+        roundtrip <- quick_parse(tmp)
         expect_identical(roundtrip$value, y)
     }
 })
@@ -98,7 +88,7 @@ test_that("double vector loading works as expected", {
 test_that("double vector writing works as expected", {
     tmp <- tempfile(fileext=".rds")
     for (y in double.scenarios) {
-        rds2cpp::write(y, file_name=tmp)
+        quick_write(y, file_name=tmp)
         roundtrip <- readRDS(tmp)
         expect_identical(roundtrip, y)
     }
@@ -110,14 +100,14 @@ test_that("raw vector loading works as expected", {
     tmp <- tempfile(fileext=".rds")
     y <- as.raw(sample(256, 99, replace=TRUE) - 1)
     saveRDS(y, file=tmp)
-    roundtrip <- rds2cpp:::parse(tmp)
+    roundtrip <- quick_parse(tmp)
     expect_identical(roundtrip$value, y)
 })
 
 test_that("raw vector writing works as expected", {
     tmp <- tempfile(fileext=".rds")
     y <- as.raw(sample(256, 99, replace=TRUE) - 1)
-    rds2cpp::write(y, file_name=tmp)
+    quick_write(y, file_name=tmp)
     roundtrip <- readRDS(tmp)
     expect_identical(roundtrip, y)
 })
@@ -142,7 +132,7 @@ test_that("complex vector loading works as expected", {
     tmp <- tempfile(fileext=".rds")
     for (y in complex.scenarios) {
         saveRDS(y, file=tmp)
-        roundtrip <- rds2cpp:::parse(tmp)
+        roundtrip <- quick_parse(tmp)
         expect_identical(roundtrip$value, y)
     }
 })
@@ -150,7 +140,7 @@ test_that("complex vector loading works as expected", {
 test_that("complex vector loading works as expected", {
     tmp <- tempfile(fileext=".rds")
     for (y in complex.scenarios) {
-        rds2cpp::write(y, file_name=tmp)
+        quick_write(y, file_name=tmp)
         roundtrip <- readRDS(tmp)
         expect_identical(roundtrip, y)
     }
@@ -174,7 +164,7 @@ test_that("character vector loading works as expected", {
     tmp <- tempfile(fileext=".rds")
     for (y in string.scenarios) {
         saveRDS(y, file=tmp)
-        roundtrip <- rds2cpp:::parse(tmp)
+        roundtrip <- quick_parse(tmp)
         expect_identical(roundtrip$value, y)
     }
 })
@@ -182,7 +172,7 @@ test_that("character vector loading works as expected", {
 test_that("character vector writing works as expected", {
     tmp <- tempfile(fileext=".rds")
     for (y in string.scenarios) {
-        rds2cpp::write(y, file_name=tmp)
+        quick_write(y, file_name=tmp)
         roundtrip <- readRDS(tmp)
         expect_identical(roundtrip, y)
     }
@@ -198,7 +188,7 @@ class(attr_vals) <- "frog"
 test_that("attributes for atomic vectors are loaded correctly", {
     tmp <- tempfile(fileext=".rds")
     saveRDS(attr_vals, file=tmp)
-    roundtrip <- rds2cpp:::parse(tmp)
+    roundtrip <- quick_parse(tmp)
     expect_identical(roundtrip$value, attr_vals)
 
     # Works if the attributes are wiped; this should be the
@@ -207,13 +197,13 @@ test_that("attributes for atomic vectors are loaded correctly", {
     attributes(wiped) <- NULL
     names(wiped) <- NULL
     saveRDS(wiped, file=tmp)
-    roundtrip <- rds2cpp:::parse(tmp)
+    roundtrip <- quick_parse(tmp)
     expect_identical(roundtrip$value, wiped)
 })
 
 test_that("attributes for atomic vectors are written correctly", {
     tmp <- tempfile(fileext=".rds")
-    rds2cpp::write(attr_vals, tmp)
+    quick_write(attr_vals, tmp)
     roundtrip <- readRDS(tmp)
     expect_identical(roundtrip, attr_vals)
 })

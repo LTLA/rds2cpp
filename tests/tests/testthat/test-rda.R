@@ -1,4 +1,4 @@
-# library(testthat); library(rds2cpp); source("test-rda.R")
+# library(testthat); library(rds2cpp); source("setup.R"); source("test-rda.R")
 
 test_that("reading RDA files (simple)", {
     X <- as.integer(c(1,1,2,3,5,8))
@@ -42,9 +42,6 @@ test_that("reading RDA files (complex)", {
 
         rds2cpp::parse_rda(tmp, parallel=FALSE)
     }, envir=.GlobalEnv)
-
-    print(str(roundtrip$value))
-    print(roundtrip$environments)
 
     expect_true(attr(roundtrip$value, "pretend-to-be-a-pairlist"))
     expect_identical(roundtrip$value$data[[1]]$environment_id, 0L)
@@ -157,12 +154,25 @@ test_that("writing RDA files (complex)", {
     expect_identical(env$Z, env$O)
 })
 
+test_that("RDS preamble extraction works correctly", {
+    tmp <- tempfile(fileext=".rds")
+    y <- as.integer(1:20)
+    save(file=tmp, list="y")
+
+    payload <- rds2cpp::parse_rda(tmp, parallel=FALSE)
+    expect_identical(payload$format_version, 3L)
+    expect_identical(paste(payload$writer_version, collapse="."), paste0(R.Version()$major, ".", R.Version()$minor))
+    expect_identical(paste(payload$reader_version, collapse="."), "3.5.0")
+
+    expect_true(payload$string_encoding %in% c("UTF-8", "latin1", "bytes", "unknown"))
+})
+
 set.seed(9999)
 test_that("parallelized read/write of RDA files", {
     payload <- runif(100000)
-
     tmp <- tempfile(fileext=".Rda")
     save(file=tmp, list=c("payload"))
+
     roundtrip <- rds2cpp::parse_rda(tmp, parallel=TRUE)
     expect_identical(roundtrip$value$data[[1]], payload)
     expect_identical(roundtrip$value$tag, "payload")
