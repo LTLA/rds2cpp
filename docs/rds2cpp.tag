@@ -1,15 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <tagfile doxygen_version="1.12.0">
   <compound kind="file">
-    <name>Environment.hpp</name>
-    <path>rds2cpp/</path>
-    <filename>Environment_8hpp.html</filename>
-    <includes id="StringEncoding_8hpp" name="StringEncoding.hpp" local="yes" import="no" module="no" objc="no">StringEncoding.hpp</includes>
-    <includes id="SEXPType_8hpp" name="SEXPType.hpp" local="yes" import="no" module="no" objc="no">SEXPType.hpp</includes>
-    <class kind="struct">rds2cpp::Environment</class>
-    <namespace>rds2cpp</namespace>
-  </compound>
-  <compound kind="file">
     <name>parse_rda.hpp</name>
     <path>rds2cpp/</path>
     <filename>parse__rda_8hpp.html</filename>
@@ -30,8 +21,6 @@
     <path>rds2cpp/</path>
     <filename>RdaFile_8hpp.html</filename>
     <includes id="RObject_8hpp" name="RObject.hpp" local="yes" import="no" module="no" objc="no">RObject.hpp</includes>
-    <includes id="Environment_8hpp" name="Environment.hpp" local="yes" import="no" module="no" objc="no">Environment.hpp</includes>
-    <includes id="Symbol_8hpp" name="Symbol.hpp" local="yes" import="no" module="no" objc="no">Symbol.hpp</includes>
     <includes id="Version_8hpp" name="Version.hpp" local="yes" import="no" module="no" objc="no">Version.hpp</includes>
     <class kind="struct">rds2cpp::RdaFile</class>
     <namespace>rds2cpp</namespace>
@@ -51,8 +40,6 @@
     <path>rds2cpp/</path>
     <filename>RdsFile_8hpp.html</filename>
     <includes id="RObject_8hpp" name="RObject.hpp" local="yes" import="no" module="no" objc="no">RObject.hpp</includes>
-    <includes id="Environment_8hpp" name="Environment.hpp" local="yes" import="no" module="no" objc="no">Environment.hpp</includes>
-    <includes id="Symbol_8hpp" name="Symbol.hpp" local="yes" import="no" module="no" objc="no">Symbol.hpp</includes>
     <includes id="Version_8hpp" name="Version.hpp" local="yes" import="no" module="no" objc="no">Version.hpp</includes>
     <class kind="struct">rds2cpp::RdsFile</class>
     <namespace>rds2cpp</namespace>
@@ -65,16 +52,23 @@
     <includes id="StringEncoding_8hpp" name="StringEncoding.hpp" local="yes" import="no" module="no" objc="no">StringEncoding.hpp</includes>
     <class kind="struct">rds2cpp::RObject</class>
     <class kind="struct">rds2cpp::Null</class>
+    <class kind="struct">rds2cpp::Symbol</class>
     <class kind="struct">rds2cpp::SymbolIndex</class>
     <class kind="struct">rds2cpp::EnvironmentIndex</class>
+    <class kind="struct">rds2cpp::EnvironmentVariable</class>
+    <class kind="struct">rds2cpp::Environment</class>
+    <class kind="struct">rds2cpp::ExternalPointer</class>
     <class kind="struct">rds2cpp::ExternalPointerIndex</class>
-    <class kind="struct">rds2cpp::Attributes</class>
+    <class kind="struct">rds2cpp::Attribute</class>
     <class kind="struct">rds2cpp::AtomicVector</class>
+    <class kind="struct">rds2cpp::String</class>
     <class kind="struct">rds2cpp::StringVector</class>
     <class kind="struct">rds2cpp::GenericVector</class>
+    <class kind="struct">rds2cpp::PairListElement</class>
     <class kind="struct">rds2cpp::PairList</class>
     <class kind="struct">rds2cpp::S4Object</class>
     <class kind="struct">rds2cpp::BuiltInFunction</class>
+    <class kind="struct">rds2cpp::LanguageArgument</class>
     <class kind="struct">rds2cpp::LanguageObject</class>
     <class kind="struct">rds2cpp::ExpressionVector</class>
     <namespace>rds2cpp</namespace>
@@ -89,14 +83,6 @@
     <name>StringEncoding.hpp</name>
     <path>rds2cpp/</path>
     <filename>StringEncoding_8hpp.html</filename>
-    <namespace>rds2cpp</namespace>
-  </compound>
-  <compound kind="file">
-    <name>Symbol.hpp</name>
-    <path>rds2cpp/</path>
-    <filename>Symbol_8hpp.html</filename>
-    <includes id="StringEncoding_8hpp" name="StringEncoding.hpp" local="yes" import="no" module="no" objc="no">StringEncoding.hpp</includes>
-    <class kind="struct">rds2cpp::Symbol</class>
     <namespace>rds2cpp</namespace>
   </compound>
   <compound kind="file">
@@ -145,49 +131,42 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>Attributes</type>
+      <type>std::vector&lt; Attribute &gt;</type>
       <name>attributes</name>
       <anchorfile>structrds2cpp_1_1AtomicVector.html</anchorfile>
-      <anchor>a6b1271e24cd3e456275de132de7e11e9</anchor>
+      <anchor>af5f0f0efde0d15beb7059f1c590d30dd</anchor>
       <arglist></arglist>
     </member>
   </compound>
   <compound kind="struct">
-    <name>rds2cpp::Attributes</name>
-    <filename>structrds2cpp_1_1Attributes.html</filename>
+    <name>rds2cpp::Attribute</name>
+    <filename>structrds2cpp_1_1Attribute.html</filename>
     <member kind="function">
-      <type>void</type>
-      <name>add</name>
-      <anchorfile>structrds2cpp_1_1Attributes.html</anchorfile>
-      <anchor>a6109e48b389399a860f1d98487a2b018</anchor>
-      <arglist>(std::string n, RObject *v, StringEncoding enc=StringEncoding::UTF8)</arglist>
+      <type></type>
+      <name>Attribute</name>
+      <anchorfile>structrds2cpp_1_1Attribute.html</anchorfile>
+      <anchor>a1023b832d6e9c5fecf282a645cb143a6</anchor>
+      <arglist>()=default</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
-      <name>add</name>
-      <anchorfile>structrds2cpp_1_1Attributes.html</anchorfile>
-      <anchor>abe5b330809ce9763404901fd282845e3</anchor>
-      <arglist>(std::string n, std::unique_ptr&lt; RObject &gt; v, StringEncoding enc=StringEncoding::UTF8)</arglist>
+      <type></type>
+      <name>Attribute</name>
+      <anchorfile>structrds2cpp_1_1Attribute.html</anchorfile>
+      <anchor>ae90390d269994998cb011eceb25d07bc</anchor>
+      <arglist>(SymbolIndex name, std::unique_ptr&lt; RObject &gt; value)</arglist>
     </member>
     <member kind="variable">
-      <type>std::vector&lt; std::string &gt;</type>
-      <name>names</name>
-      <anchorfile>structrds2cpp_1_1Attributes.html</anchorfile>
-      <anchor>a3dd274a97e415b2d14606843b63f6b18</anchor>
+      <type>SymbolIndex</type>
+      <name>name</name>
+      <anchorfile>structrds2cpp_1_1Attribute.html</anchorfile>
+      <anchor>a4635c90d640b9b20a6c0e071c24fb529</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>std::vector&lt; StringEncoding &gt;</type>
-      <name>encodings</name>
-      <anchorfile>structrds2cpp_1_1Attributes.html</anchorfile>
-      <anchor>ae2db31e6b60cfa8b94257154dd283dc2</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::vector&lt; std::unique_ptr&lt; RObject &gt; &gt;</type>
-      <name>values</name>
-      <anchorfile>structrds2cpp_1_1Attributes.html</anchorfile>
-      <anchor>a5defb973382d2827821c68367c58968c</anchor>
+      <type>std::unique_ptr&lt; RObject &gt;</type>
+      <name>value</name>
+      <anchorfile>structrds2cpp_1_1Attribute.html</anchorfile>
+      <anchor>acc766b6f911fd8f9fb11a7e1bee24618</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -213,20 +192,6 @@
   <compound kind="struct">
     <name>rds2cpp::Environment</name>
     <filename>structrds2cpp_1_1Environment.html</filename>
-    <member kind="function">
-      <type>void</type>
-      <name>add</name>
-      <anchorfile>structrds2cpp_1_1Environment.html</anchorfile>
-      <anchor>a7d0eb5c0cd41bf1552eba6f6575bf1b6</anchor>
-      <arglist>(std::string n, RObject *v, StringEncoding enc=StringEncoding::UTF8)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>add</name>
-      <anchorfile>structrds2cpp_1_1Environment.html</anchorfile>
-      <anchor>ab30ee06c3010fa741a015b0f4cb6ab21</anchor>
-      <arglist>(std::string n, std::unique_ptr&lt; RObject &gt; v, StringEncoding enc=StringEncoding::UTF8)</arglist>
-    </member>
     <member kind="variable">
       <type>bool</type>
       <name>locked</name>
@@ -256,31 +221,17 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>std::vector&lt; std::string &gt;</type>
-      <name>variable_names</name>
+      <type>std::vector&lt; EnvironmentVariable &gt;</type>
+      <name>variables</name>
       <anchorfile>structrds2cpp_1_1Environment.html</anchorfile>
-      <anchor>a667f7a97b340ebaf3d5a24c33929e60c</anchor>
+      <anchor>ac62fa6228cdd9bcb514f9ce40cbfaf14</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>std::vector&lt; StringEncoding &gt;</type>
-      <name>variable_encodings</name>
-      <anchorfile>structrds2cpp_1_1Environment.html</anchorfile>
-      <anchor>addd5af039f70a716bc6088700d94a414</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::vector&lt; std::unique_ptr&lt; RObject &gt; &gt;</type>
-      <name>variable_values</name>
-      <anchorfile>structrds2cpp_1_1Environment.html</anchorfile>
-      <anchor>afdaff9bbd4bf0b2e8a505e219b41000e</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>Attributes</type>
+      <type>std::vector&lt; Attribute &gt;</type>
       <name>attributes</name>
       <anchorfile>structrds2cpp_1_1Environment.html</anchorfile>
-      <anchor>a0143e140f79fac307aa93dba58283fc8</anchor>
+      <anchor>a93029578e62cb95118e4deaea0d3cc62</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -292,8 +243,15 @@
       <type></type>
       <name>EnvironmentIndex</name>
       <anchorfile>structrds2cpp_1_1EnvironmentIndex.html</anchorfile>
-      <anchor>ac50ff843b19bfaa8d3395bea0a517a38</anchor>
-      <arglist>(SEXPType e=SEXPType::GLOBALENV_)</arglist>
+      <anchor>a66bf62e8f3b0ba6c8f9f5116b96ec382</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>EnvironmentIndex</name>
+      <anchorfile>structrds2cpp_1_1EnvironmentIndex.html</anchorfile>
+      <anchor>a546af001d9d02e429f08f065fb9bda93</anchor>
+      <arglist>(SEXPType e)</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -325,6 +283,38 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>rds2cpp::EnvironmentVariable</name>
+    <filename>structrds2cpp_1_1EnvironmentVariable.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>EnvironmentVariable</name>
+      <anchorfile>structrds2cpp_1_1EnvironmentVariable.html</anchorfile>
+      <anchor>a6179963fc546e3378e0bd67a8b1483e6</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>EnvironmentVariable</name>
+      <anchorfile>structrds2cpp_1_1EnvironmentVariable.html</anchorfile>
+      <anchor>a4abf9413c1421d829f6362a4174234ee</anchor>
+      <arglist>(SymbolIndex name, std::unique_ptr&lt; RObject &gt; value)</arglist>
+    </member>
+    <member kind="variable">
+      <type>SymbolIndex</type>
+      <name>name</name>
+      <anchorfile>structrds2cpp_1_1EnvironmentVariable.html</anchorfile>
+      <anchor>a8fd888f8768b53e86257e62fd4fda021</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::unique_ptr&lt; RObject &gt;</type>
+      <name>value</name>
+      <anchorfile>structrds2cpp_1_1EnvironmentVariable.html</anchorfile>
+      <anchor>afcb56a8f0f6b618af87d2b1360011ecc</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
     <name>rds2cpp::ExpressionVector</name>
     <filename>structrds2cpp_1_1ExpressionVector.html</filename>
     <base>rds2cpp::RObject</base>
@@ -343,10 +333,35 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>Attributes</type>
+      <type>std::vector&lt; Attribute &gt;</type>
       <name>attributes</name>
       <anchorfile>structrds2cpp_1_1ExpressionVector.html</anchorfile>
-      <anchor>aba55dae94f564921d4ef232be76ee2d6</anchor>
+      <anchor>a163fbcf1b5a051da59a62cbdc79b93fc</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>rds2cpp::ExternalPointer</name>
+    <filename>structrds2cpp_1_1ExternalPointer.html</filename>
+    <member kind="variable">
+      <type>std::unique_ptr&lt; RObject &gt;</type>
+      <name>protection</name>
+      <anchorfile>structrds2cpp_1_1ExternalPointer.html</anchorfile>
+      <anchor>af26f22afe981af6db9c30bf971f27650</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::unique_ptr&lt; RObject &gt;</type>
+      <name>tag</name>
+      <anchorfile>structrds2cpp_1_1ExternalPointer.html</anchorfile>
+      <anchor>a45796358dcbeba4c8b70b89dee904d09</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::vector&lt; Attribute &gt;</type>
+      <name>attributes</name>
+      <anchorfile>structrds2cpp_1_1ExternalPointer.html</anchorfile>
+      <anchor>af87c1b37e53291358e223f580202ffb7</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -358,8 +373,15 @@
       <type></type>
       <name>ExternalPointerIndex</name>
       <anchorfile>structrds2cpp_1_1ExternalPointerIndex.html</anchorfile>
-      <anchor>a4f20f212090309c01d4613e849c9bde7</anchor>
-      <arglist>(std::size_t i=-1)</arglist>
+      <anchor>a911107a5def23923993c449ec33503d3</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>ExternalPointerIndex</name>
+      <anchorfile>structrds2cpp_1_1ExternalPointerIndex.html</anchorfile>
+      <anchor>ac24bcaf6da32c769a85a04fe0c0de257</anchor>
+      <arglist>(std::size_t i)</arglist>
     </member>
     <member kind="function">
       <type>SEXPType</type>
@@ -395,10 +417,49 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>Attributes</type>
+      <type>std::vector&lt; Attribute &gt;</type>
       <name>attributes</name>
       <anchorfile>structrds2cpp_1_1GenericVector.html</anchorfile>
-      <anchor>ac72b1a04ce4ca685e1121b075f59d486</anchor>
+      <anchor>a4b2c06f42761d4bd5fb4711bc7bb108f</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>rds2cpp::LanguageArgument</name>
+    <filename>structrds2cpp_1_1LanguageArgument.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>LanguageArgument</name>
+      <anchorfile>structrds2cpp_1_1LanguageArgument.html</anchorfile>
+      <anchor>ab8b0e3759ae8038d0aa10e6a4c063f30</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>LanguageArgument</name>
+      <anchorfile>structrds2cpp_1_1LanguageArgument.html</anchorfile>
+      <anchor>a13999b84e1badc994c0645ea5fbc6ea4</anchor>
+      <arglist>(SymbolIndex name, std::unique_ptr&lt; RObject &gt; value)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>LanguageArgument</name>
+      <anchorfile>structrds2cpp_1_1LanguageArgument.html</anchorfile>
+      <anchor>a9daec1b3c32cf93700251d935846a1ab</anchor>
+      <arglist>(std::unique_ptr&lt; RObject &gt; value)</arglist>
+    </member>
+    <member kind="variable">
+      <type>std::optional&lt; SymbolIndex &gt;</type>
+      <name>name</name>
+      <anchorfile>structrds2cpp_1_1LanguageArgument.html</anchorfile>
+      <anchor>ac6e6a22758f6aa72c394771185fcbe44</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::unique_ptr&lt; RObject &gt;</type>
+      <name>value</name>
+      <anchorfile>structrds2cpp_1_1LanguageArgument.html</anchorfile>
+      <anchor>adedf5955fb52836ad77ea3bfac2ad282</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -413,81 +474,25 @@
       <anchor>ae09e6c629273aa154bbb410871826878</anchor>
       <arglist>() const</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
-      <name>add_argument</name>
-      <anchorfile>structrds2cpp_1_1LanguageObject.html</anchorfile>
-      <anchor>a6152a7f57b3694cbeeb5a14cc0a5daf1</anchor>
-      <arglist>(std::string n, RObject *d, StringEncoding enc=StringEncoding::UTF8)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>add_argument</name>
-      <anchorfile>structrds2cpp_1_1LanguageObject.html</anchorfile>
-      <anchor>a73e2db19ead7661419f0c82e16e4385c</anchor>
-      <arglist>(std::string n, std::unique_ptr&lt; RObject &gt; d, StringEncoding enc=StringEncoding::UTF8)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>add_argument</name>
-      <anchorfile>structrds2cpp_1_1LanguageObject.html</anchorfile>
-      <anchor>ade1aa37398cdc8bfb80142d56398c5bf</anchor>
-      <arglist>(RObject *d)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>add_argument</name>
-      <anchorfile>structrds2cpp_1_1LanguageObject.html</anchorfile>
-      <anchor>ae278b8b8ba14dc782acdab8312f4310a</anchor>
-      <arglist>(std::unique_ptr&lt; RObject &gt; d)</arglist>
-    </member>
     <member kind="variable">
-      <type>std::string</type>
-      <name>function_name</name>
+      <type>SymbolIndex</type>
+      <name>function</name>
       <anchorfile>structrds2cpp_1_1LanguageObject.html</anchorfile>
-      <anchor>ab70121438413651f1e6e6fc95a0bb7c0</anchor>
+      <anchor>ab48f2057de7fbffc866fef92554a4002</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>StringEncoding</type>
-      <name>function_encoding</name>
+      <type>std::vector&lt; LanguageArgument &gt;</type>
+      <name>arguments</name>
       <anchorfile>structrds2cpp_1_1LanguageObject.html</anchorfile>
-      <anchor>a88a7d031093931584fa21490500edc47</anchor>
+      <anchor>a36ad9d8a6b1a058c33cd63d4006a42a2</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>std::vector&lt; std::unique_ptr&lt; RObject &gt; &gt;</type>
-      <name>argument_values</name>
-      <anchorfile>structrds2cpp_1_1LanguageObject.html</anchorfile>
-      <anchor>a93c6bc2447024ed6a6a4233e00d076b7</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::vector&lt; std::string &gt;</type>
-      <name>argument_names</name>
-      <anchorfile>structrds2cpp_1_1LanguageObject.html</anchorfile>
-      <anchor>a094c3c56d3762a20091b097b2b7b2c4f</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::vector&lt; unsigned char &gt;</type>
-      <name>argument_has_name</name>
-      <anchorfile>structrds2cpp_1_1LanguageObject.html</anchorfile>
-      <anchor>aee5435bac7ed40bb5eaeb78bb05e5835</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::vector&lt; StringEncoding &gt;</type>
-      <name>argument_encodings</name>
-      <anchorfile>structrds2cpp_1_1LanguageObject.html</anchorfile>
-      <anchor>a300aa25dab930fb8dcc6c05c3cf4530c</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>Attributes</type>
+      <type>std::vector&lt; Attribute &gt;</type>
       <name>attributes</name>
       <anchorfile>structrds2cpp_1_1LanguageObject.html</anchorfile>
-      <anchor>aae813b5cc43ee97f594b9c96a5c70cd0</anchor>
+      <anchor>aa07c1f861ca72d9a224cbd46e7dd4c9b</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -514,67 +519,57 @@
       <anchor>a66acd5fb763645bdbd5880e82c5d3805</anchor>
       <arglist>() const</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
-      <name>add</name>
-      <anchorfile>structrds2cpp_1_1PairList.html</anchorfile>
-      <anchor>a8e07c228c50a439fcf4d4747cf100b4b</anchor>
-      <arglist>(std::string t, std::unique_ptr&lt; RObject &gt; d, StringEncoding enc=StringEncoding::UTF8)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>add</name>
-      <anchorfile>structrds2cpp_1_1PairList.html</anchorfile>
-      <anchor>aa0f20e75f3eedeae77c240defd7fcd25</anchor>
-      <arglist>(std::string t, RObject *d, StringEncoding enc=StringEncoding::UTF8)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>add</name>
-      <anchorfile>structrds2cpp_1_1PairList.html</anchorfile>
-      <anchor>a84ac16335499a2f56636407ff3874c94</anchor>
-      <arglist>(std::unique_ptr&lt; RObject &gt; d)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>add</name>
-      <anchorfile>structrds2cpp_1_1PairList.html</anchorfile>
-      <anchor>a3a5bda24efb1fe1dbd15b103dfeda3a8</anchor>
-      <arglist>(RObject *d)</arglist>
-    </member>
     <member kind="variable">
-      <type>std::vector&lt; std::unique_ptr&lt; RObject &gt; &gt;</type>
+      <type>std::vector&lt; PairListElement &gt;</type>
       <name>data</name>
       <anchorfile>structrds2cpp_1_1PairList.html</anchorfile>
-      <anchor>a1bff4d9a02cd64c44908b9362317a893</anchor>
+      <anchor>a06df668e15926e07c6bdc3726537bd82</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>std::vector&lt; unsigned char &gt;</type>
-      <name>has_tag</name>
-      <anchorfile>structrds2cpp_1_1PairList.html</anchorfile>
-      <anchor>ab5db0bbafb2affaa0f64532cb4c65388</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::vector&lt; std::string &gt;</type>
-      <name>tag_names</name>
-      <anchorfile>structrds2cpp_1_1PairList.html</anchorfile>
-      <anchor>a36dc7df750a2aaaccfc943a1e3a3075a</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::vector&lt; StringEncoding &gt;</type>
-      <name>tag_encodings</name>
-      <anchorfile>structrds2cpp_1_1PairList.html</anchorfile>
-      <anchor>a815b78782ffa0f898b96df8fcaaccd0b</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>Attributes</type>
+      <type>std::vector&lt; Attribute &gt;</type>
       <name>attributes</name>
       <anchorfile>structrds2cpp_1_1PairList.html</anchorfile>
-      <anchor>a1ad992e6b3c70f83421e21fbf5ddfd71</anchor>
+      <anchor>a6c9f2ff0364b709d3937f2c26b8a3442</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>rds2cpp::PairListElement</name>
+    <filename>structrds2cpp_1_1PairListElement.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>PairListElement</name>
+      <anchorfile>structrds2cpp_1_1PairListElement.html</anchorfile>
+      <anchor>a87cdc9f02f080846d92c29c5b0aae04c</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>PairListElement</name>
+      <anchorfile>structrds2cpp_1_1PairListElement.html</anchorfile>
+      <anchor>ad1db7b915fbb987289b7bc97d18572a7</anchor>
+      <arglist>(std::unique_ptr&lt; RObject &gt; value)</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>PairListElement</name>
+      <anchorfile>structrds2cpp_1_1PairListElement.html</anchorfile>
+      <anchor>a0755f0907ca9343af953e78c34a64b58</anchor>
+      <arglist>(SymbolIndex tag, std::unique_ptr&lt; RObject &gt; value)</arglist>
+    </member>
+    <member kind="variable">
+      <type>std::optional&lt; SymbolIndex &gt;</type>
+      <name>tag</name>
+      <anchorfile>structrds2cpp_1_1PairListElement.html</anchorfile>
+      <anchor>a7b03a7353116e40e9384d1c6ca031fd3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::unique_ptr&lt; RObject &gt;</type>
+      <name>value</name>
+      <anchorfile>structrds2cpp_1_1PairListElement.html</anchorfile>
+      <anchor>aeca5d730d402c816826b80188e4243fb</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -785,10 +780,42 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>Attributes</type>
+      <type>std::vector&lt; Attribute &gt;</type>
       <name>attributes</name>
       <anchorfile>structrds2cpp_1_1S4Object.html</anchorfile>
-      <anchor>afff39c9a8ab91c50d8542f0b583982f8</anchor>
+      <anchor>aec20c9b934f3c58f09c0c765997d0be2</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>rds2cpp::String</name>
+    <filename>structrds2cpp_1_1String.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>String</name>
+      <anchorfile>structrds2cpp_1_1String.html</anchorfile>
+      <anchor>ab00505483ce587748199386244c48b9b</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>String</name>
+      <anchorfile>structrds2cpp_1_1String.html</anchorfile>
+      <anchor>a680ca95eb4cdbfa1095e6697fe5ef2e5</anchor>
+      <arglist>(std::string value, StringEncoding encoding)</arglist>
+    </member>
+    <member kind="variable">
+      <type>std::optional&lt; std::string &gt;</type>
+      <name>value</name>
+      <anchorfile>structrds2cpp_1_1String.html</anchorfile>
+      <anchor>a5d8439f2cf1d5abe0f0e7d3604dac4e6</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>StringEncoding</type>
+      <name>encoding</name>
+      <anchorfile>structrds2cpp_1_1String.html</anchorfile>
+      <anchor>a24f04251871ea3d16f0df5c841f4e874</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -803,52 +830,38 @@
       <anchor>a8bfa8ead6efbb3e7fbe58580c40a1c61</anchor>
       <arglist>() const</arglist>
     </member>
-    <member kind="function">
-      <type>void</type>
-      <name>add</name>
-      <anchorfile>structrds2cpp_1_1StringVector.html</anchorfile>
-      <anchor>a2ae3a82394b91bef285ad744f537fc39</anchor>
-      <arglist>(std::string d, StringEncoding enc=StringEncoding::UTF8)</arglist>
-    </member>
-    <member kind="function">
-      <type>void</type>
-      <name>add</name>
-      <anchorfile>structrds2cpp_1_1StringVector.html</anchorfile>
-      <anchor>af1c3c7c50cf073f30255a52460133e42</anchor>
-      <arglist>()</arglist>
-    </member>
     <member kind="variable">
-      <type>std::vector&lt; std::string &gt;</type>
+      <type>std::vector&lt; String &gt;</type>
       <name>data</name>
       <anchorfile>structrds2cpp_1_1StringVector.html</anchorfile>
-      <anchor>a800012da9c834c3b7aabbb8dd009e59b</anchor>
+      <anchor>a4505a6a34395ae8c45dfd8fe84618e7e</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>std::vector&lt; StringEncoding &gt;</type>
-      <name>encodings</name>
-      <anchorfile>structrds2cpp_1_1StringVector.html</anchorfile>
-      <anchor>a3e0ee119cdb7013bfe956df6d66165d6</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>std::vector&lt; char &gt;</type>
-      <name>missing</name>
-      <anchorfile>structrds2cpp_1_1StringVector.html</anchorfile>
-      <anchor>a75ffb98789db717ebb9a3715fcac46df</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>Attributes</type>
+      <type>std::vector&lt; Attribute &gt;</type>
       <name>attributes</name>
       <anchorfile>structrds2cpp_1_1StringVector.html</anchorfile>
-      <anchor>afb09e475b2c0a283c06f295626bc9410</anchor>
+      <anchor>a476454e92d0e37f34eb3f95a7b99f449</anchor>
       <arglist></arglist>
     </member>
   </compound>
   <compound kind="struct">
     <name>rds2cpp::Symbol</name>
     <filename>structrds2cpp_1_1Symbol.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>Symbol</name>
+      <anchorfile>structrds2cpp_1_1Symbol.html</anchorfile>
+      <anchor>a50031c05582516fd322579fa70cb47b4</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>Symbol</name>
+      <anchorfile>structrds2cpp_1_1Symbol.html</anchorfile>
+      <anchor>a71fa0685e50368df05ea52f130824d9b</anchor>
+      <arglist>(std::string name, StringEncoding encoding)</arglist>
+    </member>
     <member kind="variable">
       <type>std::string</type>
       <name>name</name>
@@ -872,8 +885,15 @@
       <type></type>
       <name>SymbolIndex</name>
       <anchorfile>structrds2cpp_1_1SymbolIndex.html</anchorfile>
-      <anchor>a8421bb3b43aa2d7f9d4c19b5f8d8ba8f</anchor>
-      <arglist>(std::size_t i=-1)</arglist>
+      <anchor>aa999cf3747e8c1fbddc007046f972ca6</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>SymbolIndex</name>
+      <anchorfile>structrds2cpp_1_1SymbolIndex.html</anchorfile>
+      <anchor>ab611a02dd30f0e5d254f695c38cfd839</anchor>
+      <arglist>(std::size_t i)</arglist>
     </member>
     <member kind="function">
       <type>SEXPType</type>
@@ -955,22 +975,27 @@
     <name>rds2cpp</name>
     <filename>namespacerds2cpp.html</filename>
     <class kind="struct">rds2cpp::AtomicVector</class>
-    <class kind="struct">rds2cpp::Attributes</class>
+    <class kind="struct">rds2cpp::Attribute</class>
     <class kind="struct">rds2cpp::BuiltInFunction</class>
     <class kind="struct">rds2cpp::Environment</class>
     <class kind="struct">rds2cpp::EnvironmentIndex</class>
+    <class kind="struct">rds2cpp::EnvironmentVariable</class>
     <class kind="struct">rds2cpp::ExpressionVector</class>
+    <class kind="struct">rds2cpp::ExternalPointer</class>
     <class kind="struct">rds2cpp::ExternalPointerIndex</class>
     <class kind="struct">rds2cpp::GenericVector</class>
+    <class kind="struct">rds2cpp::LanguageArgument</class>
     <class kind="struct">rds2cpp::LanguageObject</class>
     <class kind="struct">rds2cpp::Null</class>
     <class kind="struct">rds2cpp::PairList</class>
+    <class kind="struct">rds2cpp::PairListElement</class>
     <class kind="struct">rds2cpp::ParseRdaOptions</class>
     <class kind="struct">rds2cpp::ParseRdsOptions</class>
     <class kind="struct">rds2cpp::RdaFile</class>
     <class kind="struct">rds2cpp::RdsFile</class>
     <class kind="struct">rds2cpp::RObject</class>
     <class kind="struct">rds2cpp::S4Object</class>
+    <class kind="struct">rds2cpp::String</class>
     <class kind="struct">rds2cpp::StringVector</class>
     <class kind="struct">rds2cpp::Symbol</class>
     <class kind="struct">rds2cpp::SymbolIndex</class>

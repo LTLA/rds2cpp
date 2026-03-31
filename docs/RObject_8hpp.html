@@ -104,6 +104,7 @@ $(function(){ initResizable(false); });
 <code>#include &lt;cstdint&gt;</code><br />
 <code>#include &lt;cstddef&gt;</code><br />
 <code>#include &lt;complex&gt;</code><br />
+<code>#include &lt;optional&gt;</code><br />
 <code>#include &quot;<a class="el" href="SEXPType_8hpp_source.html">SEXPType.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="StringEncoding_8hpp_source.html">StringEncoding.hpp</a>&quot;</code><br />
 <code>#include &quot;utils_other.hpp&quot;</code><br />
@@ -113,25 +114,27 @@ Include dependency graph for RObject.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="RObject_8hpp__incl.png" border="0" usemap="#ards2cpp_2RObject_8hpp" alt=""/></div>
 <map name="ards2cpp_2RObject_8hpp" id="ards2cpp_2RObject_8hpp">
-<area shape="rect" title="Representations of unserialized R objects." alt="" coords="279,5,421,31"/>
+<area shape="rect" title="Representations of unserialized R objects." alt="" coords="315,5,457,31"/>
 <area shape="rect" title=" " alt="" coords="5,79,63,105"/>
-<area shape="poly" title=" " alt="" coords="288,34,79,81,77,76,287,29"/>
+<area shape="poly" title=" " alt="" coords="315,34,207,54,78,81,77,76,206,48,314,29"/>
 <area shape="rect" title=" " alt="" coords="86,79,147,105"/>
-<area shape="poly" title=" " alt="" coords="311,34,163,79,161,74,310,29"/>
+<area shape="poly" title=" " alt="" coords="340,34,163,81,161,76,339,29"/>
 <area shape="rect" title=" " alt="" coords="171,79,236,105"/>
-<area shape="poly" title=" " alt="" coords="326,34,243,74,241,69,324,29"/>
+<area shape="poly" title=" " alt="" coords="356,34,249,75,247,71,354,29"/>
 <area shape="rect" title=" " alt="" coords="259,79,329,105"/>
-<area shape="poly" title=" " alt="" coords="343,33,315,68,311,65,339,30"/>
-<area shape="rect" href="SEXPType_8hpp.html" title="R data types." alt="" coords="353,79,462,105"/>
-<area shape="poly" title=" " alt="" coords="362,30,390,65,386,68,357,33"/>
-<area shape="rect" href="StringEncoding_8hpp.html" title="String encodings." alt="" coords="485,79,618,105"/>
-<area shape="poly" title=" " alt="" coords="385,29,504,71,502,76,383,34"/>
-<area shape="rect" title=" " alt="" coords="641,79,747,105"/>
-<area shape="poly" title=" " alt="" coords="409,29,627,74,626,79,408,34"/>
-<area shape="rect" title=" " alt="" coords="770,79,922,105"/>
-<area shape="poly" title=" " alt="" coords="422,27,755,75,755,80,421,32"/>
-<area shape="rect" title=" " alt="" coords="525,153,578,178"/>
-<area shape="poly" title=" " alt="" coords="554,105,554,137,549,137,549,105"/>
+<area shape="poly" title=" " alt="" coords="372,34,323,72,320,67,369,29"/>
+<area shape="rect" title=" " alt="" coords="353,79,419,105"/>
+<area shape="poly" title=" " alt="" coords="389,31,389,63,383,63,383,31"/>
+<area shape="rect" href="SEXPType_8hpp.html" title="R data types." alt="" coords="444,79,552,105"/>
+<area shape="poly" title=" " alt="" coords="406,29,468,68,465,73,404,34"/>
+<area shape="rect" href="StringEncoding_8hpp.html" title="String encodings." alt="" coords="576,79,708,105"/>
+<area shape="poly" title=" " alt="" coords="430,29,585,72,583,77,429,34"/>
+<area shape="rect" title=" " alt="" coords="732,79,837,105"/>
+<area shape="poly" title=" " alt="" coords="455,29,717,76,716,81,454,34"/>
+<area shape="rect" title=" " alt="" coords="861,79,1012,105"/>
+<area shape="poly" title=" " alt="" coords="458,26,846,76,845,81,457,31"/>
+<area shape="rect" title=" " alt="" coords="615,153,669,178"/>
+<area shape="poly" title=" " alt="" coords="645,105,645,137,639,137,639,105"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -172,26 +175,44 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1Null.html">rds2cpp::Null</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">R's <code>NULL</code> value.  <a href="structrds2cpp_1_1Null.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1Symbol.html">rds2cpp::Symbol</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An R symbol.  <a href="structrds2cpp_1_1Symbol.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1SymbolIndex.html">rds2cpp::SymbolIndex</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reference to a language symbol.  <a href="structrds2cpp_1_1SymbolIndex.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1EnvironmentIndex.html">rds2cpp::EnvironmentIndex</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reference to an environment.  <a href="structrds2cpp_1_1EnvironmentIndex.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1EnvironmentVariable.html">rds2cpp::EnvironmentVariable</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variable in an <code><a class="el" href="structrds2cpp_1_1Environment.html" title="An R environment.">Environment</a></code>.  <a href="structrds2cpp_1_1EnvironmentVariable.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1Environment.html">rds2cpp::Environment</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An R environment.  <a href="structrds2cpp_1_1Environment.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1ExternalPointer.html">rds2cpp::ExternalPointer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An R external pointer.  <a href="structrds2cpp_1_1ExternalPointer.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1ExternalPointerIndex.html">rds2cpp::ExternalPointerIndex</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reference to an external pointer.  <a href="structrds2cpp_1_1ExternalPointerIndex.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1Attributes.html">rds2cpp::Attributes</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attribute names and values.  <a href="structrds2cpp_1_1Attributes.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1Attribute.html">rds2cpp::Attribute</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structrds2cpp_1_1Attribute.html" title="Attribute name and value.">Attribute</a> name and value.  <a href="structrds2cpp_1_1Attribute.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1AtomicVector.html">rds2cpp::AtomicVector&lt; ElementType, stype &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of some atomic type.  <a href="structrds2cpp_1_1AtomicVector.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1String.html">rds2cpp::String</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Single string in a <code><a class="el" href="structrds2cpp_1_1StringVector.html" title="String vector.">StringVector</a></code>.  <a href="structrds2cpp_1_1String.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1StringVector.html">rds2cpp::StringVector</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">String vector.  <a href="structrds2cpp_1_1StringVector.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structrds2cpp_1_1String.html" title="Single string in a StringVector.">String</a> vector.  <a href="structrds2cpp_1_1StringVector.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1GenericVector.html">rds2cpp::GenericVector</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic vector, i.e., an ordinary R list.  <a href="structrds2cpp_1_1GenericVector.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1PairListElement.html">rds2cpp::PairListElement</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Element of a <code><a class="el" href="structrds2cpp_1_1PairList.html" title="Pairlist, i.e., a linked list.">PairList</a></code>.  <a href="structrds2cpp_1_1PairListElement.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1PairList.html">rds2cpp::PairList</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pairlist, i.e., a linked list.  <a href="structrds2cpp_1_1PairList.html#details">More...</a><br /></td></tr>
@@ -201,6 +222,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1BuiltInFunction.html">rds2cpp::BuiltInFunction</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Built-in function.  <a href="structrds2cpp_1_1BuiltInFunction.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1LanguageArgument.html">rds2cpp::LanguageArgument</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function argument in a <code><a class="el" href="structrds2cpp_1_1LanguageObject.html" title="Language object, i.e., a function call.">LanguageObject</a></code>.  <a href="structrds2cpp_1_1LanguageArgument.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrds2cpp_1_1LanguageObject.html">rds2cpp::LanguageObject</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Language object, i.e., a function call.  <a href="structrds2cpp_1_1LanguageObject.html#details">More...</a><br /></td></tr>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['magic_5fnumbers_2ehpp_0',['magic_numbers.hpp',['https://ltla.github.io/byteme/magic__numbers_8hpp.html',1,'']]]
+  ['ostreamwriter_2ehpp_0',['OstreamWriter.hpp',['https://ltla.github.io/byteme/OstreamWriter_8hpp.html',1,'']]]
 ];

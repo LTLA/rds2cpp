@@ -1,0 +1,7 @@
+<map id="rds2cpp::EnvironmentVariable" name="rds2cpp::EnvironmentVariable">
+<area shape="rect" id="Node000001" title="Variable in an Environment." alt="" coords="5,169,198,195"/>
+<area shape="rect" id="Node000002" href="$structrds2cpp_1_1SymbolIndex.html" title="Reference to a language symbol." alt="" coords="28,80,175,106"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,122,104,169,99,169,99,122"/>
+<area shape="rect" id="Node000003" href="$structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects." alt="" coords="41,5,162,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,46,104,80,99,80,99,46"/>
+</map>

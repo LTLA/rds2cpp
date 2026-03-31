@@ -91,7 +91,6 @@ $(function(){ initResizable(false); });
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structrds2cpp_1_1Environment-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">rds2cpp::Environment Struct Reference</div></div>
@@ -101,25 +100,8 @@ $(function(){ initResizable(false); });
 <p>An R environment.  
  <a href="#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="Environment_8hpp_source.html">Environment.hpp</a>&gt;</code></p>
-<div class="dynheader">
-Collaboration diagram for rds2cpp::Environment:</div>
-<div class="dyncontent">
-<div class="center"><img src="structrds2cpp_1_1Environment__coll__graph.png" border="0" usemap="#ards2cpp_1_1Environment_coll__map" alt="Collaboration graph"/></div>
-<map name="ards2cpp_1_1Environment_coll__map" id="ards2cpp_1_1Environment_coll__map">
-<area shape="rect" title="An R environment." alt="" coords="5,94,151,120"/>
-<area shape="rect" href="structrds2cpp_1_1Attributes.html" title="Attribute names and values." alt="" coords="13,5,143,31"/>
-<area shape="poly" title=" " alt="" coords="81,47,81,94,75,94,75,47"/>
-</map>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+<p><code>#include &lt;<a class="el" href="RObject_8hpp_source.html">RObject.hpp</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a7d0eb5c0cd41bf1552eba6f6575bf1b6" id="r_a7d0eb5c0cd41bf1552eba6f6575bf1b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d0eb5c0cd41bf1552eba6f6575bf1b6">add</a> (std::string n, <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> *v, <a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a> enc=StringEncoding::UTF8)</td></tr>
-<tr class="separator:a7d0eb5c0cd41bf1552eba6f6575bf1b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab30ee06c3010fa741a015b0f4cb6ab21" id="r_ab30ee06c3010fa741a015b0f4cb6ab21"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab30ee06c3010fa741a015b0f4cb6ab21">add</a> (std::string n, std::unique_ptr&lt; <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> &gt; v, <a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a> enc=StringEncoding::UTF8)</td></tr>
-<tr class="separator:ab30ee06c3010fa741a015b0f4cb6ab21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a76e06486a983edc119e0aacfdd6b3273" id="r_a76e06486a983edc119e0aacfdd6b3273"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a76e06486a983edc119e0aacfdd6b3273">locked</a> = false</td></tr>
@@ -130,113 +112,22 @@ Public Attributes</h2></td></tr>
 <tr class="separator:af916025aa24b767482eeea48f8f32512"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad24c7d1b18fba1a4782f58e18c16f84d" id="r_ad24c7d1b18fba1a4782f58e18c16f84d"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad24c7d1b18fba1a4782f58e18c16f84d">parent</a> = -1</td></tr>
 <tr class="separator:ad24c7d1b18fba1a4782f58e18c16f84d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a667f7a97b340ebaf3d5a24c33929e60c" id="r_a667f7a97b340ebaf3d5a24c33929e60c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a667f7a97b340ebaf3d5a24c33929e60c">variable_names</a></td></tr>
-<tr class="separator:a667f7a97b340ebaf3d5a24c33929e60c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:addd5af039f70a716bc6088700d94a414" id="r_addd5af039f70a716bc6088700d94a414"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#addd5af039f70a716bc6088700d94a414">variable_encodings</a></td></tr>
-<tr class="separator:addd5af039f70a716bc6088700d94a414"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afdaff9bbd4bf0b2e8a505e219b41000e" id="r_afdaff9bbd4bf0b2e8a505e219b41000e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afdaff9bbd4bf0b2e8a505e219b41000e">variable_values</a></td></tr>
-<tr class="separator:afdaff9bbd4bf0b2e8a505e219b41000e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0143e140f79fac307aa93dba58283fc8" id="r_a0143e140f79fac307aa93dba58283fc8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structrds2cpp_1_1Attributes.html">Attributes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0143e140f79fac307aa93dba58283fc8">attributes</a></td></tr>
-<tr class="separator:a0143e140f79fac307aa93dba58283fc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac62fa6228cdd9bcb514f9ce40cbfaf14" id="r_ac62fa6228cdd9bcb514f9ce40cbfaf14"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structrds2cpp_1_1EnvironmentVariable.html">EnvironmentVariable</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac62fa6228cdd9bcb514f9ce40cbfaf14">variables</a></td></tr>
+<tr class="separator:ac62fa6228cdd9bcb514f9ce40cbfaf14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93029578e62cb95118e4deaea0d3cc62" id="r_a93029578e62cb95118e4deaea0d3cc62"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structrds2cpp_1_1Attribute.html">Attribute</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93029578e62cb95118e4deaea0d3cc62">attributes</a></td></tr>
+<tr class="separator:a93029578e62cb95118e4deaea0d3cc62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An R environment. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a7d0eb5c0cd41bf1552eba6f6575bf1b6" name="a7d0eb5c0cd41bf1552eba6f6575bf1b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7d0eb5c0cd41bf1552eba6f6575bf1b6">&#9670;&#160;</a></span>add() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void rds2cpp::Environment::add </td>
-          <td>(</td>
-          <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>n</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> *</td>          <td class="paramname"><span class="paramname"><em>v</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a></td>          <td class="paramname"><span class="paramname"><em>enc</em></span><span class="paramdefsep"> = </span><span class="paramdefval">StringEncoding::UTF8</span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>A convenient helper to add a variable.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">n</td><td>Name of the variable. </td></tr>
-    <tr><td class="paramname">v</td><td>Pointer to the variable value. This should not be owned by any other object. </td></tr>
-    <tr><td class="paramname">enc</td><td>Encoding of the variable name. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ab30ee06c3010fa741a015b0f4cb6ab21" name="ab30ee06c3010fa741a015b0f4cb6ab21"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab30ee06c3010fa741a015b0f4cb6ab21">&#9670;&#160;</a></span>add() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void rds2cpp::Environment::add </td>
-          <td>(</td>
-          <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>n</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>v</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a></td>          <td class="paramname"><span class="paramname"><em>enc</em></span><span class="paramdefsep"> = </span><span class="paramdefval">StringEncoding::UTF8</span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>A convenient helper to add a variable.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">n</td><td>Name of the variable. </td></tr>
-    <tr><td class="paramname">v</td><td>Unique pointer to the variable value. </td></tr>
-    <tr><td class="paramname">enc</td><td>Encoding of the variable name. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="a0143e140f79fac307aa93dba58283fc8" name="a0143e140f79fac307aa93dba58283fc8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0143e140f79fac307aa93dba58283fc8">&#9670;&#160;</a></span>attributes</h2>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="a93029578e62cb95118e4deaea0d3cc62" name="a93029578e62cb95118e4deaea0d3cc62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93029578e62cb95118e4deaea0d3cc62">&#9670;&#160;</a></span>attributes</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structrds2cpp_1_1Attributes.html">Attributes</a> rds2cpp::Environment::attributes</td>
+          <td class="memname">std::vector&lt;<a class="el" href="structrds2cpp_1_1Attribute.html">Attribute</a>&gt; rds2cpp::Environment::attributes</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -304,53 +195,23 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="addd5af039f70a716bc6088700d94a414" name="addd5af039f70a716bc6088700d94a414"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#addd5af039f70a716bc6088700d94a414">&#9670;&#160;</a></span>variable_encodings</h2>
+<a id="ac62fa6228cdd9bcb514f9ce40cbfaf14" name="ac62fa6228cdd9bcb514f9ce40cbfaf14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac62fa6228cdd9bcb514f9ce40cbfaf14">&#9670;&#160;</a></span>variables</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a>&gt; rds2cpp::Environment::variable_encodings</td>
+          <td class="memname">std::vector&lt;<a class="el" href="structrds2cpp_1_1EnvironmentVariable.html">EnvironmentVariable</a>&gt; rds2cpp::Environment::variables</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Encodings of the variable names in <code>variable_names</code>. </p>
-
-</div>
-</div>
-<a id="a667f7a97b340ebaf3d5a24c33929e60c" name="a667f7a97b340ebaf3d5a24c33929e60c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a667f7a97b340ebaf3d5a24c33929e60c">&#9670;&#160;</a></span>variable_names</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;std::string&gt; rds2cpp::Environment::variable_names</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Names of the variables inside this environment. </p>
-
-</div>
-</div>
-<a id="afdaff9bbd4bf0b2e8a505e219b41000e" name="afdaff9bbd4bf0b2e8a505e219b41000e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afdaff9bbd4bf0b2e8a505e219b41000e">&#9670;&#160;</a></span>variable_values</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;std::unique_ptr&lt;<a class="el" href="structrds2cpp_1_1RObject.html">RObject</a>&gt; &gt; rds2cpp::Environment::variable_values</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Values of the variables in this environment. </p>
+<p>Variables contained within this environment. </p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>rds2cpp/<a class="el" href="Environment_8hpp_source.html">Environment.hpp</a></li>
+<li>rds2cpp/<a class="el" href="RObject_8hpp_source.html">RObject.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

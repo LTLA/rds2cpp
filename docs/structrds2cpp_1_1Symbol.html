@@ -91,6 +91,7 @@ $(function(){ initResizable(false); });
 <div id="doc-content">
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structrds2cpp_1_1Symbol-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">rds2cpp::Symbol Struct Reference</div></div>
@@ -100,8 +101,15 @@ $(function(){ initResizable(false); });
 <p>An R symbol.  
  <a href="#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="Symbol_8hpp_source.html">Symbol.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="RObject_8hpp_source.html">RObject.hpp</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a50031c05582516fd322579fa70cb47b4" id="r_a50031c05582516fd322579fa70cb47b4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50031c05582516fd322579fa70cb47b4">Symbol</a> ()=default</td></tr>
+<tr class="separator:a50031c05582516fd322579fa70cb47b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71fa0685e50368df05ea52f130824d9b" id="r_a71fa0685e50368df05ea52f130824d9b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71fa0685e50368df05ea52f130824d9b">Symbol</a> (std::string <a class="el" href="#a68099267ab64bc22a9aabbdd3d9fb87e">name</a>, <a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a> <a class="el" href="#a98cc68e484cb112a40021d4cb1687054">encoding</a>)</td></tr>
+<tr class="separator:a71fa0685e50368df05ea52f130824d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a68099267ab64bc22a9aabbdd3d9fb87e" id="r_a68099267ab64bc22a9aabbdd3d9fb87e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68099267ab64bc22a9aabbdd3d9fb87e">name</a></td></tr>
@@ -111,7 +119,70 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An R symbol. </p>
-</div><h2 class="groupheader">Member Data Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a50031c05582516fd322579fa70cb47b4" name="a50031c05582516fd322579fa70cb47b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50031c05582516fd322579fa70cb47b4">&#9670;&#160;</a></span>Symbol() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">rds2cpp::Symbol::Symbol </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Default constructor. </p>
+
+</div>
+</div>
+<a id="a71fa0685e50368df05ea52f130824d9b" name="a71fa0685e50368df05ea52f130824d9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71fa0685e50368df05ea52f130824d9b">&#9670;&#160;</a></span>Symbol() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">rds2cpp::Symbol::Symbol </td>
+          <td>(</td>
+          <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a></td>          <td class="paramname"><span class="paramname"><em>encoding</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the symbol. </td></tr>
+    <tr><td class="paramname">encoding</td><td>Character encoding of the name. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
 <a id="a98cc68e484cb112a40021d4cb1687054" name="a98cc68e484cb112a40021d4cb1687054"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a98cc68e484cb112a40021d4cb1687054">&#9670;&#160;</a></span>encoding</h2>
 
@@ -143,7 +214,7 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>rds2cpp/<a class="el" href="Symbol_8hpp_source.html">Symbol.hpp</a></li>
+<li>rds2cpp/<a class="el" href="RObject_8hpp_source.html">RObject.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

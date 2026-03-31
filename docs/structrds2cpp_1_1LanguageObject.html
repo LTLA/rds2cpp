@@ -117,11 +117,12 @@ Collaboration diagram for rds2cpp::LanguageObject:</div>
 <div class="dyncontent">
 <div class="center"><img src="structrds2cpp_1_1LanguageObject__coll__graph.png" border="0" usemap="#ards2cpp_1_1LanguageObject_coll__map" alt="Collaboration graph"/></div>
 <map name="ards2cpp_1_1LanguageObject_coll__map" id="ards2cpp_1_1LanguageObject_coll__map">
-<area shape="rect" title="Language object, i.e., a function call." alt="" coords="56,94,224,120"/>
-<area shape="rect" href="structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects." alt="" coords="5,5,126,31"/>
-<area shape="poly" title=" " alt="" coords="88,41,132,92,128,95,84,45"/>
-<area shape="rect" href="structrds2cpp_1_1Attributes.html" title="Attribute names and values." alt="" coords="150,5,280,31"/>
-<area shape="poly" title=" " alt="" coords="197,45,152,95,148,92,193,41"/>
+<area shape="rect" title="Language object, i.e., a function call." alt="" coords="5,169,174,195"/>
+<area shape="rect" href="structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects." alt="" coords="24,5,144,31"/>
+<area shape="poly" title=" " alt="" coords="88,47,92,169,86,169,82,47"/>
+<area shape="rect" href="structrds2cpp_1_1SymbolIndex.html" title="Reference to a language symbol." alt="" coords="105,80,252,106"/>
+<area shape="poly" title=" " alt="" coords="113,38,165,78,162,82,110,43"/>
+<area shape="poly" title=" " alt="" coords="157,119,104,171,100,167,154,115"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -129,186 +130,20 @@ Collaboration diagram for rds2cpp::LanguageObject:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae09e6c629273aa154bbb410871826878" id="r_ae09e6c629273aa154bbb410871826878"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacerds2cpp.html#acf2b27eb21235c6dd30b8819ea682629">SEXPType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae09e6c629273aa154bbb410871826878">type</a> () const</td></tr>
 <tr class="separator:ae09e6c629273aa154bbb410871826878"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6152a7f57b3694cbeeb5a14cc0a5daf1" id="r_a6152a7f57b3694cbeeb5a14cc0a5daf1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6152a7f57b3694cbeeb5a14cc0a5daf1">add_argument</a> (std::string n, <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> *d, <a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a> enc=StringEncoding::UTF8)</td></tr>
-<tr class="separator:a6152a7f57b3694cbeeb5a14cc0a5daf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73e2db19ead7661419f0c82e16e4385c" id="r_a73e2db19ead7661419f0c82e16e4385c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73e2db19ead7661419f0c82e16e4385c">add_argument</a> (std::string n, std::unique_ptr&lt; <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> &gt; d, <a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a> enc=StringEncoding::UTF8)</td></tr>
-<tr class="separator:a73e2db19ead7661419f0c82e16e4385c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade1aa37398cdc8bfb80142d56398c5bf" id="r_ade1aa37398cdc8bfb80142d56398c5bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade1aa37398cdc8bfb80142d56398c5bf">add_argument</a> (<a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> *d)</td></tr>
-<tr class="separator:ade1aa37398cdc8bfb80142d56398c5bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae278b8b8ba14dc782acdab8312f4310a" id="r_ae278b8b8ba14dc782acdab8312f4310a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae278b8b8ba14dc782acdab8312f4310a">add_argument</a> (std::unique_ptr&lt; <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> &gt; d)</td></tr>
-<tr class="separator:ae278b8b8ba14dc782acdab8312f4310a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_structrds2cpp_1_1RObject"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_structrds2cpp_1_1RObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structrds2cpp_1_1RObject.html">rds2cpp::RObject</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ab70121438413651f1e6e6fc95a0bb7c0" id="r_ab70121438413651f1e6e6fc95a0bb7c0"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab70121438413651f1e6e6fc95a0bb7c0">function_name</a></td></tr>
-<tr class="separator:ab70121438413651f1e6e6fc95a0bb7c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88a7d031093931584fa21490500edc47" id="r_a88a7d031093931584fa21490500edc47"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a88a7d031093931584fa21490500edc47">function_encoding</a> = StringEncoding::UTF8</td></tr>
-<tr class="separator:a88a7d031093931584fa21490500edc47"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93c6bc2447024ed6a6a4233e00d076b7" id="r_a93c6bc2447024ed6a6a4233e00d076b7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93c6bc2447024ed6a6a4233e00d076b7">argument_values</a></td></tr>
-<tr class="separator:a93c6bc2447024ed6a6a4233e00d076b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a094c3c56d3762a20091b097b2b7b2c4f" id="r_a094c3c56d3762a20091b097b2b7b2c4f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a094c3c56d3762a20091b097b2b7b2c4f">argument_names</a></td></tr>
-<tr class="separator:a094c3c56d3762a20091b097b2b7b2c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee5435bac7ed40bb5eaeb78bb05e5835" id="r_aee5435bac7ed40bb5eaeb78bb05e5835"><td class="memItemLeft" align="right" valign="top">std::vector&lt; unsigned char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee5435bac7ed40bb5eaeb78bb05e5835">argument_has_name</a></td></tr>
-<tr class="separator:aee5435bac7ed40bb5eaeb78bb05e5835"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a300aa25dab930fb8dcc6c05c3cf4530c" id="r_a300aa25dab930fb8dcc6c05c3cf4530c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a300aa25dab930fb8dcc6c05c3cf4530c">argument_encodings</a></td></tr>
-<tr class="separator:a300aa25dab930fb8dcc6c05c3cf4530c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae813b5cc43ee97f594b9c96a5c70cd0" id="r_aae813b5cc43ee97f594b9c96a5c70cd0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structrds2cpp_1_1Attributes.html">Attributes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aae813b5cc43ee97f594b9c96a5c70cd0">attributes</a></td></tr>
-<tr class="separator:aae813b5cc43ee97f594b9c96a5c70cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab48f2057de7fbffc866fef92554a4002" id="r_ab48f2057de7fbffc866fef92554a4002"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structrds2cpp_1_1SymbolIndex.html">SymbolIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab48f2057de7fbffc866fef92554a4002">function</a></td></tr>
+<tr class="separator:ab48f2057de7fbffc866fef92554a4002"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36ad9d8a6b1a058c33cd63d4006a42a2" id="r_a36ad9d8a6b1a058c33cd63d4006a42a2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structrds2cpp_1_1LanguageArgument.html">LanguageArgument</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36ad9d8a6b1a058c33cd63d4006a42a2">arguments</a></td></tr>
+<tr class="separator:a36ad9d8a6b1a058c33cd63d4006a42a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa07c1f861ca72d9a224cbd46e7dd4c9b" id="r_aa07c1f861ca72d9a224cbd46e7dd4c9b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structrds2cpp_1_1Attribute.html">Attribute</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa07c1f861ca72d9a224cbd46e7dd4c9b">attributes</a></td></tr>
+<tr class="separator:aa07c1f861ca72d9a224cbd46e7dd4c9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Language object, i.e., a function call. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ade1aa37398cdc8bfb80142d56398c5bf" name="ade1aa37398cdc8bfb80142d56398c5bf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade1aa37398cdc8bfb80142d56398c5bf">&#9670;&#160;</a></span>add_argument() <span class="overload">[1/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void rds2cpp::LanguageObject::add_argument </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> *</td>          <td class="paramname"><span class="paramname"><em>d</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>A convenient helper to add an unnamed argument to the end of the argument list.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">d</td><td>Pointer to the argument value. This should not be owned by any other resource. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a6152a7f57b3694cbeeb5a14cc0a5daf1" name="a6152a7f57b3694cbeeb5a14cc0a5daf1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6152a7f57b3694cbeeb5a14cc0a5daf1">&#9670;&#160;</a></span>add_argument() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void rds2cpp::LanguageObject::add_argument </td>
-          <td>(</td>
-          <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>n</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> *</td>          <td class="paramname"><span class="paramname"><em>d</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a></td>          <td class="paramname"><span class="paramname"><em>enc</em></span><span class="paramdefsep"> = </span><span class="paramdefval">StringEncoding::UTF8</span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>A convenient helper to add a named argument to the end of the argument list.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">n</td><td>Argument name. </td></tr>
-    <tr><td class="paramname">d</td><td>Unique pointer to the argument value. This should not be owned by any other resource. </td></tr>
-    <tr><td class="paramname">enc</td><td>Encoding of the argument name. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a73e2db19ead7661419f0c82e16e4385c" name="a73e2db19ead7661419f0c82e16e4385c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a73e2db19ead7661419f0c82e16e4385c">&#9670;&#160;</a></span>add_argument() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void rds2cpp::LanguageObject::add_argument </td>
-          <td>(</td>
-          <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>n</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>d</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a></td>          <td class="paramname"><span class="paramname"><em>enc</em></span><span class="paramdefsep"> = </span><span class="paramdefval">StringEncoding::UTF8</span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>A convenient helper to add a named argument to the end of the argument list.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">n</td><td>Argument name. </td></tr>
-    <tr><td class="paramname">d</td><td>Unique pointer to the argument value. </td></tr>
-    <tr><td class="paramname">enc</td><td>Encoding of the argument name. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ae278b8b8ba14dc782acdab8312f4310a" name="ae278b8b8ba14dc782acdab8312f4310a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae278b8b8ba14dc782acdab8312f4310a">&#9670;&#160;</a></span>add_argument() <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void rds2cpp::LanguageObject::add_argument </td>
-          <td>(</td>
-          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="structrds2cpp_1_1RObject.html">RObject</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>d</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>A convenient helper to add an unnamed argument to the end of the argument list.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">d</td><td>Pointer to the argument value. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="ae09e6c629273aa154bbb410871826878" name="ae09e6c629273aa154bbb410871826878"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae09e6c629273aa154bbb410871826878">&#9670;&#160;</a></span>type()</h2>
 
@@ -338,74 +173,29 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a300aa25dab930fb8dcc6c05c3cf4530c" name="a300aa25dab930fb8dcc6c05c3cf4530c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a300aa25dab930fb8dcc6c05c3cf4530c">&#9670;&#160;</a></span>argument_encodings</h2>
+<a id="a36ad9d8a6b1a058c33cd63d4006a42a2" name="a36ad9d8a6b1a058c33cd63d4006a42a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36ad9d8a6b1a058c33cd63d4006a42a2">&#9670;&#160;</a></span>arguments</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a>&gt; rds2cpp::LanguageObject::argument_encodings</td>
+          <td class="memname">std::vector&lt;<a class="el" href="structrds2cpp_1_1LanguageArgument.html">LanguageArgument</a>&gt; rds2cpp::LanguageObject::arguments</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Encoding of the argument name, if the corresponding entry of <code>argument_names</code> is <code>true</code>. This should have the same length as <code>argument_values</code>. </p>
+<p>Function arguments, named or unnamed. </p>
 
 </div>
 </div>
-<a id="aee5435bac7ed40bb5eaeb78bb05e5835" name="aee5435bac7ed40bb5eaeb78bb05e5835"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee5435bac7ed40bb5eaeb78bb05e5835">&#9670;&#160;</a></span>argument_has_name</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;unsigned char&gt; rds2cpp::LanguageObject::argument_has_name</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>The name of the argument, if the corresponding entry of <code>argument_names</code> is <code>true</code>. This should have the same length as <code>argument_values</code>. </p>
-
-</div>
-</div>
-<a id="a094c3c56d3762a20091b097b2b7b2c4f" name="a094c3c56d3762a20091b097b2b7b2c4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a094c3c56d3762a20091b097b2b7b2c4f">&#9670;&#160;</a></span>argument_names</h2>
+<a id="aa07c1f861ca72d9a224cbd46e7dd4c9b" name="aa07c1f861ca72d9a224cbd46e7dd4c9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa07c1f861ca72d9a224cbd46e7dd4c9b">&#9670;&#160;</a></span>attributes</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;std::string&gt; rds2cpp::LanguageObject::argument_names</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Whether or not each argument is named. This should have the same length as <code>argument_values</code>. </p>
-
-</div>
-</div>
-<a id="a93c6bc2447024ed6a6a4233e00d076b7" name="a93c6bc2447024ed6a6a4233e00d076b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a93c6bc2447024ed6a6a4233e00d076b7">&#9670;&#160;</a></span>argument_values</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;std::unique_ptr&lt;<a class="el" href="structrds2cpp_1_1RObject.html">RObject</a>&gt; &gt; rds2cpp::LanguageObject::argument_values</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Values of the arguments to the function, typically <code><a class="el" href="structrds2cpp_1_1LanguageObject.html" title="Language object, i.e., a function call.">LanguageObject</a></code> or <code><a class="el" href="structrds2cpp_1_1SymbolIndex.html" title="Reference to a language symbol.">SymbolIndex</a></code> objects. These may also be <code><a class="el" href="structrds2cpp_1_1AtomicVector.html" title="Vector of some atomic type.">AtomicVector</a></code> instances of length 1. </p>
-
-</div>
-</div>
-<a id="aae813b5cc43ee97f594b9c96a5c70cd0" name="aae813b5cc43ee97f594b9c96a5c70cd0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aae813b5cc43ee97f594b9c96a5c70cd0">&#9670;&#160;</a></span>attributes</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structrds2cpp_1_1Attributes.html">Attributes</a> rds2cpp::LanguageObject::attributes</td>
+          <td class="memname">std::vector&lt;<a class="el" href="structrds2cpp_1_1Attribute.html">Attribute</a>&gt; rds2cpp::LanguageObject::attributes</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -413,29 +203,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a88a7d031093931584fa21490500edc47" name="a88a7d031093931584fa21490500edc47"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a88a7d031093931584fa21490500edc47">&#9670;&#160;</a></span>function_encoding</h2>
+<a id="ab48f2057de7fbffc866fef92554a4002" name="ab48f2057de7fbffc866fef92554a4002"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab48f2057de7fbffc866fef92554a4002">&#9670;&#160;</a></span>function</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a> rds2cpp::LanguageObject::function_encoding = StringEncoding::UTF8</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Encoding for the function name. </p>
-
-</div>
-</div>
-<a id="ab70121438413651f1e6e6fc95a0bb7c0" name="ab70121438413651f1e6e6fc95a0bb7c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab70121438413651f1e6e6fc95a0bb7c0">&#9670;&#160;</a></span>function_name</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string rds2cpp::LanguageObject::function_name</td>
+          <td class="memname"><a class="el" href="structrds2cpp_1_1SymbolIndex.html">SymbolIndex</a> rds2cpp::LanguageObject::function</td>
         </tr>
       </table>
 </div><div class="memdoc">

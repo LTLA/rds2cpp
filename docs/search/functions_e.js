@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['_7ewriter_0',['~Writer',['https://ltla.github.io/byteme/classbyteme_1_1Writer.html#ad385ffe4a1d27fe4d7db5c5425cf4588',1,'byteme::Writer']]]
+  ['zlibbufferreader_0',['ZlibBufferReader',['https://ltla.github.io/byteme/classbyteme_1_1ZlibBufferReader.html#a3cd5f4e25a1b3744237f6e6811d231dd',1,'byteme::ZlibBufferReader']]],
+  ['zlibbufferwriter_1',['ZlibBufferWriter',['https://ltla.github.io/byteme/classbyteme_1_1ZlibBufferWriter.html#a09d7572eb0c546087fb66c13aa8e2d84',1,'byteme::ZlibBufferWriter']]]
 ];

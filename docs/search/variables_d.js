@@ -5,5 +5,6 @@ var searchData=
   ['parallel_2',['parallel',['../structrds2cpp_1_1ParseRdsOptions.html#a1dd6bd4c10e4685d02cc45f6c60fc6f2',1,'rds2cpp::ParseRdsOptions::parallel'],['../structrds2cpp_1_1WriteRdsOptions.html#a4c1ef6a267e94b861da682d8ad326248',1,'rds2cpp::WriteRdsOptions::parallel'],['../structrds2cpp_1_1ParseRdaOptions.html#ae60f070dbb39430d7633c985faedfce9',1,'rds2cpp::ParseRdaOptions::parallel'],['../structrds2cpp_1_1WriteRdaOptions.html#ab9c5abf0e44472116403f011c1c0323c',1,'rds2cpp::WriteRdaOptions::parallel']]],
   ['parent_3',['parent',['../structrds2cpp_1_1Environment.html#ad24c7d1b18fba1a4782f58e18c16f84d',1,'rds2cpp::Environment']]],
   ['parent_5ftype_4',['parent_type',['../structrds2cpp_1_1Environment.html#af916025aa24b767482eeea48f8f32512',1,'rds2cpp::Environment']]],
-  ['patch_5',['patch',['../structrds2cpp_1_1Version.html#a4726e61de639e8ea832152a77391b8c6',1,'rds2cpp::Version']]]
+  ['patch_5',['patch',['../structrds2cpp_1_1Version.html#a4726e61de639e8ea832152a77391b8c6',1,'rds2cpp::Version']]],
+  ['protection_6',['protection',['../structrds2cpp_1_1ExternalPointer.html#af26f22afe981af6db9c30bf971f27650',1,'rds2cpp::ExternalPointer']]]
 ];
