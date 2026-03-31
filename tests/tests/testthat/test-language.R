@@ -9,7 +9,7 @@ test_that("function serialization works correctly", {
     expect_true(attr(info$value, "pretend-to-be-a-language"))
     expect_identical(info$value[[1]], "cbind")
 
-    expect_identical(attr(info$value[[2]], "arg-names"), character(2))
+    expect_identical(attr(info$value[[2]], "arg-names"), rep(NA_character_, 2))
     args <- info$value[[2]]
     attr(args, "arg-names") <- NULL
     expect_identical(args, list(12, "foo"))

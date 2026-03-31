@@ -18,31 +18,28 @@ inline bool has_attributes(const Header& header) {
 }
 
 template<class Source_>
-void parse_attributes_body(Source_& src, const Header& header, Attributes& output, SharedParseInfo& shared) try {
+void parse_attributes_body(Source_& src, const Header& header, std::vector<Attribute>& output, SharedParseInfo& shared) try {
     auto plist = parse_pairlist_body(src, header, shared);
+    output.reserve(plist.data.size());
 
-    const auto nnodes = plist.data.size();
-    for (I<decltype(nnodes)> t = 0; t < nnodes; ++t) {
-        if (!plist.has_tag[t]) {
+    for (auto& entry : plist.data) {
+        if (!(entry.tag.has_value())) {
             throw std::runtime_error("all attributes should be named");
         }
+        output.emplace_back(std::move(*(entry.tag)), std::move(entry.value));
     }
 
-    output.values.swap(plist.data);
-    output.names.swap(plist.tag_names);
-    output.encodings.swap(plist.tag_encodings);
 } catch (std::exception& e) {
     throw traceback("failed to parse attribute contents", e);
 }
 
 template<class Source_>
-void parse_attributes(Source_& src, Attributes& output, SharedParseInfo& shared) try {
+void parse_attributes(Source_& src, std::vector<Attribute>& output, SharedParseInfo& shared) try {
     auto header = parse_header(src);
     if (header[3] != static_cast<unsigned>(SEXPType::LIST)) {
         throw std::runtime_error("attributes should be a pairlist");
     }
     parse_attributes_body(src, header, output, shared);
-    return;
 } catch (std::exception& e) {
     throw traceback("failed to parse attributes", e);
 }

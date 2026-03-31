@@ -17,7 +17,7 @@ void write_object(const RObject* object, BufferedWriter_& bufwriter, SharedWrite
 template<class BufferedWriter_>
 void write_list(const RObject* object, BufferedWriter_& bufwriter, SharedWriteInfo& shared) {
     auto ptr = static_cast<const GenericVector*>(object);
-    inject_header(*ptr, bufwriter);
+    inject_header(*ptr, bufwriter, shared);
 
     const auto len = sanisizer::cast<std::size_t>(ptr->data.size());
     inject_length(len, bufwriter);

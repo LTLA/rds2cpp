@@ -127,10 +127,7 @@ StringVector parse_string_body(Source_& src) try {
     const auto len = get_length(src);
     StringVector output(len);
     for (I<decltype(len)> i = 0; i < len; ++i) {
-        auto str = parse_single_string(src);
-        output.data[i] = str.value;
-        output.encodings[i] = str.encoding;
-        output.missing[i] = str.missing;
+        output.data[i] = parse_single_string(src);
     }
     return output;
 } catch (std::exception& e) {

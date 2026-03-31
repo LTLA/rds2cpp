@@ -22,30 +22,27 @@ LanguageObject parse_language_body(Source_& src, const Header& header, SharedPar
     auto contents = parse_pairlist_body(src, header, shared);
     output.attributes = std::move(contents.attributes);
 
-    if (contents.has_tag.size() < 1) {
+    const auto num_contents = contents.data.size();
+    if (num_contents < 1) {
         throw std::runtime_error("pairlist should have positive length for language objects");
     }
-    if (contents.data[0]->type() != SEXPType::SYM) {
+    if (contents.data[0].value->type() != SEXPType::SYM) {
         throw std::runtime_error("first pairlist entry for a language object should be a symbol");
     }
 
-    auto ptr = static_cast<const SymbolIndex*>(contents.data[0].get());
-    const auto& symb = shared.symbols[ptr->index];
-    output.function_name = symb.name;
-    output.function_encoding = symb.encoding;
+    auto ptr = static_cast<const SymbolIndex*>(contents.data[0].value.get());
+    output.function = SymbolIndex(ptr->index);
 
     // Shifting the rest into the arguments.
-    contents.has_tag.erase(contents.has_tag.begin());
-    output.argument_has_name = std::move(contents.has_tag);
-
-    contents.tag_names.erase(contents.tag_names.begin());
-    output.argument_names = std::move(contents.tag_names);
-
-    contents.tag_encodings.erase(contents.tag_encodings.begin());
-    output.argument_encodings = std::move(contents.tag_encodings);
-
-    contents.data.erase(contents.data.begin());
-    output.argument_values = std::move(contents.data);
+    output.arguments.reserve(num_contents - 1);
+    for (I<decltype(num_contents)> i = 1; i < num_contents; ++i) {
+        auto& current = contents.data[i];
+        if (current.tag.has_value()) {
+            output.arguments.emplace_back(std::move(*(current.tag)), std::move(current.value));
+        } else {
+            output.arguments.emplace_back(std::move(current.value));
+        }
+    }
 
     return output;
 } catch (std::exception& e) {

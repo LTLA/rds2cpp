@@ -28,7 +28,6 @@ void recursive_parse(Source_& src, PairList& output, const Header& header, Share
         parse_attributes(src, output.attributes, shared);
     }
 
-    output.has_tag.push_back(has_tag);
     if (has_tag) {
         auto header = parse_header(src);
         std::size_t sindex;
@@ -42,21 +41,19 @@ void recursive_parse(Source_& src, PairList& output, const Header& header, Share
             throw std::runtime_error("expected a SYMSXP for a pairlist tag");
         }
 
-        const auto& sym = shared.symbols[sindex];
-        output.tag_names.push_back(sym.name);
-        output.tag_encodings.push_back(sym.encoding);
-    } else {
-        output.tag_names.emplace_back();
-        output.tag_encodings.emplace_back();
-    }
+        try {
+            // Similarly, we need to copy sym.name rather than making a reference,
+            // to ensure that the sym.name is still valid for emitting errors.
+            output.data.emplace_back(SymbolIndex(sindex), parse_object(src, shared));
+        } catch (std::exception& e) {
+            throw traceback("failed to parse pairlist element '" + shared.symbols[sindex].name + "'", e);
+        }
 
-    try {
-        output.data.push_back(parse_object(src, shared));
-    } catch (std::exception& e) {
-        if (output.tag_names.back().empty()) {
-            throw traceback("failed to parse unnamed pairlist element " + std::to_string(output.tag_names.size()), e);
-        } else {
-            throw traceback("failed to parse pairlist element '" + output.tag_names.back() + "'", e);
+    } else {
+        try {
+            output.data.emplace_back(parse_object(src, shared));
+        } catch (std::exception& e) {
+            throw traceback("failed to parse unnamed pairlist element " + std::to_string(output.data.size()), e);
         }
     }
 

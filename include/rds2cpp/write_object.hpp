@@ -53,7 +53,7 @@ void write_object(const RObject* object, BufferedWriter_& bufwriter, SharedWrite
             shared.write_symbol(object, bufwriter);
             break;
         case SEXPType::BUILTIN:
-            write_builtin(object, bufwriter);
+            write_builtin(object, bufwriter, shared);
             break;
         case SEXPType::LANG:
             write_language(object, bufwriter, shared);

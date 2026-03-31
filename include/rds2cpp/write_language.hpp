@@ -19,25 +19,19 @@ void write_language(const RObject* object, BufferedWriter_& bufwriter, SharedWri
     const LanguageObject& input = *static_cast<const LanguageObject*>(object);
 
     // Just another pairlist, but starting with a different SEXP type.
-    inject_header(SEXPType::LANG, input.attributes, bufwriter);
+    inject_header(SEXPType::LANG, input.attributes, bufwriter, shared);
 
     // Attributes before the rest of the content.
     write_attributes(input.attributes, bufwriter, shared);
 
-    shared.write_symbol(input.function_name, input.function_encoding, bufwriter);
+    shared.write_symbol(&(input.function), bufwriter);
 
-    const auto& values = input.argument_values;
-    const auto& has_tag = input.argument_has_name;
-    const auto& tag_names = input.argument_names;
-    const auto& tag_encodings = input.argument_encodings;
-    const auto n = values.size();
-
-    for (I<decltype(n)> i = 0; i < n; ++i) {
-        inject_next_pairlist_header(has_tag[i], bufwriter);
-        if (has_tag[i]) {
-            shared.write_symbol(tag_names[i], tag_encodings[i], bufwriter);
+    for (const auto& arg : input.arguments) {
+        inject_next_pairlist_header(arg.name.has_value(), bufwriter);
+        if (arg.name.has_value()) {
+            shared.write_symbol(&(*(arg.name)), bufwriter);
         }
-        write_object(values[i].get(), bufwriter, shared); 
+        write_object(arg.value.get(), bufwriter, shared); 
     }
 
     inject_header(SEXPType::NILVALUE_, bufwriter);

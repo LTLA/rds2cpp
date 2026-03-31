@@ -12,9 +12,9 @@
 namespace rds2cpp {
 
 template<class BufferedWriter_>
-void write_builtin(const RObject* object, BufferedWriter_& bufwriter) {
+void write_builtin(const RObject* object, BufferedWriter_& bufwriter, SharedWriteInfo& shared) {
     auto ptr = static_cast<const BuiltInFunction*>(object);
-    inject_header(*ptr, bufwriter);
+    inject_header(*ptr, bufwriter, shared);
 
     const auto len = sanisizer::cast<std::size_t>(ptr->name.size());
     inject_length(len, bufwriter);

@@ -8,6 +8,7 @@
 #include <type_traits>
 
 #include "utils_parse.hpp"
+#include "RObject.hpp"
 
 namespace rds2cpp {
 
@@ -44,14 +45,15 @@ struct has_attributes_for_writing<Object, decltype((void) std::declval<Object>()
     static constexpr bool value = true;
 };
 
-template<class Attributes>
-inline unsigned char inject_attribute_header(Attributes& attributes) {
+template<class Shared_>
+unsigned char inject_attribute_header(const std::vector<Attribute>& attributes, const Shared_& shared) {
     unsigned char bit = 0;
 
-    if (!attributes.names.empty()) {
+    if (!attributes.empty()) {
         bit |= 0x2;
-        for (const auto& x : attributes.names) {
-            if (x == "class") {
+        const auto& symbols = *(shared.known_symbols);
+        for (const auto& x : attributes) {
+            if (symbols[x.name.index].name == "class") {
                 bit |= 0x1;
                 break;
             }
@@ -61,14 +63,14 @@ inline unsigned char inject_attribute_header(Attributes& attributes) {
     return bit;
 }
 
-template<class Object_, class BufferedWriter_>
-void inject_header(Object_& vec, BufferedWriter_& bufwriter) {
+template<class Object_, class BufferedWriter_, class Shared_>
+void inject_header(Object_& vec, BufferedWriter_& bufwriter, const Shared_& shared) {
     Header details;
     details[0] = 0;
     details[1] = 0;
 
     if constexpr(has_attributes_for_writing<Object_>::value) {
-        details[2] = inject_attribute_header(vec.attributes);
+        details[2] = inject_attribute_header(vec.attributes, shared);
     } else {
         details[2] = 0;
     }
@@ -87,12 +89,12 @@ void inject_header(SEXPType type, BufferedWriter_& bufwriter) {
     bufwriter.write(details.data(), details.size());
 }
 
-template<class Attributes_, class BufferedWriter_>
-void inject_header(SEXPType type, Attributes_& attributes, BufferedWriter_& bufwriter) {
+template<class BufferedWriter_, class Shared_>
+void inject_header(SEXPType type, const std::vector<Attribute>& attributes, BufferedWriter_& bufwriter, const Shared_& shared) {
     Header details;
     details[0] = 0;
     details[1] = 0;
-    details[2] = inject_attribute_header(attributes);
+    details[2] = inject_attribute_header(attributes, shared);
     details[3] = static_cast<unsigned char>(type);
     bufwriter.write(details.data(), details.size());
 }

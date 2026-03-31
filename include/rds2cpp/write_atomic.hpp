@@ -16,7 +16,7 @@ namespace rds2cpp {
 template<class Vector_, class BufferedWriter_>
 void write_integer_or_logical_body(const RObject* obj, BufferedWriter_& bufwriter, SharedWriteInfo& shared) {
     const auto& vec = *static_cast<const Vector_*>(obj);
-    inject_header(vec, bufwriter);
+    inject_header(vec, bufwriter, shared);
 
     const auto& values = vec.data;
     const auto len = sanisizer::cast<std::size_t>(values.size());
@@ -51,7 +51,7 @@ void write_logical(const RObject* obj, BufferedWriter_& bufwriter, SharedWriteIn
 template<class BufferedWriter_>
 void write_double(const RObject* obj, BufferedWriter_& bufwriter, SharedWriteInfo& shared) {
     const auto& vec = *static_cast<const DoubleVector*>(obj);
-    inject_header(vec, bufwriter);
+    inject_header(vec, bufwriter, shared);
 
     const auto& values = vec.data;
     const auto len = sanisizer::cast<std::size_t>(values.size());
@@ -76,7 +76,7 @@ void write_double(const RObject* obj, BufferedWriter_& bufwriter, SharedWriteInf
 template<class BufferedWriter_>
 void write_raw(const RObject* obj, BufferedWriter_& bufwriter, SharedWriteInfo& shared) {
     const auto& vec = *static_cast<const RawVector*>(obj);
-    inject_header(vec, bufwriter);
+    inject_header(vec, bufwriter, shared);
 
     const auto& values = vec.data;
     const auto len = sanisizer::cast<std::size_t>(values.size());
@@ -89,7 +89,7 @@ void write_raw(const RObject* obj, BufferedWriter_& bufwriter, SharedWriteInfo& 
 template<class BufferedWriter_>
 void write_complex(const RObject* obj, BufferedWriter_& bufwriter, SharedWriteInfo& shared) {
     const auto& vec = *static_cast<const ComplexVector*>(obj);
-    inject_header(vec, bufwriter);
+    inject_header(vec, bufwriter, shared);
 
     const auto& values = vec.data;
     const auto len = sanisizer::cast<std::size_t>(values.size());
@@ -124,22 +124,20 @@ void write_complex(const RObject* obj, BufferedWriter_& bufwriter, SharedWriteIn
 template<class BufferedWriter_>
 void write_string(const RObject* obj, BufferedWriter_& bufwriter, SharedWriteInfo& shared) {
     const auto& vec = *static_cast<const StringVector*>(obj);
-    inject_header(vec, bufwriter); 
+    inject_header(vec, bufwriter, shared); 
 
     const auto& values = vec.data;
     const auto len = sanisizer::cast<std::size_t>(values.size());
     inject_length(len, bufwriter);
 
-    if (len != vec.encodings.size()) {
-        throw std::runtime_error("vectors of strings and encodings should have the same length");
-    }
-    if (len != vec.missing.size()) {
-        throw std::runtime_error("vectors of strings and missingness should have the same length");
+    for (const auto& str : vec.data) {
+        if (str.value.has_value()) {
+            write_single_string(*(str.value), str.encoding, bufwriter);
+        } else {
+            write_single_string(str.encoding, bufwriter);
+        }
     }
 
-    for (I<decltype(len)> i = 0; i < len; ++i) {
-        write_single_string(vec.data[i], vec.encodings[i], vec.missing[i], bufwriter);
-    }
     write_attributes(vec.attributes, bufwriter, shared);
 }
 

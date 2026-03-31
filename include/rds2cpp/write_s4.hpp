@@ -28,29 +28,40 @@ void write_s4(const RObject* object, BufferedWriter_& bufwriter, SharedWriteInfo
     // Adding the header.
     inject_next_pairlist_header(true, bufwriter);
 
-    // Injecting the name of the tag.
-    // We'll guess the encoding of the 'class' string as UTF-8.
-    shared.write_symbol("class", StringEncoding::UTF8, bufwriter); 
+    // Writing the class information. We do this manually because I can't figure out
+    // how to register a symbol for 'package' while keeping shared.known_symbols const.
+    {
+        shared.write_symbol("class", StringEncoding::ASCII, bufwriter); // We'll guess the encoding of the 'class' string. 
 
-    // Writing the class information.
-    StringVector class_info;
-    class_info.data.push_back(ptr->class_name);
-    class_info.encodings.push_back(ptr->class_encoding);
-    class_info.missing.push_back(false);
+        Header details;
+        details[0] = 0;
+        details[1] = 0;
+        details[2] = 0x2;
+        details[3] = static_cast<unsigned char>(SEXPType::STR);
+        bufwriter.write(details.data(), details.size());
+        inject_length(1, bufwriter);
+        write_single_string(ptr->class_name, ptr->class_encoding, bufwriter);
 
-    class_info.attributes.names.push_back("package");
-    class_info.attributes.encodings.push_back(StringEncoding::UTF8); // Guessing the encoding of the 'package' string itself.
-    auto pkg_ptr = new StringVector;
-    class_info.attributes.values.emplace_back(pkg_ptr);
+        // Adding the package attribute.
+        {
+            inject_next_pairlist_header(true, bufwriter);
+            shared.write_symbol("package", StringEncoding::ASCII, bufwriter); // similarly guessing the encoding of the 'package' string.
 
-    pkg_ptr->data.push_back(ptr->package_name);
-    pkg_ptr->encodings.push_back(ptr->package_encoding);
-    pkg_ptr->missing.push_back(false);
+            Header details;
+            details[0] = 0;
+            details[1] = 0;
+            details[2] = 0;
+            details[3] = static_cast<unsigned char>(SEXPType::STR);
+            bufwriter.write(details.data(), details.size());
+            inject_length(1, bufwriter);
+            write_single_string(ptr->package_name, ptr->package_encoding, bufwriter);
 
-    write_string(&class_info, bufwriter, shared);
+            inject_header(SEXPType::NILVALUE_, bufwriter);
+        }
+    }
 
-    // Writing the remaining slots.
-    write_attributes(ptr->attributes, bufwriter, shared);
+    // Forcibly writing all attributes with NIL termination.
+    write_attributes_body(ptr->attributes, bufwriter, shared);
 }
 
 }

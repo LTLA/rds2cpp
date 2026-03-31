@@ -38,7 +38,7 @@ std::unique_ptr<RObject> parse_object(Source_& src, SharedParseInfo& shared) {
         return;
     };
 
-    auto pointerize_attr = [&](auto obj) -> Attributes* {
+    auto pointerize_attr = [&](auto obj) -> std::vector<Attribute>* {
         pointerize(output, std::move(obj));
         typedef typename std::remove_reference<decltype(obj)>::type Object;
         auto ptr = static_cast<Object*>(output.get());
@@ -85,7 +85,7 @@ std::unique_ptr<RObject> parse_object(Source_& src, SharedParseInfo& shared) {
         pointerize_(parse_language_body(src, details, shared));
 
     } else {
-        Attributes* attr = nullptr;
+        std::vector<Attribute>* attr = nullptr;
 
         if (sexp_type == static_cast<unsigned char>(SEXPType::INT)) {
             attr = pointerize_attr(parse_integer_body(src));

@@ -14,27 +14,24 @@
 namespace rds2cpp {
 
 template<class BufferedWriter_>
-bool write_attributes(const Attributes& attr, BufferedWriter_& bufwriter, SharedWriteInfo& shared) {
-    const auto nattr = attr.names.size();
-    if (!nattr) {
-        return false;
-    }
-
-    if (nattr != attr.encodings.size()) {
-        throw std::runtime_error("vectors of attribute names and encodings should have the same length");
-    }
-    if (nattr != attr.values.size()) {
-        throw std::runtime_error("vectors of attribute names and values should have the same length");
-    }
-
-    for (I<decltype(nattr)> a = 0; a < nattr; ++a) {
+void write_attributes_body(const std::vector<Attribute>& attributes, BufferedWriter_& bufwriter, SharedWriteInfo& shared) {
+    for (const auto& attr : attributes) {
         inject_next_pairlist_header(true, bufwriter);
-        shared.write_symbol(attr.names[a], attr.encodings[a], bufwriter);
-        write_object(attr.values[a].get(), bufwriter, shared);
+        shared.write_symbol(&(attr.name), bufwriter);
+        write_object(attr.value.get(), bufwriter, shared);
     }
 
     inject_header(SEXPType::NILVALUE_, bufwriter);
-    return true;
+}
+
+template<class BufferedWriter_>
+void write_attributes(const std::vector<Attribute>& attributes, BufferedWriter_& bufwriter, SharedWriteInfo& shared) {
+    // If there weren't any attributes, we skip the pairlist creation.
+    // It is assumed that the attribute bit was unset in such cases.
+    if (attributes.empty()) {
+        return;
+    }
+    write_attributes_body(attributes, bufwriter, shared);
 }
 
 }

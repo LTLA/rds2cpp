@@ -5,9 +5,6 @@
 #include <cstdint>
 
 #include "RObject.hpp"
-#include "Environment.hpp"
-#include "ExternalPointer.hpp"
-#include "Symbol.hpp"
 #include "Version.hpp"
 
 /**

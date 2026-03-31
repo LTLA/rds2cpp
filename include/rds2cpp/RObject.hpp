@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <cstddef>
 #include <complex>
+#include <optional>
 
 #include "SEXPType.hpp"
 #include "StringEncoding.hpp"
@@ -53,36 +54,78 @@ struct Null : public RObject {
 };
 
 /**
+ * @brief An R symbol.
+ */
+struct Symbol {
+    /**
+     * Default constructor.
+     */
+    Symbol() = default;
+
+    /**
+     * @param name Name of the symbol.
+     * @param encoding Character encoding of the name.
+     */
+    Symbol(std::string name, StringEncoding encoding) : name(std::move(name)), encoding(encoding) {}
+
+    /**
+     * Name of the symbol.
+     */
+    std::string name;
+
+    /**
+     * Encoding for the symbol name.
+     */
+    StringEncoding encoding;
+};
+
+/**
  * @brief Reference to a language symbol. 
  */
 struct SymbolIndex : public RObject {
     /**
+     * Default constructor.
+     */
+    SymbolIndex() = default;
+
+    /**
      * @param i Value of the symbol index.
      */
-    SymbolIndex(std::size_t i = -1) : index(i) {}
+    SymbolIndex(std::size_t i) : index(i) {}
 
 
     SEXPType type() const { return SEXPType::SYM; }
 
     /**
-     * Index into the `symbols` vector of the `RdsFile` object.
+     * Index of the `RdsFile::symbols` or `RdaFile::symbols` vector, containing the value and encoding of the symbol.
      */
-    std::size_t index;
+    std::size_t index = - 1;
 };
+
+/**
+ * @cond
+ */
+struct Attribute;
+/**
+ * @endcond
+ */
 
 /**
  * @brief Reference to an environment. 
  */
 struct EnvironmentIndex : public RObject {
     /**
-     * By default, this creates an `EnvironmentIndex` that refers to the global environment.
-     *
-     * @param e Type of the environment.
+     * Default constructor.
      */
-    EnvironmentIndex(SEXPType e = SEXPType::GLOBALENV_) : index(-1), env_type(e) {}
+    EnvironmentIndex() = default;
 
     /**
-     * This creates an `EnvironmentIndex` that refers to a non-global environment, i.e., is of type `ENV`.
+     * @param e Type of the environment, typically one of the special environments (global, empty or base) rather than `SEXPType::ENV`. 
+     */
+    EnvironmentIndex(SEXPType e) : env_type(e) {}
+
+    /**
+     * Create an `EnvironmentIndex` that refers to a non-global environment, i.e., is of type `SEXPType::ENV`.
      *
      * @param i Value of the environment index. 
      */
@@ -90,21 +133,102 @@ struct EnvironmentIndex : public RObject {
 
     /**
      * Type of environment.
-     * Most environments will be `ENV` but special environments can be constructed like `GLOBALENV_`.
+     * Most environments will be `ENV` but special environments can be constructed like `SEXPType::GLOBALENV_`.
      */
     SEXPType type() const { return env_type; }
 
     /**
-     * Index into the `environments` vector of the `RdsFile` object.
-     * This is only used if `type()` returns `ENV`.
+     * Index of the `RdsFile::external_pointers` or `RdaFile::external_pointers` vector, containing information about this environment.
+     * Only used if `type()` returns `ENV`.
      */
-    std::size_t index;
+    std::size_t index = -1;
 
     /**
      * Type of the environment, as returned by `type()`.
-     * This can be modified if it changes after construction. 
      */
-    SEXPType env_type;
+    SEXPType env_type = SEXPType::GLOBALENV_;
+};
+
+/**
+ * @brief Variable in an `Environment`.
+ */
+struct EnvironmentVariable {
+    /**
+     * Default constructor.
+     */
+    EnvironmentVariable() = default;
+
+    /**
+     * @param name Variable name.
+     * @param value Value of the variable.
+     */
+    EnvironmentVariable(SymbolIndex name, std::unique_ptr<RObject> value) : name(std::move(name)), value(std::move(value)) {}
+
+    /**
+     * Variable name.
+     */
+    SymbolIndex name;
+    /**
+     * Value of the variable.
+     */
+    std::unique_ptr<RObject> value;
+};
+
+/**
+ * @brief An R environment.
+ */
+struct Environment {
+    /**
+     * Whether the environment was locked.
+     */
+    bool locked = false;
+
+    /**
+     * Whether the environment was hashed.
+     */
+    bool hashed = false;
+
+    /**
+     * Type of the parent environment.
+     * This is usually one of `SEXPType::ENV`, `SEXPType::GLOBALENV_`, `SEXPType::BASEENV_` or `SEXPType::EMPTYENV_`.
+     */
+    SEXPType parent_type = SEXPType::GLOBALENV_;
+
+    /** 
+     * Index of the parent environment.
+     * This should only be used if `parent_type` is `SEXPType::ENV`.
+     */
+    std::size_t parent = -1;
+
+    /**
+     * Variables contained within this environment.
+     */
+    std::vector<EnvironmentVariable> variables;
+
+    /**
+     * Additional attributes.
+     */
+    std::vector<Attribute> attributes;
+};
+
+/**
+ * @brief An R external pointer.
+ */
+struct ExternalPointer {
+    /**
+     * Pointer to the external pointer's protection value.
+     */
+    std::unique_ptr<RObject> protection;
+
+    /**
+     * Pointer to the external pointer's tag.
+     */
+    std::unique_ptr<RObject> tag;
+
+    /**
+     * Additional attributes.
+     */
+    std::vector<Attribute> attributes;
 };
 
 /**
@@ -112,64 +236,48 @@ struct EnvironmentIndex : public RObject {
  */
 struct ExternalPointerIndex : public RObject {
     /**
+     * Default constructor.
+     */
+    ExternalPointerIndex() = default;
+
+    /**
      * @param i Value of the external pointer index.
      */
-    ExternalPointerIndex(std::size_t i = -1) : index(i) {}
+    ExternalPointerIndex(std::size_t i) : index(i) {}
 
 
     SEXPType type() const { return SEXPType::EXTPTR; }
 
     /**
-     * Index into the `external_pointers` vector of the `RdsFile` object.
+     * Index of the `RdsFile::external_pointers` or `RdaFile::external_pointers` vector, containing information about this external pointer.
      */
-    std::size_t index;
+    std::size_t index = -1;
 };
 
 /**
- * @brief Attribute names and values.
+ * @brief Attribute name and value. 
  */
-struct Attributes {
+struct Attribute {
     /**
-     * Name of each attribute.
+     * Default constructor.
      */
-    std::vector<std::string> names;
+    Attribute() = default;
 
     /**
-     * Encoding of each attribute's name.
+     * @param name Attribute name.
+     * @param value Value of the attribute.
      */
-    std::vector<StringEncoding> encodings;
+    Attribute(SymbolIndex name, std::unique_ptr<RObject> value) : name(std::move(name)), value(std::move(value)) {}
 
     /**
-     * Value of each attribute.
+     * Attribute name.
      */
-    std::vector<std::unique_ptr<RObject> > values;
+    SymbolIndex name;
 
     /**
-     * A convenient helper to add an attribute.
-     *
-     * @param n Name of the attribute.
-     * @param v Pointer to the attribute value.
-     * This should not be owned by any other object.
-     * @param enc Encoding of the attribute name.
+     * Value of the attribute.
      */
-    void add(std::string n, RObject* v, StringEncoding enc = StringEncoding::UTF8) {
-        names.emplace_back(std::move(n));
-        encodings.emplace_back(enc);
-        values.emplace_back(v);
-    }
-
-    /**
-     * A convenient helper to add an attribute.
-     *
-     * @param n Name of the attribute.
-     * @param v Unique pointer to the attribute value.
-     * @param enc Encoding of the attribute name.
-     */
-    void add(std::string n, std::unique_ptr<RObject> v, StringEncoding enc = StringEncoding::UTF8) {
-        names.emplace_back(std::move(n));
-        encodings.emplace_back(enc);
-        values.emplace_back(std::move(v));
-    }
+    std::unique_ptr<RObject> value;
 };
 
 /**
@@ -202,7 +310,7 @@ struct AtomicVector : public RObject {
     /**
      * Additional attributes.
      */
-    Attributes attributes;
+    std::vector<Attribute> attributes;
 };
 
 /**
@@ -231,17 +339,41 @@ typedef AtomicVector<unsigned char, SEXPType::RAW> RawVector;
 typedef AtomicVector<std::complex<double>, SEXPType::CPLX> ComplexVector;
 
 /**
+ * @brief Single string in a `StringVector`.
+ */
+struct String {
+    /**
+     * Default constructor.
+     */
+    String() = default;
+
+    /**
+     * @param value Value of the string.
+     * @param encoding Character encoding of the string.
+     */
+    String(std::string value, StringEncoding encoding) : value(std::move(value)), encoding(encoding) {}
+
+    /**
+     * Value of the string.
+     * If unset, the string is considered to be missing.
+     */
+    std::optional<std::string> value;
+
+    /**
+     * Character encoding of the string.
+     * This is respected even if `value` is unset.
+     */
+    StringEncoding encoding = StringEncoding::UTF8;
+};
+
+/**
  * @brief String vector.
  */
 struct StringVector : public RObject {
     /**
      * @cond
      */
-    StringVector(std::size_t n = 0) :
-        data(sanisizer::cast<I<decltype(data.size())> >(n)),
-        encodings(sanisizer::cast<I<decltype(encodings.size())> >(n)),
-        missing(sanisizer::cast<I<decltype(missing.size())> >(n))
-    {}
+    StringVector(std::size_t n = 0) : data(sanisizer::cast<I<decltype(data.size())> >(n)) {}
     /**
      * @endcond
      */
@@ -251,44 +383,12 @@ struct StringVector : public RObject {
     /**
      * Contents of the vector.
      */
-    std::vector<std::string> data;
-
-    /**
-     * Encodings for each element in `data`.
-     */
-    std::vector<StringEncoding> encodings;
-
-    /**
-     * Whether a string is missing in the vector.
-     * If `true`, the corresponding value of `data` and `encoding` should not be used.
-     */
-    std::vector<char> missing;
-
-    /**
-     * A convenient helper to add a string to the end of the vector.
-     *
-     * @param d Value of the string.
-     * @param enc Encoding of the attribute name.
-     */
-    void add(std::string d, StringEncoding enc = StringEncoding::UTF8) {
-        data.push_back(std::move(d));
-        encodings.push_back(enc);
-        missing.push_back(false);
-    }
-
-    /**
-     * A convenient helper to add a missing string to the end of the vector.
-     */
-    void add() {
-        data.push_back("");
-        encodings.push_back(StringEncoding::NONE);
-        missing.push_back(true);
-    }
+    std::vector<String> data;
 
     /**
      * Additional attributes.
      */
-    Attributes attributes;
+    std::vector<Attribute> attributes;
 };
 
 /**
@@ -315,7 +415,41 @@ struct GenericVector : public RObject {
     /**
      * Additional attributes.
      */
-    Attributes attributes;
+    std::vector<Attribute> attributes;
+};
+
+/**
+ * @brief Element of a `PairList`.
+ */
+struct PairListElement {
+    /**
+     * Default constructor.
+     */
+    PairListElement() = default;
+
+    /**
+     * Construct an untagged element.
+     * @param value Value of the element.
+     */
+    PairListElement(std::unique_ptr<RObject> value) : value(std::move(value)) {}
+
+    /**
+     * Construct a tagged element.
+     * @param tag Tag of the element.
+     * @param value Value of the element.
+     */
+    PairListElement(SymbolIndex tag, std::unique_ptr<RObject> value) : tag(std::move(tag)), value(std::move(value)) {}
+
+    /**
+     * Tag (a.k.a., name) of the pairlist element.
+     * If unset, this element is untagged.
+     */
+    std::optional<SymbolIndex> tag;
+
+    /**
+     * Value of the element.
+     */
+    std::unique_ptr<RObject> value;
 };
 
 /**
@@ -327,83 +461,12 @@ struct PairList : public RObject {
     /**
      * Contents of the vector.
      */
-    std::vector<std::unique_ptr<RObject> > data; 
-
-    /**
-     * Whether or not the corresponding element of `data` is tagged.
-     * This is of length equal to `data`.
-     */
-    std::vector<unsigned char> has_tag;
-
-    /**
-     * Names of the tags.
-     * Empty strings are used for untagged elements.
-     */
-    std::vector<std::string> tag_names;
-
-    /**
-     * Encoding of the tags.
-     */
-    std::vector<StringEncoding> tag_encodings;
-
-    /**
-     * A convenient helper to add a tagged element to the end of the pairlist.
-     *
-     * @param t Tag name.
-     * @param d Unique pointer to the element value.
-     * @param enc Encoding of the tag name.
-     */
-    void add(std::string t, std::unique_ptr<RObject> d, StringEncoding enc = StringEncoding::UTF8) {
-        data.push_back(std::move(d));
-        has_tag.push_back(true);
-        tag_names.push_back(std::move(t));
-        tag_encodings.push_back(enc);
-    }
-
-    /**
-     * A convenient helper to add a tagged element to the end of the pairlist.
-     *
-     * @param t Tag name.
-     * @param d Pointer to the element value.
-     * This should not be owned by any other resource.
-     * @param enc Encoding of the tag name.
-     */
-    void add(std::string t, RObject* d, StringEncoding enc = StringEncoding::UTF8) {
-        data.emplace_back(d);
-        has_tag.push_back(true);
-        tag_names.push_back(std::move(t));
-        tag_encodings.push_back(enc);
-    }
-
-    /**
-     * A convenient helper to add an untagged element to the end of the pairlist.
-     *
-     * @param d Pointer to the element value.
-     */
-    void add(std::unique_ptr<RObject> d) {
-        data.push_back(std::move(d));
-        has_tag.push_back(false);
-        tag_names.push_back("");
-        tag_encodings.push_back(StringEncoding::NONE);
-    }
-
-    /**
-     * A convenient helper to add an untagged element to the end of the pairlist.
-     *
-     * @param d Pointer to the element value.
-     * This should not be owned by any other resource.
-     */
-    void add(RObject* d) {
-        data.emplace_back(d);
-        has_tag.push_back(false);
-        tag_names.push_back("");
-        tag_encodings.push_back(StringEncoding::NONE);
-    }
+    std::vector<PairListElement> data; 
 
     /**
      * Additional attributes.
      */
-    Attributes attributes;
+    std::vector<Attribute> attributes;
 };
 
 /**
@@ -436,7 +499,7 @@ struct S4Object : public RObject {
      * Additional attributes.
      * For S4 objects, this is where the values of all slots are stored.
      */
-    Attributes attributes;
+    std::vector<Attribute> attributes;
 };
 
 /**
@@ -452,6 +515,41 @@ struct BuiltInFunction : public RObject {
 };
 
 /**
+ * @brief Function argument in a `LanguageObject`.
+ */
+struct LanguageArgument {
+    /**
+     * Default constructor.
+     */
+    LanguageArgument() = default;
+
+    /**
+     * Construct a named argument.
+     * @param name Name of the argument.
+     * @param value Value of the argument.
+     */
+    LanguageArgument(SymbolIndex name, std::unique_ptr<RObject> value) : name(std::move(name)), value(std::move(value)) {}
+
+    /**
+     * Construct an unnamed argument.
+     * @param value Value of the argument.
+     */
+    LanguageArgument(std::unique_ptr<RObject> value) : value(std::move(value)) {}
+
+    /**
+     * Name of the argument.
+     * If unset, the argument is unnamed.
+     */
+    std::optional<SymbolIndex> name;
+
+    /**
+     * Value of the argument, typically `LanguageObject` or `SymbolIndex` objects.
+     * These may also be `AtomicVector` instances of length 1.
+     */
+    std::unique_ptr<RObject> value;
+};
+
+/**
  * @brief Language object, i.e., a function call.
  */
 struct LanguageObject : public RObject {
@@ -461,95 +559,17 @@ struct LanguageObject : public RObject {
     /**
      * Name of the function.
      */
-    std::string function_name;
+    SymbolIndex function;
 
     /**
-     * Encoding for the function name.
+     * Function arguments, named or unnamed.
      */
-    StringEncoding function_encoding = StringEncoding::UTF8;
-
-    /**
-     * Values of the arguments to the function, typically `LanguageObject` or `SymbolIndex` objects.
-     * These may also be `AtomicVector` instances of length 1.
-     */
-    std::vector<std::unique_ptr<RObject> > argument_values;
-
-    /**
-     * Whether or not each argument is named.
-     * This should have the same length as `argument_values`.
-     */
-    std::vector<std::string> argument_names;
-
-    /**
-     * The name of the argument, if the corresponding entry of `argument_names` is `true`.
-     * This should have the same length as `argument_values`.
-     */
-    std::vector<unsigned char> argument_has_name;
-
-    /**
-     * Encoding of the argument name, if the corresponding entry of `argument_names` is `true`.
-     * This should have the same length as `argument_values`.
-     */
-    std::vector<StringEncoding> argument_encodings;
-
-    /**
-     * A convenient helper to add a named argument to the end of the argument list.
-     *
-     * @param n Argument name.
-     * @param d Unique pointer to the argument value.
-     * This should not be owned by any other resource.
-     * @param enc Encoding of the argument name.
-     */
-    void add_argument(std::string n, RObject* d, StringEncoding enc = StringEncoding::UTF8) {
-        argument_names.push_back(std::move(n));
-        argument_values.emplace_back(d);
-        argument_has_name.push_back(true);
-        argument_encodings.push_back(enc);
-    }
-
-    /**
-     * A convenient helper to add a named argument to the end of the argument list.
-     *
-     * @param n Argument name.
-     * @param d Unique pointer to the argument value.
-     * @param enc Encoding of the argument name.
-     */
-    void add_argument(std::string n, std::unique_ptr<RObject> d, StringEncoding enc = StringEncoding::UTF8) {
-        argument_names.push_back(std::move(n));
-        argument_values.push_back(std::move(d));
-        argument_has_name.push_back(true);
-        argument_encodings.push_back(enc);
-    }
-
-    /**
-     * A convenient helper to add an unnamed argument to the end of the argument list.
-     *
-     * @param d Pointer to the argument value.
-     * This should not be owned by any other resource.
-     */
-    void add_argument(RObject* d) {
-        argument_names.emplace_back();
-        argument_values.emplace_back(d);
-        argument_has_name.push_back(false);
-        argument_encodings.push_back(StringEncoding::NONE);
-    }
-
-    /**
-     * A convenient helper to add an unnamed argument to the end of the argument list.
-     *
-     * @param d Pointer to the argument value.
-     */
-    void add_argument(std::unique_ptr<RObject> d) {
-        argument_names.emplace_back();
-        argument_values.push_back(std::move(d));
-        argument_has_name.push_back(false);
-        argument_encodings.push_back(StringEncoding::NONE);
-    }
+    std::vector<LanguageArgument> arguments;
 
     /**
      * Additional attributes.
      */
-    Attributes attributes;
+    std::vector<Attribute> attributes;
 };
 
 /**
@@ -577,7 +597,7 @@ struct ExpressionVector : public RObject {
     /**
      * Additional attributes.
      */
-    Attributes attributes;
+    std::vector<Attribute> attributes;
 };
 
 }

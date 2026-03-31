@@ -6,12 +6,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "Environment.hpp"
-#include "Symbol.hpp"
-#include "ExternalPointer.hpp"
 #include "RObject.hpp"
 #include "SEXPType.hpp"
-
 #include "write_single_string.hpp"
 #include "utils_write.hpp"
 
@@ -77,7 +73,7 @@ public:
         }
 
         inject_header(SEXPType::SYM, bufwriter);
-        write_single_string(value, encoding, false, bufwriter);
+        write_single_string(value, encoding, bufwriter);
 
         const auto old_reference_count = reference_count;
         host[value] = reference_count;
@@ -121,7 +117,7 @@ public:
         reference_count = sanisizer::sum<I<decltype(reference_count)> >(reference_count, 1); // safely incrementing this count.
 
         const auto& ext = (*known_external_pointers)[index];
-        inject_header(SEXPType::EXTPTR, ext.attributes, bufwriter);
+        inject_header(SEXPType::EXTPTR, ext.attributes, bufwriter, *this);
         write_object(ext.protection.get(), bufwriter, *this);
         write_object(ext.tag.get(), bufwriter, *this);
         write_attributes(ext.attributes, bufwriter, *this);
@@ -151,7 +147,7 @@ public:
         candidate = reference_count++;
 
         const auto& env = (*known_environments)[index];
-        inject_header(SEXPType::ENV, env.attributes, bufwriter);
+        inject_header(SEXPType::ENV, env.attributes, bufwriter, *this);
         inject_integer<std::int32_t, std::int32_t>(env.locked, bufwriter);
 
         {
@@ -161,31 +157,20 @@ public:
             write_environment(&parent, bufwriter);
         }
 
-        const auto& names = env.variable_names;
-        const auto& encodings = env.variable_encodings;
-        const auto& values = env.variable_values;
-
-        const auto len = names.size();
-        if (len) {
-            // Creating a tagged pairlist per element.
-            for (I<decltype(len)> i = 0; i < len; ++i) {
-                inject_next_pairlist_header(true, bufwriter);
-                write_symbol(names[i], encodings[i], bufwriter);
-                write_object(values[i].get(), bufwriter, *this);
-            }
+        // Creating a tagged pairlist per element.
+        for (const auto& var : env.variables) {
+            inject_next_pairlist_header(true, bufwriter);
+            write_symbol(&(var.name), bufwriter);
+            write_object(var.value.get(), bufwriter, *this);
         }
-
-        // Terminating the pairlist.
         inject_header(SEXPType::NILVALUE_, bufwriter);
 
         // We're not saving a hash table, because I don't want to have to
         // reproduce R's environment hashing logic.
         inject_header(SEXPType::NILVALUE_, bufwriter);
 
-        if (!write_attributes(env.attributes, bufwriter, *this)) {
-            // Finishing with NULL if there aren't any attributes.
-            inject_header(SEXPType::NILVALUE_, bufwriter);
-        }
+        // Forcibly writing out all attributes with NIL termination.
+        write_attributes_body(env.attributes, bufwriter, *this);
     }
 };
 

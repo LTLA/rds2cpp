@@ -7,17 +7,12 @@
 #include "utils_parse.hpp"
 #include "SEXPType.hpp"
 #include "StringEncoding.hpp"
+#include "RObject.hpp"
 
 namespace rds2cpp {
 
-struct StringInfo {
-    std::string value;
-    StringEncoding encoding = StringEncoding::NONE;
-    bool missing = false;
-};
-
 template<class Source_>
-StringInfo parse_single_string(Source_& src) try {
+String parse_single_string(Source_& src) try {
     auto header = parse_header(src);
     std::reverse(header.begin(), header.end()); // make it little-endian for easier indexing.
     if (header[0] != static_cast<unsigned char>(SEXPType::CHAR)) {
@@ -27,22 +22,24 @@ StringInfo parse_single_string(Source_& src) try {
     // Getting the string length; all strings are less than 2^31-1,
     // see https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Long-vectors
     const auto strlen = quick_integer<std::int32_t>(src);
+    const bool missing = (strlen == -1);
 
-    StringInfo output;
-    output.missing = (strlen == -1);
+    String output;
 
-    if (!output.missing) {
+    if (!missing) {
         if (strlen < 0) {
             throw std::runtime_error("length of a non-missing string should be non-negative");
         }
 
-        output.value.reserve(strlen); // don't resize and use extract() on string::data, as that pointer is read-only AFAICT.
+        std::string val;
+        val.reserve(strlen); // don't resize and use extract() on string::data, as that pointer is read-only AFAICT.
         for (I<decltype(strlen)> i = 0; i < strlen; ++i) {
             if (!src.advance()) {
                 throw empty_error();
             }
-            output.value.push_back(as_char(src.get()));
+            val.push_back(as_char(src.get()));
         }
+        output.value = std::move(val);
 
         /* String encoding is stored in the gp field, from bits 12 to 27 in the header.
          * We make life easier by just accessing the relevant byte below, after adjusting
@@ -66,7 +63,7 @@ StringInfo parse_single_string(Source_& src) try {
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse a single CHARSXP", e);
-    return StringInfo();
+    return String();
 }
 
 }

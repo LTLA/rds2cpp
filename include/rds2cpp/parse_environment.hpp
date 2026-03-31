@@ -70,14 +70,12 @@ EnvironmentIndex parse_new_environment_body(Source_& src, SharedParseInfo& share
     if (unhashed[3] == static_cast<unsigned char>(SEXPType::LIST)) {
         auto plist = parse_pairlist_body(src, unhashed, shared);
 
-        const auto plist_len = plist.data.size();
-        for (I<decltype(plist_len)> i = 0; i < plist_len; ++i) {
-            if (!plist.has_tag[i]) {
+        new_env.variables.reserve(plist.data.size());
+        for (auto& entry : plist.data) {
+            if (!(entry.tag.has_value())) {
                 throw std::runtime_error("unhashed environment values should be respresented in a tagged pairlist");
             }
-            new_env.variable_values.emplace_back(std::move(plist.data[i]));
-            new_env.variable_names.emplace_back(std::move(plist.tag_names[i]));
-            new_env.variable_encodings.emplace_back(plist.tag_encodings[i]);
+            new_env.variables.emplace_back(std::move(*(entry.tag)), std::move(entry.value));
         }
 
         auto hashed = parse_header(src); 
@@ -94,25 +92,23 @@ EnvironmentIndex parse_new_environment_body(Source_& src, SharedParseInfo& share
         new_env.hashed = true;
 
         auto vec = parse_list_body(src, shared);
-        const auto veclen = vec.data.size();
-        for (I<decltype(veclen)> i = 0; i < veclen; ++i) {
-            if (vec.data[i]->type() == SEXPType::NIL) {
+        for (auto& sublist : vec.data) {
+            const auto subtype = sublist->type();
+            if (subtype == SEXPType::NIL) {
                 continue;
             }
-
-            if (vec.data[i]->type() != SEXPType::LIST) {
+            if (subtype != SEXPType::LIST) {
                 throw std::runtime_error("environment values should be represented as pairlists");
             }
 
-            auto plist = static_cast<PairList*>(vec.data[i].get());
-            const auto nelements = plist->data.size();
-            for (I<decltype(nelements)> j = 0; j < nelements; ++j) {
-                if (!plist->has_tag[j]) {
-                    throw std::runtime_error("environment values should be represented as a length-1 tagged pairlists");
+            auto plist = static_cast<PairList*>(sublist.get());
+            new_env.variables.reserve(new_env.variables.size() + plist->data.size());
+
+            for (auto& entry : plist->data) {
+                if (!entry.tag.has_value()) {
+                    throw std::runtime_error("environment values should be stored in a tagged pairlist");
                 }
-                new_env.variable_values.emplace_back(std::move(plist->data[j]));
-                new_env.variable_names.emplace_back(std::move(plist->tag_names[j]));
-                new_env.variable_encodings.emplace_back(plist->tag_encodings[j]);
+                new_env.variables.emplace_back(std::move(*(entry.tag)), std::move(entry.value));
             }
         }
 

@@ -13,13 +13,13 @@ test_that("length extraction works correctly", {
 })
 
 test_that("string extraction works correctly", {
-    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^7, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "UTF-8", FALSE))
-    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^6, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "latin1", FALSE))
-    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 2^2, 0, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "unknown", FALSE))
-    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^5, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "bytes", FALSE))
+    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^7, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "UTF-8"))
+    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^6, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "latin1"))
+    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 2^2, 0, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "unknown"))
+    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^5, 9, 0, 0, 0, 5, charToRaw('ABCDE')))), list("ABCDE", "bytes"))
 
-    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^7, 9, 0, 0, 0, 0))), list("", "UTF-8", FALSE))
-    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^5, 9, 255, 255, 255, 255))), list("", "bytes", TRUE))
+    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^7, 9, 0, 0, 0, 0))), list("", "UTF-8"))
+    expect_identical(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^5, 9, 255, 255, 255, 255))), NA_character_)
     expect_error(rds2cpp::parse_single_string(as.raw(c(0, 0, 0, 2^5, 9, 255, 0, 0, 0))), "non-negative");
 })
 

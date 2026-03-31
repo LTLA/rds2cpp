@@ -7,9 +7,6 @@
 #include <cstddef>
 #include <stdexcept>
 
-#include "Environment.hpp"
-#include "Symbol.hpp"
-#include "ExternalPointer.hpp"
 #include "RObject.hpp"
 #include "SEXPType.hpp"
 #include "utils_parse.hpp"

@@ -142,11 +142,9 @@ StringVector parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
         output = StringVector(n);
 
         for (I<decltype(n)> i = 0; i < n; ++i) {
-            if (cast->data[i] == std::numeric_limits<std::int32_t>::min()) { // see R_ext/Arith.h
-                output.missing[i] = true;
-            } else {
-                output.data[i] = std::to_string(cast->data[i]);
-                output.encodings[i] = StringEncoding::ASCII;
+            if (cast->data[i] != std::numeric_limits<std::int32_t>::min()) { // see altrep.c.
+                output.data[i].value = std::to_string(cast->data[i]);
+                output.data[i].encoding = StringEncoding::ASCII;
             }
         }
 
@@ -159,11 +157,11 @@ StringVector parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
 
         const auto datalen = cast->data.size();
         for (I<decltype(datalen)> i = 0; i < datalen; ++i) {
-            output.encodings[i] = StringEncoding::ASCII;
+            output.data[i].encoding = StringEncoding::ASCII;
 
             if (std::isfinite(cast->data[i])) {
                 converter << cast->data[i];
-                output.data[i] = converter.str();
+                output.data[i].value = converter.str();
                 converter.str(std::string());
 
             } else if (std::isnan(cast->data[i])) {
@@ -177,16 +175,16 @@ StringVector parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
                 );
 
                 if (payload == 1954) {
-                    output.missing[i] = true;
+                    // Missing values are represented by the default unset value of String::value. 
                 } else {
-                    output.data[i] = "NaN";
+                    output.data[i].value = "NaN";
                 }
 
             } else if (std::isinf(cast->data[i])) {
                 if (cast->data[i] > 0) {
-                    output.data[i] = "Inf";
+                    output.data[i].value = "Inf";
                 } else {
-                    output.data[i] = "-Inf";
+                    output.data[i].value = "-Inf";
                 }
             }
         }
@@ -228,7 +226,7 @@ std::unique_ptr<RObject> parse_altrep_body(Source_& src, SharedParseInfo& shared
     }
 
     auto plist = parse_pairlist_body(src, header, shared);
-    if (plist.data.size() < 1 || plist.data[0]->type() != SEXPType::SYM) {
+    if (plist.data.size() < 1 || plist.data[0].value->type() != SEXPType::SYM) {
         throw std::runtime_error("expected type specification symbol in the ALTREP description");
     }
 
@@ -237,7 +235,7 @@ std::unique_ptr<RObject> parse_altrep_body(Source_& src, SharedParseInfo& shared
         pointerize(output, std::move(x));
     };
 
-    auto sdx = static_cast<SymbolIndex*>(plist.data[0].get());
+    auto sdx = static_cast<SymbolIndex*>(plist.data[0].value.get());
     const auto& symb = shared.symbols[sdx->index];
 
     if (symb.name == "wrap_integer") {
