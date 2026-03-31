@@ -49,7 +49,7 @@ struct RObject {
 /**
  * @brief R's `NULL` value.
  */
-struct Null : public RObject {
+struct Null final : public RObject {
     SEXPType type() const { return SEXPType::NIL; }
 };
 
@@ -82,7 +82,7 @@ struct Symbol {
 /**
  * @brief Reference to a language symbol. 
  */
-struct SymbolIndex : public RObject {
+struct SymbolIndex final : public RObject {
     /**
      * Default constructor.
      */
@@ -113,7 +113,7 @@ struct Attribute;
 /**
  * @brief Reference to an environment. 
  */
-struct EnvironmentIndex : public RObject {
+struct EnvironmentIndex final : public RObject {
     /**
      * Default constructor.
      */
@@ -234,7 +234,7 @@ struct ExternalPointer {
 /**
  * @brief Reference to an external pointer.
  */
-struct ExternalPointerIndex : public RObject {
+struct ExternalPointerIndex final : public RObject {
     /**
      * Default constructor.
      */
@@ -287,7 +287,7 @@ struct Attribute {
  * @tparam stype `SEXPType` flag for the type. 
  */
 template<typename ElementType, SEXPType stype>
-struct AtomicVector : public RObject {
+struct AtomicVector final : public RObject {
     /**
      * @cond
      */
@@ -369,7 +369,7 @@ struct String {
 /**
  * @brief String vector.
  */
-struct StringVector : public RObject {
+struct StringVector final : public RObject {
     /**
      * @cond
      */
@@ -394,7 +394,7 @@ struct StringVector : public RObject {
 /**
  * @brief Generic vector, i.e., an ordinary R list.
  */
-struct GenericVector : public RObject {
+struct GenericVector final : public RObject {
     /**
      * @cond
      */
@@ -455,7 +455,7 @@ struct PairListElement {
 /**
  * @brief Pairlist, i.e., a linked list.
  */
-struct PairList : public RObject {
+struct PairList final : public RObject {
     SEXPType type() const { return SEXPType::LIST; }
 
     /**
@@ -472,7 +472,7 @@ struct PairList : public RObject {
 /**
  * @brief S4 object.
  */
-struct S4Object : public RObject {
+struct S4Object final : public RObject {
     SEXPType type() const { return SEXPType::S4; }
 
     /**
@@ -505,7 +505,7 @@ struct S4Object : public RObject {
 /**
  * @brief Built-in function.
  */
-struct BuiltInFunction : public RObject {
+struct BuiltInFunction final : public RObject {
     SEXPType type() const { return SEXPType::BUILTIN; }
 
     /**
@@ -552,7 +552,7 @@ struct LanguageArgument {
 /**
  * @brief Language object, i.e., a function call.
  */
-struct LanguageObject : public RObject {
+struct LanguageObject final : public RObject {
 
     SEXPType type() const { return SEXPType::LANG; }
 
@@ -575,7 +575,7 @@ struct LanguageObject : public RObject {
 /**
  * @brief Expression vector.
  */
-struct ExpressionVector : public RObject {
+struct ExpressionVector final : public RObject {
     /**
      * @cond
      */
