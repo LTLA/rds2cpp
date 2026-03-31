@@ -33,83 +33,102 @@ std::unique_ptr<RObject> parse_object(Source_& src, SharedParseInfo& shared) {
     auto sexp_type = details[3];
 
     std::unique_ptr<RObject> output;
-    auto pointerize_ = [&](auto obj) -> void {
+
+    auto pointerize_attr = [&](auto obj) -> void {
+        if (has_attributes(details)) {
+            parse_attributes(src, obj.attributes, shared);
+        }
         pointerize(output, std::move(obj));
-        return;
     };
 
-    auto pointerize_attr = [&](auto obj) -> std::vector<Attribute>* {
-        pointerize(output, std::move(obj));
-        typedef typename std::remove_reference<decltype(obj)>::type Object;
-        auto ptr = static_cast<Object*>(output.get());
-        return &(ptr->attributes);
-    };
+    switch(sexp_type) {
+        case static_cast<unsigned char>(SEXPType::LIST):
+            pointerize(output, parse_pairlist_body(src, details, shared));
+            break;
 
-    if (sexp_type == static_cast<unsigned char>(SEXPType::LIST)) {
-        pointerize_(parse_pairlist_body(src, details, shared));
+        case static_cast<unsigned char>(SEXPType::SYM):
+            pointerize(output, parse_symbol_body(src, shared));
+            break;
 
-    } else if (sexp_type == static_cast<unsigned char>(SEXPType::SYM)) {
-        pointerize_(parse_symbol_body(src, shared));
+        case static_cast<unsigned char>(SEXPType::S4):
+            pointerize(output, parse_s4_body(src, details, shared));
+            break;
 
-    } else if (sexp_type == static_cast<unsigned char>(SEXPType::S4)) {
-        pointerize_(parse_s4_body(src, details, shared));
+        case static_cast<unsigned char>(SEXPType::ALTREP_):
+            output = parse_altrep_body(src, shared);
+            break;
 
-    } else if (sexp_type == static_cast<unsigned char>(SEXPType::ALTREP_)) {
-        output = parse_altrep_body(src, shared);
+        case static_cast<unsigned char>(SEXPType::NIL):
+        case static_cast<unsigned char>(SEXPType::NILVALUE_):
+            pointerize(output, Null());
+            break;
 
-    } else if (sexp_type == static_cast<unsigned char>(SEXPType::NIL) || sexp_type == static_cast<unsigned char>(SEXPType::NILVALUE_)) {
-        pointerize_(Null());
+        case static_cast<unsigned char>(SEXPType::ENV):
+            pointerize(output, parse_new_environment_body(src, shared));
+            break;
 
-    } else if (sexp_type == static_cast<unsigned char>(SEXPType::ENV)) {
-        pointerize_(parse_new_environment_body(src, shared));
+        case static_cast<unsigned char>(SEXPType::EXTPTR):
+            pointerize(output, parse_external_pointer_body(src, details, shared));
+            break;
 
-    } else if (sexp_type == static_cast<unsigned char>(SEXPType::EXTPTR)) {
-        pointerize_(parse_external_pointer_body(src, details, shared));
+        case static_cast<unsigned char>(SEXPType::GLOBALENV_):
+            pointerize(output, parse_global_environment_body());
+            break;
 
-    } else if (sexp_type == static_cast<unsigned char>(SEXPType::GLOBALENV_)) {
-        pointerize_(parse_global_environment_body());
+        case static_cast<unsigned char>(SEXPType::BASEENV_):
+            pointerize(output, parse_base_environment_body());
+            break;
 
-    } else if (sexp_type == static_cast<unsigned char>(SEXPType::BASEENV_)) {
-        pointerize_(parse_base_environment_body());
+        case static_cast<unsigned char>(SEXPType::EMPTYENV_):
+            pointerize(output, parse_empty_environment_body());
+            break;
 
-    } else if (sexp_type == static_cast<unsigned char>(SEXPType::EMPTYENV_)) {
-        pointerize_(parse_empty_environment_body());
+        case static_cast<unsigned char>(SEXPType::REF):
+            output = shared.resolve_reference(details);
+            break;
 
-    } else if (sexp_type == static_cast<unsigned char>(SEXPType::REF)) {
-        output = shared.resolve_reference(details);
+        case static_cast<unsigned char>(SEXPType::BUILTIN):
+            pointerize(output, parse_builtin_body(src));
+            break;
 
-    } else if (sexp_type == static_cast<unsigned char>(SEXPType::BUILTIN)) {
-        pointerize_(parse_builtin_body(src));
+        case static_cast<unsigned char>(SEXPType::LANG):
+            pointerize(output, parse_language_body(src, details, shared));
+            break;
 
-    } else if (sexp_type == static_cast<unsigned char>(SEXPType::LANG)) {
-        pointerize_(parse_language_body(src, details, shared));
+        case static_cast<unsigned char>(SEXPType::INT):
+            pointerize_attr(parse_integer_body(src));
+            break;
 
-    } else {
-        std::vector<Attribute>* attr = nullptr;
+        case static_cast<unsigned char>(SEXPType::LGL):
+            pointerize_attr(parse_logical_body(src));
+            break;
 
-        if (sexp_type == static_cast<unsigned char>(SEXPType::INT)) {
-            attr = pointerize_attr(parse_integer_body(src));
-        } else if (sexp_type == static_cast<unsigned char>(SEXPType::LGL)) { 
-            attr = pointerize_attr(parse_logical_body(src));
-        } else if (sexp_type == static_cast<unsigned char>(SEXPType::RAW)) {
-            attr = pointerize_attr(parse_raw_body(src));
-        } else if (sexp_type == static_cast<unsigned char>(SEXPType::REAL)) {
-            attr = pointerize_attr(parse_double_body(src));
-        } else if (sexp_type == static_cast<unsigned char>(SEXPType::CPLX)) {
-            attr = pointerize_attr(parse_complex_body(src));
-        } else if (sexp_type == static_cast<unsigned char>(SEXPType::STR)) {
-            attr = pointerize_attr(parse_string_body(src));
-        } else if (sexp_type == static_cast<unsigned char>(SEXPType::VEC)) {
-            attr = pointerize_attr(parse_list_body(src, shared));
-        } else if (sexp_type == static_cast<unsigned char>(SEXPType::EXPR)) {
-            attr = pointerize_attr(parse_expression_body(src, shared));
-        } else {
+        case static_cast<unsigned char>(SEXPType::RAW):
+            pointerize_attr(parse_raw_body(src));
+            break;
+
+        case static_cast<unsigned char>(SEXPType::REAL):
+            pointerize_attr(parse_double_body(src));
+            break;
+
+        case static_cast<unsigned char>(SEXPType::CPLX):
+            pointerize_attr(parse_complex_body(src));
+            break;
+
+        case static_cast<unsigned char>(SEXPType::STR):
+            pointerize_attr(parse_string_body(src));
+            break;
+
+        case static_cast<unsigned char>(SEXPType::VEC):
+            pointerize_attr(parse_list_body(src, shared));
+            break;
+
+        case static_cast<unsigned char>(SEXPType::EXPR):
+            pointerize_attr(parse_expression_body(src, shared));
+            break;
+
+        default:
             throw std::runtime_error("cannot read unknown (or unsupported) SEXP type " + std::to_string(static_cast<int>(sexp_type)));
-        }
-
-        if (has_attributes(details) && attr) {
-            parse_attributes(src, *attr, shared);
-        }
     }
 
     return output;
