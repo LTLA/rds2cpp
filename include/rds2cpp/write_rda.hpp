@@ -65,7 +65,21 @@ void write_rda(const RdaFile& info, Writer& writer, const WriteRdaOptions& optio
     bufwriter->write(encoding);
 
     SharedWriteInfo shared(info.symbols, info.environments, info.external_pointers);
-    write_pairlist(&(info.contents), *bufwriter, shared);
+
+    // We need to write it out as a tagged pairlist but we can't move the unique_ptrs into a temporary PairList while keeping things const. 
+    // So we'll just do it manually, by duplicating the logic in write_pairlist(). 
+    for (const auto& entry : info.objects) {
+        Header details;
+        details[0] = 0;
+        details[1] = 0;
+        details[2] = 0x4; // i.e., has tag.
+        details[3] = static_cast<unsigned char>(SEXPType::LIST);
+        bufwriter->write(details.data(), details.size());
+        write_symbol(&(entry.name), *bufwriter, shared);
+        write_object(entry.value.get(), *bufwriter, shared); 
+    }
+
+    inject_header(SEXPType::NILVALUE_, *bufwriter);
 }
 
 /**

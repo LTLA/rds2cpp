@@ -16,6 +16,32 @@
 namespace rds2cpp {
 
 /**
+ * @brief R object saved in a `RdaFile`.
+ */
+struct RdaObject {
+    /**
+     * Default constructor.
+     */
+    RdaObject() = default;
+
+    /**
+     * @param name Name of the object.
+     * @param value Value of the object.
+     */
+    RdaObject(SymbolIndex name, std::unique_ptr<RObject> value) : name(std::move(name)), value(std::move(value)) {}
+
+    /**
+     * Name of the object.
+     */
+    SymbolIndex name;
+
+    /**
+     * Value of the object.
+     */
+    std::unique_ptr<RObject> value;
+};
+
+/**
  * @brief Contents of the parsed RDA file.
  */
 struct RdaFile {
@@ -40,10 +66,9 @@ struct RdaFile {
     StringEncoding encoding = StringEncoding::UTF8;
 
     /**
-     * The unserialized pairlist containing all saved objects.
-     * This pairlist will be tagged with the object names. 
+     * Vector of objects saved in this file along with their names.
      */
-    PairList contents;
+    std::vector<RdaObject> objects;
 
     /**
      * All environments inside the file.

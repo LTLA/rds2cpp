@@ -9,9 +9,7 @@ test_that("reading RDA files (simple)", {
     save(file=tmp, list=c("X", "Y", "Z"))
 
     roundtrip <- rds2cpp::parse_rda(tmp, parallel=FALSE)
-    expect_true(attr(roundtrip$value, "pretend-to-be-a-pairlist"))
-    expect_identical(roundtrip$value$data, list(X, Y, Z))
-    expect_identical(roundtrip$value$tag, c("X", "Y", "Z"))
+    expect_identical(roundtrip$value, list(X=X, Y=Y, Z=Z))
 
     expect_identical(roundtrip$environments, list())
     expect_identical(roundtrip$symbols, c("X", "Y", "Z", "names"))
@@ -43,18 +41,17 @@ test_that("reading RDA files (complex)", {
         rds2cpp::parse_rda(tmp, parallel=FALSE)
     }, envir=.GlobalEnv)
 
-    expect_true(attr(roundtrip$value, "pretend-to-be-a-pairlist"))
-    expect_identical(roundtrip$value$data[[1]]$environment_id, 0L)
-    expect_identical(roundtrip$value$data[[2]]$external_pointer_id, 0L)
-    expect_identical(roundtrip$symbols[roundtrip$value$data[[3]]$symbol_id + 1L], "aaron")
-    expect_identical(roundtrip$value$data[[4]]$environment_id, 1L)
-    expect_identical(roundtrip$value$data[[5]]$external_pointer_id, 1L)
-    expect_identical(roundtrip$symbols[roundtrip$value$data[[6]]$symbol_id + 1L], "lun")
-    expect_identical(roundtrip$value$data[[7]]$environment_id, 0L)
-    expect_identical(roundtrip$value$data[[8]]$external_pointer_id, 0L)
-    expect_identical(roundtrip$value$data[[9]]$symbol_id, roundtrip$value$data[[3]]$symbol_id)
+    expect_identical(names(roundtrip$value), c("X", "Y", "Z", "A", "B", "C", "M", "N", "O"))
+    expect_identical(roundtrip$value$X$environment_id, 0L)
+    expect_identical(roundtrip$value$Y$external_pointer_id, 0L)
+    expect_identical(roundtrip$symbols[roundtrip$value$Z$symbol_id + 1L], "aaron")
+    expect_identical(roundtrip$value$A$environment_id, 1L)
+    expect_identical(roundtrip$value$B$external_pointer_id, 1L)
+    expect_identical(roundtrip$symbols[roundtrip$value$C$symbol_id + 1L], "lun")
+    expect_identical(roundtrip$value$M$environment_id, 0L)
+    expect_identical(roundtrip$value$N$external_pointer_id, 0L)
+    expect_identical(roundtrip$value$O$symbol_id, roundtrip$value$Z$symbol_id)
 
-    expect_identical(roundtrip$value$tag, c("X", "Y", "Z", "A", "B", "C", "M", "N", "O"))
     expect_identical(sort(roundtrip$symbols), sort(c("X", "Y", "Z", "A", "B", "C", "M", "N", "O", "aaron", "lun", "names", "FOO", "BAR")))
 
     expect_identical(roundtrip$environments[[1]]$variables, list(FOO=X$FOO))
@@ -69,7 +66,6 @@ test_that("writing RDA files (simple)", {
         Y = letters,
         Z = list(aa = TRUE, bb = FALSE)
     )
-    attr(pl, "pretend-to-be-a-pairlist") <- TRUE
 
     tmp <- tempfile(fileext=".Rda")
     rds2cpp::write_rda(pl, tmp, parallel=FALSE)
@@ -120,7 +116,6 @@ test_that("writing RDA files (complex)", {
         A = A, B = B, C = C,
         M = X, N = Y, O = Z
     )
-    attr(pl, "pretend-to-be-a-pairlist") <- TRUE
 
     tmp <- tempfile(fileext=".Rda")
     rds2cpp::write_rda(pl, tmp, parallel=FALSE)
@@ -174,11 +169,10 @@ test_that("parallelized read/write of RDA files", {
     save(file=tmp, list=c("payload"))
 
     roundtrip <- rds2cpp::parse_rda(tmp, parallel=TRUE)
-    expect_identical(roundtrip$value$data[[1]], payload)
-    expect_identical(roundtrip$value$tag, "payload")
+    expect_identical(roundtrip$value$payload, payload)
+    expect_identical(names(roundtrip$value), "payload")
 
     pl <- list(payload = payload)
-    attr(pl, "pretend-to-be-a-pairlist") <- TRUE
     rds2cpp::write_rda(pl, tmp, parallel=TRUE)
     env <- new.env()
     load(tmp, envir=env)

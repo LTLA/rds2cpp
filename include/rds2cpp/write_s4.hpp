@@ -28,15 +28,15 @@ void write_s4(const RObject* object, BufferedWriter_& bufwriter, SharedWriteInfo
     // Adding the header.
     inject_next_pairlist_header(true, bufwriter);
 
-    // Writing the class information. We do this manually because I can't figure out
-    // how to register a symbol for 'package' while keeping shared.known_symbols const.
+    // Writing the class information as the first "attribute" among the S4 slots.
+    // We do this manually because I can't figure out how to register a symbol for 'class' and 'package' while keeping everything const.
     {
         write_symbol("class", StringEncoding::ASCII, bufwriter, shared); // We'll guess the encoding of the 'class' string. 
 
         Header details;
         details[0] = 0;
         details[1] = 0;
-        details[2] = 0x2;
+        details[2] = 0x2; // i.e., this also has attributes.
         details[3] = static_cast<unsigned char>(SEXPType::STR);
         bufwriter.write(details.data(), details.size());
         inject_length(1, bufwriter);

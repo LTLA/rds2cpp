@@ -43,7 +43,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // parse_single_string
-Rcpp::List parse_single_string(Rcpp::RawVector raw);
+Rcpp::RObject parse_single_string(Rcpp::RawVector raw);
 RcppExport SEXP _rds2cpp_parse_single_string(SEXP rawSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -65,11 +65,11 @@ BEGIN_RCPP
 END_RCPP
 }
 // write_rda
-Rcpp::RObject write_rda(Rcpp::RObject x, std::string file_name, bool parallel);
+Rcpp::RObject write_rda(Rcpp::List x, std::string file_name, bool parallel);
 RcppExport SEXP _rds2cpp_write_rda(SEXP xSEXP, SEXP file_nameSEXP, SEXP parallelSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::RObject >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type x(xSEXP);
     Rcpp::traits::input_parameter< std::string >::type file_name(file_nameSEXP);
     Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP);
     rcpp_result_gen = Rcpp::wrap(write_rda(x, file_name, parallel));

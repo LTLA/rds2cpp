@@ -308,11 +308,18 @@ Rcpp::RObject write_rds(Rcpp::RObject x, std::string file_name, bool parallel) {
 
 //' @export
 //[[Rcpp::export(rng=false)]]
-Rcpp::RObject write_rda(Rcpp::RObject x, std::string file_name, bool parallel) {
+Rcpp::RObject write_rda(Rcpp::List x, std::string file_name, bool parallel) {
     rds2cpp::RdaFile output;
-    auto uncoverted = unconvert(x, output);
-    auto pl = dynamic_cast<rds2cpp::PairList*>(uncoverted.get());
-    output.contents = std::move(*pl);
+
+    output.objects.reserve(x.size());
+    const std::size_t n = x.size();
+    Rcpp::CharacterVector names = x.attr("names");
+    for (std::size_t i = 0; i < n; ++i) {
+        output.objects.emplace_back(
+            rds2cpp::register_symbol(Rcpp::as<std::string>(names[i]), rds2cpp::StringEncoding::UTF8, output.symbols),
+            unconvert(x[i], output)
+        );
+    }
 
     rds2cpp::WriteRdaOptions opt;
     opt.parallel = parallel;

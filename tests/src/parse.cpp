@@ -297,7 +297,16 @@ Rcpp::RObject parse_rdx(const RdxFile_& rdx_file) {
     if constexpr(std::is_same<RdxFile_, rds2cpp::RdsFile>::value) {
         output["value"] = convert(rdx_file.object.get(), rdx_file);
     } else {
-        output["value"] = convert(&(rdx_file.contents), rdx_file);
+        const std::size_t num_objects = rdx_file.objects.size();
+        Rcpp::List tmp(num_objects);
+        Rcpp::CharacterVector names(num_objects);
+        for (std::size_t i = 0; i < num_objects; ++i) {
+            const auto& obj = rdx_file.objects[i];
+            names[i] = rdx_file.symbols[obj.name.index].name;
+            tmp[i] = convert(obj.value.get(), rdx_file);
+        }
+        tmp.attr("names") = names;
+        output["value"] = std::move(tmp);
     }
 
     return output;
