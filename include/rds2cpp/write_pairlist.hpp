@@ -43,7 +43,7 @@ void write_pairlist(const RObject* object, BufferedWriter_& bufwriter, SharedWri
         }
 
         if (entry.tag.has_value()) {
-            shared.write_symbol(&(*(entry.tag)), bufwriter);
+            write_symbol(&(*(entry.tag)), bufwriter, shared);
         }
 
         write_object(entry.value.get(), bufwriter, shared); 

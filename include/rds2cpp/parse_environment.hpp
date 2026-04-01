@@ -29,7 +29,9 @@ inline std::unique_ptr<EnvironmentIndex> parse_empty_environment_body() {
 template<class Source_>
 std::unique_ptr<EnvironmentIndex> parse_new_environment_body(Source_& src, SharedParseInfo& shared) try {
     // Need to provision the environment first, so that internal references are valid.
-    const auto eindex = shared.request_environment();
+    // Don't create an lvalue reference to 'shared.environments[eindex]',
+    // as this might be invalidated by reallocations to 'shared.environments'.
+    const auto eindex = request_new_environment(shared);
     Environment new_env;
 
     // Is it locked or not?
@@ -42,7 +44,7 @@ std::unique_ptr<EnvironmentIndex> parse_new_environment_body(Source_& src, Share
 
     auto lastbit = parent[3];
     if (lastbit == static_cast<unsigned char>(SEXPType::REF)) {
-        new_env.parent = shared.get_environment_index(parent);
+        new_env.parent = extract_environment_index(parent, shared);
         new_env.parent_type = SEXPType::ENV;
 
     } else if (lastbit == static_cast<unsigned char>(SEXPType::ENV)) {

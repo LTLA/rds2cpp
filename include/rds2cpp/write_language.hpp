@@ -24,12 +24,12 @@ void write_language(const RObject* object, BufferedWriter_& bufwriter, SharedWri
     // Attributes before the rest of the content.
     write_attributes(input.attributes, bufwriter, shared);
 
-    shared.write_symbol(&(input.function), bufwriter);
+    write_symbol(&(input.function), bufwriter, shared);
 
     for (const auto& arg : input.arguments) {
         inject_next_pairlist_header(arg.name.has_value(), bufwriter);
         if (arg.name.has_value()) {
-            shared.write_symbol(&(*(arg.name)), bufwriter);
+            write_symbol(&(*(arg.name)), bufwriter, shared);
         }
         write_object(arg.value.get(), bufwriter, shared); 
     }

@@ -17,7 +17,7 @@ template<class BufferedWriter_>
 void write_attributes_body(const std::vector<Attribute>& attributes, BufferedWriter_& bufwriter, SharedWriteInfo& shared) {
     for (const auto& attr : attributes) {
         inject_next_pairlist_header(true, bufwriter);
-        shared.write_symbol(&(attr.name), bufwriter);
+        write_symbol(&(attr.name), bufwriter, shared);
         write_object(attr.value.get(), bufwriter, shared);
     }
 

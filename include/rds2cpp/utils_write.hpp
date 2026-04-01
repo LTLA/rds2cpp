@@ -51,9 +51,8 @@ unsigned char inject_attribute_header(const std::vector<Attribute>& attributes, 
 
     if (!attributes.empty()) {
         bit |= 0x2;
-        const auto& symbols = *(shared.known_symbols);
         for (const auto& x : attributes) {
-            if (symbols[x.name.index].name == "class") {
+            if (shared.known_symbols[x.name.index].name == "class") {
                 bit |= 0x1;
                 break;
             }

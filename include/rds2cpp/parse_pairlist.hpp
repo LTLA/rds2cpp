@@ -36,7 +36,7 @@ void recursive_parse(Source_& src, PairList& output, const Header& header, Share
             auto sdx = parse_symbol_body(src, shared);
             sindex = sdx->index;
         } else if (header[3] == static_cast<unsigned char>(SEXPType::REF)) {
-            sindex = shared.get_symbol_index(header);
+            sindex = extract_symbol_index(header, shared);
         } else {
             throw std::runtime_error("expected a SYMSXP for a pairlist tag");
         }

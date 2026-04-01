@@ -84,7 +84,7 @@ std::unique_ptr<RObject> parse_object(Source_& src, SharedParseInfo& shared) {
             break;
 
         case static_cast<unsigned char>(SEXPType::REF):
-            output = shared.resolve_reference(details);
+            output = resolve_reference(details, shared);
             break;
 
         case static_cast<unsigned char>(SEXPType::BUILTIN):

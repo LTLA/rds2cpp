@@ -17,11 +17,13 @@ std::unique_ptr<SymbolIndex> parse_symbol_body(Reader& reader, SharedParseInfo& 
         throw new std::runtime_error("expected a non-missing string for a symbol");
     }
 
-    const auto idx = shared.request_symbol();
-    shared.symbols[idx].name = std::move(*(str.value));
-    shared.symbols[idx].encoding = str.encoding;
+    // Don't try to create a lvalue reference to 'shared.symbols[sindex]',
+    // as this could be invalidated upon potential reallocations to 'shared.symbols' in the future.
+    const auto sindex = request_new_symbol(shared);
+    shared.symbols[sindex].name = std::move(*(str.value));
+    shared.symbols[sindex].encoding = str.encoding;
 
-    return std::make_unique<SymbolIndex>(idx);
+    return std::make_unique<SymbolIndex>(sindex);
 } catch (std::exception& e) {
     throw traceback("failed to parse a symbol body", e);
     return std::unique_ptr<SymbolIndex>();

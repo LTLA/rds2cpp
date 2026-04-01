@@ -50,7 +50,7 @@ void write_object(const RObject* object, BufferedWriter_& bufwriter, SharedWrite
             write_pairlist(object, bufwriter, shared);
             break;
         case SEXPType::SYM:
-            shared.write_symbol(object, bufwriter);
+            write_symbol(object, bufwriter, shared);
             break;
         case SEXPType::BUILTIN:
             write_builtin(object, bufwriter, shared);
@@ -65,10 +65,10 @@ void write_object(const RObject* object, BufferedWriter_& bufwriter, SharedWrite
         case SEXPType::GLOBALENV_:
         case SEXPType::BASEENV_:
         case SEXPType::EMPTYENV_:
-            shared.write_environment(object, bufwriter);
+            write_environment(object, bufwriter, shared);
             break;
         case SEXPType::EXTPTR:
-            shared.write_external_pointer(object, bufwriter);
+            write_external_pointer(object, bufwriter, shared);
             break;
         default:
             throw std::runtime_error("unsupported SEXP type '" + std::to_string(static_cast<int>(object->type())) + "' for writing");

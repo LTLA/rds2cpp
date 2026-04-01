@@ -31,7 +31,7 @@ void write_s4(const RObject* object, BufferedWriter_& bufwriter, SharedWriteInfo
     // Writing the class information. We do this manually because I can't figure out
     // how to register a symbol for 'package' while keeping shared.known_symbols const.
     {
-        shared.write_symbol("class", StringEncoding::ASCII, bufwriter); // We'll guess the encoding of the 'class' string. 
+        write_symbol("class", StringEncoding::ASCII, bufwriter, shared); // We'll guess the encoding of the 'class' string. 
 
         Header details;
         details[0] = 0;
@@ -45,7 +45,7 @@ void write_s4(const RObject* object, BufferedWriter_& bufwriter, SharedWriteInfo
         // Adding the package attribute.
         {
             inject_next_pairlist_header(true, bufwriter);
-            shared.write_symbol("package", StringEncoding::ASCII, bufwriter); // similarly guessing the encoding of the 'package' string.
+            write_symbol("package", StringEncoding::ASCII, bufwriter, shared); // similarly guessing the encoding of the 'package' string.
 
             Header details;
             details[0] = 0;
