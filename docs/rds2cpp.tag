@@ -22,6 +22,7 @@
     <filename>RdaFile_8hpp.html</filename>
     <includes id="RObject_8hpp" name="RObject.hpp" local="yes" import="no" module="no" objc="no">RObject.hpp</includes>
     <includes id="Version_8hpp" name="Version.hpp" local="yes" import="no" module="no" objc="no">Version.hpp</includes>
+    <class kind="struct">rds2cpp::RdaObject</class>
     <class kind="struct">rds2cpp::RdaFile</class>
     <namespace>rds2cpp</namespace>
   </compound>
@@ -641,10 +642,10 @@
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>PairList</type>
-      <name>contents</name>
+      <type>std::vector&lt; RdaObject &gt;</type>
+      <name>objects</name>
       <anchorfile>structrds2cpp_1_1RdaFile.html</anchorfile>
-      <anchor>a15057cf2f0eb39fbe0d989d1e8945c15</anchor>
+      <anchor>a0a4f36f6ae7bfc35c132ae3de4c3f0b6</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -666,6 +667,38 @@
       <name>external_pointers</name>
       <anchorfile>structrds2cpp_1_1RdaFile.html</anchorfile>
       <anchor>ab557f051bd04a7268d820a3d15db1ab3</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>rds2cpp::RdaObject</name>
+    <filename>structrds2cpp_1_1RdaObject.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>RdaObject</name>
+      <anchorfile>structrds2cpp_1_1RdaObject.html</anchorfile>
+      <anchor>a5760e70e29ee0bf8b8e0bbe23c611b70</anchor>
+      <arglist>()=default</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>RdaObject</name>
+      <anchorfile>structrds2cpp_1_1RdaObject.html</anchorfile>
+      <anchor>ac5808b69ad50c9608efb95fe42bb392b</anchor>
+      <arglist>(SymbolIndex name, std::unique_ptr&lt; RObject &gt; value)</arglist>
+    </member>
+    <member kind="variable">
+      <type>SymbolIndex</type>
+      <name>name</name>
+      <anchorfile>structrds2cpp_1_1RdaObject.html</anchorfile>
+      <anchor>a757892260e45a6b3d33f20bc6e14d775</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>std::unique_ptr&lt; RObject &gt;</type>
+      <name>value</name>
+      <anchorfile>structrds2cpp_1_1RdaObject.html</anchorfile>
+      <anchor>a8d888ad0c15e144bc95370391fc474db</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -992,6 +1025,7 @@
     <class kind="struct">rds2cpp::ParseRdaOptions</class>
     <class kind="struct">rds2cpp::ParseRdsOptions</class>
     <class kind="struct">rds2cpp::RdaFile</class>
+    <class kind="struct">rds2cpp::RdaObject</class>
     <class kind="struct">rds2cpp::RdsFile</class>
     <class kind="struct">rds2cpp::RObject</class>
     <class kind="struct">rds2cpp::S4Object</class>

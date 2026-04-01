@@ -106,13 +106,9 @@ Collaboration diagram for rds2cpp::RdaFile:</div>
 <div class="dyncontent">
 <div class="center"><img src="structrds2cpp_1_1RdaFile__coll__graph.png" border="0" usemap="#ards2cpp_1_1RdaFile_coll__map" alt="Collaboration graph"/></div>
 <map name="ards2cpp_1_1RdaFile_coll__map" id="ards2cpp_1_1RdaFile_coll__map">
-<area shape="rect" title="Contents of the parsed RDA file." alt="" coords="69,184,187,210"/>
-<area shape="rect" href="structrds2cpp_1_1Version.html" title="Major&#45;minor&#45;patch version number, usually of R itself." alt="" coords="5,80,123,106"/>
-<area shape="poly" title=" " alt="" coords="67,121,70,141,78,159,90,171,104,181,101,186,86,175,74,161,65,142,62,122"/>
-<area shape="rect" href="structrds2cpp_1_1PairList.html" title="Pairlist, i.e., a linked list." alt="" coords="146,80,264,106"/>
-<area shape="poly" title=" " alt="" coords="193,121,166,162,144,185,140,182,162,158,189,118"/>
-<area shape="rect" href="structrds2cpp_1_1RObject.html" title="Virtual class for all unserialized R objects." alt="" coords="145,5,266,31"/>
-<area shape="poly" title=" " alt="" coords="208,46,208,80,203,80,203,46"/>
+<area shape="rect" title="Contents of the parsed RDA file." alt="" coords="5,109,123,135"/>
+<area shape="rect" href="structrds2cpp_1_1Version.html" title="Major&#45;minor&#45;patch version number, usually of R itself." alt="" coords="5,5,123,31"/>
+<area shape="poly" title=" " alt="" coords="67,47,67,109,61,109,61,47"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -126,8 +122,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:af275709f827cbbf8e227c13a2d7aed4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a800778c48e430d42d2bcbe04629a75a5" id="r_a800778c48e430d42d2bcbe04629a75a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacerds2cpp.html#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a800778c48e430d42d2bcbe04629a75a5">encoding</a> = StringEncoding::UTF8</td></tr>
 <tr class="separator:a800778c48e430d42d2bcbe04629a75a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15057cf2f0eb39fbe0d989d1e8945c15" id="r_a15057cf2f0eb39fbe0d989d1e8945c15"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structrds2cpp_1_1PairList.html">PairList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a15057cf2f0eb39fbe0d989d1e8945c15">contents</a></td></tr>
-<tr class="separator:a15057cf2f0eb39fbe0d989d1e8945c15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a4f36f6ae7bfc35c132ae3de4c3f0b6" id="r_a0a4f36f6ae7bfc35c132ae3de4c3f0b6"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structrds2cpp_1_1RdaObject.html">RdaObject</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0a4f36f6ae7bfc35c132ae3de4c3f0b6">objects</a></td></tr>
+<tr class="separator:a0a4f36f6ae7bfc35c132ae3de4c3f0b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac15125c490c48dcb86501df122e18b4d" id="r_ac15125c490c48dcb86501df122e18b4d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structrds2cpp_1_1Environment.html">Environment</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac15125c490c48dcb86501df122e18b4d">environments</a></td></tr>
 <tr class="separator:ac15125c490c48dcb86501df122e18b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a533cbeb2fe57f68207fbbf79e1836133" id="r_a533cbeb2fe57f68207fbbf79e1836133"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structrds2cpp_1_1Symbol.html">Symbol</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a533cbeb2fe57f68207fbbf79e1836133">symbols</a></td></tr>
@@ -138,21 +134,6 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contents of the parsed RDA file. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="a15057cf2f0eb39fbe0d989d1e8945c15" name="a15057cf2f0eb39fbe0d989d1e8945c15"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a15057cf2f0eb39fbe0d989d1e8945c15">&#9670;&#160;</a></span>contents</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structrds2cpp_1_1PairList.html">PairList</a> rds2cpp::RdaFile::contents</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>The unserialized pairlist containing all saved objects. This pairlist will be tagged with the object names. </p>
-
-</div>
-</div>
 <a id="a800778c48e430d42d2bcbe04629a75a5" name="a800778c48e430d42d2bcbe04629a75a5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a800778c48e430d42d2bcbe04629a75a5">&#9670;&#160;</a></span>encoding</h2>
 
@@ -210,6 +191,21 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p><a class="el" href="structrds2cpp_1_1Version.html" title="Major-minor-patch version number, usually of R itself.">Version</a> of the R serialization format. </p>
+
+</div>
+</div>
+<a id="a0a4f36f6ae7bfc35c132ae3de4c3f0b6" name="a0a4f36f6ae7bfc35c132ae3de4c3f0b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a4f36f6ae7bfc35c132ae3de4c3f0b6">&#9670;&#160;</a></span>objects</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structrds2cpp_1_1RdaObject.html">RdaObject</a>&gt; rds2cpp::RdaFile::objects</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Vector of objects saved in this file along with their names. </p>
 
 </div>
 </div>

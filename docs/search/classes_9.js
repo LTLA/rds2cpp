@@ -8,7 +8,8 @@ var searchData=
   ['rawfilewriter_5',['RawFileWriter',['https://ltla.github.io/byteme/classbyteme_1_1RawFileWriter.html',1,'byteme']]],
   ['rawfilewriteroptions_6',['RawFileWriterOptions',['https://ltla.github.io/byteme/structbyteme_1_1RawFileWriterOptions.html',1,'byteme']]],
   ['rdafile_7',['RdaFile',['../structrds2cpp_1_1RdaFile.html',1,'rds2cpp']]],
-  ['rdsfile_8',['RdsFile',['../structrds2cpp_1_1RdsFile.html',1,'rds2cpp']]],
-  ['reader_9',['Reader',['https://ltla.github.io/byteme/classbyteme_1_1Reader.html',1,'byteme']]],
-  ['robject_10',['RObject',['../structrds2cpp_1_1RObject.html',1,'rds2cpp']]]
+  ['rdaobject_8',['RdaObject',['../structrds2cpp_1_1RdaObject.html',1,'rds2cpp']]],
+  ['rdsfile_9',['RdsFile',['../structrds2cpp_1_1RdsFile.html',1,'rds2cpp']]],
+  ['reader_10',['Reader',['https://ltla.github.io/byteme/classbyteme_1_1Reader.html',1,'byteme']]],
+  ['robject_11',['RObject',['../structrds2cpp_1_1RObject.html',1,'rds2cpp']]]
 ];
