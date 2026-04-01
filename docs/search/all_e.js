@@ -27,7 +27,9 @@ var searchData=
   ['reader_2ehpp_24',['Reader.hpp',['https://ltla.github.io/byteme/Reader_8hpp.html',1,'']]],
   ['reader_5fversion_25',['reader_version',['../structrds2cpp_1_1RdsFile.html#a65d8062cd2c5c9724e768e5fa06e0c8e',1,'rds2cpp::RdsFile::reader_version'],['../structrds2cpp_1_1RdaFile.html#af275709f827cbbf8e227c13a2d7aed4f',1,'rds2cpp::RdaFile::reader_version']]],
   ['register_5fsymbol_26',['register_symbol',['../namespacerds2cpp.html#a5a019c3163a4f7cd84212d7192432088',1,'rds2cpp']]],
-  ['reserve_27',['reserve',['https://ltla.github.io/byteme/structbyteme_1_1RawBufferWriterOptions.html#ace854857d6b1b607ff4fedca07d05e1b',1,'byteme::RawBufferWriterOptions']]],
-  ['robject_28',['RObject',['../structrds2cpp_1_1RObject.html',1,'rds2cpp']]],
-  ['robject_2ehpp_29',['RObject.hpp',['../RObject_8hpp.html',1,'']]]
+  ['required_5fbits_5ffor_5ffloat_27',['required_bits_for_float',['https://ltla.github.io/sanisizer/namespacesanisizer.html#a714d5385b83631d2aace857ca004fee8',1,'sanisizer']]],
+  ['reserve_28',['reserve',['https://ltla.github.io/byteme/structbyteme_1_1RawBufferWriterOptions.html#ace854857d6b1b607ff4fedca07d05e1b',1,'byteme::RawBufferWriterOptions::reserve'],['https://ltla.github.io/sanisizer/namespacesanisizer.html#a1a07e85a7c7d29d992442f2d40476188',1,'sanisizer::reserve(Container_ &amp;container, Value_ x, Args_ &amp;&amp;... args)']]],
+  ['resize_29',['resize',['https://ltla.github.io/sanisizer/namespacesanisizer.html#a3df6e5117dcf28cab0e705d4ac499f0d',1,'sanisizer']]],
+  ['robject_30',['RObject',['../structrds2cpp_1_1RObject.html',1,'rds2cpp']]],
+  ['robject_2ehpp_31',['RObject.hpp',['../RObject_8hpp.html',1,'']]]
 ];

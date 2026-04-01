@@ -1,8 +1,10 @@
 var searchData=
 [
-  ['genericvector_0',['GenericVector',['../structrds2cpp_1_1GenericVector.html',1,'rds2cpp']]],
-  ['gzipfilereader_1',['GzipFileReader',['https://ltla.github.io/byteme/classbyteme_1_1GzipFileReader.html',1,'byteme']]],
-  ['gzipfilereaderoptions_2',['GzipFileReaderOptions',['https://ltla.github.io/byteme/structbyteme_1_1GzipFileReaderOptions.html',1,'byteme']]],
-  ['gzipfilewriter_3',['GzipFileWriter',['https://ltla.github.io/byteme/classbyteme_1_1GzipFileWriter.html',1,'byteme']]],
-  ['gzipfilewriteroptions_4',['GzipFileWriterOptions',['https://ltla.github.io/byteme/structbyteme_1_1GzipFileWriterOptions.html',1,'byteme']]]
+  ['environment_0',['Environment',['../structrds2cpp_1_1Environment.html',1,'rds2cpp']]],
+  ['environmentindex_1',['EnvironmentIndex',['../structrds2cpp_1_1EnvironmentIndex.html',1,'rds2cpp']]],
+  ['environmentvariable_2',['EnvironmentVariable',['../structrds2cpp_1_1EnvironmentVariable.html',1,'rds2cpp']]],
+  ['exact_3',['Exact',['https://ltla.github.io/sanisizer/classsanisizer_1_1Exact.html',1,'sanisizer']]],
+  ['expressionvector_4',['ExpressionVector',['../structrds2cpp_1_1ExpressionVector.html',1,'rds2cpp']]],
+  ['externalpointer_5',['ExternalPointer',['../structrds2cpp_1_1ExternalPointer.html',1,'rds2cpp']]],
+  ['externalpointerindex_6',['ExternalPointerIndex',['../structrds2cpp_1_1ExternalPointerIndex.html',1,'rds2cpp']]]
 ];

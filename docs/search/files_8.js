@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['version_2ehpp_0',['Version.hpp',['../Version_8hpp.html',1,'']]]
+  ['ostreamwriter_2ehpp_0',['OstreamWriter.hpp',['https://ltla.github.io/byteme/OstreamWriter_8hpp.html',1,'']]]
 ];

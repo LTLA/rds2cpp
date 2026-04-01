@@ -1,8 +1,11 @@
 var searchData=
 [
-  ['serialbufferedreader_0',['SerialBufferedReader',['https://ltla.github.io/byteme/classbyteme_1_1SerialBufferedReader.html#a0171352dd5853d7fdbbcff353de3a379',1,'byteme::SerialBufferedReader']]],
-  ['serialbufferedwriter_1',['SerialBufferedWriter',['https://ltla.github.io/byteme/classbyteme_1_1SerialBufferedWriter.html#a8a01232e87e3ab7512225fc4ebf747f2',1,'byteme::SerialBufferedWriter']]],
-  ['string_2',['String',['../structrds2cpp_1_1String.html#ab00505483ce587748199386244c48b9b',1,'rds2cpp::String::String()=default'],['../structrds2cpp_1_1String.html#a680ca95eb4cdbfa1095e6697fe5ef2e5',1,'rds2cpp::String::String(std::string value, StringEncoding encoding)']]],
-  ['symbol_3',['Symbol',['../structrds2cpp_1_1Symbol.html#a50031c05582516fd322579fa70cb47b4',1,'rds2cpp::Symbol::Symbol()=default'],['../structrds2cpp_1_1Symbol.html#a71fa0685e50368df05ea52f130824d9b',1,'rds2cpp::Symbol::Symbol(std::string name, StringEncoding encoding)']]],
-  ['symbolindex_4',['SymbolIndex',['../structrds2cpp_1_1SymbolIndex.html#aa999cf3747e8c1fbddc007046f972ca6',1,'rds2cpp::SymbolIndex::SymbolIndex()=default'],['../structrds2cpp_1_1SymbolIndex.html#ab611a02dd30f0e5d254f695c38cfd839',1,'rds2cpp::SymbolIndex::SymbolIndex(std::size_t i)']]]
+  ['pairlistelement_0',['PairListElement',['../structrds2cpp_1_1PairListElement.html#a87cdc9f02f080846d92c29c5b0aae04c',1,'rds2cpp::PairListElement::PairListElement()=default'],['../structrds2cpp_1_1PairListElement.html#ad1db7b915fbb987289b7bc97d18572a7',1,'rds2cpp::PairListElement::PairListElement(std::unique_ptr&lt; RObject &gt; value)'],['../structrds2cpp_1_1PairListElement.html#a0755f0907ca9343af953e78c34a64b58',1,'rds2cpp::PairListElement::PairListElement(SymbolIndex tag, std::unique_ptr&lt; RObject &gt; value)']]],
+  ['parallelbufferedreader_1',['ParallelBufferedReader',['https://ltla.github.io/byteme/classbyteme_1_1ParallelBufferedReader.html#ab0097f7773c2b49bd9d96f6bd57c3f94',1,'byteme::ParallelBufferedReader']]],
+  ['parallelbufferedwriter_2',['ParallelBufferedWriter',['https://ltla.github.io/byteme/classbyteme_1_1ParallelBufferedWriter.html#a269dc96008f8783973324b72b605f85d',1,'byteme::ParallelBufferedWriter']]],
+  ['parse_5frda_3',['parse_rda',['../namespacerds2cpp.html#a347bce96790a7ff868d7e60c82dbfe5c',1,'rds2cpp::parse_rda(Reader_ &amp;reader, const ParseRdaOptions &amp;options)'],['../namespacerds2cpp.html#ae1acad6c6d88ec1426f6f4edb4427198',1,'rds2cpp::parse_rda(std::string file, const ParseRdaOptions &amp;options)']]],
+  ['parse_5frds_4',['parse_rds',['../namespacerds2cpp.html#a6e8135078d12460c602af9c3933eb435',1,'rds2cpp::parse_rds(Reader_ &amp;reader, const ParseRdsOptions &amp;options)'],['../namespacerds2cpp.html#a241c3b1eaf4075a72418c89407e76a20',1,'rds2cpp::parse_rds(std::string file, const ParseRdsOptions &amp;options)']]],
+  ['position_5',['position',['https://ltla.github.io/byteme/classbyteme_1_1BufferedReader.html#ab2e8c16f833432e10414208a89fb26c6',1,'byteme::BufferedReader']]],
+  ['product_6',['product',['https://ltla.github.io/sanisizer/namespacesanisizer.html#ace3b6841d0fd165ae3f47d07a713a15c',1,'sanisizer']]],
+  ['product_5funsafe_7',['product_unsafe',['https://ltla.github.io/sanisizer/namespacesanisizer.html#aa3df28f9c655292959f7fbf22e61f9c2',1,'sanisizer']]]
 ];

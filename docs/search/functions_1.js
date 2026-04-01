@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['environmentindex_0',['EnvironmentIndex',['../structrds2cpp_1_1EnvironmentIndex.html#a66bf62e8f3b0ba6c8f9f5116b96ec382',1,'rds2cpp::EnvironmentIndex::EnvironmentIndex()=default'],['../structrds2cpp_1_1EnvironmentIndex.html#a546af001d9d02e429f08f065fb9bda93',1,'rds2cpp::EnvironmentIndex::EnvironmentIndex(SEXPType e)'],['../structrds2cpp_1_1EnvironmentIndex.html#ad5fd3a53d8905ce57d4f5a6af19488d6',1,'rds2cpp::EnvironmentIndex::EnvironmentIndex(std::size_t i)']]],
-  ['environmentvariable_1',['EnvironmentVariable',['../structrds2cpp_1_1EnvironmentVariable.html#a6179963fc546e3378e0bd67a8b1483e6',1,'rds2cpp::EnvironmentVariable::EnvironmentVariable()=default'],['../structrds2cpp_1_1EnvironmentVariable.html#a4abf9413c1421d829f6362a4174234ee',1,'rds2cpp::EnvironmentVariable::EnvironmentVariable(SymbolIndex name, std::unique_ptr&lt; RObject &gt; value)']]],
-  ['externalpointerindex_2',['ExternalPointerIndex',['../structrds2cpp_1_1ExternalPointerIndex.html#a911107a5def23923993c449ec33503d3',1,'rds2cpp::ExternalPointerIndex::ExternalPointerIndex()=default'],['../structrds2cpp_1_1ExternalPointerIndex.html#ac24bcaf6da32c769a85a04fe0c0de257',1,'rds2cpp::ExternalPointerIndex::ExternalPointerIndex(std::size_t i)']]],
-  ['extract_3',['extract',['https://ltla.github.io/byteme/classbyteme_1_1BufferedReader.html#a1c15c13a980c5f5a99d6a780317c413e',1,'byteme::BufferedReader']]],
-  ['extract_5funtil_4',['extract_until',['https://ltla.github.io/byteme/classbyteme_1_1BufferedReader.html#a71b85149e3a02321f0568d845c0280ee',1,'byteme::BufferedReader']]]
+  ['can_5fcast_0',['can_cast',['https://ltla.github.io/sanisizer/namespacesanisizer.html#a58381525eca91a088489cdabfbc4f74c',1,'sanisizer']]],
+  ['cap_1',['cap',['https://ltla.github.io/sanisizer/namespacesanisizer.html#abd46ba64586c8de228897cc013def813',1,'sanisizer']]],
+  ['cast_2',['Cast',['https://ltla.github.io/sanisizer/classsanisizer_1_1Cast.html#a327da91858adaf6b4fb636e67bacd536',1,'sanisizer::Cast']]],
+  ['cast_3',['cast',['https://ltla.github.io/sanisizer/namespacesanisizer.html#acde4a5b2077777f0c0d0b0761183b29b',1,'sanisizer']]],
+  ['check_5foverflow_4',['check_overflow',['https://ltla.github.io/sanisizer/namespacesanisizer.html#a6911bfdd00b6bd59dd72b935ca5d9d3a',1,'sanisizer']]],
+  ['create_5',['create',['https://ltla.github.io/sanisizer/namespacesanisizer.html#a0c7c43499ff60d5185708c50b32a40d7',1,'sanisizer']]]
 ];

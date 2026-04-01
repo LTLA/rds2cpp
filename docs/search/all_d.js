@@ -18,5 +18,8 @@ var searchData=
   ['parserdsoptions_15',['ParseRdsOptions',['../structrds2cpp_1_1ParseRdsOptions.html',1,'rds2cpp']]],
   ['patch_16',['patch',['../structrds2cpp_1_1Version.html#a4726e61de639e8ea832152a77391b8c6',1,'rds2cpp::Version']]],
   ['position_17',['position',['https://ltla.github.io/byteme/classbyteme_1_1BufferedReader.html#ab2e8c16f833432e10414208a89fb26c6',1,'byteme::BufferedReader']]],
-  ['protection_18',['protection',['../structrds2cpp_1_1ExternalPointer.html#af26f22afe981af6db9c30bf971f27650',1,'rds2cpp::ExternalPointer']]]
+  ['product_18',['product',['https://ltla.github.io/sanisizer/namespacesanisizer.html#ace3b6841d0fd165ae3f47d07a713a15c',1,'sanisizer']]],
+  ['product_5funsafe_19',['product_unsafe',['https://ltla.github.io/sanisizer/namespacesanisizer.html#aa3df28f9c655292959f7fbf22e61f9c2',1,'sanisizer']]],
+  ['protection_20',['protection',['../structrds2cpp_1_1ExternalPointer.html#af26f22afe981af6db9c30bf971f27650',1,'rds2cpp::ExternalPointer']]],
+  ['ptrdiff_2ehpp_21',['ptrdiff.hpp',['https://ltla.github.io/sanisizer/ptrdiff_8hpp.html',1,'']]]
 ];
