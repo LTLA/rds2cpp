@@ -8,13 +8,6 @@
 #include <cstddef>
 
 template<class RdxFile_>
-static rds2cpp::SymbolIndex prepare_symbol(std::string x, rds2cpp::StringEncoding enc, RdxFile_& globals) {
-    rds2cpp::SymbolIndex sidx(globals.symbols.size());
-    globals.symbols.emplace_back(x, enc); 
-    return sidx;
-}
-
-template<class RdxFile_>
 std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, RdxFile_& globals);
 
 template<class RdsObject_, class RdxFile_>
@@ -22,8 +15,10 @@ void add_attributes(const Rcpp::RObject& x, RdsObject_* y, RdxFile_& globals) {
     const auto& attr_names = x.attributeNames();
     auto& attr_dest = y->attributes;
     for (const auto& attr : attr_names) {
-        auto sidx = prepare_symbol(attr, rds2cpp::StringEncoding::ASCII, globals); // just assume the encoding, I guess.
-        attr_dest.emplace_back(std::move(sidx), unconvert(x.attr(attr), globals));
+        attr_dest.emplace_back(
+            rds2cpp::register_symbol(attr, rds2cpp::StringEncoding::ASCII, globals.symbols), // just assume the encoding, I guess.
+            unconvert(x.attr(attr), globals)
+        );
     }
 }
 
@@ -33,8 +28,10 @@ void add_attributes_except(const Rcpp::RObject& x, RdsObject_* y, RdxFile_& glob
     auto& attr_dest = y->attributes;
     for (const auto& attr : attr_names) {
         if (excluded.find(attr) == excluded.end()) {
-            auto sidx = prepare_symbol(attr, rds2cpp::StringEncoding::ASCII, globals); // just assume the encoding, I guess.
-            attr_dest.emplace_back(std::move(sidx), unconvert(x.attr(attr), globals));
+            attr_dest.emplace_back(
+                rds2cpp::register_symbol(attr, rds2cpp::StringEncoding::ASCII, globals.symbols), // just assume the encoding, I guess.
+                unconvert(x.attr(attr), globals)
+            );
         }
     }
 }
@@ -133,8 +130,10 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, RdxFile_& gl
                 if (curname == "") {
                     ptr->data.emplace_back(std::move(unc));
                 } else {
-                    auto sidx = prepare_symbol(std::move(curname), rds2cpp::StringEncoding::ASCII, globals);
-                    ptr->data.emplace_back(std::move(sidx), std::move(unc));
+                    ptr->data.emplace_back(
+                        rds2cpp::register_symbol(std::move(curname), rds2cpp::StringEncoding::ASCII, globals.symbols),
+                        std::move(unc)
+                    );
                 }
             }
             add_attributes(x, ptr, globals);
@@ -168,8 +167,10 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, RdxFile_& gl
                     Rcpp::CharacterVector names = vec.attr("names");
                     const std::size_t n = vec.size();
                     for (std::size_t i = 0; i < n; ++i) {
-                        auto sidx = prepare_symbol(Rcpp::String(names[i]).get_cstring(), rds2cpp::StringEncoding::UTF8, globals);
-                        latest.variables.emplace_back(std::move(sidx), unconvert(vec[i], globals));
+                        latest.variables.emplace_back(
+                            rds2cpp::register_symbol(Rcpp::String(names[i]).get_cstring(), rds2cpp::StringEncoding::UTF8, globals.symbols),
+                            unconvert(vec[i], globals)
+                        );
                     }
 
                     add_attributes_except(x, &latest, globals, { "pretend-to-be-an-environment", "environment-index", "environment-parent", "environment-locked", "names" });
@@ -201,7 +202,7 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, RdxFile_& gl
             auto ptr = new rds2cpp::LanguageObject;
             output.reset(ptr);
             Rcpp::CharacterVector name(vec[0]);
-            ptr->function = prepare_symbol(Rcpp::String(name[0]).get_cstring(), rds2cpp::StringEncoding::UTF8, globals);
+            ptr->function = rds2cpp::register_symbol(Rcpp::String(name[0]).get_cstring(), rds2cpp::StringEncoding::UTF8, globals.symbols);
 
             Rcpp::List arguments(vec[1]);
             Rcpp::CharacterVector argnames;
@@ -213,8 +214,10 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, RdxFile_& gl
             for (std::size_t a = 0; a < num_args; ++a) {
                 auto unc = unconvert(arguments[a], globals);
                 if (argnames.size()) {
-                    auto sidx = prepare_symbol(Rcpp::String(argnames[a]).get_cstring(), rds2cpp::StringEncoding::UTF8, globals);
-                    ptr->arguments.emplace_back(std::move(sidx), std::move(unc));
+                    ptr->arguments.emplace_back(
+                        rds2cpp::register_symbol(Rcpp::String(argnames[a]).get_cstring(), rds2cpp::StringEncoding::UTF8, globals.symbols),
+                        std::move(unc)
+                    );
                 } else {
                     ptr->arguments.emplace_back(std::move(unc));
                 }
@@ -267,8 +270,10 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, RdxFile_& gl
         const auto& names = obj.attributeNames();
         for (const auto& n : names) {
             if (n != "class") {
-                auto sidx = prepare_symbol(n, rds2cpp::StringEncoding::ASCII, globals); // again, just assuming the encoding.
-                ptr->attributes.emplace_back(std::move(sidx), unconvert(obj.slot(n), globals));
+                ptr->attributes.emplace_back(
+                    rds2cpp::register_symbol(n, rds2cpp::StringEncoding::ASCII, globals.symbols), // again, just assuming the encoding.
+                    unconvert(obj.slot(n), globals)
+                );
             }
         }
 
