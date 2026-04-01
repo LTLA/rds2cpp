@@ -1218,7 +1218,7 @@
   </compound>
   <compound kind="page">
     <name>index</name>
-    <title>Read RDS files in C++</title>
+    <title>Read RDS/RDA files in C++</title>
     <filename>index.html</filename>
     <docanchor file="index.html">md__2github_2workspace_2README</docanchor>
   </compound>
