@@ -104,13 +104,15 @@ struct SymbolIndex final : public RObject {
 
 /**
  * @param name Name of the symbol, see `Symbol::name`.
- * @param name Encoding of the symbol, see `Symbol::encoding`.
+ * @param encoding Encoding of the symbol, see `Symbol::encoding`.
  * @param symbols Vector containing the global set of symbols, typically `RdsFile::symbols` or `RdaFile::symbols`.
  *
  * @return A new symbol is added to `symbols` and a `SymbolIndex` is returned that points to the new entry of `symbols`.
  *
  * This is a convenient helper to register new symbols in `RdsFile` prior to calling `write_rds()` (or to `RdaFile` before `write_rda()`).
  * It returns a `SymbolIndex` that can be used in various fields like `LanguageArgument::name`, `PairListElement::tag`, `EnvironmentVariable::name`, etc.
+ * For efficiency, users can re-use the same `SymbolIndex` in multiple locations within the same `RdsFile` and `RdaFile` to reference this combination of `name` and `encoding`.
+ * However, it is perfectly fine to create a new `SymbolIndex` in such cases as any duplicated combinations will be automatically removed by `write_rds()` and `write_rda()`.
  */
 inline SymbolIndex register_symbol(std::string name, StringEncoding encoding, std::vector<Symbol>& symbols) {
     auto idx = symbols.size();

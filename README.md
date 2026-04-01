@@ -1,17 +1,18 @@
-# Read RDS files in C++
+# Read RDS/RDA files in C++
 
 ![Unit tests](https://github.com/LTLA/rds2cpp/actions/workflows/run-tests.yaml/badge.svg)
 ![Documentation](https://github.com/LTLA/rds2cpp/actions/workflows/doxygenate.yaml/badge.svg)
 
 ## Overview
 
-This repository contains a header-only C++ library for reading and writing RDS files (created with `saveRDS()`) without the need to link to R's libraries.
+This repository contains a header-only C++ library for reading and writing RDS or RDA files without the need to link to R's libraries.
 In this manner, we can use RDS as a flexible data exchange format across different frameworks that have C++ bindings, 
 e.g., [Python](https://github.com/biocpy/rds2py), [Javascript (via Wasm)](https://github.com/jkanche/scran.js).
 We currently support most user-visible data structures such as atomic vectors, lists, environments and S4 classes.
 
 ## Quick start
 
+Each RDS file contains a single R object and is typically created by calling `saveRDS()` within an R session.
 Given a path to an RDS file, the `parse_rds()` function will return a pointer to an `RObject` interface:
 
 ```cpp
@@ -19,7 +20,7 @@ Given a path to an RDS file, the `parse_rds()` function will return a pointer to
 
 // Returns an object containing the file information,
 // e.g., R version used to read/write the file.
-auto file_info = rds2cpp::parse_rds(fpath, {});
+auto file_info = rds2cpp::parse_rds(fpath, rds2cpp::ParseRdsOptions());
 
 // Get the pointer to the actual R object.
 const auto& ptr = file_info->object;
@@ -31,8 +32,7 @@ For example, if we wanted to process integer vectors:
 ```cpp
 if (ptr->type() == rds2cpp::SEXPType::INT) {
     auto iptr = static_cast<const rds2cpp::IntegerVector*>(ptr.get());
-    const auto& values = iptr->data; // vector of int32_t's.
-    const auto& attr_names = iptr->attributes.names; // vector of attribute names.
+    const std::vector<std::int32_t>& values = iptr->data;
 }
 ```
 
@@ -40,24 +40,33 @@ See the [reference documentation](https://ltla.github.io/rds2cpp) for a list of 
 
 ## More reading examples
 
-**rds2cpp** can extract ordinary lists from an RDS file.
-Users can inspect the attributes to determine if the list is named.
+We can extract ordinary lists from an RDS file, examining the attributes to determine if the list is named.
 
 ```cpp
 if (ptr->type() == rds2cpp::SEXPType::VEC) {
     auto lptr = static_cast<const rds2cpp::GenericVector*>(ptr.get());
     const auto& elements = lptr->data; // vector of pointers to list elements.
 
-    const auto& attr = lptr->attributes; 
-    const auto& attr_names = sptr->attributes.names;
-    const auto& attr_values = sptr->attributes.values;
+    for (const auto& attr : lptr->attributes) {
+        // Symbols are referenced by their position in the 'symbols' vector.
+        const auto& attr_name = file_info.symbols[attr.name.index].name;
 
-    // Scanning for the list names.
-    auto nIt = std::find(attr_names.begin(), attr_names.end(), std::string("names"));
-    if (nIt != attr_names.end()) {
-        size_t nindex = nIt - attr_names.begin();
-        if (attr_values[nindex]->type() == rds2cpp::SEXPType::STR) {
-            auto nptr = static_cast<const rds2cpp::StringVector*>(attr_values[nindex].get());
+        if (attr_name == "names") {
+            if (attr.value->type() != rds2cpp::SEXPType::STR) {
+                // Just adding some protection for weird objects.
+                throw std::runtime_error("oops, names should be strings!");
+            }
+
+            auto nptr = static_cast<const rds2cpp::StringVector*>(attr.value.get());
+            for (const auto& str : nptr->value) {
+                if (!str.value.has_value()) {
+                    throw std::runtime_error("oops, names should not be missing!");
+                }
+
+                const std::string& str_value = *(str.value); // value of the string.
+                const auto& str_enc = str.encoding; // encoding of the string.
+                // Do something with the list names...
+            }
         }
     }
 }
@@ -71,8 +80,11 @@ if (ptr->type() == rds2cpp::SEXPType::S4) {
     auto sptr = static_cast<const rds2cpp::S4Object*>(ptr.get());
     sptr->class_name;
     sptr->package_name;
-    const auto& slot_names = sptr->attributes.names;
-    const auto& slot_values = sptr->attributes.values;
+
+    for (const auto& slot : sptr->attributes) {
+        const auto& slot_name = file_info.symbols[slot.name.index].name;
+        const auto& slot_val = *(slot.value); // Do something with the slot value...
+    }
 }
 ```
 
@@ -81,9 +93,13 @@ These should be treated as file-specific globals that may be referenced one or m
 
 ```cpp
 if (ptr->type() == rds2cpp::SEXPType::ENV) {
-    const auto& env = file_info->environments[eptr->index];
-    const auto& vnames = env.variable_names;
-    const auto& vvalues = env.variable_values;
+    auto eptr = static_cast<const rds2cpp::EnvironmentIndex*>(ptr.get());
+    const auto& env = file_info.environments[eptr->index];
+
+    for (const auto& var = env.variables) {
+        const auto& var_name = file_info.symbols[var.name.index].name;
+        const auto& var_value = *(var.value); // Do something with the variable...
+    }
 }
 ```
 
@@ -107,47 +123,64 @@ auto vec = new rds2cpp::IntegerVector;
 file_info.object.reset(vec);
 
 // Storing data in the integer vector.
-vec->data = std::vector<int32_t>{ 0, 1, 2, 3, 4, 5 };
+vec->data = std::vector<std::int32_t>{ 0, 1, 2, 3, 4, 5 };
 
-rds2cpp::write_rds(file_info, "some_file_path.rds");
+rds2cpp::write_rds(file_info, "some_file_path.rds", rds2cpp::WriteRdsOptions());
 ```
 
 Here's a more complicated example that saves a sparse matrix (as a `dgCMatrix` from the **Matrix** package) to file.
 
 ```cpp
 rds2cpp::RdsFile file_info;
-auto ptr = new rds2cpp::S4Object;
-file_info.object.reset(ptr);
-auto& obj = *ptr;
+auto ptr = std::make_unique<rds2cpp::S4Object>();
 
+auto& obj = *ptr;
 obj.class_name = "dgCMatrix";
 obj.package_name = "Matrix";
 
-auto ivec = new rds2cpp::IntegerVector;
-obj.attributes.add("i", ivec);
-ivec->data = std::vector<int32_t>{ 6, 8, 0, 3, 5, 6, 0, 1, 3, 7 };
+auto ivec = std::make_unique<rds2cpp::IntegerVector>();
+ivec->data = std::vector<std::int32_t>{ 6, 8, 0, 3, 5, 6, 0, 1, 3, 7 };
+obj.attributes.emplace_back(
+    rds2cpp::register_symbol("i", rds2cpp::StringEncoding::UTF8, file_info.symbols),
+    std::move(ivec)
+);
 
-auto pvec = new rds2cpp::IntegerVector;
-obj.attributes.add("p", pvec);
-pvec->data = std::vector<int32_t>{ 0, 0, 2, 3, 4, 5, 6, 8, 8, 8, 10 };
+auto pvec = std::make_unique<rds2cpp::IntegerVector>();
+pvec->data = std::vector<std::int32_t>{ 0, 0, 2, 3, 4, 5, 6, 8, 8, 8, 10 };
+obj.attributes.emplace_back(
+    rds2cpp::register_symbol("p", rds2cpp::StringEncoding::UTF8, file_info.symbols),
+    std::move(pvec)
+);
 
-auto xvec = new rds2cpp::DoubleVector;
-obj.attributes.add("x", xvec);
-xvec->data = std::vector<double>{ 0.96, -0.34, 0.82, -2, -0.72, 0.39, 0.16, 0.36, -1.5, -0.47 };
+auto xvec = std::make_unique<rds2cpp::DoubleVector>();
+xvec->data = std::vector<double>{ .96, -.34, .82, -2., -.72, .39, .16, .36, -1.5, -.47 };
+obj.attributes.emplace_back(
+    rds2cpp::register_symbol("x", rds2cpp::StringEncoding::UTF8, file_info.symbols),
+    std::move(xvec)
+);
 
-auto dims = new rds2cpp::IntegerVector;
-obj.attributes.add("Dim", dims);
+auto dims = std::make_unique<rds2cpp::IntegerVector>();
 dims->data = std::vector<int32_t>{ 10, 10 };
+obj.attributes.emplace_back(
+    rds2cpp::register_symbol("Dim", rds2cpp::StringEncoding::UTF8, file_info.symbols),
+    std::move(dims)
+);
 
-auto dimnames = new rds2cpp::GenericVector;
-obj.attributes.add("Dimnames", dimnames);
-dimnames->data.emplace_back(new rds2cpp::Null);
-dimnames->data.emplace_back(new rds2cpp::Null);
+auto dimnames = std::make_unique<rds2cpp::GenericVector>();
+dimnames->data.emplace_back(new Null);
+dimnames->data.emplace_back(new Null);
+obj.attributes.emplace_back(
+    rds2cpp::register_symbol("Dimnames", rds2cpp::StringEncoding::UTF8, file_info.symbols),
+    std::move(dimnames)
+);
 
-auto factors = new rds2cpp::GenericVector;
-obj.attributes.add("factors", factors);
+obj.attributes.add(
+    rds2cpp::register_symbol("factors", rds2cpp::StringEncoding::UTF8, file_info.symbols),
+    std::make_unique<rds2cpp::GenericVector>()
+);
 
-rds2cpp::write_rds(file_info, "my_matrix.rds");
+file_info.object = std::move(ptr);
+rds2cpp::write_rds(file_info, "my_matrix.rds", {});
 ``` 
 
 We can also create environments by registering the environment before creating indices to it.
@@ -156,20 +189,74 @@ We can also create environments by registering the environment before creating i
 rds2cpp::RdsFile file_info;
 
 // Creating an environment with a 'foo' variable containing c('bar', NA, 'whee')
-file_info.environments.resize(1);
-auto& current_env = file_info.environments[0];
+file_info.environments.emplace_back();
+auto& current_env = file_info.environments.back();
 
-auto sptr = new rds2cpp::StringVector;
-current_env.add("foo", sptr);
-sptr->add("bar");
-sptr->add(); // NA string
-sptr->add("whee");
+auto sptr = std::make_unique<rds2cpp::StringVector>();
+sptr->data.emplace_back("bar", rds2cpp::StringEncoding::UTF8);
+sptr->data.emplace_back(); // NA string.
+sptr->data.emplace_back("whee", rds2cpp::StringEncoding::ASCII);
 
-// Referencing the environment: 
-auto eptr = new rds2cpp::EnvironmentIndex(0);
-file_info.object.reset(eptr);
+// The object is just a reference to the first environment: 
+file_info.object.reset(new rds2cpp::EnvironmentIndex(0));
 
-rds2cpp::write_rds(file_info, "my_env.rds");
+rds2cpp::write_rds(file_info, "my_env.rds", {});
+```
+
+## Reading/writing RDA files
+
+Each RDA file (a.k.a., Rdata) contains multiple R objects, each of which is associated with a unique name.
+It is typically created by calling `save()` within an R session.
+We can read all objects into memory with the `parse_rda()` function:
+
+```cpp
+auto file_info = rds2cpp::parse_rda(fpath, rds2cpp::ParseRdaOptions());
+
+for (const auto& obj : file_info.objects) {
+    const auto& obj_name = file_info.symbols[obj.name.index].name;
+    switch (obj.value->type()) {
+        case rds2cpp::SEXPType::INT:
+            // This is an integer vector...
+            break;
+        case rds2cpp::SEXPType::STR:
+            // This is a character vector...
+            break;
+        default:
+            // and so on...
+    }
+}
+```
+
+Similarly, we can write the name/object pairs into an RDA file.
+
+```cpp
+#include <numeric>
+
+auto ivec = std::make_unique<rds2cpp::IntegerVector>(5);
+std::iota(ivec->data.begin(), ivec->data.end(), 1);
+
+auto list = std::make_unique<rds2cpp::GenericVector>(2);
+list->data[0].reset(new Null);
+list->data[1].reset(new rds2cpp::LogicalVector(10));
+
+auto svec = std::make_unique<rds2cpp::StringVector>(1);
+svec->data[0].value = "FOOBAR";
+
+rds2cpp::RdaFile file_info;
+file_info.objects.emplace_back(
+    rds2cpp::register_symbol("alpha", rds2cpp::StringEncoding::UTF8, file_info.symbols),
+    std::move(ivec)
+);
+file_info.objects.emplace_back(
+    rds2cpp::register_symbol("bravo", rds2cpp::StringEncoding::UTF8, file_info.symbols),
+    std::move(list)
+);
+file_info.objects.emplace_back(
+    rds2cpp::register_symbol("charlie", rds2cpp::StringEncoding::UTF8, file_info.symbols),
+    std::move(svec)
+);
+
+rds2cpp::write_rda(file_info, "my_env.Rda", rds2cpp::WriteRdaOptions());
 ```
 
 ## Building projects
@@ -221,9 +308,8 @@ target_link_libraries(mylib INTERFACE ltla::rds2cpp)
 
 If you're not using CMake, the simple approach is to just copy the files in the [`include/`](include) subdirectory -
 either directly or with Git submodules - and include their path during compilation with, e.g., GCC's `-I`.
-
-You'll also need to add the [**byteme**](https://github.com/LTLA/byteme) header-only library to the compiler's search path.
-Normally, when using CMake, this is automatically linked to Zlib; this will now need to be done manually.
+You'll need to add the various dependencies listed in [`extern/CMakeLists.txt`](extern/CMakeLists.txt) to the compiler's search path.
+You'll also need to link to Zlib.
 
 ## Known limitations
 

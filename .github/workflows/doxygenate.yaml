@@ -21,6 +21,11 @@ jobs:
       with:
         args: -O docs/byteme.tag https://ltla.github.io/byteme/byteme.tag
 
+    - name: Add sanisizer tagfile
+      uses: wei/wget@v1
+      with:
+        args: -O docs/sanisizer.tag https://ltla.github.io/sanisizer/sanisizer.tag
+
     - name: Doxygen Action
       uses: mattnotmitt/doxygen-action@v1
       with:
