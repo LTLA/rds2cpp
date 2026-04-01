@@ -15,16 +15,16 @@ template<class Source_>
 std::unique_ptr<RObject> parse_object(Source_&, SharedParseInfo& shared);
 
 template<class Source_>
-ExpressionVector parse_expression_body(Source_& src, SharedParseInfo& shared) try {
+std::unique_ptr<ExpressionVector> parse_expression_body(Source_& src, SharedParseInfo& shared) try {
     const auto len = get_length(src);
-    ExpressionVector output(len);
+    auto output = std::make_unique<ExpressionVector>(len);
     for (I<decltype(len)> i = 0; i < len; ++i) {
-        output.data[i] = parse_object(src, shared);
+        output->data[i] = parse_object(src, shared);
     }
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse an expression body", e);
-    return ExpressionVector();
+    return std::unique_ptr<ExpressionVector>();
 }
 
 }

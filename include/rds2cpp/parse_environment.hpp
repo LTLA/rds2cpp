@@ -12,22 +12,22 @@
 namespace rds2cpp {
 
 template<class Source_>
-PairList parse_pairlist_body(Source_&, SharedParseInfo&);
+std::unique_ptr<PairList> parse_pairlist_body(Source_&, SharedParseInfo&);
 
-inline EnvironmentIndex parse_global_environment_body() {
-    return EnvironmentIndex(SEXPType::GLOBALENV_);
+inline std::unique_ptr<EnvironmentIndex> parse_global_environment_body() {
+    return std::make_unique<EnvironmentIndex>(SEXPType::GLOBALENV_);
 }
 
-inline EnvironmentIndex parse_base_environment_body() {
-    return EnvironmentIndex(SEXPType::BASEENV_);
+inline std::unique_ptr<EnvironmentIndex> parse_base_environment_body() {
+    return std::make_unique<EnvironmentIndex>(SEXPType::BASEENV_);
 }
 
-inline EnvironmentIndex parse_empty_environment_body() {
-    return EnvironmentIndex(SEXPType::EMPTYENV_);
+inline std::unique_ptr<EnvironmentIndex> parse_empty_environment_body() {
+    return std::make_unique<EnvironmentIndex>(SEXPType::EMPTYENV_);
 }
 
 template<class Source_>
-EnvironmentIndex parse_new_environment_body(Source_& src, SharedParseInfo& shared) try {
+std::unique_ptr<EnvironmentIndex> parse_new_environment_body(Source_& src, SharedParseInfo& shared) try {
     // Need to provision the environment first, so that internal references are valid.
     const auto eindex = shared.request_environment();
     Environment new_env;
@@ -47,7 +47,7 @@ EnvironmentIndex parse_new_environment_body(Source_& src, SharedParseInfo& share
 
     } else if (lastbit == static_cast<unsigned char>(SEXPType::ENV)) {
         auto env = parse_new_environment_body(src, shared);
-        new_env.parent = env.index;
+        new_env.parent = env->index;
         new_env.parent_type = SEXPType::ENV;
 
     } else if (lastbit == static_cast<unsigned char>(SEXPType::GLOBALENV_)) {
@@ -70,8 +70,8 @@ EnvironmentIndex parse_new_environment_body(Source_& src, SharedParseInfo& share
     if (unhashed[3] == static_cast<unsigned char>(SEXPType::LIST)) {
         auto plist = parse_pairlist_body(src, unhashed, shared);
 
-        new_env.variables.reserve(plist.data.size());
-        for (auto& entry : plist.data) {
+        new_env.variables.reserve(plist->data.size());
+        for (auto& entry : plist->data) {
             if (!(entry.tag.has_value())) {
                 throw std::runtime_error("unhashed environment values should be respresented in a tagged pairlist");
             }
@@ -92,7 +92,7 @@ EnvironmentIndex parse_new_environment_body(Source_& src, SharedParseInfo& share
         new_env.hashed = true;
 
         auto vec = parse_list_body(src, shared);
-        for (auto& sublist : vec.data) {
+        for (auto& sublist : vec->data) {
             const auto subtype = sublist->type();
             if (subtype == SEXPType::NIL) {
                 continue;
@@ -125,10 +125,10 @@ EnvironmentIndex parse_new_environment_body(Source_& src, SharedParseInfo& share
     }
 
     shared.environments[eindex] = std::move(new_env);
-    return EnvironmentIndex(eindex);
+    return std::make_unique<EnvironmentIndex>(eindex);
 } catch (std::exception& e) {
     throw traceback("failed to parse a new environment body", e);
-    return EnvironmentIndex();
+    return std::unique_ptr<EnvironmentIndex>();
 }
 
 }

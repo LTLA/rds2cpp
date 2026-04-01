@@ -34,7 +34,7 @@ void recursive_parse(Source_& src, PairList& output, const Header& header, Share
 
         if (header[3] == static_cast<unsigned char>(SEXPType::SYM)) {
             auto sdx = parse_symbol_body(src, shared);
-            sindex = sdx.index;
+            sindex = sdx->index;
         } else if (header[3] == static_cast<unsigned char>(SEXPType::REF)) {
             sindex = shared.get_symbol_index(header);
         } else {
@@ -64,20 +64,20 @@ void recursive_parse(Source_& src, PairList& output, const Header& header, Share
         throw std::runtime_error("expected a terminator or the next pairlist node");
     }
 
+    // Tail recursion should be optimized out.
     recursive_parse(src, output, next_header, shared);
-    return;
 }
 
 }
 
 template<class Source_>
-PairList parse_pairlist_body(Source_& src, const Header& header, SharedParseInfo& shared) try {
-    PairList output;
-    pairlist_internal::recursive_parse(src, output, header, shared);
+std::unique_ptr<PairList> parse_pairlist_body(Source_& src, const Header& header, SharedParseInfo& shared) try {
+    auto output = std::make_unique<PairList>();
+    pairlist_internal::recursive_parse(src, *output, header, shared);
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse a pairlist body", e);
-    return PairList();
+    return std::unique_ptr<PairList>();
 }
 
 }

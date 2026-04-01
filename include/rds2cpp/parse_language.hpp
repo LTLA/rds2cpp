@@ -13,41 +13,41 @@
 namespace rds2cpp {
 
 template<class Source_>
-PairList parse_pairlist_body(Source_&, const Header&, SharedParseInfo&);
+std::unique_ptr<PairList> parse_pairlist_body(Source_&, const Header&, SharedParseInfo&);
 
 template<class Source_>
-LanguageObject parse_language_body(Source_& src, const Header& header, SharedParseInfo& shared) try {
-    LanguageObject output;
+std::unique_ptr<LanguageObject> parse_language_body(Source_& src, const Header& header, SharedParseInfo& shared) try {
+    auto output = std::make_unique<LanguageObject>();
 
     auto contents = parse_pairlist_body(src, header, shared);
-    output.attributes = std::move(contents.attributes);
+    output->attributes = std::move(contents->attributes);
 
-    const auto num_contents = contents.data.size();
+    const auto num_contents = contents->data.size();
     if (num_contents < 1) {
         throw std::runtime_error("pairlist should have positive length for language objects");
     }
-    if (contents.data[0].value->type() != SEXPType::SYM) {
+    if (contents->data[0].value->type() != SEXPType::SYM) {
         throw std::runtime_error("first pairlist entry for a language object should be a symbol");
     }
 
-    auto ptr = static_cast<const SymbolIndex*>(contents.data[0].value.get());
-    output.function = SymbolIndex(ptr->index);
+    auto ptr = static_cast<const SymbolIndex*>(contents->data[0].value.get());
+    output->function = SymbolIndex(ptr->index);
 
     // Shifting the rest into the arguments.
-    output.arguments.reserve(num_contents - 1);
+    output->arguments.reserve(num_contents - 1);
     for (I<decltype(num_contents)> i = 1; i < num_contents; ++i) {
-        auto& current = contents.data[i];
+        auto& current = contents->data[i];
         if (current.tag.has_value()) {
-            output.arguments.emplace_back(std::move(*(current.tag)), std::move(current.value));
+            output->arguments.emplace_back(std::move(*(current.tag)), std::move(current.value));
         } else {
-            output.arguments.emplace_back(std::move(current.value));
+            output->arguments.emplace_back(std::move(current.value));
         }
     }
 
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse an R language object's body", e);
-    return LanguageObject();
+    return std::unique_ptr<LanguageObject>();
 }
 
 }

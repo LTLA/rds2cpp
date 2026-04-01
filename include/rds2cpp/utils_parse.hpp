@@ -97,12 +97,6 @@ Header parse_header(Source_& src) try {
     return Header();
 }
 
-template<class Pointer, class Object>
-void pointerize(Pointer& ptr, Object obj) {
-    ptr.reset(new Object(std::move(obj)));
-    return;
-}
-
 }
 
 #endif

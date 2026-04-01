@@ -11,7 +11,7 @@
 namespace rds2cpp {
 
 template<class Source_>
-PairList parse_pairlist_body(Source_&, const Header&, SharedParseInfo&);
+std::unique_ptr<PairList> parse_pairlist_body(Source_&, const Header&, SharedParseInfo&);
 
 inline bool has_attributes(const Header& header) {
     return (header[2] & 0x2);
@@ -20,9 +20,9 @@ inline bool has_attributes(const Header& header) {
 template<class Source_>
 void parse_attributes_body(Source_& src, const Header& header, std::vector<Attribute>& output, SharedParseInfo& shared) try {
     auto plist = parse_pairlist_body(src, header, shared);
-    output.reserve(plist.data.size());
+    output.reserve(plist->data.size());
 
-    for (auto& entry : plist.data) {
+    for (auto& entry : plist->data) {
         if (!(entry.tag.has_value())) {
             throw std::runtime_error("all attributes should be named");
         }

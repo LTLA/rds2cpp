@@ -11,7 +11,7 @@
 namespace rds2cpp {
 
 template<class Reader>
-SymbolIndex parse_symbol_body(Reader& reader, SharedParseInfo& shared) try {
+std::unique_ptr<SymbolIndex> parse_symbol_body(Reader& reader, SharedParseInfo& shared) try {
     auto str = parse_single_string(reader);
     if (!str.value.has_value()) {
         throw new std::runtime_error("expected a non-missing string for a symbol");
@@ -21,10 +21,10 @@ SymbolIndex parse_symbol_body(Reader& reader, SharedParseInfo& shared) try {
     shared.symbols[idx].name = std::move(*(str.value));
     shared.symbols[idx].encoding = str.encoding;
 
-    return SymbolIndex(idx);
+    return std::make_unique<SymbolIndex>(idx);
 } catch (std::exception& e) {
     throw traceback("failed to parse a symbol body", e);
-    return SymbolIndex();
+    return std::unique_ptr<SymbolIndex>();
 }
 
 }

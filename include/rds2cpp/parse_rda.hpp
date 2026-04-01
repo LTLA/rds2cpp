@@ -150,7 +150,7 @@ RdaFile parse_rda(Reader_& reader, const ParseRdaOptions& options) {
     if (sexp_type != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected RDA file to contain a pairlist");
     }
-    output.contents = parse_pairlist_body(src, details, shared);
+    output.contents = std::move(*parse_pairlist_body(src, details, shared));
 
     output.environments = std::move(shared.environments);
     output.symbols = std::move(shared.symbols);

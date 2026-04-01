@@ -14,7 +14,7 @@ template<class Source_>
 std::unique_ptr<RObject> parse_object(Source_& src, SharedParseInfo& shared);
 
 template<class Source_>
-ExternalPointerIndex parse_external_pointer_body(Source_& src, const Header& header, SharedParseInfo& shared) try {
+std::unique_ptr<ExternalPointerIndex> parse_external_pointer_body(Source_& src, const Header& header, SharedParseInfo& shared) try {
     auto idx = shared.request_external_pointer();
     auto& extptr = shared.external_pointers[idx];
 
@@ -24,10 +24,10 @@ ExternalPointerIndex parse_external_pointer_body(Source_& src, const Header& hea
         parse_attributes(src, extptr.attributes, shared);
     }
 
-    return ExternalPointerIndex(idx);
+    return std::make_unique<ExternalPointerIndex>(idx);
 } catch (std::exception& e) {
     throw traceback("failed to parse an external pointer body", e);
-    return ExternalPointerIndex();
+    return std::unique_ptr<ExternalPointerIndex>();
 }
 
 }

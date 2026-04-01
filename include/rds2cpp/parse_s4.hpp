@@ -15,10 +15,10 @@ template<class Source_>
 std::unique_ptr<RObject> parse_object(Source_&, SharedParseInfo&);
 
 template<class Source_>
-PairList parse_pairlist_body(Source_&, const Header&, SharedParseInfo&);
+std::unique_ptr<PairList> parse_pairlist_body(Source_&, const Header&, SharedParseInfo&);
 
 template<class Source_>
-S4Object parse_s4_body(Source_& src, const Header& header, SharedParseInfo& shared) try {
+std::unique_ptr<S4Object> parse_s4_body(Source_& src, const Header& header, SharedParseInfo& shared) try {
     if (!(header[2] & 0x2) || !(header[2] & 0x1) || !(header[1] & 0x1)) {
         throw std::runtime_error("S4 objects should have object, attribute, and gp-S4 bits set in header");
     }
@@ -31,16 +31,16 @@ S4Object parse_s4_body(Source_& src, const Header& header, SharedParseInfo& shar
     auto slot_plist = parse_pairlist_body(src, slot_header, shared);
 
     bool found_class = false;
-    S4Object output;
-    output.attributes.reserve(slot_plist.data.empty() ? 0 : slot_plist.data.size() - 1); // ignoring the class attribute. 
+    auto output = std::make_unique<S4Object>();
+    output->attributes.reserve(slot_plist->data.empty() ? 0 : slot_plist->data.size() - 1); // ignoring the class attribute. 
 
-    for (auto& entry : slot_plist.data) {
+    for (auto& entry : slot_plist->data) {
         if (!entry.tag.has_value()) {
             throw std::runtime_error("all slots in an S4 object should be named");
         }
 
         if (shared.symbols[entry.tag->index].name != "class") {
-            output.attributes.emplace_back(std::move(*(entry.tag)), std::move(entry.value));
+            output->attributes.emplace_back(std::move(*(entry.tag)), std::move(entry.value));
             continue;
         }
 
@@ -60,8 +60,8 @@ S4Object parse_s4_body(Source_& src, const Header& header, SharedParseInfo& shar
         if (!(cls->data[0].value.has_value())) {
             throw std::runtime_error("class attribute in an S4 object should not be a missing string");
         }
-        output.class_name = *(cls->data[0].value);
-        output.class_encoding = cls->data[0].encoding;
+        output->class_name = *(cls->data[0].value);
+        output->class_encoding = cls->data[0].encoding;
 
         if (cls->attributes.size() != 1 ||
             shared.symbols[cls->attributes[0].name.index].name != "package" ||
@@ -76,8 +76,8 @@ S4Object parse_s4_body(Source_& src, const Header& header, SharedParseInfo& shar
         if (!(pkg->data[0].value.has_value())) {
             throw std::runtime_error("package attribute in an S4 object should not be a missing string");
         }
-        output.package_name = *(pkg->data[0].value);
-        output.package_encoding = pkg->data[0].encoding;
+        output->package_name = *(pkg->data[0].value);
+        output->package_encoding = pkg->data[0].encoding;
     }
 
     if (!found_class) {
@@ -87,7 +87,7 @@ S4Object parse_s4_body(Source_& src, const Header& header, SharedParseInfo& shar
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse an S4 object's body", e);
-    return S4Object();
+    return std::unique_ptr<S4Object>();
 }
 
 }

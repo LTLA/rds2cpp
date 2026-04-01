@@ -21,28 +21,28 @@
 namespace rds2cpp {
 
 template<class Source_>
-IntegerVector parse_integer_body(Source_&);
+std::unique_ptr<IntegerVector> parse_integer_body(Source_&);
 
 template<class Source_>
-DoubleVector parse_double_body(Source_& src);
+std::unique_ptr<DoubleVector> parse_double_body(Source_& src);
 
 template<class Source_>
 std::unique_ptr<RObject> parse_object(Source_&, SharedParseInfo&);
 
 template<class Source_>
-PairList parse_pairlist_body(Source_&, const Header&, SharedParseInfo&);
+std::unique_ptr<PairList> parse_pairlist_body(Source_&, const Header&, SharedParseInfo&);
 
 namespace altrep_internal {
 
 template<class Vector_, class Source_>
-Vector_ parse_numeric_compact_seq(Source_& src) try {
+std::unique_ptr<Vector_> parse_numeric_compact_seq(Source_& src) try {
     auto header = parse_header(src);
     if (header[3] != static_cast<unsigned char>(SEXPType::REAL)) {
         throw std::runtime_error("expected compact_seq to store sequence information in doubles");
     }
 
     auto info = parse_double_body(src);
-    const auto& ranges = info.data;
+    const auto& ranges = info->data;
     if (ranges.size() != 3) {
         throw std::runtime_error("expected compact_seq's sequence information to be of length 3");
     }
@@ -69,9 +69,9 @@ Vector_ parse_numeric_compact_seq(Source_& src) try {
         }
     }
 
-    Vector_ output(len);
+    auto output = std::make_unique<Vector_>(len);
     for (I<decltype(len)> i = 0; i < len; ++i, start += step) {
-        output.data[i] = start;
+        output->data[i] = start;
     }
 
     auto terminator = parse_header(src);
@@ -82,20 +82,19 @@ Vector_ parse_numeric_compact_seq(Source_& src) try {
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse compact numeric ALTREP", e);
-    return Vector_();
+    return std::unique_ptr<Vector_>();
 }
 
-template<class Vector, class Source_>
-Vector parse_attribute_wrapper(Source_& src, SharedParseInfo& shared) try {
+template<class Vector_, class Source_>
+std::unique_ptr<Vector_> parse_attribute_wrapper(Source_& src, SharedParseInfo& shared) try {
     auto plist_header = parse_header(src);
     if (plist_header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected pairlist in wrap_* ALTREP's payload");
     }
 
     // First pairlist element is a CONS cell where the first value is the wrapped integer vector.
-
     auto contents = parse_object(src, shared);
-    if (contents->type() != Vector::vector_sexp_type) {
+    if (contents->type() != Vector_::vector_sexp_type) {
         throw std::runtime_error("incorrectly typed contents in wrap_* ALTREP's payload");
     }
 
@@ -106,27 +105,27 @@ Vector parse_attribute_wrapper(Source_& src, SharedParseInfo& shared) try {
     }
 
     auto metadata = parse_integer_body(src);
-    if (metadata.data.size() != 2) {
+    if (metadata->data.size() != 2) {
         throw std::runtime_error("wrap_* ALTREP's metadata should be a length-2 integer vector");
     }
 
     // Now we can finally get the attributes, which makes up the rest of the pairlist.
-    auto coerced = static_cast<Vector*>(contents.get());
+    std::unique_ptr<Vector_> output(static_cast<Vector_*>(contents.release()));
     auto attrheader = parse_header(src);
     if (attrheader[3] == static_cast<unsigned>(SEXPType::LIST)) {
-        parse_attributes_body(src, attrheader, coerced->attributes, shared);
+        parse_attributes_body(src, attrheader, output->attributes, shared);
     } else if (attrheader[3] != static_cast<unsigned>(SEXPType::NILVALUE_)) {
         throw std::runtime_error("wrap_* ALTREP's attributes should be a pairlist or NULL");
     }
 
-    return Vector(std::move(*coerced));
+    return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse attribute-wrapped ALTREP", e);
-    return Vector();
+    return std::unique_ptr<Vector_>();
 }
 
 template<class Source_>
-StringVector parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
+std::unique_ptr<StringVector> parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
     auto plist_header = parse_header(src);
     if (plist_header[3] != static_cast<unsigned char>(SEXPType::LIST)) {
         throw std::runtime_error("expected pairlist in deferred_string ALTREP's payload");
@@ -134,17 +133,17 @@ StringVector parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
 
     // First pairlist element is a CONS cell where the first value is the thing to be converted.
     auto contents = parse_object(src, shared);
-    StringVector output;
+    std::unique_ptr<StringVector> output;
 
     if (contents->type() == SEXPType::INT){
         auto cast = static_cast<IntegerVector*>(contents.get());
         const auto n = cast->data.size();
-        output = StringVector(n);
+        output = std::make_unique<StringVector>(n);
 
         for (I<decltype(n)> i = 0; i < n; ++i) {
             if (cast->data[i] != std::numeric_limits<std::int32_t>::min()) { // see altrep.c.
-                output.data[i].value = std::to_string(cast->data[i]);
-                output.data[i].encoding = StringEncoding::ASCII;
+                output->data[i].value = std::to_string(cast->data[i]);
+                output->data[i].encoding = StringEncoding::ASCII;
             }
         }
 
@@ -153,15 +152,15 @@ StringVector parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
         converter.precision(std::numeric_limits<double>::max_digits10);
         auto cast = static_cast<DoubleVector*>(contents.get());
         const bool lw = (little_endian() ? 0 : 1); // see arithmetic.c.
-        output = StringVector(cast->data.size());
+        output = std::make_unique<StringVector>(cast->data.size());
 
         const auto datalen = cast->data.size();
         for (I<decltype(datalen)> i = 0; i < datalen; ++i) {
-            output.data[i].encoding = StringEncoding::ASCII;
+            output->data[i].encoding = StringEncoding::ASCII;
 
             if (std::isfinite(cast->data[i])) {
                 converter << cast->data[i];
-                output.data[i].value = converter.str();
+                output->data[i].value = converter.str();
                 converter.str(std::string());
 
             } else if (std::isnan(cast->data[i])) {
@@ -177,14 +176,14 @@ StringVector parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
                 if (payload == 1954) {
                     // Missing values are represented by the default unset value of String::value. 
                 } else {
-                    output.data[i].value = "NaN";
+                    output->data[i].value = "NaN";
                 }
 
             } else if (std::isinf(cast->data[i])) {
                 if (cast->data[i] > 0) {
-                    output.data[i].value = "Inf";
+                    output->data[i].value = "Inf";
                 } else {
-                    output.data[i].value = "-Inf";
+                    output->data[i].value = "-Inf";
                 }
             }
         }
@@ -200,7 +199,7 @@ StringVector parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
     }
 
     auto metadata = parse_integer_body(src);
-    if (metadata.data.size() != 1) {
+    if (metadata->data.size() != 1) {
         throw std::runtime_error("deferred_string ALTREP's metadata should be a length-1 integer vector");
     }
 
@@ -213,7 +212,7 @@ StringVector parse_deferred_string(Source_& src, SharedParseInfo& shared) try {
     return output;
 } catch (std::exception& e) {
     throw traceback("failed to parse deferred string ALTREP", e);
-    return StringVector();
+    return std::make_unique<StringVector>();
 }
 
 }
@@ -226,24 +225,20 @@ std::unique_ptr<RObject> parse_altrep_body(Source_& src, SharedParseInfo& shared
     }
 
     auto plist = parse_pairlist_body(src, header, shared);
-    if (plist.data.size() < 1 || plist.data[0].value->type() != SEXPType::SYM) {
+    if (plist->data.size() < 1 || plist->data[0].value->type() != SEXPType::SYM) {
         throw std::runtime_error("expected type specification symbol in the ALTREP description");
     }
 
     std::unique_ptr<RObject> output;
-    auto pointerize_ = [&](auto x) -> void {
-        pointerize(output, std::move(x));
-    };
-
-    auto sdx = static_cast<SymbolIndex*>(plist.data[0].value.get());
+    auto sdx = static_cast<SymbolIndex*>(plist->data[0].value.get());
     const auto& symb = shared.symbols[sdx->index];
 
     if (symb.name == "wrap_integer") {
-        pointerize_(altrep_internal::parse_attribute_wrapper<IntegerVector>(src, shared));
+        output = altrep_internal::parse_attribute_wrapper<IntegerVector>(src, shared);
     } else if (symb.name == "compact_intseq") {
-        pointerize_(altrep_internal::parse_numeric_compact_seq<IntegerVector>(src));
+        output = altrep_internal::parse_numeric_compact_seq<IntegerVector>(src);
     } else if (symb.name == "deferred_string") {
-        pointerize_(altrep_internal::parse_deferred_string(src, shared));
+        output = altrep_internal::parse_deferred_string(src, shared);
     } else {
         throw std::runtime_error("unrecognized ALTREP type '" + symb.name + "'");
     }

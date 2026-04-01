@@ -36,22 +36,22 @@ std::unique_ptr<RObject> parse_object(Source_& src, SharedParseInfo& shared) {
 
     auto pointerize_attr = [&](auto obj) -> void {
         if (has_attributes(details)) {
-            parse_attributes(src, obj.attributes, shared);
+            parse_attributes(src, obj->attributes, shared);
         }
-        pointerize(output, std::move(obj));
+        output = std::move(obj);
     };
 
     switch(sexp_type) {
         case static_cast<unsigned char>(SEXPType::LIST):
-            pointerize(output, parse_pairlist_body(src, details, shared));
+            output = parse_pairlist_body(src, details, shared);
             break;
 
         case static_cast<unsigned char>(SEXPType::SYM):
-            pointerize(output, parse_symbol_body(src, shared));
+            output = parse_symbol_body(src, shared);
             break;
 
         case static_cast<unsigned char>(SEXPType::S4):
-            pointerize(output, parse_s4_body(src, details, shared));
+            output = parse_s4_body(src, details, shared);
             break;
 
         case static_cast<unsigned char>(SEXPType::ALTREP_):
@@ -60,27 +60,27 @@ std::unique_ptr<RObject> parse_object(Source_& src, SharedParseInfo& shared) {
 
         case static_cast<unsigned char>(SEXPType::NIL):
         case static_cast<unsigned char>(SEXPType::NILVALUE_):
-            pointerize(output, Null());
+            output.reset(new Null);
             break;
 
         case static_cast<unsigned char>(SEXPType::ENV):
-            pointerize(output, parse_new_environment_body(src, shared));
+            output = parse_new_environment_body(src, shared);
             break;
 
         case static_cast<unsigned char>(SEXPType::EXTPTR):
-            pointerize(output, parse_external_pointer_body(src, details, shared));
+            output = parse_external_pointer_body(src, details, shared);
             break;
 
         case static_cast<unsigned char>(SEXPType::GLOBALENV_):
-            pointerize(output, parse_global_environment_body());
+            output = parse_global_environment_body();
             break;
 
         case static_cast<unsigned char>(SEXPType::BASEENV_):
-            pointerize(output, parse_base_environment_body());
+            output = parse_base_environment_body();
             break;
 
         case static_cast<unsigned char>(SEXPType::EMPTYENV_):
-            pointerize(output, parse_empty_environment_body());
+            output = parse_empty_environment_body();
             break;
 
         case static_cast<unsigned char>(SEXPType::REF):
@@ -88,11 +88,11 @@ std::unique_ptr<RObject> parse_object(Source_& src, SharedParseInfo& shared) {
             break;
 
         case static_cast<unsigned char>(SEXPType::BUILTIN):
-            pointerize(output, parse_builtin_body(src));
+            output = parse_builtin_body(src);
             break;
 
         case static_cast<unsigned char>(SEXPType::LANG):
-            pointerize(output, parse_language_body(src, details, shared));
+            output = parse_language_body(src, details, shared);
             break;
 
         case static_cast<unsigned char>(SEXPType::INT):
