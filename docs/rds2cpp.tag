@@ -1105,6 +1105,13 @@
       <enumvalue file="namespacerds2cpp.html" anchor="acf2b27eb21235c6dd30b8819ea682629aaee609eea0155bbd24d2569f0af1c037">ALTREP_</enumvalue>
     </member>
     <member kind="function">
+      <type>SymbolIndex</type>
+      <name>register_symbol</name>
+      <anchorfile>namespacerds2cpp.html</anchorfile>
+      <anchor>a5a019c3163a4f7cd84212d7192432088</anchor>
+      <arglist>(std::string name, StringEncoding encoding, std::vector&lt; Symbol &gt; &amp;symbols)</arglist>
+    </member>
+    <member kind="function">
       <type>RdsFile</type>
       <name>parse_rds</name>
       <anchorfile>namespacerds2cpp.html</anchorfile>

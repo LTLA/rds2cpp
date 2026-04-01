@@ -24,7 +24,8 @@ var searchData=
   ['reader_21',['Reader',['https://ltla.github.io/byteme/classbyteme_1_1Reader.html',1,'byteme']]],
   ['reader_2ehpp_22',['Reader.hpp',['https://ltla.github.io/byteme/Reader_8hpp.html',1,'']]],
   ['reader_5fversion_23',['reader_version',['../structrds2cpp_1_1RdsFile.html#a65d8062cd2c5c9724e768e5fa06e0c8e',1,'rds2cpp::RdsFile::reader_version'],['../structrds2cpp_1_1RdaFile.html#af275709f827cbbf8e227c13a2d7aed4f',1,'rds2cpp::RdaFile::reader_version']]],
-  ['reserve_24',['reserve',['https://ltla.github.io/byteme/structbyteme_1_1RawBufferWriterOptions.html#ace854857d6b1b607ff4fedca07d05e1b',1,'byteme::RawBufferWriterOptions']]],
-  ['robject_25',['RObject',['../structrds2cpp_1_1RObject.html',1,'rds2cpp']]],
-  ['robject_2ehpp_26',['RObject.hpp',['../RObject_8hpp.html',1,'']]]
+  ['register_5fsymbol_24',['register_symbol',['../namespacerds2cpp.html#a5a019c3163a4f7cd84212d7192432088',1,'rds2cpp']]],
+  ['reserve_25',['reserve',['https://ltla.github.io/byteme/structbyteme_1_1RawBufferWriterOptions.html#ace854857d6b1b607ff4fedca07d05e1b',1,'byteme::RawBufferWriterOptions']]],
+  ['robject_26',['RObject',['../structrds2cpp_1_1RObject.html',1,'rds2cpp']]],
+  ['robject_2ehpp_27',['RObject.hpp',['../RObject_8hpp.html',1,'']]]
 ];

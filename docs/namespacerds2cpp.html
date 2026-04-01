@@ -277,6 +277,8 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a5a019c3163a4f7cd84212d7192432088" id="r_a5a019c3163a4f7cd84212d7192432088"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structrds2cpp_1_1SymbolIndex.html">SymbolIndex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a019c3163a4f7cd84212d7192432088">register_symbol</a> (std::string name, <a class="el" href="#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a> encoding, std::vector&lt; <a class="el" href="structrds2cpp_1_1Symbol.html">Symbol</a> &gt; &amp;symbols)</td></tr>
+<tr class="separator:a5a019c3163a4f7cd84212d7192432088"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e8135078d12460c602af9c3933eb435" id="r_a6e8135078d12460c602af9c3933eb435"><td class="memTemplParams" colspan="2">template&lt;class Reader_ &gt; </td></tr>
 <tr class="memitem:a6e8135078d12460c602af9c3933eb435"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structrds2cpp_1_1RdsFile.html">RdsFile</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a6e8135078d12460c602af9c3933eb435">parse_rds</a> (Reader_ &amp;reader, const <a class="el" href="structrds2cpp_1_1ParseRdsOptions.html">ParseRdsOptions</a> &amp;options)</td></tr>
 <tr class="separator:a6e8135078d12460c602af9c3933eb435"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -529,6 +531,50 @@ template&lt;class Reader_ &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>An <code><a class="el" href="structrds2cpp_1_1RdsFile.html" title="Contents of the parsed RDS file.">RdsFile</a></code> object containing the contents of <code>file</code>. </dd></dl>
+
+</div>
+</div>
+<a id="a5a019c3163a4f7cd84212d7192432088" name="a5a019c3163a4f7cd84212d7192432088"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a019c3163a4f7cd84212d7192432088">&#9670;&#160;</a></span>register_symbol()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structrds2cpp_1_1SymbolIndex.html">SymbolIndex</a> rds2cpp::register_symbol </td>
+          <td>(</td>
+          <td class="paramtype">std::string</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a3af792550d3dc4537cdbd71452ef765b">StringEncoding</a></td>          <td class="paramname"><span class="paramname"><em>encoding</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="structrds2cpp_1_1Symbol.html">Symbol</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>symbols</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the symbol, see <code><a class="el" href="structrds2cpp_1_1Symbol.html#a68099267ab64bc22a9aabbdd3d9fb87e">Symbol::name</a></code>. </td></tr>
+    <tr><td class="paramname">name</td><td>Encoding of the symbol, see <code><a class="el" href="structrds2cpp_1_1Symbol.html#a98cc68e484cb112a40021d4cb1687054">Symbol::encoding</a></code>. </td></tr>
+    <tr><td class="paramname">symbols</td><td>Vector containing the global set of symbols, typically <code><a class="el" href="structrds2cpp_1_1RdsFile.html#a5ed3f4f1d927bbba3b9803d77f440968">RdsFile::symbols</a></code> or <code><a class="el" href="structrds2cpp_1_1RdaFile.html#a533cbeb2fe57f68207fbbf79e1836133">RdaFile::symbols</a></code>.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A new symbol is added to <code>symbols</code> and a <code><a class="el" href="structrds2cpp_1_1SymbolIndex.html" title="Reference to a language symbol.">SymbolIndex</a></code> is returned that points to the new entry of <code>symbols</code>.</dd></dl>
+<p>This is a convenient helper to register new symbols in <code><a class="el" href="structrds2cpp_1_1RdsFile.html" title="Contents of the parsed RDS file.">RdsFile</a></code> prior to calling <code><a class="el" href="#a9820d2a851cbdd58a6d874d124f8782b">write_rds()</a></code> (or to <code><a class="el" href="structrds2cpp_1_1RdaFile.html" title="Contents of the parsed RDA file.">RdaFile</a></code> before <code><a class="el" href="#a7b9cab5eeb106e16393b718fdab75b01">write_rda()</a></code>). It returns a <code><a class="el" href="structrds2cpp_1_1SymbolIndex.html" title="Reference to a language symbol.">SymbolIndex</a></code> that can be used in various fields like <code><a class="el" href="structrds2cpp_1_1LanguageArgument.html#ac6e6a22758f6aa72c394771185fcbe44">LanguageArgument::name</a></code>, <code><a class="el" href="structrds2cpp_1_1PairListElement.html#a7b03a7353116e40e9384d1c6ca031fd3">PairListElement::tag</a></code>, <code><a class="el" href="structrds2cpp_1_1EnvironmentVariable.html#a8fd888f8768b53e86257e62fd4fda021">EnvironmentVariable::name</a></code>, etc. </p>
 
 </div>
 </div>
