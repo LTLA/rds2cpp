@@ -97,7 +97,12 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, RdxFile_& gl
                 if (current == NA_STRING) {
                     continue;
                 } 
-                ptr->data[i].encoding = (current.get_encoding() == CE_NATIVE ? rds2cpp::StringEncoding::ASCII : rds2cpp::StringEncoding::UTF8);
+                const auto enc = current.get_encoding();
+                if (enc == CE_NATIVE) {
+                    ptr->data[i].encoding = rds2cpp::StringEncoding::ASCII;
+                } else if (enc == CE_LATIN1) {
+                    ptr->data[i].encoding = rds2cpp::StringEncoding::LATIN1;
+                }
                 ptr->data[i].value = current.get_cstring();
             }
 
@@ -136,7 +141,7 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, RdxFile_& gl
                     );
                 }
             }
-            add_attributes(x, ptr, globals);
+            add_attributes_except(x, ptr, globals, { "pretend-to-be-a-pairlist", "names" });
 
         } else if (vec.hasAttribute("pretend-to-be-an-environment")) {
             Rcpp::IntegerVector env_index = vec.attr("environment-index");
@@ -213,7 +218,7 @@ std::unique_ptr<rds2cpp::RObject> unconvert(const Rcpp::RObject& x, RdxFile_& gl
             const std::size_t num_args = arguments.size();
             for (std::size_t a = 0; a < num_args; ++a) {
                 auto unc = unconvert(arguments[a], globals);
-                if (argnames.size()) {
+                if (argnames.size() && argnames[a] != NA_STRING) {
                     ptr->arguments.emplace_back(
                         rds2cpp::register_symbol(Rcpp::String(argnames[a]).get_cstring(), rds2cpp::StringEncoding::UTF8, globals.symbols),
                         std::move(unc)

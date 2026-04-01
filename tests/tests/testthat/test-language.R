@@ -39,6 +39,19 @@ test_that("function serialization works correctly for named arguments", {
     args <- info$value[[2]]
     attr(args, "arg-names") <- NULL
     expect_identical(args, list(12, "foo"))
+
+    # What about partial names?
+    y <- quote(register("aaron", 'lun', age=98))
+    saveRDS(y, file=tmp)
+
+    info <- quick_parse(tmp)
+    expect_true(attr(info$value, "pretend-to-be-a-language"))
+    expect_identical(info$value[[1]], "register")
+
+    expect_identical(attr(info$value[[2]], "arg-names"), c(NA, NA, "age"))
+    args <- info$value[[2]]
+    attr(args, "arg-names") <- NULL
+    expect_identical(args, list("aaron", "lun", 98))
 })
 
 test_that("function writing works correctly with named arguments", {
@@ -51,6 +64,16 @@ test_that("function writing works correctly with named arguments", {
     quick_write(y, tmp)
     roundtrip <- readRDS(tmp)
     expect_identical(roundtrip, quote(aaron(foo=12, bar='foo')))
+
+    # What about partial names.
+    y <- list("register", list("aaron", "lun", 98))
+    attr(y[[1]], "pretend-to-be-a-symbol") <- TRUE
+    attr(y, "pretend-to-be-a-language") <- TRUE
+    names(y[[2]]) <- c(NA, NA, "age")
+
+    quick_write(y, tmp)
+    roundtrip <- readRDS(tmp)
+    expect_identical(roundtrip, quote(register("aaron", "lun", age=98)))
 })
 
 test_that("function serialization works correctly for nested function calls", {
@@ -112,4 +135,3 @@ test_that("function writing works correctly with attributes", {
     attr(roundtrip, "foo") <- NULL
     expect_identical(roundtrip, quote(x%%1))
 })
-

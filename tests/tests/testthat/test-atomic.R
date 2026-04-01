@@ -178,6 +178,30 @@ test_that("character vector writing works as expected", {
     }
 })
 
+test_that("character vector loading respects Latin-1 encodings", {
+    mixed <- c("Aaron", "😀😀😀", "fran\xE7ais")
+    Encoding(mixed) <- c("unknown", "UTF-8", "latin1")
+
+    tmp <- tempfile(fileext=".rds")
+    saveRDS(mixed, file=tmp)
+    roundtrip <- quick_parse(tmp)
+
+    expect_identical(mixed, roundtrip$value)
+    expect_identical(Encoding(mixed), Encoding(roundtrip$value))
+})
+
+test_that("character vector writing respects Latin-1 encodings", {
+    mixed <- c("Aaron", "😀😀😀", "fran\xE7ais")
+    Encoding(mixed) <- c("unknown", "UTF-8", "latin1")
+
+    tmp <- tempfile(fileext=".rds")
+    quick_write(mixed, file_name=tmp)
+
+    roundtrip <- readRDS(tmp)
+    expect_identical(mixed, roundtrip)
+    expect_identical(Encoding(mixed), Encoding(roundtrip))
+})
+
 ########################################################
 
 attr_vals <- sample(.Machine$integer.max, 1000)

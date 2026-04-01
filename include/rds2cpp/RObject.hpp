@@ -76,7 +76,7 @@ struct Symbol {
     /**
      * Encoding for the symbol name.
      */
-    StringEncoding encoding;
+    StringEncoding encoding = StringEncoding::UTF8;
 };
 
 /**

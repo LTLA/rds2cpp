@@ -11,6 +11,8 @@ void assign_to_string(Rcpp::StringVector& output, std::size_t i, const std::stri
     cetype_t enc = CE_UTF8;
     if (encoding == rds2cpp::StringEncoding::ASCII) {
         enc = CE_NATIVE;
+    } else if (encoding == rds2cpp::StringEncoding::LATIN1) {
+        enc = CE_LATIN1;
     }
     output[i] = Rcpp::String(value, enc);
 }
