@@ -12,16 +12,9 @@ namespace rds2cpp {
 template<class Source_>
 std::unique_ptr<BuiltInFunction> parse_builtin_body(Source_& src) try {
     const auto len = get_length(src);
-
     auto output = std::make_unique<BuiltInFunction>();
-    output->name.reserve(len); // don't resize and use extract() on string::data, as that pointer is read-only AFAICT.
-    for (I<decltype(len)> i = 0; i < len; ++i) {
-        if (!src.advance()) {
-            throw empty_error();
-        }
-        output->name.push_back(as_char(src.get()));
-    }
-
+    sanisizer::resize(output->name, len);
+    quick_extract(src, len, reinterpret_cast<unsigned char*>(output->name.data()));
     return output;
 } catch(std::exception& e) {
     throw traceback("failed to parse built-in function body", e);

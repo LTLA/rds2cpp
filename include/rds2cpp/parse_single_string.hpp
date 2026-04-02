@@ -30,16 +30,8 @@ String parse_single_string(Source_& src) try {
         if (strlen < 0) {
             throw std::runtime_error("length of a non-missing string should be non-negative");
         }
-
-        std::string val;
-        val.reserve(strlen); // don't resize and use extract() on string::data, as that pointer is read-only AFAICT.
-        for (I<decltype(strlen)> i = 0; i < strlen; ++i) {
-            if (!src.advance()) {
-                throw empty_error();
-            }
-            val.push_back(as_char(src.get()));
-        }
-        output.value = std::move(val);
+        output.value.emplace(sanisizer::cast<typename std::string::size_type>(strlen), '\0');
+        quick_extract(src, strlen, reinterpret_cast<unsigned char*>(output.value->data()));
 
         /* String encoding is stored in the gp field, from bits 12 to 27 in the header.
          * We make life easier by just accessing the relevant byte below, after adjusting

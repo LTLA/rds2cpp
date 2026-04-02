@@ -128,14 +128,8 @@ RdaFile parse_rda(Reader_& reader, const ParseRdaOptions& options) {
         }
 
         try {
-            std::string encoding;
-            encoding.reserve(encoding_length); // don't resize and use extract() on string::data, as that pointer is read-only AFAICT.
-            for (I<decltype(encoding_length)> b = 0; b < encoding_length; ++b) {
-                if (!src.advance()) {
-                    throw empty_error();
-                }
-                encoding.push_back(as_char(src.get()));
-            }
+            auto encoding = sanisizer::create<std::string>(encoding_length, '\0');
+            quick_extract(src, encoding_length, reinterpret_cast<unsigned char*>(encoding.data()));
             output.encoding = string_encoding_from_name(encoding);
         } catch (std::exception& e) {
             throw traceback("failed to read the encoding string from the RDA preamble", e);
