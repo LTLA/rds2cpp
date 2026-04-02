@@ -23,11 +23,14 @@ inline std::runtime_error empty_error() {
 }
 
 inline void quick_extract(byteme::BufferedReader<unsigned char>& src, std::size_t len, unsigned char* output) {
+    if (len == 0) {
+        return;
+    }
     if (!src.advance()) {
         throw empty_error();
     }
     auto extracted = src.extract_until(len, output);
-    if (extracted != len) {
+    if (extracted < len) {
         throw empty_error();
     }
 }

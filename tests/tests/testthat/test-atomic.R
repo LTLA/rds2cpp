@@ -4,6 +4,7 @@ integer.scenarios <- list(
     sample(15),
     rpois(112, lambda=8),
     rnorm(990) * 10,
+    integer(0),
     {
         y <- 0:99
         y[sample(length(y), 10)] <- NA
@@ -35,6 +36,7 @@ test_that("integer vector writing works as expected", {
 
 logical.scenarios <- list(
     rbinom(55, 1, 0.5) == 0,
+    logical(0),
     {
         y <- rbinom(999, 1, 0.5) == 0
         y[sample(length(y), 10)] <- NA
@@ -66,6 +68,7 @@ double.scenarios <- list(
     rnorm(99),
     rgamma(1, 2, 1),
     rexp(1000),
+    double(0),
     {
         y <- rnorm(999)
         y[sample(length(y), 10)] <- NA
@@ -96,20 +99,27 @@ test_that("double vector writing works as expected", {
 
 ########################################################
 
+raw.scenarios <- list(
+    as.raw(sample(256, 99, replace=TRUE) - 1),
+    raw(0)
+)
+
 test_that("raw vector loading works as expected", {
-    tmp <- tempfile(fileext=".rds")
-    y <- as.raw(sample(256, 99, replace=TRUE) - 1)
-    saveRDS(y, file=tmp)
-    roundtrip <- quick_parse(tmp)
-    expect_identical(roundtrip$value, y)
+    for (y in raw.scenarios) {
+        tmp <- tempfile(fileext=".rds")
+        saveRDS(y, file=tmp)
+        roundtrip <- quick_parse(tmp)
+        expect_identical(roundtrip$value, y)
+    } 
 })
 
 test_that("raw vector writing works as expected", {
-    tmp <- tempfile(fileext=".rds")
-    y <- as.raw(sample(256, 99, replace=TRUE) - 1)
-    quick_write(y, file_name=tmp)
-    roundtrip <- readRDS(tmp)
-    expect_identical(roundtrip, y)
+    for (y in raw.scenarios) {
+        tmp <- tempfile(fileext=".rds")
+        quick_write(y, file_name=tmp)
+        roundtrip <- readRDS(tmp)
+        expect_identical(roundtrip, y)
+    }
 })
 
 ########################################################
@@ -118,6 +128,7 @@ complex.scenarios <- list(
     rnorm(99) + rnorm(99) * 1i,
     rgamma(1, 2, 1) * 2i,
     rexp(1000) + 0i,
+    complex(0),
     {
         y <- rnorm(999) + rnorm(999) * 1i
         y[sample(length(y), 10)] <- NA
@@ -150,6 +161,8 @@ test_that("complex vector loading works as expected", {
 
 string.scenarios <- list(
     sample(LETTERS),
+    character(0),
+    character(100), # only empty strings.
     c("Aaron", "Lun", "was", "here!"),
     c("Akari", NA, "Alicia", "Alice", NA, "Athena", "Aika", "Akira", NA),
     c(
@@ -230,4 +243,23 @@ test_that("attributes for atomic vectors are written correctly", {
     quick_write(attr_vals, tmp)
     roundtrip <- readRDS(tmp)
     expect_identical(roundtrip, attr_vals)
+})
+
+########################################################
+
+# Check that zero-length reads are proper no-ops.
+empties <- list(integer(0), double(0), character(0), raw(0), logical(0))
+
+test_that("multiple empty vectors are loaded correctly", {
+    tmp <- tempfile(fileext=".rds")
+    saveRDS(empties, file=tmp)
+    roundtrip <- quick_parse(tmp)
+    expect_identical(roundtrip$value, empties)
+})
+
+test_that("multiple empty vectors are written correctly", {
+    tmp <- tempfile(fileext=".rds")
+    quick_write(empties, tmp)
+    roundtrip <- readRDS(tmp)
+    expect_identical(roundtrip, empties)
 })
