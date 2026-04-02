@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 
 project(rds2cpp
-    VERSION 1.3.0
+    VERSION 1.3.1
     DESCRIPTION "Read and write RDS/RDA files in C++"
     LANGUAGES CXX)
 
