@@ -59,35 +59,16 @@ RdaFile parse_rda(Reader_& reader, const ParseRdaOptions& options) {
 
     RdaFile output;
 
-    // Reading the header first. This is the first and only time that 
-    // we need to do a src.valid() check, as we're using the current 
-    // position of the source; in all other cases, it can be assumed
-    // that the source needs to be advance()'d before get().
     {
         try {
-            if (!src.valid()) {
-                throw empty_error();
-            }
-
-            std::string header;
-            header += as_char(src.get());
-            for (int i = 0; i < 4; ++i) {
-                if (!src.advance()) {
-                    throw empty_error();
-                }
-                header += as_char(src.get());
-            }
+            std::string header(5, '\0');
+            quick_extract(src, 5, reinterpret_cast<unsigned char*>(header.data()));
             if (header != "RDX2\n" && header != "RDX3\n") {
-                throw std::runtime_error("unsupported format are currently supported");
+                throw std::runtime_error("only RDX2 or RDX3 formats are currently supported");
             }
 
-            header.clear();
-            for (int i = 0; i < 2; ++i) {
-                if (!src.advance()) {
-                    throw empty_error();
-                }
-                header += as_char(src.get());
-            }
+            header.resize(2);
+            quick_extract(src, 2, reinterpret_cast<unsigned char*>(header.data()));
             if (header != "X\n") {
                 throw std::runtime_error("only RDA files in XDR format are currently supported");
             }

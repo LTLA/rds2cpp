@@ -26,17 +26,13 @@ inline void quick_extract(byteme::BufferedReader<unsigned char>& src, std::size_
     if (len == 0) {
         return;
     }
-    if (!src.advance()) {
+    if (!src.valid()) {
         throw empty_error();
     }
-    auto extracted = src.extract_until(len, output);
-    if (extracted < len) {
+    auto extracted = src.extract(len, output);
+    if (extracted.first < len) {
         throw empty_error();
     }
-}
-
-inline char as_char(unsigned char val) {
-    return *reinterpret_cast<const char*>(&val); // make sure we interpret this as a char.
 }
 
 inline bool little_endian() {

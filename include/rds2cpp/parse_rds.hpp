@@ -59,23 +59,10 @@ RdsFile parse_rds(Reader_& reader, const ParseRdsOptions& options) {
 
     RdsFile output;
 
-    // Reading the header first. This is the first and only time that 
-    // we need to do a src.valid() check, as we're using the current 
-    // position of the source; in all other cases, it can be assumed
-    // that the source needs to be advance()'d before get().
     {
         try {
-            if (!src.valid()) {
-                throw empty_error();
-            }
-
-            std::string header;
-            header += as_char(src.get());
-            if (!src.advance()) {
-                throw empty_error();
-            }
-            header += as_char(src.get());
-
+            std::string header(2, '\0');
+            quick_extract(src, 2, reinterpret_cast<unsigned char*>(header.data()));
             if (header != "X\n") {
                 throw std::runtime_error("only RDS files in XDR format are currently supported");
             }
